@@ -1,8 +1,9 @@
 /**
  * 眠花糖 on the play screen.
- * Primary: official TuZi.obj decimated GLB, toon shading + ink outline,
- * idle bounce and a happy jump on merge / order complete.
- * Fallback: official 2D three-view drawings with the same bounce/jump.
+ * Official TuZi GLB with warm toon shading + navy outline,
+ * 3/4 camera so the yellow tail star stays visible,
+ * squash-and-stretch bounce, sparkles on jump.
+ * Fallback: official 2D art with the same animation.
  */
 const POSES = {
   idle: "assets/mascot/front.png",
@@ -21,8 +22,9 @@ const POSES = {
 export function mountMascot(root) {
   root.innerHTML = `
     <div class="mascot-stage">
-      <canvas class="mascot-3d" width="360" height="360" aria-hidden="true"></canvas>
+      <canvas class="mascot-3d" width="512" height="512" aria-hidden="true"></canvas>
       <img class="mascot-2d" alt="眠花糖" src="${POSES.idle}">
+      <div class="mascot-sparkles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <div class="mascot-bubble" hidden></div>
     </div>`;
   const img = root.querySelector(".mascot-2d");
@@ -32,11 +34,11 @@ export function mountMascot(root) {
   let pose = "idle";
   let timer = 0;
   let moodUntil = 0;
-  let jump = 0;       // 0–1 jump envelope
+  let jump = 0;
   let jumpVel = 0;
   let targetBounce = 0;
   let mode3d = false;
-  const anim = { bounce: 0, squish: 1, tilt: 0, spin: 0 };
+  const anim = { bounce: 0, squish: 1, tilt: 0, spin: 0, jump: 0 };
 
   function setPose(name, ms = 900) {
     pose = name;
@@ -46,8 +48,8 @@ export function mountMascot(root) {
 
   function startJump(power = 1) {
     jump = Math.max(jump, 0.05);
-    jumpVel = 0.055 * power;
-    targetBounce = 18 * power;
+    jumpVel = 0.062 * power;
+    targetBounce = 22 * power;
   }
 
   function say(text, ms = 1600) {
@@ -74,11 +76,10 @@ export function mountMascot(root) {
 
   function tick(t) {
     timer = t / 1000;
-    // jump physics
     if (jumpVel !== 0 || jump > 0) {
       jump += jumpVel;
-      jumpVel -= 0.0032;
-      if (jump < 0) { jump = 0; jumpVel = jumpVel * -0.35; if (Math.abs(jumpVel) < 0.01) jumpVel = 0; }
+      jumpVel -= 0.0034;
+      if (jump < 0) { jump = 0; jumpVel = jumpVel * -0.38; if (Math.abs(jumpVel) < 0.01) jumpVel = 0; }
     }
     if (performance.now() > moodUntil && !mode3d) {
       const cycle = Math.floor(timer / 3) % 4;
@@ -89,11 +90,14 @@ export function mountMascot(root) {
       }
     }
     targetBounce += (0 - targetBounce) * 0.07;
-    const idleBob = Math.sin(timer * 3.2) * 10;
-    anim.bounce = idleBob + jump * 86 + targetBounce;
-    anim.squish = 1 + Math.sin(timer * 3.2) * 0.05 - jump * 0.18;
-    anim.tilt = Math.sin(timer * 1.5) * 4;
-    anim.spin = Math.sin(timer * 0.7) * 0.28;
+    const idleBob = Math.sin(timer * 3.4) * 14;
+    anim.bounce = idleBob + jump * 96 + targetBounce;
+    // squash on land / stretch at peak
+    const jumpStretch = jump > 0.2 ? -0.16 : (jumpVel < -0.02 ? 0.14 : 0);
+    anim.squish = 1 + Math.sin(timer * 3.4) * 0.07 + jumpStretch;
+    anim.tilt = Math.sin(timer * 1.35) * 5;
+    anim.spin = Math.sin(timer * 0.85) * 0.22;
+    anim.jump = jump;
     const sy = anim.squish, sx = 2 - sy;
     if (!mode3d) {
       img.style.transform = `translateY(${-anim.bounce}px) rotate(${anim.tilt}deg) scale(${sx}, ${sy})`;
@@ -132,46 +136,108 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   const THREE = await import("three");
   const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 40);
-  camera.position.set(1.7, 1.35, 4.8);
-  camera.lookAt(0, 1.0, 0);
+  // Closer 3/4 camera so the bunny fills the stage and the tail star peeks out.
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 40);
+  // Distance ~4.3 so the full 2-unit-tall bunny (with feet and tail star) fits.
+  camera.position.set(2.45, 1.28, 3.85);
+  camera.lookAt(0.0, 0.96, 0);
+
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  const fit = () => {
-    const w = canvas.clientWidth || 360, h = canvas.clientHeight || 360;
-    renderer.setSize(w, h, false);
-    camera.aspect = w / Math.max(1, h);
-    camera.updateProjectionMatrix();
-  };
-  fit();
-  new ResizeObserver(fit).observe(canvas.parentElement || canvas);
+  renderer.setClearColor(0x000000, 0);
+  if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-  scene.add(new THREE.AmbientLight(0xffffff, 1.15));
-  const sun = new THREE.DirectionalLight(0xffffff, 1.15);
-  sun.position.set(2.2, 4.2, 3.2);
-  scene.add(sun);
-  const fill = new THREE.DirectionalLight(0xc5d4ff, 0.35);
-  fill.position.set(-3, 1, -2);
-  scene.add(fill);
-
-  // 4-stop toon ramp
-  const ramp = makeToonRamp(THREE);
-
-  const gltf = await new Promise((resolve, reject) => {
-    new GLTFLoader().load("assets/models/mianhuatang.glb", resolve, undefined, reject);
-  });
-  const bunny = gltf.scene;
-  // Keep official GLB materials (cream body, ink face, yellow tail star).
-  scene.add(bunny);
-
+  let lastW = 0, lastH = 0;
   const ensureSize = () => {
     const w = canvas.clientWidth || 0, h = canvas.clientHeight || 0;
     if (w < 8 || h < 8) return false;
+    if (w === lastW && h === lastH) return true;
+    lastW = w; lastH = h;
     renderer.setSize(w, h, false);
     camera.aspect = w / Math.max(1, h);
     camera.updateProjectionMatrix();
     return true;
   };
+  ensureSize();
+  new ResizeObserver(ensureSize).observe(canvas.parentElement || canvas);
+
+  // Bright, warm lighting so the body stays creamy white, not grey clay.
+  scene.add(new THREE.AmbientLight(0xfff6e8, 1.55));
+  const sun = new THREE.DirectionalLight(0xfff4d6, 1.05);
+  sun.position.set(2.4, 4.6, 3.4);
+  scene.add(sun);
+  const fill = new THREE.DirectionalLight(0xffe8f0, 0.45);
+  fill.position.set(-3.2, 1.6, 1.2);
+  scene.add(fill);
+  const rim = new THREE.DirectionalLight(0xffed00, 0.35);
+  rim.position.set(-1.2, 1.0, -3.2);
+  scene.add(rim);
+
+  const bodyRamp = makeToonRamp(THREE, [
+    [255, 228, 210],
+    [255, 244, 232],
+    [255, 251, 244],
+    [255, 255, 252]
+  ]);
+  const inkRamp = makeToonRamp(THREE, [
+    [36, 42, 72],
+    [50, 58, 92],
+    [70, 80, 120],
+    [90, 100, 140]
+  ]);
+  const starRamp = makeToonRamp(THREE, [
+    [230, 180, 0],
+    [255, 220, 40],
+    [255, 237, 0],
+    [255, 252, 160]
+  ]);
+
+  const gltf = await new Promise((resolve, reject) => {
+    new GLTFLoader().load("assets/models/mianhuatang.glb", resolve, undefined, reject);
+  });
+  const bunny = gltf.scene;
+  const outlineMat = new THREE.MeshBasicMaterial({
+    color: 0x3b4468, side: THREE.BackSide, depthWrite: true
+  });
+  const meshes = [];
+  bunny.traverse((o) => { if (o.isMesh) meshes.push(o); });
+  for (const o of meshes) {
+    const c = o.material && o.material.color;
+    let kind = "body";
+    if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
+    const bb = o.geometry.boundingBox;
+    // The official tail star sits at the back (min z < -0.74) and low on the body.
+    if (bb && bb.min.z < -0.74 && bb.max.y < 0.9) kind = "star";
+    else if (c) {
+      const hsl = { h: 0, s: 0, l: 0 };
+      c.getHSL(hsl);
+      if (hsl.s > 0.35 && c.r > 0.7 && c.g > 0.55 && c.b < 0.45) kind = "star";
+      else if (hsl.l < 0.45) kind = "ink";
+    }
+    let mat;
+    if (kind === "star") {
+      mat = new THREE.MeshToonMaterial({ color: 0xffed00, gradientMap: starRamp, emissive: 0xffc400, emissiveIntensity: 0.35 });
+    } else if (kind === "ink") {
+      mat = new THREE.MeshToonMaterial({ color: 0x3b4468, gradientMap: inkRamp });
+    } else {
+      mat = new THREE.MeshToonMaterial({ color: 0xfff7ee, gradientMap: bodyRamp });
+    }
+    o.material = mat;
+    if (kind === "star") {
+      o.scale.setScalar(1.55);
+      o.position.z -= 0.18; // peek out from behind the body
+      o.renderOrder = 2;
+    } else {
+      const out = new THREE.Mesh(o.geometry, outlineMat);
+      out.name = "outline";
+      out.scale.setScalar(1.028);
+      out.renderOrder = 0;
+      o.renderOrder = 1;
+      o.add(out);
+    }
+  }
+  scene.add(bunny);
+
   if (!ensureSize()) {
     await new Promise((resolve) => {
       const ro = new ResizeObserver(() => { if (ensureSize()) { ro.disconnect(); resolve(); } });
@@ -185,7 +251,6 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   canvas.style.display = "block";
   onReady();
 
-  // If the canvas stays empty (hidden-at-boot WebGL / software renderer), go back to official 2D.
   setTimeout(() => {
     try {
       const gl = renderer.getContext();
@@ -209,9 +274,10 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
     const t = (now - t0) / 1000;
     const a = getAnim();
     ensureSize();
-    bunny.rotation.y = 0.35 + a.spin * 0.45;
+    // Base 3/4 yaw keeps the yellow tail star visible on the bunny's right; gentle sway.
+    bunny.rotation.y = 0.95 + a.spin * 0.55;
     bunny.rotation.z = a.tilt * 0.012;
-    bunny.position.y = a.bounce * 0.012;
+    bunny.position.y = a.bounce * 0.010;
     const sy = a.squish;
     bunny.scale.set(2 - sy, sy, 2 - sy);
     renderer.render(scene, camera);
@@ -220,16 +286,18 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   requestAnimationFrame(loop);
 }
 
-function makeToonRamp(THREE) {
-  const data = new Uint8Array([
-    70, 70, 70, 255,
-    130, 130, 130, 255,
-    190, 190, 190, 255,
-    255, 255, 255, 255
-  ]);
-  const tex = new THREE.DataTexture(data, 4, 1, THREE.RGBAFormat);
+function makeToonRamp(THREE, stops) {
+  const data = new Uint8Array(stops.length * 4);
+  stops.forEach((s, i) => {
+    data[i * 4] = s[0];
+    data[i * 4 + 1] = s[1];
+    data[i * 4 + 2] = s[2];
+    data[i * 4 + 3] = 255;
+  });
+  const tex = new THREE.DataTexture(data, stops.length, 1, THREE.RGBAFormat);
   tex.minFilter = THREE.NearestFilter;
   tex.magFilter = THREE.NearestFilter;
   tex.needsUpdate = true;
+  if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
   return tex;
 }
