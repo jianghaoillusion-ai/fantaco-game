@@ -245,6 +245,8 @@ export function ensureDaily(save, now = new Date()) {
     save.daily.challengeDay = day;
     save.daily.challenge = 0;
     save.daily.challengeClaimed = false;
+    save.daily.taskMerges = 0;
+    save.daily.taskGens = 0;
   }
   if (!save.ads || save.ads.day !== day) save.ads = { day, count: 0 };
   if (!save.shopDaily || save.shopDaily.day !== day) save.shopDaily = { day, bought: {} };

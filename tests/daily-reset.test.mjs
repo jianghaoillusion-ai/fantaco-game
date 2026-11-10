@@ -60,6 +60,8 @@ assert.equal(day, "2026-11-11");
 assert.equal(save.daily.challenge, 0);
 assert.equal(save.daily.challengeClaimed, false);
 assert.equal(save.daily.challengeDay, "2026-11-11");
+assert.equal(save.daily.taskMerges, 0);
+assert.equal(save.daily.taskGens, 0);
 assert.equal(save.daily.claimed, true); // gift claimed flag stays on the old day key
 assert.equal(save.daily.day, "2026-11-10");
 assert.equal(save.daily.streak, 3);

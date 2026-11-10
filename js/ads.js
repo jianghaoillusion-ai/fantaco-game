@@ -1,5 +1,5 @@
 /** Rewarded "ad": official 〈飛向藍藍天〉 MV via the YouTube IFrame Player API. Never real money. */
-import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=17";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=18";
 
 export const AD_DAILY = 5;
 export const AD_VIDEO_ID = "XPvIihQWrcA";
@@ -100,7 +100,10 @@ export function createAds(ctx) {
     }
     persist();
     refreshHud();
-    if (prize.coins) ctx.grantCoins?.(prize.coins, $("#ad-sheet .ad-card") || $("#ad-sheet"));
+    const from = $("#ad-sheet .ad-card") || $("#ad-sheet");
+    if (prize.coins) ctx.grantCoins?.(prize.coins, from);
+    const extra = { energy: prize.energy || 0, diamonds: prize.diamonds || 0 };
+    if ((extra.energy || extra.diamonds) && ctx.fx?.flyRewards) ctx.fx.flyRewards(extra, from);
     sfx.daily();
     toast(bits.length ? `看完了！${bits.join("、")}` : (prize.label || "看完了！"));
     const lab = $("#ad-prize");

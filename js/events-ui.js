@@ -1,5 +1,6 @@
 /** Travel Town-style side-event button + panel. Uses js/events.js; no real money. */
 import { formatEventLeft } from "./events.js";
+import { bindTip } from "./tip.js?v=18";
 
 function needLabel(need, progress) {
   const p = progress || 0;
@@ -57,8 +58,9 @@ export function createEventsUi(ctx) {
     const ready = st && !st.claimed && (st.progress || 0) >= (feat.need?.count || 0);
     const left = formatEventLeft(feat.endKey, new Date(), true);
     btn.className = "event-entry" + (feat.kind === "long" ? " long" : " short") + (ready ? " ready" : "");
+    bindTip(btn, feat.name, "打開活動");
+    btn.removeAttribute("title");
     btn.setAttribute("aria-label", `${feat.name}，還有 ${left.replace(/\u00a0/g, "")}`);
-    btn.title = feat.name;
     btn.innerHTML = `<img src="assets/icons/gift.png" alt="">
       <span class="event-timer">${left}</span>
       ${ready ? '<span class="event-ready" aria-hidden="true">✓</span>' : ""}`;
@@ -72,6 +74,13 @@ export function createEventsUi(ctx) {
     box.innerHTML = [ev.long, ev.short].filter(Boolean).map((def) => cardHtml(def, save.events?.[def.kind])).join("");
     box.querySelectorAll("[data-claim]").forEach((b) => {
       b.addEventListener("click", () => claim(b.getAttribute("data-claim"), b));
+    });
+    box.querySelectorAll(".ev-info").forEach((b) => {
+      bindTip(b, b.getAttribute("data-tip-title") || "", b.getAttribute("data-tip-body") || "");
+      b.addEventListener("click", (e) => {
+        e.stopPropagation();
+        b.dispatchEvent(new PointerEvent("pointerenter", { pointerType: "mouse", bubbles: true }));
+      });
     });
   }
 
@@ -90,17 +99,18 @@ export function createEventsUi(ctx) {
     else action = `<p class="ev-wait">進行中</p>`;
     return `<article class="ev-card ${def.kind}${ready ? " ready" : ""}${claimed ? " claimed" : ""}">
       <header class="ev-banner">
+        <span class="ev-ornament" aria-hidden="true"></span>
         <span class="ev-tag">${tag}</span>
         <h3>${def.name}</h3>
-        <span class="ev-count"><img src="assets/icons/clock.png" alt="">還有 ${left}</span>
+        <button type="button" class="ev-info" data-tip-title="${def.name}" data-tip-body="${(def.blurb || "").replace(/"/g, "&quot;")}" aria-label="說明">i</button>
+        <span class="ev-count"><img src="assets/icons/clock.png" alt="">${left}</span>
         <span class="ev-day">${dayBit}</span>
       </header>
-      <p class="ev-blurb">${def.blurb || ""}</p>
+      <div class="ev-track" aria-label="獎勵">${rewardHtml(def.reward)}</div>
       <div class="ev-progress" role="progressbar" aria-valuemin="0" aria-valuemax="${goal}" aria-valuenow="${progress}" aria-label="${needLabel(def.need, progress)}">
         <span class="ev-bar"><i style="width:${pct}%"></i></span>
         <span class="ev-frac">${needLabel(def.need, progress)}</span>
       </div>
-      <div class="ev-rewards" aria-label="獎勵">${rewardHtml(def.reward)}</div>
       ${action}
     </article>`;
   }
@@ -141,8 +151,13 @@ export function createEventsUi(ctx) {
       ctx.refreshHud?.();
       render();
     };
-    if (reward.coins && grantCoins) grantCoins(reward.coins, btn, after);
-    else after();
+    const extras = { diamonds: reward.diamonds || 0 };
+    const finish = () => {
+      if (extras.diamonds && ctx.fx?.flyRewards) ctx.fx.flyRewards(extras, btn, after);
+      else after();
+    };
+    if (reward.coins && grantCoins) grantCoins(reward.coins, btn, finish);
+    else finish();
     toast(`完成「${reward.name}」！`);
   }
 

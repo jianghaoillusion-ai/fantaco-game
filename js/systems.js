@@ -1,14 +1,15 @@
 /** Wires map, shop, fog, orders UI and fx so app.js only needs a thin hook. */
-import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=17";
-import { createFx } from "./fx.js?v=17";
-import { createShop } from "./shop.js?v=17";
-import { createBag } from "./bag.js?v=17";
-import { createOrdersUi } from "./orders-ui.js?v=17";
-import { createMap } from "./map.js?v=17";
-import { createAds } from "./ads.js?v=17";
-import { nearbyEmpty } from "./merge.js?v=17";
+import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=18";
+import { createFx } from "./fx.js?v=18";
+import { createShop } from "./shop.js?v=18";
+import { createBag } from "./bag.js?v=18";
+import { createOrdersUi } from "./orders-ui.js?v=18";
+import { createMap } from "./map.js?v=18";
+import { createAds } from "./ads.js?v=18";
+import { nearbyEmpty } from "./merge.js?v=18";
 import { createEvents } from "./events.js";
-import { createEventsUi } from "./events-ui.js?v=17";
+import { createEventsUi } from "./events-ui.js?v=18";
+import { createBoardDrag } from "./drag.js?v=18";
 
 export { GEN_POPS, GEN_COOL_MS };
 
@@ -16,6 +17,7 @@ export function attachSystems(ctx) {
   const fx = createFx(ctx);
   ctx.fx = fx;
   const fog = createFog(ctx);
+  ctx.fog = fog;
   const bag = createBag(ctx);
   ctx.bag = bag;
   const shop = createShop(ctx);
@@ -27,6 +29,8 @@ export function attachSystems(ctx) {
   ctx.events = events;
   const eventsUi = createEventsUi(ctx);
   ctx.eventsUi = eventsUi;
+  const drag = createBoardDrag(ctx);
+  ctx.drag = drag;
 
   ctx.emptyOpenCell = () => nearbyEmpty(ctx.getSave().board, ctx.getCols(), ctx.getRows(), -1, fog.isOpenIndex);
 
@@ -36,7 +40,8 @@ export function attachSystems(ctx) {
     map.bind();
     ads.bind();
     eventsUi.bind();
+    drag.bind();
   }
 
-  return { fx, fog, shop, bag, orders, map, ads, events, eventsUi, bind, GEN_POPS, GEN_COOL_MS };
+  return { fx, fog, shop, bag, orders, map, ads, events, eventsUi, drag, bind, GEN_POPS, GEN_COOL_MS };
 }

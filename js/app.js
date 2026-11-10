@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=17";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=17";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=17";
-import { mountMascot } from "./mascot.js?v=17";
-import { mountHome } from "./home.js?v=17";
-import { bindStory, startStory } from "./story.js?v=17";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=17";
-import { bagCap, migrateBagSlots } from "./bag.js?v=17";
-import { reserveItems } from "./merge.js?v=17";
-import { avatarSrc } from "./portraits.js?v=17";
+import { Auth } from "./auth.js?v=18";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=18";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=18";
+import { mountMascot } from "./mascot.js?v=18";
+import { mountHome } from "./home.js?v=18";
+import { bindStory, startStory } from "./story.js?v=18";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=18";
+import { bagCap, migrateBagSlots } from "./bag.js?v=18";
+import { reserveItems } from "./merge.js?v=18";
+import { avatarSrc } from "./portraits.js?v=18";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=17";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=17";
-import { regionById } from "./world.js?v=17";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=17";
-import { bindTip } from "./tip.js?v=17";
+} from "./merge.js?v=18";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=18";
+import { regionById } from "./world.js?v=18";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=18";
+import { bindTip, bindChromeTips } from "./tip.js?v=18";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=17");
+  const res = await fetch(url + "?v=18");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -97,7 +97,7 @@ export async function boot() {
   settingsUi = createSettingsUi({ $, persist, getSave: () => SAVE, show });
   settingsUi.bind();
   bindStory({ $, sfx, show, chapterBg: () => getComputedStyle($("#play") || document.documentElement).getPropertyValue("--chapter-bg") });
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, todayKey, formatDailyResetLeft, ensureDaily, grantCoins, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, refreshHud, startStory, todayKey, formatDailyResetLeft, ensureDaily, grantCoins, showDiscover: (item) => systems?.fx?.showDiscover(item), flyRewards: (b, el, d) => systems?.fx?.flyRewards(b, el, d), selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
@@ -184,11 +184,7 @@ function bind() {
     else { playMusic(SAVE.chapter); show("play"); }
   });
   systems?.bind();
-
-  $("#play").addEventListener("pointerdown", onBoardDown);
-  window.addEventListener("pointermove", onDragMove);
-  window.addEventListener("pointerup", onDragUp);
-  window.addEventListener("pointercancel", onDragUp);
+  bindChromeTips();
 
   let resizeT = 0;
   const onWinResize = () => {
@@ -292,8 +288,13 @@ function grantCoins(n, fromEl, then) {
       refreshHud();
       then?.(leveled);
     };
-    if (systems?.fx?.flyCoins) systems.fx.flyCoins(fromEl, document.querySelector("#play .lv-badge, [data-xp-tip]"), finish);
-    else finish();
+    const wrap = () => {
+      if (leveled && systems?.fx?.flyRewards) {
+        systems.fx.flyRewards({ diamonds: 2 }, document.querySelector("#play .lv-badge, [data-xp-tip]"), finish);
+      } else finish();
+    };
+    if (systems?.fx?.flyCoins) systems.fx.flyCoins(fromEl, document.querySelector("#play .lv-badge, [data-xp-tip]"), wrap);
+    else wrap();
   } else {
     refreshHud();
     then?.(leveled);
@@ -305,7 +306,7 @@ function placeToast() {
   const t = $("#toast");
   if (!t) return;
   const playOn = $("#play")?.classList.contains("on");
-  const blocked = document.querySelector("#bag.overlay.on, #shop.overlay.on, #settings-sheet.on, #story.screen.on, #result.overlay.on, #event-sheet.overlay.on, #ad-sheet.overlay.on, #energy-prompt.overlay.on");
+  const blocked = document.querySelector("#bag.overlay.on, #shop.overlay.on, #settings-sheet.on, #story.screen.on, #result.overlay.on, #event-sheet.overlay.on, #challenge-sheet.overlay.on, #ad-sheet.overlay.on, #energy-prompt.overlay.on");
   t.classList.toggle("play-toast", !!(playOn && !blocked));
   if (playOn && !blocked) {
     const orders = $("#orders");
@@ -415,7 +416,8 @@ function makePiece(item) {
   const img = infoImg(item);
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
-  el.title = name;
+  el.removeAttribute("title");
+  bindTip(el, name, "拖到一樣的上面，就可以合成。");
   return el;
 }
 function isWantedItem(item) {
@@ -642,7 +644,14 @@ function tapGenerator(loc) {
   SAVE.energy -= 1;
   if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
   gen.pops = (gen.pops || 0) + 1;
-  if (gen.pops >= GEN_POPS) { gen.pops = 0; gen.coolUntil = Date.now() + GEN_COOL_MS; }
+  const popsMax = systems?.fog?.genBurstPops?.(SAVE, gen) ?? GEN_POPS;
+  if (gen.pops >= popsMax) {
+    gen.pops = 0;
+    const coolMs = systems?.fog?.genCoolMs?.(SAVE, gen) ?? GEN_COOL_MS;
+    if (coolMs > 0) { gen.coolUntil = Date.now() + coolMs; gen.coolStarted = Date.now(); }
+    else { gen.coolUntil = 0; gen.coolStarted = 0; }
+  }
+  systems?.orders?.bumpTask?.("gens");
   if (toInv) SAVE.inventory.push(made);
   else SAVE.board[empty] = made;
   discover(made);
@@ -714,6 +723,7 @@ function onMerged(merged) {
   }
   try { navigator.vibrate?.(12); } catch {}
   systems?.events?.noteMerge?.(merged);
+  systems?.orders?.bumpTask?.("merges");
   discover(merged);
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) {}
@@ -882,7 +892,12 @@ function tryFulfill(loc, orderId) {
     else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
     else maybeStoryIntro();
   };
-  grantCoins(coins, fromCard, after);
+  const extras = { diamonds: gems || 0, seeds: o.reward.seeds || 0, energy: o.reward.energy || 0 };
+  grantCoins(coins, fromCard, (leveled) => {
+    if (systems?.fx?.flyRewards && (extras.diamonds || extras.seeds || extras.energy)) {
+      systems.fx.flyRewards(extras, fromCard, () => after(leveled));
+    } else after(leveled);
+  });
 }
 
 let storyQueue = [], storyIdx = 0, storyDoneFn = null;
@@ -1013,7 +1028,9 @@ function claimDaily() {
   SAVE.daily = { ...(SAVE.daily || {}), day: today, streak: st, claimed: true };
   persist(); sfx.daily(); mascot?.wish();
   toast(`領到 ${energy} 能量、${seeds} 顆星星種子（連續 ${st} 天）`);
-  renderDaily(); refreshHud();
+  const after = () => { renderDaily(); refreshHud(); };
+  if (systems?.fx?.flyRewards) systems.fx.flyRewards({ energy, seeds }, document.getElementById("btn-claim-daily"), after);
+  else after();
 }
 
 function renderSettings() {
@@ -1044,6 +1061,8 @@ function systemCtx() {
     persist, toast, sfx, show, refresh, refreshHud, grantCoins, applyCoins,
     startStory, applyChapterLook, playMusic, pauseMusic, resumeMusic,
     makePiece, infoName, infoImg, findCellByUid, removeFrom,
+    canMerge: (a, b) => canMerge(a, b, CHAINS, GENS),
+    moveOrMerge, onTap, moveToInventory,
     tryFulfill: (loc, id) => tryFulfill(loc, id),
     grantGen: (id, tier) => grantGen(id, tier),
     xpLevel: (xp) => xpLevel(xp, GAME.xpCurve || [0, 40, 100]),

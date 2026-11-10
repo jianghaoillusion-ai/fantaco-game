@@ -1,5 +1,5 @@
 /** Expandable magic bag. Slot unlocks cost only 星星種子. Never real money. */
-import { bindTip, hideTip } from "./tip.js?v=17";
+import { bindTip, hideTip } from "./tip.js?v=18";
 
 export const BAG_START = 6;
 export const BAG_MAX = 20;
@@ -85,7 +85,7 @@ export function createBag(ctx) {
       slot.dataset.slot = i;
       if (locked) {
         const cost = slotCost(i + 1);
-        slot.innerHTML = `<button type="button" class="bag-unlock" title="用 ${cost} 顆星星種子打開這一格">
+        slot.innerHTML = `<button type="button" class="bag-unlock">
           <span class="lock" aria-hidden="true"></span>
           <span class="price"><img src="assets/items/star-seed.png" alt="">${cost}</span>
         </button>`;

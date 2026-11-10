@@ -114,12 +114,14 @@ export function createFx(ctx) {
     const thumb = $("#info-thumb");
     if (!item) {
       bar.classList.add("empty");
-      $("#info-name").textContent = "點選棋盤上的東西";
-      $("#info-hint").textContent = "合兩個一樣的，交給訂單。";
+      bar.hidden = true;
+      $("#info-name").textContent = "";
+      $("#info-hint").textContent = "";
       if ($("#btn-sell")) $("#btn-sell").disabled = true;
       if (thumb) { thumb.hidden = true; thumb.removeAttribute("src"); }
       return;
     }
+    bar.hidden = false;
     bar.classList.remove("empty");
     $("#info-name").textContent = ctx.infoName(item);
     const src = ctx.infoImg?.(item);
@@ -195,5 +197,145 @@ export function createFx(ctx) {
     }
   }
 
-  return { flyTo, flyCoins, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore };
+
+  const REWARD_ICON = {
+    coins: "assets/ui/coin.png",
+    diamonds: "assets/ui/diamond.png",
+    energy: "assets/icons/energy.png",
+    seeds: "assets/items/star-seed.png",
+    stars: "assets/items/star-seed.png"
+  };
+  const REWARD_TARGET = {
+    coins: "#play .lv-badge, [data-xp-tip], .lv-badge",
+    diamonds: "#play .pill.diamonds, .pill.diamonds",
+    energy: "#play .pill.energy, .pill.energy",
+    seeds: "#play .pill.seeds, .pill.seeds",
+    stars: "#play .pill.seeds, .pill.seeds"
+  };
+
+  function hudEl(kind) {
+    return document.querySelector(REWARD_TARGET[kind] || REWARD_TARGET.coins);
+  }
+
+  function pulseHud(el) {
+    if (!el) return;
+    el.classList.remove("hud-bump");
+    void el.offsetWidth;
+    el.classList.add("hud-bump");
+    setTimeout(() => el.classList.remove("hud-bump"), 420);
+  }
+
+  /** Burst of spinning, twinkling icons that stagger into a HUD counter. */
+  function flyKind(kind, fromEl, count, onArrive, done) {
+    const icon = REWARD_ICON[kind];
+    if (!icon || !count) { done?.(); return; }
+    const n = Math.max(3, Math.min(8, 2 + Math.ceil(Math.abs(count) / 4)));
+    const a = (fromEl instanceof Element ? fromEl.getBoundingClientRect() : null)
+      || { left: innerWidth * 0.5, top: innerHeight * 0.45, width: 0, height: 0 };
+    const target = hudEl(kind);
+    const b = target?.getBoundingClientRect?.() || { left: 24, top: 24, width: 32, height: 32 };
+    const x0 = a.left + a.width / 2;
+    const y0 = a.top + a.height / 2;
+    const x1 = b.left + b.width / 2;
+    const y1 = b.top + b.height / 2;
+    let left = n;
+    for (let i = 0; i < n; i++) {
+      const img = document.createElement("img");
+      img.src = icon;
+      img.alt = "";
+      img.className = "fly-reward twinkle";
+      img.style.left = x0 + "px";
+      img.style.top = y0 + "px";
+      document.body.appendChild(img);
+      const spread = (i - (n - 1) / 2) * 42;
+      const midX = (x0 + x1) / 2 + spread;
+      const midY = Math.min(y0, y1) - 60 - (i % 3) * 16;
+      const delay = i * 55;
+      const anim = img.animate([
+        { transform: "translate(-50%,-50%) scale(.4) rotate(0deg)", opacity: 0.95, offset: 0 },
+        { transform: `translate(${midX - x0}px, ${midY - y0}px) scale(1.15) rotate(180deg)`, opacity: 1, offset: 0.42 },
+        { transform: `translate(${x1 - x0}px, ${y1 - y0}px) scale(.4) rotate(360deg)`, opacity: 1, offset: 1 }
+      ], { duration: 620, delay, easing: "cubic-bezier(.22,.61,.36,1)", fill: "forwards" });
+      anim.onfinish = () => {
+        img.remove();
+        sfx?.chime?.();
+        pulseHud(target);
+        onArrive?.();
+        left -= 1;
+        if (left <= 0) done?.();
+      };
+    }
+  }
+
+  function flyRewards(bundle, fromEl, done) {
+    const kinds = ["coins", "diamonds", "energy", "seeds", "stars"].filter((k) => (bundle?.[k] || 0) > 0);
+    if (!kinds.length) { done?.(); return; }
+    let pending = kinds.length;
+    const next = () => { pending -= 1; if (pending <= 0) done?.(); };
+    kinds.forEach((k, i) => {
+      setTimeout(() => flyKind(k, fromEl, bundle[k], null, next), i * 80);
+    });
+  }
+
+  // Keep the old name as a coins-only wrapper so existing calls still work.
+  const _flyCoins = flyCoins;
+  function flyCoinsWrap(fromEl, toEl, done) {
+    flyKind("coins", fromEl, 8, () => {
+      const badge = toEl instanceof Element ? toEl : hudEl("coins");
+      if (badge) {
+        badge.classList.remove("lv-spin");
+        void badge.offsetWidth;
+        badge.classList.add("lv-spin");
+        setTimeout(() => badge.classList.remove("lv-spin"), 700);
+      }
+    }, done);
+  }
+
+  function showDiscover(item) {
+    const name = ctx.infoName(item);
+    const imgSrc = ctx.infoImg(item);
+    sfx?.discover?.();
+    let layer = document.getElementById("discover-fx");
+    if (!layer) {
+      layer = document.createElement("div");
+      layer.id = "discover-fx";
+      layer.className = "discover-fx";
+      document.body.appendChild(layer);
+    }
+    const toEl = document.querySelector(`.piece[data-uid="${item.uid}"]`)
+      || document.getElementById("btn-book")
+      || document.querySelector(".pill.seeds");
+    layer.innerHTML = `<div class="discover-stage">
+      <span class="discover-rays" aria-hidden="true"></span>
+      <img class="discover-item" src="${imgSrc}" alt="">
+      <span class="discover-sparkles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <b class="discover-title">發現新物品！</b>
+    </div>`;
+    layer.classList.add("on");
+    const skip = () => close(true);
+    layer.onclick = skip;
+    let closed = false;
+    function close(fromTap) {
+      if (closed) return;
+      closed = true;
+      layer.onclick = null;
+      const icon = layer.querySelector(".discover-item");
+      const title = layer.querySelector(".discover-title");
+      if (title) title.style.opacity = "0";
+      if (icon && toEl) {
+        const a = icon.getBoundingClientRect();
+        const b = toEl.getBoundingClientRect();
+        icon.style.transition = "transform .45s cubic-bezier(.22,.61,.36,1), opacity .45s";
+        icon.style.transform = `translate(${b.left + b.width / 2 - a.left - a.width / 2}px, ${b.top + b.height / 2 - a.top - a.height / 2}px) scale(.2)`;
+        icon.style.opacity = "0.3";
+        setTimeout(() => { layer.classList.remove("on"); layer.innerHTML = ""; }, 460);
+      } else {
+        layer.classList.remove("on");
+        layer.innerHTML = "";
+      }
+    }
+    setTimeout(() => close(false), 1500);
+  }
+
+  return { flyTo, flyCoins: flyCoinsWrap, flyRewards, flyKind, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore, pulseHud };
 }

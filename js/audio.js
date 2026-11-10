@@ -181,5 +181,20 @@ export const sfx = {
     beep(880, 0.09, "sine", 0.032);
     beep(1240, 0.11, "triangle", 0.028, 0.05);
     beep(1760, 0.09, "sine", 0.018, 0.1);
+  },
+  chime() {
+    beep(988, 0.06, "sine", 0.03);
+    beep(1319, 0.07, "triangle", 0.022, 0.04);
+  },
+  discover() {
+    beep(392, 0.16, "sine", 0.07);
+    beep(523, 0.16, "triangle", 0.06, 0.1);
+    beep(659, 0.18, "sine", 0.07, 0.2);
+    beep(784, 0.2, "sine", 0.08, 0.32);
+    beep(1047, 0.28, "triangle", 0.07, 0.48);
+    beep(1319, 0.32, "sine", 0.05, 0.62);
+    sparkle(0.12, 0.07);
+    sparkle(0.28, 0.05);
+    sparkle(0.5, 0.06);
   }
 };

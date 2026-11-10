@@ -13,13 +13,13 @@
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/app.css?v=17">
-  <link rel="stylesheet" href="css/home.css?v=17">
-  <link rel="stylesheet" href="css/story.css?v=17">
-  <link rel="stylesheet" href="css/bag.css?v=17">
-  <link rel="stylesheet" href="css/orders.css?v=17">
-  <link rel="stylesheet" href="css/settings.css?v=17">
-  <link rel="stylesheet" href="css/quality.css?v=17">
+  <link rel="stylesheet" href="css/app.css?v=18">
+  <link rel="stylesheet" href="css/home.css?v=18">
+  <link rel="stylesheet" href="css/story.css?v=18">
+  <link rel="stylesheet" href="css/bag.css?v=18">
+  <link rel="stylesheet" href="css/orders.css?v=18">
+  <link rel="stylesheet" href="css/settings.css?v=18">
+  <link rel="stylesheet" href="css/quality.css?v=18">
 </head>
 <body>
   <div id="app">
@@ -38,7 +38,8 @@
     </section>
 
     <section id="title" class="screen">
-      <button class="home-settings" id="btn-settings" type="button" title="音樂、音效與名字" aria-label="設定">
+      <div class="balloon-bg" aria-hidden="true"></div>
+      <button class="home-settings" id="btn-settings" type="button" aria-label="設定">
         <img src="assets/icons/gear.png" alt="">
       </button>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
@@ -47,28 +48,26 @@
       <div class="actions">
         <button class="btn wide" id="btn-play">開始冒險</button>
         <div class="home-dock" role="navigation" aria-label="主畫面">
-          <button class="home-ico" id="btn-map" type="button" title="打開世界地圖，修復小建築">
-            <span class="tile"><img src="assets/icons/map.png" alt=""></span>故事地圖
+          <button class="home-ico" id="btn-map" type="button" aria-label="故事地圖">
+            <span class="tile"><img src="assets/icons/map.png" alt=""></span>
           </button>
-          <button class="home-ico" id="btn-book" type="button" title="看看收集到的寶物">
-            <span class="tile"><img src="assets/icons/book.png" alt=""></span>魔法書
+          <button class="home-ico" id="btn-book" type="button" aria-label="魔法書">
+            <span class="tile"><img src="assets/icons/book.png" alt=""></span>
           </button>
-          <button class="home-ico" id="btn-daily" type="button" title="每天都可以來領一份禮物">
+          <button class="home-ico" id="btn-daily" type="button" aria-label="每日禮物">
             <span class="tile"><img src="assets/icons/clock.png" alt=""></span>
             <span class="home-dot" hidden></span>
             <span class="home-count" hidden></span>
-            每日禮物
           </button>
-          <button class="home-ico" id="btn-redeem" type="button" title="用星星種子換禮物">
-            <span class="tile"><img src="assets/icons/gift.png" alt=""></span>兌換禮品
+          <button class="home-ico" id="btn-redeem" type="button" aria-label="兌換禮品">
+            <span class="tile"><img src="assets/icons/gift.png" alt=""></span>
           </button>
-          <button class="home-ico" id="btn-lyrics" type="button" title="聽聽主題曲">
-            <span class="tile"><img src="assets/icons/song.png" alt=""></span>飛向藍藍天
+          <button class="home-ico" id="btn-lyrics" type="button" aria-label="飛向藍藍天">
+            <span class="tile"><img src="assets/icons/song.png" alt=""></span>
           </button>
-          <button class="home-ico ad-entry" id="btn-watch-ad" type="button" data-open-ad title="看〈飛向藍藍天〉領獎勵">
+          <button class="home-ico ad-entry" id="btn-watch-ad" type="button" data-open-ad aria-label="看影片領獎勵">
             <span class="tile"><img src="assets/icons/tv.png" alt=""></span>
             <span class="ad-badge" data-ad-left>5</span>
-            看影片
           </button>
         </div>
       </div>
@@ -82,11 +81,11 @@
             <b data-level>Lv.1</b>
             <span class="xpbar" aria-hidden="true"><i data-xp></i></span>
           </span>
-          <span class="pill energy" title="能量會慢慢回來"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span><span class="emax">/<span data-energy-max>100</span></span><small data-energy-in>已滿</small></span>
-          <span class="pill diamonds" title="鑽石"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
+          <span class="pill energy"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span><span class="emax">/<span data-energy-max>100</span></span><small data-energy-in>已滿</small></span>
+          <span class="pill diamonds"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
           <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
-          <span class="pill mats" title="修復材料"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
-          <button type="button" id="btn-hud-settings" class="icon-btn hud-gear" aria-label="設定" title="設定">
+          <span class="pill mats"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
+          <button type="button" id="btn-hud-settings" class="icon-btn hud-gear" aria-label="設定">
             <img src="assets/icons/gear.png" alt="">
           </button>
         </div>
@@ -99,28 +98,24 @@
         <div class="item-info" id="item-info">
           <img class="info-thumb" id="info-thumb" alt="" hidden>
           <div class="info-text">
-            <b id="info-name">點選棋盤上的東西</b>
-            <span id="info-hint">合兩個一樣的，交給訂單。</span>
+            <b id="info-name"></b>
+            <span id="info-hint"></span>
           </div>
           <button type="button" id="btn-sell" class="sell-btn" disabled>出售</button>
         </div>
         <div class="toolbar">
-          <button type="button" id="btn-bag" class="tool-btn bag bag-icon" aria-label="魔法袋" title="打開魔法袋">
+          <button type="button" id="btn-bag" class="tool-btn bag bag-icon" aria-label="魔法袋">
             <img src="assets/icons/bag.png" alt="">
             <span class="bag-badge" id="inv-count">0/6</span>
-            <small>魔法袋</small>
           </button>
           <button type="button" id="btn-go-map" class="tool-btn map" aria-label="地圖">
             <img src="assets/icons/map.png" alt="">
-            <small>地圖</small>
           </button>
           <button type="button" id="btn-go-shop" class="tool-btn shop" aria-label="小舖">
             <img src="assets/icons/shop.png" alt="">
-            <small>小舖</small>
           </button>
           <button type="button" class="tool-btn home ghost" data-back="title" aria-label="主畫面">
             <img src="assets/icons/home.png" alt="">
-            <small>主畫面</small>
           </button>
         </div>
       </div>
@@ -130,7 +125,7 @@
       <div class="hud">
         <button class="icon-btn" data-back="play" aria-label="返回棋盤">←</button>
         <span class="lv-badge compact" aria-label="等級與金幣經驗" data-xp-tip><span class="lv-star" aria-hidden="true"><img src="assets/ui/coin.png" alt=""></span><b data-level>Lv.1</b><span class="xpbar compact-bar" aria-hidden="true"><i data-xp></i></span></span>
-        <span class="pill diamonds" title="鑽石"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
+        <span class="pill diamonds"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
         <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
         <button type="button" id="btn-map-shop" class="btn map-shop">小舖</button>
       </div>
@@ -352,6 +347,17 @@
       </div>
     </div>
 
+    <div id="challenge-sheet" class="overlay" role="dialog" aria-modal="true" aria-labelledby="challenge-heading" aria-hidden="true">
+      <div class="modal challenge-card">
+        <h2 id="challenge-heading">今日挑戰</h2>
+        <button type="button" class="event-close" id="btn-challenge-close" aria-label="關閉">關閉</button>
+        <div id="challenge-tasks" class="ch-tasks"></div>
+        <div id="challenge-rewards" class="ev-track" aria-label="獎勵"></div>
+        <button type="button" class="btn green ev-claim" id="btn-challenge-claim">領取</button>
+        <p id="challenge-done" class="ev-done" hidden>今天完成囉</p>
+      </div>
+    </div>
+
     <div id="event-sheet" class="overlay" role="dialog" aria-modal="true" aria-labelledby="event-heading" aria-hidden="true">
       <div class="modal event-card">
         <div class="event-hero" aria-hidden="true"></div>
@@ -371,6 +377,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=17"></script>
+  <script type="module" src="js/app.js?v=18"></script>
 </body>
 </html>

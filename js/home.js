@@ -1,6 +1,6 @@
 /** Title / home screen: icon dock, daily clock state, floating balloons. */
 
-import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=17";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=18";
 
 const ICONS = [
   { id: "btn-map", icon: "assets/icons/map.png", label: "故事地圖", tip: "打開世界地圖，修復小建築" },
@@ -34,8 +34,8 @@ export function mountHome(ctx) {
       count.hidden = ready;
       count.textContent = ready ? "" : formatDailyResetLeft();
     }
-    dailyBtn.title = ready ? "今天的禮物可以領了" : `08:00 再來　還要 ${formatDailyResetLeft()}`;
-    dailyBtn.setAttribute("aria-label", dailyBtn.title);
+    dailyBtn.removeAttribute("title");
+    dailyBtn.setAttribute("aria-label", ready ? "每日禮物，可以領了" : "每日禮物");
   }
 
   function paintBalloons() {
@@ -67,6 +67,7 @@ export function mountHome(ctx) {
   }
 
   refresh();
+  paintBalloons();
   setInterval(() => {
     if ($("#title")?.classList.contains("on")) refresh();
   }, 30000);

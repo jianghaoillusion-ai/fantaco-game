@@ -1,4 +1,5 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=17";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=18";
+import { bindTip } from "./tip.js?v=18";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
@@ -33,37 +34,110 @@ export function createOrdersUi(ctx) {
     return null;
   }
 
+  const TASKS = [
+    { key: "orders", goal: 3, icon: "assets/icons/gift.png", label: "交訂單" },
+    { key: "merges", goal: 5, icon: "assets/ui/coin.png", label: "合成" },
+    { key: "gens", goal: 5, icon: "assets/icons/energy.png", label: "產出" }
+  ];
+
+  function taskCount(save, key) {
+    if (key === "orders") return save.daily?.challenge || 0;
+    if (key === "merges") return save.daily?.taskMerges || 0;
+    if (key === "gens") return save.daily?.taskGens || 0;
+    return 0;
+  }
+
   function dailyState() {
     const save = ctx.getSave();
     ensureDaily(save);
+    const tasks = TASKS.map((t) => {
+      const done = Math.min(t.goal, taskCount(save, t.key));
+      return { ...t, done, ready: done >= t.goal };
+    });
+    const done = tasks.reduce((n, t) => n + t.done, 0);
+    const goal = tasks.reduce((n, t) => n + t.goal, 0);
+    const allDone = tasks.every((t) => t.ready);
     return {
-      done: save.daily?.challenge || 0,
-      goal: 3,
+      tasks, done, goal, allDone,
       claimed: !!save.daily?.challengeClaimed,
       left: formatDailyResetLeft()
     };
   }
 
-  function bumpDaily() {
+  function bumpDaily() { bumpTask("orders"); }
+
+  function bumpTask(key) {
     const save = ctx.getSave();
     const today = todayKey();
-    if (!save.daily) save.daily = { day: "", streak: 0, claimed: false, challengeDay: today, challenge: 0, challengeClaimed: false };
+    if (!save.daily) save.daily = { day: "", streak: 0, claimed: false, challengeDay: today, challenge: 0, challengeClaimed: false, taskMerges: 0, taskGens: 0 };
     ensureDaily(save);
-    save.daily.challenge = (save.daily.challenge || 0) + 1;
+    if (key === "orders") save.daily.challenge = (save.daily.challenge || 0) + 1;
+    else if (key === "merges") save.daily.taskMerges = (save.daily.taskMerges || 0) + 1;
+    else if (key === "gens") save.daily.taskGens = (save.daily.taskGens || 0) + 1;
   }
 
-  function claimDailyChallenge() {
+  function claimDailyChallenge(fromEl) {
     const save = ctx.getSave();
     const st = dailyState();
-    if (st.claimed || st.done < st.goal) { sfx.invalid(); return; }
+    if (st.claimed || !st.allDone) { sfx.invalid(); return; }
     save.daily.challengeClaimed = true;
     save.starSeeds = (save.starSeeds || 0) + 8;
     save.energy = Math.min(ENERGY.max, save.energy + 10);
     sfx.daily();
-    toast("今日挑戰完成！＋8 星星種子、＋10 能量");
     persist();
-    ctx.refreshHud();
-    renderOrders();
+    const after = () => { ctx.refreshHud(); renderOrders(); renderChallengePanel(); };
+    if (ctx.fx?.flyRewards) ctx.fx.flyRewards({ seeds: 8, energy: 10 }, fromEl || document.querySelector(".daily-card"), after);
+    else after();
+  }
+
+  function renderChallengePanel() {
+    const box = document.getElementById("challenge-tasks");
+    if (!box) return;
+    const st = dailyState();
+    box.innerHTML = st.tasks.map((t) => {
+      const pct = Math.round((t.done / t.goal) * 100);
+      return `<div class="ch-task${t.ready ? " ready" : ""}">
+        <img src="${t.icon}" alt="">
+        <span class="ch-bar"><i style="width:${pct}%"></i></span>
+        <span class="ch-frac">${t.done}/${t.goal}</span>
+      </div>`;
+    }).join("");
+    const rew = document.getElementById("challenge-rewards");
+    if (rew) rew.innerHTML = `<span class="ev-rew"><img src="assets/items/star-seed.png" alt="">8</span><span class="ev-rew"><img src="assets/icons/energy.png" alt="">10</span>`;
+    const claim = document.getElementById("btn-challenge-claim");
+    if (claim) {
+      claim.disabled = st.claimed || !st.allDone;
+      claim.hidden = st.claimed;
+      claim.textContent = st.claimed ? "已領取" : "領取";
+    }
+    const done = document.getElementById("challenge-done");
+    if (done) done.hidden = !st.claimed;
+  }
+
+  function openChallenge() {
+    const sheet = document.getElementById("challenge-sheet");
+    if (!sheet) return;
+    sfx.tap();
+    renderChallengePanel();
+    sheet.classList.add("on");
+    sheet.setAttribute("aria-hidden", "false");
+  }
+
+  function closeChallenge() {
+    const sheet = document.getElementById("challenge-sheet");
+    if (!sheet) return;
+    sheet.classList.remove("on");
+    sheet.setAttribute("aria-hidden", "true");
+  }
+
+  function bindChallenge() {
+    if (bindChallenge._on) return;
+    bindChallenge._on = true;
+    document.getElementById("btn-challenge-close")?.addEventListener("click", () => { sfx.tap(); closeChallenge(); });
+    document.getElementById("btn-challenge-claim")?.addEventListener("click", (e) => claimDailyChallenge(e.currentTarget));
+    document.getElementById("challenge-sheet")?.addEventListener("click", (e) => {
+      if (e.target?.id === "challenge-sheet") closeChallenge();
+    });
   }
 
   function renderOrders() {
@@ -76,16 +150,20 @@ export function createOrdersUi(ctx) {
     const st = dailyState();
     const head = document.createElement("div");
     head.className = "orders-head";
-    const daily = document.createElement("div");
-    daily.className = "daily-bar" + (st.done >= st.goal && !st.claimed ? " ready" : "") + (st.claimed ? " claimed" : "");
-    daily.innerHTML = `<b>今日挑戰</b>
-      <span class="need">${st.done}/${st.goal}</span>
-      <span class="rew">＋8 種子　＋10 能量</span>
-      <span class="banter">${st.claimed ? "今天完成囉" : "剩 " + st.left}</span>
-      ${st.done >= st.goal && !st.claimed ? '<button type="button" class="give">領取</button>' : ""}`;
-    daily.querySelector(".give")?.addEventListener("click", (e) => { e.stopPropagation(); claimDailyChallenge(); });
+    const daily = document.createElement("button");
+    daily.type = "button";
+    daily.className = "daily-card" + (st.allDone && !st.claimed ? " ready" : "") + (st.claimed ? " claimed" : "");
+    daily.setAttribute("aria-label", st.claimed ? "今日挑戰已完成" : `今日挑戰 ${st.done}/${st.goal}，還有 ${st.left.replace(/\u00a0/g, " ")}`);
+    const pct = Math.round((st.done / st.goal) * 100);
+    daily.innerHTML = `<img class="daily-ico" src="assets/icons/gift.png" alt="">
+      <span class="daily-bar-track"><i style="width:${pct}%"></i></span>
+      <span class="daily-timer">${st.claimed ? "完成" : st.left}</span>
+      ${st.allDone && !st.claimed ? '<span class="daily-claim-dot" aria-hidden="true">✓</span>' : ""}`;
+    daily.addEventListener("click", (e) => { e.stopPropagation(); openChallenge(); });
+    bindTip(daily, "今日挑戰", st.claimed ? "今天完成囉" : `${st.done}/${st.goal}　還有 ${st.left}`);
     head.appendChild(daily);
     box.appendChild(head);
+    bindChallenge();
 
     const row = document.createElement("div");
     row.className = "orders-row";
@@ -100,7 +178,6 @@ export function createOrdersUi(ctx) {
       const card = document.createElement("div");
       card.className = "order" + (o.flag ? " story" : "") + (ready ? " ready" : "");
       card.dataset.id = o.id;
-      card.title = `${npc.name}　${def?.name || ""}　${tip}`;
       card.innerHTML = `
         ${o.flag ? '<span class="book-badge"><img src="assets/icons/book.png" alt="故事"></span>' : ""}
         ${ready ? '<span class="check-badge" aria-hidden="true">✓</span><span class="check-spark"></span>' : ""}
@@ -118,6 +195,7 @@ export function createOrdersUi(ctx) {
         e.stopPropagation();
         clickGive(o.id, card);
       });
+      bindTip(card, npc.name, `${def?.name || ""}　${tip}`);
       if (ready && !seenReady.has(o.id)) {
         seenReady.add(o.id);
         toast("可以交付囉！點「交付」交給朋友。");
@@ -141,5 +219,5 @@ export function createOrdersUi(ctx) {
     ctx.fx?.flyTo(fromEl, card, () => ctx.tryFulfill(loc, orderId));
   }
 
-  return { renderOrders, hasItem, findNeed, clickGive, bumpDaily, dailyState };
+  return { renderOrders, hasItem, findNeed, clickGive, bumpDaily, bumpTask, dailyState, openChallenge, closeChallenge };
 }

@@ -1,6 +1,6 @@
 /** Story scenes: big portraits, matching expressions, typewriter + mouth, filled stage. */
 
-import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=17";
+import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=18";
 
 let queue = [], idx = 0, doneFn = null;
 let typing = false, typed = "", full = "", typeTimer = 0, mouthTimer = 0, talking = false;

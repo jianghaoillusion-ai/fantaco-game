@@ -1,9 +1,36 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
-import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=17";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=17";
+import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=18";
+import { nearbyEmpty, produceFrom } from "./merge.js?v=18";
 
-export const GEN_POPS = 12;
-export const GEN_COOL_MS = 30_000;
+export const GEN_POPS = 18;
+export const GEN_COOL_MS = 6_000;
+
+/** Energy-producer recharge: Travel Town is ~30s–1min after a burst; we go shorter. Early levels are near-instant. */
+export function genBurstPops(save, item) {
+  const L = save?.level || 1;
+  if (L <= 3) return 24;
+  if (L <= 8) return 18;
+  return 14;
+}
+
+export function genCoolMs(save, item) {
+  const L = save?.level || 1;
+  const tier = item?.tier || 1;
+  if (L <= 3 && tier <= 2) return 0;
+  if (L <= 5) return 3000;
+  if (L <= 10) return 6000;
+  if (L <= 20) return 8000;
+  return 12000;
+}
+
+export function autoGenMs(save, def, item) {
+  const base = item?.autoMs || def?.autoMs || 0;
+  if (!base) return 0;
+  const L = save?.level || 1;
+  if (L <= 3) return Math.min(base, 8000);
+  if (L <= 8) return Math.min(base, 12000);
+  return Math.min(base, 18000);
+}
 
 export function createFog(ctx) {
   const { toast, sfx, persist, refresh } = ctx;
@@ -55,15 +82,34 @@ export function createFog(ctx) {
 
   function decorateGen(piece, item) {
     if (!piece) return;
+    const slot = piece.closest(".cell") || piece.parentElement;
     const left = (item.coolUntil || 0) - Date.now();
+    let timer = slot?.querySelector?.(".gen-timer");
     if (left > 0) {
       piece.classList.add("cooling");
       piece.classList.remove("ready");
       piece.dataset.cool = Math.ceil(left / 1000) + "s";
+      if (slot) {
+        if (!timer) {
+          timer = document.createElement("div");
+          timer.className = "gen-timer";
+          timer.setAttribute("aria-hidden", "true");
+          slot.appendChild(timer);
+        }
+        const ms = Math.max(1, (item.coolUntil || 0) - (item.coolStarted || (item.coolUntil - (genCoolMs(ctx.getSave?.(), item) || left))));
+        const total = Math.max(left, (item.coolUntil || 0) - (item.coolStarted || Date.now() - 1));
+        const start = item.coolStarted || (item.coolUntil - total);
+        const dur = Math.max(1, item.coolUntil - start);
+        const pct = Math.max(0, Math.min(1, left / dur));
+        const ang = Math.round(pct * 360);
+        timer.innerHTML = `<span class="gen-ring" style="--pct:${ang}deg"></span><span class="gen-pill">${Math.ceil(left / 1000)}秒</span>`;
+        timer.hidden = false;
+      }
     } else {
       piece.classList.add("ready");
       piece.classList.remove("cooling");
       delete piece.dataset.cool;
+      if (timer) timer.hidden = true;
     }
   }
 
@@ -117,7 +163,7 @@ export function createFog(ctx) {
     (save.board || []).forEach((cell, i) => {
       if (!cell || cell.kind !== "gen") return;
       const def = gens[cell.gen];
-      const ms = cell.autoMs || def?.autoMs;
+      const ms = autoGenMs(save, def, cell);
       if (!ms) return;
       if (!cell.coolUntil) cell.coolUntil = now + ms;
       if (now < cell.coolUntil) return;
@@ -150,6 +196,6 @@ export function createFog(ctx) {
     tickAutoGens();
   }
 
-  return { decorateCell, decorateGen, tryUnlockClump, onLockedTap, isOpenIndex, canDropAt, isCellOpen, tickCool, tickAutoGens, revealAdjacent, GEN_POPS, GEN_COOL_MS };
+  return { decorateCell, decorateGen, tryUnlockClump, onLockedTap, isOpenIndex, canDropAt, isCellOpen, tickCool, tickAutoGens, revealAdjacent, GEN_POPS, GEN_COOL_MS, genCoolMs, genBurstPops, autoGenMs };
 
 }
