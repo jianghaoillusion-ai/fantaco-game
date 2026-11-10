@@ -206,6 +206,75 @@ export function makeProceduralOrder(ctx) {
   };
 }
 
+
+function shuffle(list) {
+  const a = list.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function listProceduralCandidates(opts) {
+  const { chains, chapter, discovered, npcsByChapter } = opts;
+  const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
+  const unlocked = Object.keys(chains).filter((id) => {
+    const ch = chains[id].chapter;
+    const okChapter = order.indexOf(ch) <= order.indexOf(chapter || "village");
+    if (!okChapter) return false;
+    if (id === "star" || id === "garden") return true;
+    return discoveredMax(discovered, id) >= 1;
+  });
+  const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
+  const out = [];
+  for (const chain of unlocked) {
+    const maxT = maxTier(chains, chain);
+    const starter = chain === "star" || chain === "garden";
+    const cap = Math.max(starter ? 3 : 2, discoveredMax(discovered, chain));
+    const top = Math.min(maxT, cap);
+    for (let tier = 2; tier <= top; tier++) {
+      const seeds = 3 + tier * 2;
+      const xp = 15 + tier * 10;
+      for (const npc of npcs) {
+        out.push({
+          npc,
+          need: { chain, tier },
+          reward: { seeds, xp, energy: tier >= 4 ? 6 : 3, coins: seeds + 4 },
+          chapter,
+          procedural: true
+        });
+      }
+    }
+  }
+  return out;
+}
+
+/** Fill up to `slots` orders with unique customers and unique needs. */
+export function fillOrderSlots(save, slots, opts) {
+  save.orders = (save.orders || []).filter((o) => o && o.need);
+  const story = typeof opts.nextStory === "function" ? opts.nextStory() : opts.nextStory;
+  if (story && !save.orders.some((o) => o.id === story.id)) {
+    save.orders.unshift({ ...story });
+  }
+  const needKey = (o) => `${o.need.chain}:${o.need.tier}`;
+  const candidates = shuffle(listProceduralCandidates(opts));
+  const take = (allowRepeatNeed, allowRepeatNpc) => {
+    for (const c of candidates) {
+      if (save.orders.length >= slots) return;
+      const npcs = new Set(save.orders.map((o) => o.npc));
+      const needs = new Set(save.orders.map(needKey));
+      if (!allowRepeatNpc && npcs.has(c.npc)) continue;
+      if (!allowRepeatNeed && needs.has(needKey(c))) continue;
+      save.orders.push({ ...c, id: "p-" + makeUid() });
+    }
+  };
+  take(false, false);
+  take(true, false);
+  take(true, true);
+  save.orders = save.orders.slice(0, slots);
+}
+
 export const NPCS_BY_CHAPTER = {
   village: ["jiejie", "feifei", "apiao"],
   journey: ["feifei", "apiao", "spirit"],

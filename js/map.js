@@ -16,12 +16,12 @@ export function createMap(ctx) {
     const map = ctx.getMap();
     box.innerHTML = "";
     box.classList.add("town-map");
+    box.classList.remove("world-map");
     for (const region of map.regions || []) {
       if (!regionVisible(map, save, region)) continue;
       const open = isRegionUnlocked(save, region.id);
       const card = document.createElement("article");
       card.className = "region-card" + (open ? "" : " locked") + (save.region === region.id ? " active" : "");
-      const src = region.source === "new" ? '<span class="src-new">新創作</span>' : "";
       const thumb = region.bg || "assets/bg/village.webp";
       const blocked = open ? null : regionUnlockBlocked(map, save, region);
       const cost = formatCost(region.unlock || {});
@@ -29,7 +29,7 @@ export function createMap(ctx) {
         <img class="thumb" src="${thumb}" alt="">
         <div>
           <div class="num">${open ? "已打開" : "還沒打開"}</div>
-          <h3>${region.name}${src}</h3>
+          <h3>${region.name}</h3>
           <small>${region.subtitle || ""}</small>
           ${open ? "" : `<div class="costs">打開需要：${region.unlock?.type === "start" ? "開場即開放" : cost}${blocked ? "　（" + blocked + "）" : ""}</div>`}
         </div>
@@ -57,10 +57,9 @@ export function createMap(ctx) {
       }
       box.appendChild(card);
     }
-    const soon = document.createElement("article");
-    soon.className = "region-card";
-    soon.innerHTML = `<header><div><div class="num"><span class="soon-mark">每週更新</span></div>
-      <h3>新的小故事製作中</h3><small>之後只要在 data/map.json 加一個地區就能進來。訂單會一直出，可以一直玩。</small></div></header>`;
+    const soon = document.createElement("p");
+    soon.className = "map-soon";
+    soon.textContent = "之後還會打開新的地方。訂單會一直出，可以一直玩。";
     box.appendChild(soon);
   }
 
@@ -102,8 +101,7 @@ export function createMap(ctx) {
     if (blocked) { sfx.invalid(); toast(blocked); return; }
     pendingRegion = region;
     $("#region-buy-title").textContent = "打開「" + region.name + "」";
-    const tag = region.source === "new" ? "這是為遊戲新創作的地點。" : "";
-    $("#region-buy-sub").textContent = (region.subtitle || "") + (tag ? " " + tag : "");
+    $("#region-buy-sub").textContent = region.subtitle || "";
     $("#region-buy-cost").textContent = formatCost(region.unlock);
     $("#region-buy")?.classList.add("on");
   }
@@ -154,11 +152,13 @@ export function createMap(ctx) {
     if (b.clump && save.unlockedClumps && !save.unlockedClumps.includes("all") && !save.unlockedClumps.includes(b.clump)) {
       save.unlockedClumps.push(b.clump);
     }
-    sfx.order();
+    sfx.level();
     toast(`修好了${b.name}！＋${xp} 經驗`);
     persist();
     refreshHud();
     renderMap();
+    ctx.fx?.celebrateRestore?.(b.name);
+    ctx.playMusic?.(region?.music || region?.chapter || ch);
     ctx.mascot?.cheer?.();
   }
 

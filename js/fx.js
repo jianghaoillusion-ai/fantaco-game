@@ -76,5 +76,15 @@ export function createFx(ctx) {
     }
   }
 
-  return { flyTo, popAt, coinPop, showDiscover, showInfo };
+  function celebrateRestore(name, anchor) {
+    const layer = document.createElement("div");
+    layer.className = "restore-fx";
+    layer.innerHTML = `<div class="restore-burst" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+      <b>修好了！</b><span>${name}</span>`;
+    document.body.appendChild(layer);
+    coinPop(anchor || $("#map") || document.body, "修好了");
+    setTimeout(() => layer.remove(), 1800);
+  }
+
+  return { flyTo, popAt, coinPop, showDiscover, showInfo, celebrateRestore };
 }

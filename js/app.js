@@ -5,10 +5,11 @@ import { mountMascot } from "./mascot.js";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
-  remapBoard, nearbyEmpty
+  remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js";
 import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
 import { regionById } from "./world.js";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -41,7 +42,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=6");
+  const res = await fetch(url + "?v=7");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -59,18 +60,16 @@ export async function boot() {
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
   tickEnergy(SAVE);
-  COLS = SAVE.boardCols || COLS;
-  ROWS = SAVE.boardRows || ROWS;
   if (!SAVE.unlockedRegions) SAVE.unlockedRegions = ["village"];
   if (!SAVE.region) SAVE.region = "village";
   if (!SAVE.board) {
-    SAVE.board = starterBoard(COLS, ROWS);
-    SAVE.boardCols = COLS;
-    SAVE.boardRows = ROWS;
     if (!SAVE.unlockedClumps) SAVE.unlockedClumps = ["start"];
   } else if (!SAVE.unlockedClumps) {
     SAVE.unlockedClumps = ["all"];
   }
+  migrateToFixedBoard(SAVE, { remapBoard, starterBoard });
+  COLS = BOARD_COLS;
+  ROWS = BOARD_ROWS;
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
@@ -237,53 +236,7 @@ function toast(msg) {
 }
 
 
-/* ---------- responsive board ---------- */
-function pickBoardSize(availW, availH) {
-  const gap = availW < 430 ? 4 : 6;
-  const pad = availW < 430 ? 6 : 8;
-  const minCell = 36, maxCell = 72;
-  const vw = (typeof window !== "undefined" && window.innerWidth) || availW;
-  const vh = (typeof window !== "undefined" && window.innerHeight) || availH;
-  const aspect = vw / Math.max(1, vh);
-  const preferred = aspect < 0.9
-    ? [[7, 9], [8, 10], [7, 8], [8, 9], [6, 9], [7, 10], [8, 8], [6, 8]]
-    : aspect > 1.2
-      ? [[10, 7], [11, 7], [9, 7], [10, 8], [8, 6], [11, 8], [12, 7], [9, 6]]
-      : [[8, 8], [8, 7], [7, 7], [9, 7], [9, 8], [8, 9], [7, 8]];
-  const target = aspect < 0.9 ? (vw < 600 ? [7, 9] : [8, 10]) : aspect > 1.2 ? [10, 7] : [8, 8];
-  const idealCell = availW < 500 ? 46 : availW < 900 ? 58 : 64;
-  const score = (cols, rows) => {
-    const border = 8;
-    const cell = Math.floor(Math.min(
-      (availW - pad * 2 - gap * (cols - 1) - border) / cols,
-      (availH - pad * 2 - gap * (rows - 1) - border) / rows
-    ));
-    if (cell < minCell) return null;
-    const usedC = Math.min(cell, maxCell);
-    const usedW = pad * 2 + usedC * cols + gap * (cols - 1) + border;
-    const usedH = pad * 2 + usedC * rows + gap * (rows - 1) + border;
-    if (usedW > availW + 0.5 || usedH > availH + 0.5) return null;
-    const fill = (usedW * usedH) / Math.max(1, availW * availH);
-    const cellFit = 1 - Math.min(1, Math.abs(usedC - idealCell) / 36);
-    let quality = cellFit * 0.7 + fill * 0.3;
-    if (cols === target[0] && rows === target[1] && usedC >= 40) quality += 0.2;
-    return { cols, rows, cell: usedC, gap, pad, fill, quality };
-  };
-  let best = null;
-  for (const [c, r] of preferred) {
-    const s = score(c, r);
-    if (s && (!best || s.quality > best.quality)) best = s;
-  }
-  if (best) return best;
-  for (let c = 6; c <= 12; c++) {
-    for (let r = 5; r <= 12; r++) {
-      const s = score(c, r);
-      if (s && (!best || s.quality > best.quality)) best = s;
-    }
-  }
-  return best || { cols: 7, rows: 9, cell: 40, gap, pad, fill: 0 };
-}
-
+/* ---------- fixed 7×9 board; only the cell size scales ---------- */
 function measureBoardBox() {
   const scene = $(".scene") || $(".play-main");
   if (!scene) return { w: 360, h: 400 };
@@ -292,16 +245,15 @@ function measureBoardBox() {
 
 function applyBoardLayout() {
   const box = measureBoardBox();
-  const picked = pickBoardSize(box.w, box.h);
+  const picked = fitBoardCell(box.w, box.h);
+  COLS = BOARD_COLS;
+  ROWS = BOARD_ROWS;
   const frame = $(".play-frame") || $("#play");
   if (frame) {
     const fw = (frame.clientWidth || box.w) - 24;
     const invCell = Math.max(40, Math.min(64, Math.floor((fw - 6 * 7) / 8)));
     frame.style.setProperty("--inv-cell", invCell + "px");
   }
-  const sizeChanged = picked.cols !== COLS || picked.rows !== ROWS || (SAVE.board && SAVE.board.length !== picked.cols * picked.rows);
-  COLS = picked.cols;
-  ROWS = picked.rows;
   const board = $("#board");
   if (board) {
     board.style.setProperty("--cols", String(COLS));
@@ -310,21 +262,9 @@ function applyBoardLayout() {
     board.style.setProperty("--gap", picked.gap + "px");
     board.style.setProperty("--pad", picked.pad + "px");
   }
-  if (sizeChanged) {
-    const oldC = SAVE.boardCols || 7;
-    const oldR = SAVE.boardRows || Math.max(1, Math.floor((SAVE.board || []).length / Math.max(1, oldC)));
-    if (SAVE.board && SAVE.board.length) {
-      const { board: next, overflow } = remapBoard(SAVE.board, oldC, oldR, COLS, ROWS);
-      SAVE.board = next;
-      const cap = GAME.board?.inventory || 8;
-      for (const cell of overflow) {
-        if (SAVE.inventory.filter(Boolean).length < cap) SAVE.inventory.push(cell);
-      }
-    } else {
-      SAVE.board = starterBoard(COLS, ROWS);
-    }
-    SAVE.boardCols = COLS;
-    SAVE.boardRows = ROWS;
+  const need = !SAVE.board || SAVE.board.length !== COLS * ROWS || SAVE.boardCols !== COLS || SAVE.boardRows !== ROWS;
+  if (need) {
+    migrateToFixedBoard(SAVE, { remapBoard, starterBoard });
     persist();
     renderBoard();
   }
@@ -680,30 +620,14 @@ function nextStoryOrder() {
 }
 
 function ensureOrders() {
-  SAVE.orders = (SAVE.orders || []).filter((o) => o && o.need);
-  const slots = GAME.board?.orders || 4;
-  // keep current story order first if any
-  const story = nextStoryOrder();
-  const hasStory = SAVE.orders.some((o) => !o.procedural && story && o.id === story.id);
-  if (story && !hasStory && !SAVE.orders.some((o) => o.id === story.id)) {
-    SAVE.orders.unshift({ ...story });
-  }
-  // fill procedural
-  let guard = 0;
-  while (SAVE.orders.length < slots && guard++ < 8) {
-    const o = makeProceduralOrder({
-      chains: CHAINS,
-      chapter: SAVE.chapter,
-      discovered: SAVE.discovered,
-      npcsByChapter: NPCS_BY_CHAPTER,
-      seq: SAVE.ordersDone || 0
-    });
-    if (!o) break;
-    // avoid duplicate needs
-    if (SAVE.orders.some((x) => x.need.chain === o.need.chain && x.need.tier === o.need.tier)) continue;
-    SAVE.orders.push(o);
-  }
-  SAVE.orders = SAVE.orders.slice(0, slots);
+  fillOrderSlots(SAVE, GAME.board?.orders || 3, {
+    chains: CHAINS,
+    chapter: SAVE.chapter,
+    discovered: SAVE.discovered,
+    npcsByChapter: NPCS_BY_CHAPTER,
+    seq: SAVE.ordersDone || 0,
+    nextStory: nextStoryOrder
+  });
 }
 
 function hasGen(id) {
