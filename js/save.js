@@ -1,7 +1,8 @@
+import { remapBoard } from "./merge.js";
 const KEY = "fantaco.mianhuatang.save.v2";
 const LEGACY = "fantaco.mianhuatang.save.v1";
 
-const ENERGY_MAX = 80;
+const ENERGY_MAX = 100;
 const REGEN_MS = 90_000;
 
 export const ENERGY = { max: ENERGY_MAX, regenMs: REGEN_MS };
@@ -13,8 +14,8 @@ export function configureEnergy(config = {}) {
 
 export function emptySave() {
   return {
-    version: 3,
-    schemaVersion: 3,
+    version: 4,
+    schemaVersion: 4,
     map: { regions: {}, unlockedGenerators: [], legacyChapters: [] },
     fog: { openCount: 12, legacyOpen: false },
     magicBag: { capacity: 8, materials: {} },
@@ -37,11 +38,15 @@ export function emptySave() {
     storyDone: [],
     chapter: "village",
     restore: { village: 0, journey: 0, candy: 0, bulu: 0, hate: 0, ending: 0 },
+    buildings: {},
+    unlockedClumps: ["start"],
+    unlockedRegions: ["village"],
+    region: "village",
     treasures: {},
     discovered: {},
     flags: {},
     settings: { music: true, sfx: true },
-    daily: { day: "", streak: 0, claimed: false },
+    daily: { day: "", streak: 0, claimed: false, challenge: 0, challengeClaimed: false },
     comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
@@ -63,9 +68,9 @@ function migrate(v1) {
 export function normalizeSave(raw) {
   const base = emptySave();
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
-  if ((raw.schemaVersion ?? raw.version ?? 1) > 3) throw new Error("存檔版本較新，請更新遊戲後再開啟");
-  const s = { ...base, ...raw, version: 3, schemaVersion: 3 };
-  for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures", "map", "fog", "magicBag", "challenge", "generatorCooldowns"]) {
+  if ((raw.schemaVersion ?? raw.version ?? 1) > 4) throw new Error("存檔版本較新，請更新遊戲後再開啟");
+  const s = { ...base, ...raw, version: 4, schemaVersion: 4 };
+  for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures", "map", "fog", "magicBag", "challenge", "generatorCooldowns", "buildings"]) {
     s[key] = { ...base[key], ...(raw[key] && typeof raw[key] === "object" && !Array.isArray(raw[key]) ? raw[key] : {}) };
   }
   for (const key of ["inventory", "orders", "storyDone"]) s[key] = Array.isArray(raw[key]) ? raw[key] : [];
@@ -88,6 +93,33 @@ export function normalizeSave(raw) {
     const chapters = ['village','journey','candy','bulu','hate','ending'];
     s.map.legacyChapters = chapters.slice(0, Math.max(0, chapters.indexOf(s.chapter)) + 1);
   }
+  s.buildings = Object.fromEntries(Object.entries(object(s.buildings)).filter(([, v]) => Number.isInteger(v) && v >= 0));
+  s.unlockedRegions = [...new Set(['village', ...(Array.isArray(raw.unlockedRegions) ? raw.unlockedRegions.filter(x => typeof x === 'string') : [])])];
+  if ((raw.schemaVersion ?? raw.version ?? 2) < 4) {
+    // The retired draft had two repair steps per region. Keep its ledger and
+    // translate paid progress once; subsequent weekly additions need no mapping.
+    const legacy = {village:['village','stage',3],castle:['castle','hall',2],forest:['hill','lookout',1],candy:['candylane','stall',1],bulu:['lamplight','lamp',1],hate:['theater','show',1],sky:['plaza','fountain',1]};
+    for (const [id, [region, building, max]] of Object.entries(legacy)) {
+      const step = s.map.regions[id] || 0;
+      if (!step) continue;
+      if (!s.unlockedRegions.includes(region)) s.unlockedRegions.push(region);
+      s.buildings[building] = Math.max(s.buildings[building] || 0, step >= 2 ? max : 1);
+    }
+    if (raw.challenge?.day && !raw.daily?.challenge) {
+      s.daily.challengeDay = raw.challenge.day;
+      s.daily.challenge = raw.challenge.orders || 0;
+      s.daily.challengeClaimed = !!raw.challenge.claimed;
+    }
+  }
+  s.unlockedClumps = Array.isArray(raw.unlockedClumps) ? [...raw.unlockedClumps] : s.board ? ['all'] : ['start'];
+  if (s.board) {
+    const oldCols = Number.isInteger(raw.boardCols) && raw.boardCols > 0 ? raw.boardCols : 7;
+    const oldRows = Math.max(Number.isInteger(raw.boardRows) ? raw.boardRows : 0, Math.ceil(s.board.length / oldCols));
+    const { board, overflow } = remapBoard(s.board, oldCols, oldRows, 7, 9);
+    s.board = board; s.inventory = [...s.inventory, ...overflow];
+  }
+  s.boardCols = 7; s.boardRows = 9;
+  if (!s.unlockedRegions.includes(s.region)) s.region = 'village';
   return s;
 }
 
@@ -104,8 +136,8 @@ export function loadSave() {
 }
 
 export function writeSave(data) {
-  if ((data.schemaVersion ?? data.version) > 3) throw new Error("存檔版本較新");
-  data.version = 3; data.schemaVersion = 3;
+  if ((data.schemaVersion ?? data.version) > 4) throw new Error("存檔版本較新");
+  data.version = 4; data.schemaVersion = 4;
   data.updatedAt = Date.now();
   localStorage.setItem(KEY, JSON.stringify(data));
   // STUB: later POST JSON to Cloudflare Worker, persist in D1

@@ -1,4 +1,3 @@
-import { openCells } from "./board-loop.js";
 /** Merge-2 board, generators, orders. Data-driven chains. */
 
 export function maxTier(chains, chain) {
@@ -36,8 +35,8 @@ export function starterBoard(cols, rows) {
   put(cr, cc - 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
   put(cr, cc + 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
   put(cr + 1, cc, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(cr - 2, Math.max(0, cc - 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
-  put(cr - 2, Math.min(cols - 1, cc + 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  put(cr - 1, cc - 1, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  put(cr - 1, cc + 1, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
   return b;
 }
 
@@ -115,40 +114,39 @@ export function produceFrom(genCell, gens) {
   return { kind: "item", chain: def.produces, tier, uid: makeUid() };
 }
 
-/** Full boards never spend energy or silently send generated items to inventory. */
-export function generateItem(save, generator, gens, energy, random = Math.random, now = Date.now()) {
-  let spaces = (save.fog ? openCells(save) : save.board.map((_, i) => i)).filter(i => !save.board[i]);
-  if (!spaces.length) return { error: "full" };
-  const cost = energy.cost ?? 1;
-  if (save.energy < cost) return { error: "energy" };
-  const until = save.generatorCooldowns?.[generator.uid] || 0;
-  const cooldown = energy.cooldownMs ?? 2000;
-  if (until > now && until <= now + cooldown) return { error: "cooldown", remainingMs: until - now };
-  const origin = save.board.indexOf(generator), cols = save.boardCols || save.board.length;
-  if (origin >= 0) {
-    const distance = i => Math.max(Math.abs(i % cols - origin % cols), Math.abs(Math.floor(i / cols) - Math.floor(origin / cols)));
-    const nearest = Math.min(...spaces.map(distance));
-    spaces = spaces.filter(i => distance(i) === nearest);
-  }
-  const item = produceFrom(generator, gens);
-  if (!item) return { error: "generator" };
-  const index = spaces[Math.floor(random() * spaces.length)];
-  if (save.energy >= energy.max) save.energyAt = now;
-  save.energy -= cost;
-  if (generator.uid) {
-    save.generatorCooldowns ||= {};
-    save.generatorCooldowns[generator.uid] = now + cooldown;
-  }
-  save.board[index] = item;
-  return { item, index };
-}
-
 export function endlessRegion(completed, balance) {
   return 1 + Math.floor(completed / balance.ordersPerRegion);
 }
 
 export function firstEmpty(board) {
   return board.findIndex((c) => !c);
+}
+
+/** Prefer a random empty unlocked cell in rings around an origin; then any unlocked empty. */
+export function nearbyEmpty(board, cols, rows, origin, isOpen) {
+  const open = typeof isOpen === "function" ? isOpen : () => true;
+  const empties = (cells) => cells.filter((i) => i >= 0 && i < board.length && !board[i] && open(i));
+  if (origin == null || origin < 0) {
+    const all = empties([...board.keys()]);
+    return all.length ? all[Math.floor(Math.random() * all.length)] : -1;
+  }
+  const r0 = Math.floor(origin / cols), c0 = origin % cols;
+  const maxR = Math.max(cols, rows);
+  for (let ring = 1; ring <= maxR; ring++) {
+    const cells = [];
+    for (let dr = -ring; dr <= ring; dr++) {
+      for (let dc = -ring; dc <= ring; dc++) {
+        if (Math.max(Math.abs(dr), Math.abs(dc)) !== ring) continue;
+        const r = r0 + dr, c = c0 + dc;
+        if (r < 0 || c < 0 || r >= rows || c >= cols) continue;
+        cells.push(r * cols + c);
+      }
+    }
+    const opts = empties(cells);
+    if (opts.length) return opts[Math.floor(Math.random() * opts.length)];
+  }
+  const all = empties([...board.keys()]);
+  return all.length ? all[Math.floor(Math.random() * all.length)] : -1;
 }
 
 export function playerMaxTier(board, inv, chain) {
@@ -197,7 +195,7 @@ export function makeProceduralOrder(ctx) {
   else if (slot === 3) tier = Math.min(maxT, Math.max(2, cap + (cap >= maxT ? 0 : 1))); // stretch
   else tier = Math.min(maxT, Math.max(2, cap));
   tier = Math.max(2, Math.min(maxT, tier));
-  const npcs = npcsByChapter[chapter] || ["feifei", "apiao", "mian"];
+  const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
   const seeds = (balance.seedBase ?? 3) + tier * (balance.seedsPerTier ?? 2) + (slot === 3 ? (balance.hardSeeds ?? 6) : 0);
   const xp = (balance.xpBase ?? 15) + tier * (balance.xpPerTier ?? 10) + (slot === 3 ? (balance.hardXp ?? 20) : 0);
@@ -215,12 +213,12 @@ export function makeProceduralOrder(ctx) {
 }
 
 export const NPCS_BY_CHAPTER = {
-  village: ["jiejie", "feifei", "apiao", "mian"],
-  journey: ["feifei", "apiao", "spirit", "mian"],
+  village: ["jiejie", "feifei", "apiao"],
+  journey: ["feifei", "apiao", "spirit"],
   candy: ["sika", "feifei", "apiao", "spirit"],
   bulu: ["bulu", "feifei", "apiao", "spirit"],
   hate: ["hate", "feifei", "apiao", "spirit"],
-  ending: ["feifei", "apiao", "jiejie", "sika", "bulu", "hate", "spirit", "mian"]
+  ending: ["feifei", "apiao", "jiejie", "sika", "bulu", "hate", "spirit"]
 };
 
 export function xpLevel(xp, curve) {

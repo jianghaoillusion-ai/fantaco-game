@@ -1,29 +1,27 @@
-import { loadMapData } from "./map-adapter.js";
-import { repairRegion, mapChapterOpen, expandBag } from "./map-loop.js";
-import { buyOffer } from "./shop-logic.js";
-import { arrangeFogBoard, isCellOpen, firstOpenEmpty } from "./board-loop.js";
-import { recordOrder, claimChallenge, challengeState } from "./daily-challenge.js";
-import { emitGameplay, renderRegionControls, renderShopControls, renderChallenge } from "./loop-ui.js";
 import { Auth } from "./auth.js";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY, configureEnergy } from "./save.js";
 import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js";
 import { mountMascot } from "./mascot.js";
 import {
-  starterBoard, canMerge, mergeCells, keyOf,
-  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, makeUid, idx, generateItem, endlessRegion
+  starterBoard, canMerge, mergeCells, produceFrom, keyOf,
+  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
+  nearbyEmpty, endlessRegion
 } from "./merge.js";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
+import { regionById, isCellOpen, allBuildings } from "./world.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
-let SAVE;
+let SAVE = loadSave();
 let mascot;
 let dragging = null;
-let selectedUid = null;
 let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
+let selectedUid = null;
+let systems;
 
 let COLS = 7, ROWS = 9;
 const CHAPTER_END = {
@@ -43,35 +41,37 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=5");
+  const res = await fetch(url + "?v=6");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
 
 export async function boot() {
-  SAVE = loadSave();
-  [GAME, CHAINS, CHAPTERS, STORY] = await Promise.all([
+  [GAME, CHAINS, CHAPTERS, STORY, MAP] = await Promise.all([
     fetchJSON("data/game.json"),
     fetchJSON("data/chains.json"),
     fetchJSON("data/chapters.json"),
-    fetchJSON("data/story-orders.json")
+    fetchJSON("data/story-orders.json"),
+    fetchJSON("data/map.json")
   ]);
-  MAP = await loadMapData(fetchJSON);
   GENS = CHAINS.generators;
   CHAINS = CHAINS.chains;
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
   configureEnergy(GAME.energy);
-  COLS = GAME.board?.cols || 7; ROWS = GAME.board?.rows || 6;
   tickEnergy(SAVE);
   COLS = SAVE.boardCols || COLS;
   ROWS = SAVE.boardRows || ROWS;
+  if (!SAVE.unlockedRegions) SAVE.unlockedRegions = ["village"];
+  if (!SAVE.region) SAVE.region = "village";
   if (!SAVE.board) {
     SAVE.board = starterBoard(COLS, ROWS);
     SAVE.boardCols = COLS;
     SAVE.boardRows = ROWS;
+    if (!SAVE.unlockedClumps) SAVE.unlockedClumps = ["start"];
+  } else if (!SAVE.unlockedClumps) {
+    SAVE.unlockedClumps = ["all"];
   }
-  arrangeFogBoard(SAVE, COLS, ROWS);
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
@@ -80,22 +80,17 @@ export async function boot() {
   unlockGenerators();
   ensureOrders();
   persist();
+  systems = attachSystems(systemCtx());
   bind();
   mascot = mountMascot($("#mascot-root"));
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, repair: repairMapRegion, buy: purchaseOffer, claimChallenge: collectChallenge };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); refreshLoopTimers(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); }, 1000);
 }
 
-function persist() {
-  tickEnergy(SAVE);
-  // Retry unlocked generators after merges/orders free a cell on a previously full board.
-  if (GENS && SAVE.board) unlockGenerators();
-  try { writeSave(SAVE); syncCloud(SAVE); }
-  catch { toast("無法儲存進度，請確認瀏覽器允許儲存並保留此分頁"); }
-}
+function persist() { tickEnergy(SAVE); if (GENS && SAVE.board) unlockGenerators(); writeSave(SAVE); syncCloud(SAVE); }
 
 function show(name) {
   $$(".screen,.overlay").forEach((el) => el.classList.remove("on"));
@@ -118,7 +113,6 @@ function show(name) {
   else if (name === "settings") renderSettings();
   else if (name === "map") renderMap();
   else if (name === "daily") renderDaily();
-  else if (name === "shop") renderShopControls($("#shop-offers"), SAVE, MAP, purchaseOffer);
   refreshHud();
   if (name === "play" && !$("#result").classList.contains("on")) maybeFirstIntro();
 }
@@ -127,10 +121,17 @@ function chapter() { return CHAPTERS.find((c) => c.id === SAVE.chapter) || CHAPT
 
 function applyChapterLook() {
   const ch = chapter();
+  const region = regionById(MAP, SAVE.region) || null;
   const play = $("#play");
-  const bg = new URL(ch.bg, document.baseURI).href;
-  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.72), rgba(251,252,246,.88) 40%, var(--cream)), url("${bg}")`;
+  const bgPath = region?.bg || ch.bg;
+  const bg = new URL(bgPath, document.baseURI).href;
+  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.35), rgba(251,252,246,.55) 60%, var(--cream)), url("${bg}")`;
+  play.style.setProperty("--chapter-bg", `url("${bg}")`);
   play.dataset.chapterId = ch.id;
+  play.dataset.regionId = SAVE.region || ch.id;
+  const sceneBg = $(".scene-bg");
+  if (sceneBg) sceneBg.style.backgroundImage = `url("${bg}")`;
+  $$("[data-chapter]").forEach((el) => { el.textContent = region?.name || ch.title; });
 }
 
 function bind() {
@@ -151,13 +152,6 @@ function bind() {
   $("#btn-lyrics")?.addEventListener("click", () => { sfx.tap(); show("lyrics"); });
   $("#btn-howto")?.addEventListener("click", () => { sfx.tap(); show("howto"); });
   $("#btn-settings")?.addEventListener("click", () => { sfx.tap(); show("settings"); });
-  $("#btn-map-play")?.addEventListener("click", () => show("map"));
-  $("#btn-shop")?.addEventListener("click", () => show("shop"));
-  $("#btn-bag-expand")?.addEventListener("click", () => {
-    const result = expandBag(SAVE);
-    if (result.error) return transactionError(result.error);
-    persist(); renderInventory(); refreshHud(); emitGameplay("bag-expanded", { capacity: SAVE.magicBag.capacity });
-  });
   $("#btn-map")?.addEventListener("click", () => { sfx.tap(); show("map"); });
   $("#btn-daily")?.addEventListener("click", () => { sfx.tap(); show("daily"); });
   $$("[data-back]").forEach((b) => b.addEventListener("click", () => { sfx.tap(); show(b.dataset.back); }));
@@ -180,15 +174,13 @@ function bind() {
     SAVE.settings.sfx = e.target.checked; setAudioSettings(SAVE.settings); persist();
   });
 
-  $("#btn-sell")?.addEventListener("click", sellSelected);
   $("#btn-claim-daily")?.addEventListener("click", claimDaily);
   $("#btn-result-ok")?.addEventListener("click", () => {
     $("#result").classList.remove("on");
     if (pendingAfterClear) { const fn = pendingAfterClear; pendingAfterClear = null; fn(); }
     else { playMusic(SAVE.chapter); show("play"); }
   });
-  $("#btn-bag-close")?.addEventListener("click", () => $("#inventory").classList.remove("open"));
-  $("#btn-inv-toggle")?.addEventListener("click", () => $("#inventory").classList.toggle("open"));
+  systems?.bind();
 
   $("#play").addEventListener("pointerdown", onBoardDown);
   window.addEventListener("pointermove", onDragMove);
@@ -204,9 +196,9 @@ function bind() {
   };
   window.addEventListener("resize", onWinResize);
   window.addEventListener("orientationchange", onWinResize);
-  const main = $(".play-main");
-  if (main && window.ResizeObserver) {
-    new ResizeObserver(onWinResize).observe(main);
+  const box = $(".scene") || $(".play-main");
+  if (box && window.ResizeObserver) {
+    new ResizeObserver(onWinResize).observe(box);
   }
 }
 
@@ -217,8 +209,8 @@ function refreshHud() {
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
-  $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
+  $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins || 0; });
   $$("[data-energy]").forEach((el) => { el.textContent = SAVE.energy; });
   $$("[data-energy-max]").forEach((el) => { el.textContent = ENERGY.max; });
   const wait = nextEnergyIn(SAVE);
@@ -235,7 +227,7 @@ function refreshHud() {
   const pct = Math.max(0, Math.min(1, (SAVE.xp - lo) / Math.max(1, hi - lo)));
   $$("[data-xp]").forEach((el) => { el.style.width = (pct * 100) + "%"; });
   const ch = chapter();
-  $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = mainComplete() ? `探索區域 ${currentRegion()}` : ch.title; });
+  $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = ch.title; });
 }
 
 function toast(msg) {
@@ -249,62 +241,15 @@ function toast(msg) {
 
 /* ---------- responsive board ---------- */
 function pickBoardSize(availW, availH) {
-  const gap = availW < 430 ? 4 : 6;
-  const pad = availW < 430 ? 6 : 8;
-  const minCell = 36, maxCell = 92;
-  const aspect = availW / Math.max(1, availH);
-  const preferred = aspect < 0.9
-    ? [[7, 9], [8, 10], [7, 8], [8, 9], [7, 10], [6, 9], [8, 11], [6, 8]]
-    : aspect > 1.2
-      ? [[10, 7], [11, 7], [10, 8], [9, 7], [11, 8], [12, 7], [8, 6], [9, 6]]
-      : [[8, 8], [8, 7], [7, 7], [9, 8], [8, 9], [9, 7], [7, 8]];
-  const score = (cols, rows) => {
-    const border = 8; // 3px border + a little slack
-    const cell = Math.floor(Math.min(
-      (availW - pad * 2 - gap * (cols - 1) - border) / cols,
-      (availH - pad * 2 - gap * (rows - 1) - border) / rows
-    ));
-    if (cell < minCell) return null;
-    const usedC = Math.min(cell, maxCell);
-    const usedW = pad * 2 + usedC * cols + gap * (cols - 1) + border;
-    const usedH = pad * 2 + usedC * rows + gap * (rows - 1) + border;
-    if (usedW > availW + 0.5 || usedH > availH + 0.5) return null;
-    const fill = (usedW * usedH) / Math.max(1, availW * availH);
-    return { cols, rows, cell: usedC, gap, pad, fill };
-  };
-  let best = null;
-  const tried = new Set();
-  for (const [c, r] of preferred) {
-    tried.add(c + "," + r);
-    const s = score(c, r);
-    if (!s) continue;
-    if (!best || s.fill > best.fill + 0.02 || (Math.abs(s.fill - best.fill) <= 0.02 && s.cell > best.cell)) best = s;
-  }
-  for (let c = 6; c <= 12; c++) {
-    for (let r = 5; r <= 12; r++) {
-      if (tried.has(c + "," + r)) continue;
-      const s = score(c, r);
-      if (!s) continue;
-      if (!best || s.fill > best.fill + 0.04 || (Math.abs(s.fill - best.fill) <= 0.01 && s.cols * s.rows >= best.cols * best.rows && s.cell >= best.cell - 2)) best = s;
-    }
-  }
-  return best || { cols: 7, rows: 9, cell: 40, gap, pad, fill: 0 };
+  const cols = 7, rows = 9, gap = availW < 430 ? 4 : 6, pad = availW < 430 ? 6 : 8;
+  const cell = Math.max(1, Math.floor(Math.min((availW - pad * 2 - gap * 6 - 8) / cols, (availH - pad * 2 - gap * 8 - 8) / rows)));
+  return { cols, rows, cell, gap, pad };
 }
 
 function measureBoardBox() {
-  const main = $(".play-main");
-  const mascot = $(".mascot-col");
-  if (!main) return { w: 360, h: 400 };
-  const gap = parseFloat(getComputedStyle(main).gap) || 8;
-  const row = getComputedStyle(main).flexDirection !== "column";
-  const w = main.clientWidth;
-  const h = main.clientHeight;
-  if (row) {
-    const mw = mascot ? mascot.getBoundingClientRect().width : 0;
-    return { w: Math.max(120, w - mw - gap), h: Math.max(120, h) };
-  }
-  const mh = mascot ? mascot.getBoundingClientRect().height : 0;
-  return { w: Math.max(120, w), h: Math.max(120, h - mh - gap) };
+  const scene = $(".scene") || $(".play-main");
+  if (!scene) return { w: 360, h: 400 };
+  return { w: Math.max(120, scene.clientWidth - 8), h: Math.max(120, scene.clientHeight - 8) };
 }
 
 function applyBoardLayout() {
@@ -316,9 +261,7 @@ function applyBoardLayout() {
     const invCell = Math.max(40, Math.min(64, Math.floor((fw - 6 * 7) / 8)));
     frame.style.setProperty("--inv-cell", invCell + "px");
   }
-  const sizeChanged = picked.cols !== COLS || picked.rows !== ROWS || (SAVE.board && SAVE.board.length !== picked.cols * picked.rows);
-  COLS = picked.cols;
-  ROWS = picked.rows;
+  COLS = 7; ROWS = 9;
   const board = $("#board");
   if (board) {
     board.style.setProperty("--cols", String(COLS));
@@ -326,17 +269,6 @@ function applyBoardLayout() {
     board.style.setProperty("--cell", picked.cell + "px");
     board.style.setProperty("--gap", picked.gap + "px");
     board.style.setProperty("--pad", picked.pad + "px");
-  }
-  if (sizeChanged) {
-    if (SAVE.board && SAVE.board.length) {
-      arrangeFogBoard(SAVE, COLS, ROWS);
-    } else {
-      SAVE.board = starterBoard(COLS, ROWS);
-    }
-    SAVE.boardCols = COLS;
-    SAVE.boardRows = ROWS;
-    persist();
-    renderBoard();
   }
   return picked;
 }
@@ -353,18 +285,17 @@ function renderBoard() {
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       const slot = document.createElement("div");
-      slot.className = "cell" + (isCellOpen(SAVE, idx(COLS, r, c)) ? "" : " fog locked");
-      slot.dataset.locked = String(!isCellOpen(SAVE, idx(COLS, r, c)));
+      slot.className = "cell";
       slot.dataset.r = r; slot.dataset.c = c;
       const item = cellAt(r, c);
       if (item) slot.appendChild(makePiece(item));
+      systems?.fog.decorateCell(slot, r, c, item);
       board.appendChild(slot);
     }
   }
   renderInventory();
-  refreshSelection();
-  refreshLoopTimers();
-  renderOrders();
+  const sel = selectedUid && findCellByUid(selectedUid);
+  systems?.fx.showInfo(sel ? sel.item : null);
 }
 
 function itemRarity(item) {
@@ -378,17 +309,9 @@ function makePiece(item) {
   el.className = "piece" + (item.kind === "gen" ? " gen" : "") + " r-" + rarity;
   el.dataset.uid = item.uid;
   el.dataset.rarity = rarity;
-  if (item.kind === "gen") {
-    el.dataset.cooldownUntil = SAVE.generatorCooldowns[item.uid] || 0;
-    if (+el.dataset.cooldownUntil > Date.now()) el.classList.add("cooling");
-  }
   const img = infoImg(item);
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
-  if (item.kind === "gen") {
-    const timer = document.createElement("span"); timer.className = "generator-countdown";
-    timer.dataset.generatorTimer = item.uid; el.appendChild(timer);
-  }
   el.title = name;
   return el;
 }
@@ -414,7 +337,8 @@ function findCellByUid(uid) {
 }
 
 function onBoardDown(e) {
-  if (dragging || e.isPrimary === false) return;
+  const locked = e.target.closest(".cell.locked");
+  if (locked && !e.target.closest(".piece")) { systems?.fog.onLockedTap(locked); return; }
   const piece = e.target.closest(".piece");
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
@@ -424,7 +348,7 @@ function onBoardDown(e) {
 }
 
 function onDragMove(e) {
-  if (!dragging || e.pointerId !== dragging.pointerId) return;
+  if (!dragging) return;
   const dx = e.clientX - dragging.start.x, dy = e.clientY - dragging.start.y;
   if (!dragging.moved && Math.hypot(dx, dy) < 10) return;
   if (!dragging.moved) {
@@ -454,13 +378,14 @@ function highlightDrop(e) {
     if (od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier) cell.classList.add("hot");
   } else {
     const r = +cell.dataset.r, c = +cell.dataset.c;
+    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) return;
     const dest = cellAt(r, c);
-    if ((cell.dataset.inv !== undefined || isCellOpen(SAVE, idx(COLS, r, c))) && (!dest || canMerge(item, dest, CHAINS, GENS))) cell.classList.add("hot");
+    if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
   }
 }
 
 function onDragUp(e) {
-  if (!dragging || e.pointerId !== dragging.pointerId) return;
+  if (!dragging) return;
   const d = dragging; dragging = null;
   $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
   d.piece.classList.remove("lifted");
@@ -531,69 +456,60 @@ function removeFrom(loc) {
 
 function onTap(loc) {
   const item = loc.item;
-  if (loc.where === "inv") {
-    const empty = firstOpenEmpty(SAVE);
-    if (empty < 0) return toast("棋盤滿了");
-    moveOrMerge(loc, Math.floor(empty / COLS), empty % COLS); return;
-  }
-  selectedUid = item.kind === "item" ? item.uid : null;
-  refreshSelection();
-  if (item.kind === "gen") { tapGenerator(loc); return; }
-  toast(infoName(item));
+  selectedUid = item.uid;
+  systems?.fx.showInfo(item);
   sfx.tap();
-}
-
-function refreshSelection() {
-  const item = findCellByUid(selectedUid)?.item;
-  const button = $("#btn-sell");
-  button.hidden = !item || item.kind !== "item";
-  if (!button.hidden) button.textContent = `出售 ${infoName(item)}　＋${item.tier * GAME.orders.sellCoinsPerTier} 金幣`;
-}
-
-function sellSelected() {
-  const loc = findCellByUid(selectedUid);
-  if (!loc || loc.item.kind !== "item") return;
-  SAVE.coins += loc.item.tier * GAME.orders.sellCoinsPerTier;
-  removeFrom(loc);
-  selectedUid = null;
-  persist(); renderBoard(); refreshHud();
+  if (item.kind === "gen") { tapGenerator(loc); return; }
+  renderBoard();
 }
 
 function tapGenerator(loc) {
   tickEnergy(SAVE);
-  const origin = loc.where === "board" ? document.querySelector(`#board .cell:nth-child(${loc.i + 1})`)?.getBoundingClientRect() : null;
-  const result = generateItem(SAVE, loc.item, GENS, { ...GAME.energy, ...ENERGY });
-  if (result.error) {
-    if (result.error === "energy") {
-      sfx.energy(); mascot?.sad();
-      toast(`體力用完了，${Math.ceil(nextEnergyIn(SAVE) / 1000)} 秒後恢復 1 點`);
-    } else if (result.error === "cooldown") { toast(`產生器冷卻中，${Math.ceil(result.remainingMs / 1000)} 秒後可用`);
-    } else { sfx.invalid(); toast("棋盤滿了，先合成、交訂單或移到背包吧"); }
+  const gen = loc.item;
+  if (gen.coolUntil && gen.coolUntil > Date.now()) {
+    const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
+    sfx.invalid();
+    toast(`產生器還在休息（${s} 秒）`);
     return;
   }
-  emitGameplay("generated", { uid: loc.item.uid, ...result });
-  const made = result.item;
+  if (SAVE.energy < 1) {
+    sfx.energy();
+    mascot?.sad();
+    const s = Math.ceil(nextEnergyIn(SAVE) / 1000);
+    toast(`能量還在回來的路上（${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}）`);
+    return;
+  }
+  const origin = loc.where === "board" ? loc.i : -1;
+  let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
+  let toInv = false;
+  if (empty < 0) {
+    if (SAVE.inventory.length >= SAVE.magicBag.capacity) {
+      toast("棋盤和背包都滿了，先合一些吧");
+      sfx.invalid();
+      return;
+    }
+    toInv = true;
+  }
+  const made = produceFrom(gen, GENS);
+  if (!made) return;
+  SAVE.energy -= 1;
+  if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
+  gen.pops = (gen.pops || 0) + 1;
+  if (gen.pops >= GEN_POPS) { gen.pops = 0; gen.coolUntil = Date.now() + GEN_COOL_MS; }
+  if (toInv) SAVE.inventory.push(made);
+  else SAVE.board[empty] = made;
   discover(made);
   sfx.generate();
   persist();
   renderBoard();
-  const target = document.querySelector(`#board .cell:nth-child(${result.index + 1}) .piece`);
-  if (origin && target?.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const end = target.getBoundingClientRect();
-    target.animate([
-      { transform: `translate(${origin.x - end.x}px, ${origin.y - end.y}px) scale(.4)`, opacity: .4 },
-      { transform: "translate(0, -12px) scale(1.08)", offset: .75 },
-      { transform: "translate(0, 0) scale(1)", opacity: 1 }
-    ], { duration: 360, easing: "ease-out" });
-  }
   refreshHud();
-  mascot?.idle();
+  systems?.fx.popAt(made.uid);
 }
 
 function moveOrMerge(loc, r, c) {
   if (!validLocation(loc)) return;
+  if (systems && !systems.fog.canDropAt(r, c)) { sfx.invalid(); toast("這一格還沒揭開"); return; }
   const destI = idx(COLS, r, c);
-  if (!isCellOpen(SAVE, destI)) { toast("到地圖修復建築，就能揭開迷霧"); return; }
   const src = loc.item;
   const dest = SAVE.board[destI];
   // same cell
@@ -602,7 +518,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard(); renderOrders();
+    persist(); renderBoard();
     return;
   }
   if (canMerge(src, dest, CHAINS, GENS)) {
@@ -610,7 +526,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
-    persist(); renderBoard(); renderOrders();
+    persist(); renderBoard();
     return;
   }
   // swap
@@ -618,7 +534,7 @@ function moveOrMerge(loc, r, c) {
     SAVE.board[loc.i] = dest;
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard(); renderOrders();
+    persist(); renderBoard();
     return;
   }
   sfx.invalid();
@@ -634,8 +550,8 @@ function onMerged(merged) {
   sfx.merge(tier);
   if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
   mascot?.merge(tier);
+  systems?.fx.popAt(merged.uid);
   discover(merged);
-  emitGameplay("merged", { item: merged, combo: combo.n });
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) shake(6);
   // first-discover gift
@@ -651,8 +567,7 @@ function discover(cell, opts = {}) {
       SAVE.treasures[defNameId(def)] = (SAVE.treasures[defNameId(def)] || 0) + 1;
       if (!opts.silent) {
         SAVE.starSeeds += 1;
-        emitGameplay("discovered", { item: cell, definition: def });
-        toast(`新發現：${def.name}　＋1 星星種子`);
+        systems?.fx.showDiscover(cell);
       }
     }
   }
@@ -688,23 +603,7 @@ function floatCombo(n) {
 }
 
 function renderInventory() {
-  const box = $("#inv-cells");
-  box.innerHTML = "";
-  const cap = SAVE.magicBag.capacity;
-  $("#bag-materials").textContent = `修復木材 ${SAVE.magicBag.materials.wood || 0}`;
-  $("#btn-bag-expand").textContent = `擴充一格　${10 + (cap - 8) * 5} 星星種子`;
-  $("#btn-bag-expand").disabled = cap >= 24;
-  $("#inv-count").textContent = `${SAVE.inventory.length}/${cap}`;
-  for (let i = 0; i < Math.max(cap, SAVE.inventory.length); i++) {
-    const slot = document.createElement("div");
-    slot.className = "cell inv-cell";
-    slot.dataset.inv = i;
-    if (SAVE.inventory[i]) {
-      slot.appendChild(makePiece(SAVE.inventory[i]));
-
-    }
-    box.appendChild(slot);
-  }
+  if (systems?.shop) systems.shop.renderInventory();
 }
 
 /* ---------- orders ---------- */
@@ -716,8 +615,10 @@ function currentRegion() { return endlessRegion(SAVE.endless.completed, GAME.ord
 function hasStoryFlag(flag) {
   return SAVE.storyDone.includes(flag) || STORY.some(o => o.flag === flag && storyCompleted(o));
 }
+function availableChains() {
+  return [...new Set(Object.values(GENS).filter(g => hasGen(g.id)).map(g => g.produces))];
+}
 function chapterUnlocked(id) {
-  if (!mapChapterOpen(SAVE, MAP, id)) return false;
   if (id === "village") return true;
   if (id === "journey") return SAVE.storyDone.includes("ch1-end") || SAVE.storyDone.includes("v5");
   if (id === "candy") return SAVE.storyDone.includes("ch2-end") || SAVE.storyDone.includes("j5");
@@ -725,9 +626,6 @@ function chapterUnlocked(id) {
   if (id === "hate") return SAVE.storyDone.includes("ch4-end");
   if (id === "ending") return SAVE.storyDone.includes("ch5-end");
   return false;
-}
-function availableChains() {
-  return [...new Set(Object.values(GENS).filter(g => hasGen(g.id)).map(g => g.produces))];
 }
 
 function chapterOpenForStory(id, flag) {
@@ -780,7 +678,9 @@ function hasGen(id) {
 
 function grantGen(id, tier = 1) {
   if (hasGen(id)) return false;
-  const empty = firstOpenEmpty(SAVE);
+  const empty = systems
+    ? nearbyEmpty(SAVE.board, COLS, ROWS, -1, systems.fog.isOpenIndex)
+    : nearbyEmpty(SAVE.board, COLS, ROWS, -1, i => isCellOpen(SAVE, Math.floor(i / COLS), i % COLS, COLS, ROWS));
   const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
   if (empty >= 0) SAVE.board[empty] = cell;
   else if (SAVE.inventory.length < SAVE.magicBag.capacity) SAVE.inventory.push(cell);
@@ -790,62 +690,33 @@ function grantGen(id, tier = 1) {
 }
 
 function unlockGenerators() {
+  const repaired = allBuildings(MAP).flatMap(b => (b.unlocks || []).slice(0, SAVE.buildings[b.id] || 0));
   for (const gen of Object.values(GENS)) {
-    if (SAVE.map.unlockedGenerators.includes(gen.id) || gen.unlock === "start" || (gen.unlock.startsWith("story:") && hasStoryFlag(gen.unlock.slice(6)))) grantGen(gen.id);
+    if (repaired.includes(gen.id) || SAVE.map.unlockedGenerators.includes(gen.id) || gen.unlock === 'start' || (gen.unlock?.startsWith('story:') && hasStoryFlag(gen.unlock.slice(6)))) grantGen(gen.id);
   }
 }
 
 function renderOrders() {
-  const box = $("#orders");
-  box.innerHTML = "";
-  for (const o of SAVE.orders) {
-    const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/mascot/front.png" };
-    const def = itemDef(CHAINS, o.need.chain, o.need.tier);
-    const card = document.createElement("div");
-    card.className = "order" + (o.flag ? " story" : "");
-    card.dataset.id = o.id;
-    card.innerHTML = `
-      <img class="npc" src="${npc.portrait}" alt="${npc.name}">
-      <div class="body">
-        <b>${npc.name}${o.flag ? " · 故事" : ""}</b>
-        <div class="need">
-          <img src="${def?.img || ""}" alt="">
-          <span>${def?.name || ""}</span>
-        </div>
-        ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
-        <div class="rew">＋${o.reward.coins || 0} 金幣　＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
-      </div>`;
-    const give = document.createElement("button"); give.className = "btn order-give"; give.textContent = "交給他";
-    const match = SAVE.board.concat(SAVE.inventory).find(x => x?.kind === "item" && x.chain === o.need.chain && x.tier === o.need.tier);
-    give.disabled = !match; card.classList.toggle("ready", !!match);
-    give.addEventListener("click", () => { const loc = findCellByUid(match?.uid); if (loc) tryFulfill(loc, o.id); });
-    card.appendChild(give);
-    box.appendChild(card);
-  }
-  renderChallenge($("#challenge-card"), SAVE, collectChallenge);
-  refreshLoopTimers();
+  if (systems?.orders) systems.orders.renderOrders();
 }
 
 function tryFulfill(loc, orderId) {
-  const o = SAVE.orders.find((x) => x.id === orderId);
   if (!validLocation(loc)) return;
+  const o = SAVE.orders.find((x) => x.id === orderId);
   const item = loc.item;
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
-  const wasEndless = mainComplete();
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
-  recordOrder(SAVE);
-  emitGameplay("order-completed", { order: o, item, from: { where: loc.where, index: loc.i } });
-  SAVE.coins += o.reward.coins || 0;
-  if (wasEndless && o.procedural) SAVE.endless.completed += 1;
+  if (o.procedural && mainComplete()) SAVE.endless.completed += 1;
   SAVE.starSeeds += o.reward.seeds || 0;
+  SAVE.coins = (SAVE.coins || 0) + (o.reward.coins ?? ((o.reward.seeds || 0) + 4));
+  systems?.orders.bumpDaily();
   const before = SAVE.level;
   SAVE.xp += o.reward.xp || 0;
-  // Level now follows repairs; XP remains recorded for compatibility.
-  tickEnergy(SAVE);
+  SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
   if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
   if (o.flag) SAVE.storyDone.push(o.flag);
   if (o.restore) {
@@ -856,7 +727,7 @@ function tryFulfill(loc, orderId) {
   mascot?.order();
   const leveled = SAVE.level > before;
   const chapterClear = Object.values(CHAPTER_END).includes(o.flag);
-  if (chapterClear && CHAPTER_NEXT[o.chapter] && chapterUnlocked(CHAPTER_NEXT[o.chapter])) SAVE.chapter = CHAPTER_NEXT[o.chapter];
+  if (chapterClear && CHAPTER_NEXT[o.chapter]) SAVE.chapter = CHAPTER_NEXT[o.chapter];
   unlockGenerators();
   ensureOrders();
   persist();
@@ -878,7 +749,6 @@ let pendingAfterClear = null;
 function maybeFirstIntro() { maybeStoryIntro(); }
 
 function maybeStoryIntro() {
-  if (storyDoneFn) return false;
   const o = (SAVE.orders || []).find((x) => x.intro && !SAVE.flags["seen-intro-" + x.id]);
   if (!o) return false;
   if (o.id === "v1" && SAVE.flags.seenOpen && !SAVE.flags["seen-intro-v1"]) {
@@ -924,7 +794,7 @@ function nextStory() {
   storyIdx += 1;
   if (storyIdx >= storyQueue.length) {
     const fn = storyDoneFn; storyDoneFn = null;
-    if (fn) fn(); else show("play");
+    show("play"); fn?.();
   } else renderStory();
 }
 
@@ -978,45 +848,7 @@ function renderBook() {
 }
 
 function renderMap() {
-  renderRegionControls($("#nodes"), SAVE, MAP, CHAINS, repairMapRegion);
-}
-
-function transactionError(code) {
-  const messages = { coins: "金幣不足，再完成幾張訂單吧", starSeeds: "星星種子不足", items: "還缺指定道具，可從棋盤或魔法袋交付", materials: "還缺修復木材，完成訂單就能取得", locked: "先修好前一區", complete: "已經完成了", "energy-full": "體力已滿", "bag-full": "魔法袋滿了，先取出道具", claimed: "今天已經領過了", orders: "先完成三張訂單" };
-  toast(messages[code] || "目前無法完成這個操作");
-}
-function repairMapRegion(id) {
-  const result = repairRegion(SAVE, MAP, id);
-  if (result.error) { transactionError(result.error); return result; }
-  const next = CHAPTER_NEXT[SAVE.chapter];
-  if (next && chapterUnlocked(next)) SAVE.chapter = next;
-  unlockGenerators(); ensureOrders(); persist(); renderMap(); refresh();
-  emitGameplay("map-repaired", result);
-  toast(result.complete ? "修復完成！新的區域開放了" : "修復完成，迷霧散開了");
-  return result;
-}
-function purchaseOffer(id) {
-  tickEnergy(SAVE);
-  const result = buyOffer(SAVE, MAP, id, ENERGY.max);
-  if (result.error) { transactionError(result.error); return result; }
-  persist(); refreshHud(); emitGameplay("shop-purchased", result); toast("已放入魔法袋／補充體力");
-  return result;
-}
-function collectChallenge() {
-  const result = claimChallenge(SAVE);
-  if (result.error) return transactionError(result.error);
-  persist(); renderOrders(); refreshHud(); emitGameplay("challenge-claimed", result);
-}
-function refreshLoopTimers() {
-  const previous = SAVE.challenge.day, state = challengeState(SAVE);
-  if (previous && previous !== state.day) { persist(); renderChallenge($("#challenge-card"), SAVE, collectChallenge); }
-  const seconds = Math.ceil(state.remainingMs / 1000);
-  $$("[data-challenge-countdown]").forEach(el => { el.textContent = `${Math.floor(seconds / 3600)}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`; });
-  $$("[data-generator-timer]").forEach(el => {
-    const remaining = Math.max(0, Math.ceil(((SAVE.generatorCooldowns[el.dataset.generatorTimer] || 0) - Date.now()) / 1000));
-    el.textContent = remaining ? `${remaining}s` : "";
-    el.parentElement?.classList.toggle("cooling", remaining > 0);
-  });
+  if (systems?.map) systems.map.renderMap();
 }
 
 function renderDaily() {
@@ -1062,12 +894,36 @@ function renderLyrics() {
   $("#lyrics-lines").innerHTML = L.lines.map((l) => `<p>${l}</p>`).join("");
 }
 
+
+function systemCtx() {
+  return {
+    $, $$,
+    getSave: () => SAVE,
+    getGame: () => GAME,
+    getMap: () => MAP,
+    getChains: () => CHAINS,
+    getCols: () => COLS,
+    getRows: () => ROWS,
+    getSelected: () => selectedUid,
+    setSelected: (u) => { selectedUid = u; },
+    persist, toast, sfx, show, refresh, refreshHud,
+    startStory, applyChapterLook, playMusic,
+    makePiece, infoName, infoImg, findCellByUid, removeFrom,
+    tryFulfill: (loc, id) => tryFulfill(loc, id),
+    grantGen: (id, tier) => grantGen(id, tier),
+    xpLevel: (xp) => xpLevel(xp, GAME.xpCurve || [0, 40, 100]),
+    makeUid, ENERGY, todayKey,
+    itemDef: (chain, tier) => itemDef(CHAINS, chain, tier),
+    maxTier: (chain) => maxTier(CHAINS, chain),
+    get mascot() { return mascot; },
+    showInfo: (item) => systems?.fx.showInfo(item)
+  };
+}
+
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
 function completeTopOrder() { /* debug */ }
 
 boot().catch((err) => {
   console.error(err);
-  const message = document.createElement("p");
-  message.textContent = err.message.includes("存檔版本") ? err.message : "遊戲載入失敗，請重新整理。";
-  document.body.replaceChildren(message);
+  document.body.innerHTML = "<p style='padding:40px;font-family:sans-serif'>遊戲載入失敗，請重新整理。</p>";
 });

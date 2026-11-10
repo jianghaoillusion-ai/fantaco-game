@@ -16,7 +16,7 @@ test('舊存檔補上金幣、探索進度及巢狀設定，保留物品', () =>
  assert.equal(s.endless.completed, 0);
  assert.equal(s.settings.sfx, true);
  assert.equal(s.restore.journey, 0);
- assert.deepEqual(s.board, [null]);
+ assert.equal(s.board.length, 63);assert.equal(s.board.filter(Boolean).length,0);
  save.writeSave(s);
  assert.deepEqual(save.loadSave(), s);
 });
@@ -30,20 +30,6 @@ test('體力遵循資料設定、保留零時間戳與零碎恢復時間', () =>
  save.tickEnergy(s, 90000);
  assert.equal(s.energy, 10);
  save.configureEnergy(game.energy);
-});
-test('生成器隨機散落，滿盤與沒體力不扣點、不產物', () => {
- assert.equal(typeof merge.generateItem, 'function');
- const gen = {kind: 'gen', gen: 'star', tier: 1};
- const s = {board: [gen, null, null], energy: 2};
- const result = merge.generateItem(s, gen, data.generators, game.energy, () => 0.99);
- assert.equal(result.index, 1);
- assert.equal(s.energy, 1);
- s.board[2] = s.board[1];
- assert.equal(merge.generateItem(s, gen, data.generators, game.energy).error, 'full');
- assert.equal(s.energy, 1);
- s.board[2] = null; s.energy = 0;
- assert.equal(merge.generateItem(s, gen, data.generators, game.energy).error, 'energy');
- assert.equal(s.board[2], null);
 });
 test('無限訂單依區域增難、需要可取得物品、獎勵含金幣', () => {
  const ctx = {chains: data.chains, chapter: 'candy', discovered: {}, npcsByChapter: merge.NPCS_BY_CHAPTER, seq: 1, availableChains: ['tea'], balance: game.orders};
