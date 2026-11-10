@@ -1,3 +1,4 @@
+import { openCells } from "./board-loop.js";
 /** Merge-2 board, generators, orders. Data-driven chains. */
 
 export function maxTier(chains, chain) {
@@ -176,16 +177,29 @@ export function produceFrom(genCell, gens) {
 }
 
 /** Full boards never spend energy or silently send generated items to inventory. */
-export function generateItem(save, generator, gens, energy, random = Math.random) {
-  const spaces = save.board.map((cell, i) => cell ? -1 : i).filter(i => i >= 0);
+export function generateItem(save, generator, gens, energy, random = Math.random, now = Date.now()) {
+  let spaces = (save.fog ? openCells(save) : save.board.map((_, i) => i)).filter(i => !save.board[i]);
   if (!spaces.length) return { error: "full" };
   const cost = energy.cost ?? 1;
   if (save.energy < cost) return { error: "energy" };
+  const until = save.generatorCooldowns?.[generator.uid] || 0;
+  const cooldown = energy.cooldownMs ?? 2000;
+  if (until > now && until <= now + cooldown) return { error: "cooldown", remainingMs: until - now };
+  const origin = save.board.indexOf(generator), cols = save.boardCols || save.board.length;
+  if (origin >= 0) {
+    const distance = i => Math.max(Math.abs(i % cols - origin % cols), Math.abs(Math.floor(i / cols) - Math.floor(origin / cols)));
+    const nearest = Math.min(...spaces.map(distance));
+    spaces = spaces.filter(i => distance(i) === nearest);
+  }
   const item = produceFrom(generator, gens);
   if (!item) return { error: "generator" };
   const index = spaces[Math.floor(random() * spaces.length)];
-  if (save.energy >= energy.max) save.energyAt = Date.now();
+  if (save.energy >= energy.max) save.energyAt = now;
   save.energy -= cost;
+  if (generator.uid) {
+    save.generatorCooldowns ||= {};
+    save.generatorCooldowns[generator.uid] = now + cooldown;
+  }
   save.board[index] = item;
   return { item, index };
 }

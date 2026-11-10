@@ -36,14 +36,14 @@ test('生成器隨機散落，滿盤與沒體力不扣點、不產物', () => {
  const gen = {kind: 'gen', gen: 'star', tier: 1};
  const s = {board: [gen, null, null], energy: 2};
  const result = merge.generateItem(s, gen, data.generators, game.energy, () => 0.99);
- assert.equal(result.index, 2);
+ assert.equal(result.index, 1);
  assert.equal(s.energy, 1);
- s.board[1] = s.board[2];
+ s.board[2] = s.board[1];
  assert.equal(merge.generateItem(s, gen, data.generators, game.energy).error, 'full');
  assert.equal(s.energy, 1);
- s.board[1] = null; s.energy = 0;
+ s.board[2] = null; s.energy = 0;
  assert.equal(merge.generateItem(s, gen, data.generators, game.energy).error, 'energy');
- assert.equal(s.board[1], null);
+ assert.equal(s.board[2], null);
 });
 test('無限訂單依區域增難、需要可取得物品、獎勵含金幣', () => {
  const ctx = {chains: data.chains, chapter: 'candy', discovered: {}, npcsByChapter: merge.NPCS_BY_CHAPTER, seq: 1, availableChains: ['tea'], balance: game.orders};
