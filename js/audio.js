@@ -20,7 +20,7 @@ export function setAudioSettings(s) { settings = { ...settings, ...s }; if (!set
 export function getAudioSettings() { return settings; }
 
 export function playMusic(chapterId) {
-  const file = ({ village: "bgm-village", journey: "bgm-journey", candy: "bgm-candy" })[chapterId] || "bgm-village";
+  const file = ({ village: "bgm-village", journey: "bgm-journey", candy: "bgm-candy", bulu: "bgm-journey", hate: "bgm-candy", ending: "bgm-village" })[chapterId] || "bgm-village";
   if (!settings.music) { stopMusic(); return; }
   if (musicEl.id === file && musicEl.el && !musicEl.el.paused) return;
   stopMusic();

@@ -16,11 +16,17 @@
       "chapter": "village",
       "flag": "v1",
       "restore": 1,
+      "banter": "先從一顆小星星開始吧。",
       "intro": [
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
           "text": "歡迎來到微笑村！今天是一年一度的微笑大賽。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "好多旗子、好多花朵……好熱鬧喔。"
         },
         {
           "speaker": "眠花糖",
@@ -50,6 +56,7 @@
       "chapter": "village",
       "flag": "v2",
       "restore": 1,
+      "banter": "我……我也想參加。",
       "intro": [
         {
           "speaker": "飛飛",
@@ -62,9 +69,48 @@
           "text": "沒關係啦！我和眠花糖都會幫你加油！"
         },
         {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "飛飛，把心裡的微笑拿出來就好。不必跟別人比。"
+        },
+        {
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "如果有一顆閃亮星，我好像就比較有勇氣了。"
+        }
+      ]
+    },
+    {
+      "id": "v2b",
+      "npc": "jiejie",
+      "need": {
+        "chain": "star",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 6,
+        "xp": 35,
+        "energy": 0
+      },
+      "chapter": "village",
+      "flag": "v2b",
+      "restore": 1,
+      "banter": "大賽要開始囉。",
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "參賽的小朋友都到齊了。飛飛，準備好了嗎？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我的嘴巴……好像忘記怎麼往上彎。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "那我們先做一對許願雙星，當作加油牌！"
         }
       ]
     },
@@ -84,11 +130,46 @@
       "chapter": "village",
       "flag": "v3",
       "restore": 1,
+      "banter": "花香會讓人想笑。",
       "intro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "微笑村的花好香。可以幫我摘一朵黃花嗎？"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（用耳朵朝花圃點了點。）"
+        }
+      ]
+    },
+    {
+      "id": "v3b",
+      "npc": "jiejie",
+      "need": {
+        "chain": "garden",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 7,
+        "xp": 45,
+        "energy": 5
+      },
+      "chapter": "village",
+      "flag": "v3b",
+      "restore": 1,
+      "banter": "頒獎台上要有花。",
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "頒獎台上還缺一朵白玫瑰。飛飛，你願意幫忙嗎？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "願意！可是我看別人笑得那麼好看，又有點……不知道自己行不行。"
         }
       ]
     },
@@ -108,11 +189,17 @@
       "chapter": "village",
       "flag": "v4",
       "restore": 1,
+      "banter": "我要一朵藍花配成對！",
       "intro": [
         {
           "speaker": "阿飄",
           "portrait": "apiao",
           "text": "嘿，我也要一朵藍花！拿來跟飛飛配成對。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "謝謝你，阿飄。有你在，我比較不怕。"
         }
       ]
     },
@@ -132,7 +219,13 @@
       "chapter": "village",
       "flag": "ch1-end",
       "restore": 1,
+      "banter": "真正的快樂，也許在外面。",
       "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "大賽結束了。大家都很開心，可是我還是有點空空的。"
+        },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
@@ -142,6 +235,11 @@
           "speaker": "眠花糖",
           "portrait": "mascot",
           "text": "（指向遠方，又指指星星茶壺。）"
+        },
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "去看看吧。微笑村的門，永遠為你開著。"
         }
       ],
       "outro": [
@@ -178,6 +276,7 @@
       "chapter": "journey",
       "flag": "j1",
       "restore": 1,
+      "banter": "前面有小山和山洞。",
       "intro": [
         {
           "speaker": "阿飄",
@@ -188,6 +287,40 @@
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "咦？洞穴裡有紅蘑菇耶。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（小心探頭，又快速縮回來。）"
+        }
+      ]
+    },
+    {
+      "id": "j1b",
+      "npc": "feifei",
+      "need": {
+        "chain": "forest",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 7,
+        "xp": 45,
+        "energy": 5
+      },
+      "chapter": "journey",
+      "flag": "j1b",
+      "restore": 1,
+      "banter": "溪邊好涼，山洞有點黑。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "小溪好涼。我們沿著水聲走，好不好？"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "好啊。不過山洞比較黑，先採一叢蘑菇照路吧。"
         }
       ]
     },
@@ -207,11 +340,17 @@
       "chapter": "journey",
       "flag": "j2",
       "restore": 1,
+      "banter": "藍蘑菇會不會發光？",
       "intro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "再採一朵藍蘑菇，也許就能照亮山洞。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "小心腳下！我好像踢到一個軟軟的袋子。"
         }
       ]
     },
@@ -231,6 +370,7 @@
       "chapter": "journey",
       "flag": "j3",
       "restore": 1,
+      "banter": "是誰打開了魔法袋？",
       "intro": [
         {
           "speaker": "氣球精靈",
@@ -238,9 +378,53 @@
           "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？"
         },
         {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "哇！你是……氣球做的人嗎？"
+        },
+        {
           "speaker": "阿飄",
           "portrait": "apiao",
           "text": "是詐騙嗎？……你真的是氣球精靈？先拿出愛心撲克牌來證明一下！"
+        }
+      ]
+    },
+    {
+      "id": "j3b",
+      "npc": "spirit",
+      "need": {
+        "chain": "magic",
+        "tier": 2
+      },
+      "reward": {
+        "seeds": 7,
+        "xp": 50,
+        "energy": 0
+      },
+      "chapter": "journey",
+      "flag": "j3b",
+      "restore": 1,
+      "banter": "袋裡有三顆氣球。",
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "三次？那我要許跑車、大餐，還有機器人！"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "先不要急。這種願望，要想清楚再用。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "說得好。先用一張黑桃撲克牌，當作見面禮吧。"
         }
       ]
     },
@@ -260,11 +444,17 @@
       "chapter": "journey",
       "flag": "j4",
       "restore": 1,
+      "banter": "先用藥水暖暖身手。",
       "intro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！先用藍藍天藥水暖暖身手。"
+          "text": "想好了再把氣球拿出來。先用藍藍天藥水暖暖身手。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "藍藍天……聽起來就像一首歌。"
         }
       ]
     },
@@ -284,11 +474,17 @@
       "chapter": "journey",
       "flag": "ch2-end",
       "restore": 1,
+      "banter": "我想先把袋子留下。",
       "intro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "阿飄說可以許跑車、大餐或機器人……但我想先把魔法袋留下來，繼續走。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "也行啦。反正前面好像還有人需要幫忙。"
         }
       ],
       "outro": [
@@ -320,6 +516,7 @@
       "chapter": "candy",
       "flag": "c1",
       "restore": 1,
+      "banter": "糖果……有沒有人要買……",
       "intro": [
         {
           "speaker": "西卡",
@@ -329,7 +526,17 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想買一盒。哇，好好吃！先幫西卡做一個杯子蛋糕，讓他重拾力氣。"
+          "text": "我想買一盒。哇，好好吃！"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "真的好好吃。可是路人都走過去了。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "先幫西卡做一個杯子蛋糕，讓他重拾力氣。"
         }
       ]
     },
@@ -349,11 +556,17 @@
       "chapter": "candy",
       "flag": "c2",
       "restore": 1,
+      "banter": "如果盒子再漂亮一點……",
       "intro": [
         {
           "speaker": "西卡",
           "portrait": "sika",
           "text": "如果有一個漂亮的糖果盒，客人也許會停下來。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "對呀。好吃的東西，也要用有創意的方法讓大家看見。"
         }
       ]
     },
@@ -373,11 +586,46 @@
       "chapter": "candy",
       "flag": "c3",
       "restore": 1,
+      "banter": "我負責試吃！",
       "intro": [
         {
           "speaker": "阿飄",
           "portrait": "apiao",
           "text": "再來一個雙層蛋糕！我負責試吃，飛飛負責加油。"
+        },
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "謝謝你們還願意停下來。好久沒有人這樣對我說話了。"
+        }
+      ]
+    },
+    {
+      "id": "c3b",
+      "npc": "sika",
+      "need": {
+        "chain": "garden",
+        "tier": 6
+      },
+      "reward": {
+        "seeds": 10,
+        "xp": 70,
+        "energy": 5
+      },
+      "chapter": "candy",
+      "flag": "c3b",
+      "restore": 1,
+      "banter": "攤子旁再放一朵花。",
+      "intro": [
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "如果攤子旁邊有一朵藍玫瑰，看起來會不會更有精神？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "會的。我們一起把它變好看。"
         }
       ]
     },
@@ -397,11 +645,22 @@
       "chapter": "candy",
       "flag": "c4",
       "restore": 1,
+      "banter": "我想把第一願送給西卡。",
       "intro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想把第一個願望送給西卡。先讓糖果塔立起來，洩氣就會散掉。"
+          "text": "我想把第一個願望送給西卡。先讓糖果塔立起來。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "你真的要把氣球用在別人身上？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "嗯。看見西卡笑，我好像也比較有力氣了。"
         }
       ]
     },
@@ -421,11 +680,17 @@
       "chapter": "candy",
       "flag": "ch3-end",
       "restore": 1,
+      "banter": "來買糖果囉────",
       "intro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
           "text": "氣球精靈，我的願望是：幫助西卡，讓他可以用有創意的方法，把好吃的糖果賣出去。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "這份願望，我聽見了。"
         }
       ],
       "outro": [
@@ -447,7 +712,563 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。每週都會有新的故事。"
+          "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。"
+        }
+      ]
+    },
+    {
+      "id": "b1",
+      "npc": "bulu",
+      "need": {
+        "chain": "forest",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 10,
+        "xp": 70,
+        "energy": 5
+      },
+      "chapter": "bulu",
+      "flag": "b1",
+      "restore": 1,
+      "banter": "天……天黑了。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "天色暗下來了。前面草叢裡，好像有人在發抖。"
+        },
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "你、你們好……我叫布魯。天一黑，我的腳就不敢往前走。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "沒關係，我們先採些蘑菇，讓路亮一點。"
+        }
+      ]
+    },
+    {
+      "id": "b2",
+      "npc": "bulu",
+      "need": {
+        "chain": "star",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 12,
+        "xp": 80,
+        "energy": 5
+      },
+      "chapter": "bulu",
+      "flag": "b2",
+      "restore": 1,
+      "banter": "有燈就好一點。",
+      "intro": [
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "星星茶壺如果會亮，我是不是就能再走幾步？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "會的。我們陪你走，你不是一個人。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（把茶壺輕輕推到布魯面前。）"
+        }
+      ]
+    },
+    {
+      "id": "b3",
+      "npc": "feifei",
+      "need": {
+        "chain": "magic",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 12,
+        "xp": 85,
+        "energy": 5
+      },
+      "chapter": "bulu",
+      "flag": "b3",
+      "restore": 1,
+      "banter": "喝一口勇氣藥水。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "這是勇氣藥水。不是讓黑夜消失，是讓心裡亮一點。"
+        },
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "我試試看……還是有點怕。可是我還想再走。"
+        }
+      ]
+    },
+    {
+      "id": "b4",
+      "npc": "bulu",
+      "need": {
+        "chain": "star",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 16,
+        "xp": 100,
+        "energy": 8
+      },
+      "chapter": "bulu",
+      "flag": "b4",
+      "restore": 1,
+      "banter": "那顆大氣球，看起來好安全。",
+      "intro": [
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "那邊有一顆很大的微笑氣球。我……我想躲進去。裡面會不會比較不黑？"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "先別急著躲。我們把氣球帶過來，一起看一看。"
+        }
+      ]
+    },
+    {
+      "id": "b5",
+      "npc": "apiao",
+      "need": {
+        "chain": "forest",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 12,
+        "xp": 90,
+        "energy": 5
+      },
+      "chapter": "bulu",
+      "flag": "b5",
+      "restore": 1,
+      "banter": "再圍一圈小燈。",
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "我們用蘑菇圈把氣球圍起來，像一圈小燈。"
+        },
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "真的比較亮了。可是我還是好想有一個不會消失的光。"
+        }
+      ]
+    },
+    {
+      "id": "b6",
+      "npc": "feifei",
+      "need": {
+        "chain": "garden",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 20,
+        "xp": 130,
+        "energy": 15
+      },
+      "chapter": "bulu",
+      "flag": "ch4-end",
+      "restore": 1,
+      "banter": "第二個願望，我想送給布魯。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "氣球精靈，我的第二個願望：幫助怕黑的布魯，讓他有勇氣走進那顆大氣球，也有勇氣再走出來。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "害怕沒有關係。願意再走一步，就是很勇敢。"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "願望，實現了！"
+        },
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "我走進大氣球了……裡面不像我想的那麼黑。謝謝你，飛飛。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "你看，你已經走出來了。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "還剩最後一顆氣球。我們得想清楚再許。"
+        }
+      ]
+    },
+    {
+      "id": "h1",
+      "npc": "hate",
+      "need": {
+        "chain": "magic",
+        "tier": 6
+      },
+      "reward": {
+        "seeds": 14,
+        "xp": 90,
+        "energy": 5
+      },
+      "chapter": "hate",
+      "flag": "h1",
+      "restore": 1,
+      "banter": "我的魔術，總是不成功。",
+      "intro": [
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "大家好……我是哈特。我想表演魔術，可是一上台，帽子裡什麼也變不出來。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "你已經戴著很漂亮的帽子了。我們先幫你整理一頂紫緞帶禮帽吧。"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "謝謝。其實我最想變出一隻兔子，讓大家為我拍手。"
+        }
+      ]
+    },
+    {
+      "id": "h2",
+      "npc": "hate",
+      "need": {
+        "chain": "magic",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 16,
+        "xp": 110,
+        "energy": 8
+      },
+      "chapter": "hate",
+      "flag": "h2",
+      "restore": 1,
+      "banter": "如果有一頂真正的魔術高帽……",
+      "intro": [
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "如果有一頂真正的魔術高帽，也許兔子就會出現。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "高帽我們可以做。可是自信，可能要你自己拿出來。"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "我知道。可是我好怕大家笑我。"
+        }
+      ]
+    },
+    {
+      "id": "h3",
+      "npc": "feifei",
+      "need": {
+        "chain": "garden",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 12,
+        "xp": 80,
+        "energy": 5
+      },
+      "chapter": "hate",
+      "flag": "h3",
+      "restore": 1,
+      "banter": "舞台旁放一朵白玫瑰。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我們在小舞台旁邊放一朵白玫瑰，當作開場。"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "好美。可是我還是不敢走上去。"
+        }
+      ]
+    },
+    {
+      "id": "h4",
+      "npc": "apiao",
+      "need": {
+        "chain": "star",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 16,
+        "xp": 100,
+        "energy": 5
+      },
+      "chapter": "hate",
+      "flag": "h4",
+      "restore": 1,
+      "banter": "只剩最後一顆氣球了。",
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "飛飛，只剩最後一顆氣球了。你自己也好想許一個願望吧？"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我想過。我想變得更勇敢，想有一個自己的舞台……"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "可是我看著哈特，又想起西卡和布魯。真正讓我高興的，好像是他們笑出來的時候。"
+        }
+      ]
+    },
+    {
+      "id": "h5",
+      "npc": "hate",
+      "need": {
+        "chain": "garden",
+        "tier": 8
+      },
+      "reward": {
+        "seeds": 18,
+        "xp": 120,
+        "energy": 8
+      },
+      "chapter": "hate",
+      "flag": "h5",
+      "restore": 1,
+      "banter": "請大家來看一場小小的花園秀。",
+      "intro": [
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "不管氣球許不許願，我想先練習一次。請大家來看一場小小的花園秀。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我們都在這裡看。你不是一個人上台。"
+        }
+      ]
+    },
+    {
+      "id": "h6",
+      "npc": "feifei",
+      "need": {
+        "chain": "magic",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 22,
+        "xp": 150,
+        "energy": 18
+      },
+      "chapter": "hate",
+      "flag": "ch5-end",
+      "restore": 1,
+      "banter": "最後一願，我想送給哈特。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我決定了。氣球精靈，最後一個願望：幫助哈特變出他最想要的兔子，也讓他找回上台的自信。"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "飛飛……這是你最後一顆氣球耶。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "沒關係。看見你敢笑著走上去，就是我的願望。"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "願望，實現了！"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "兔子……真的出來了！我……我也可以讓大家開心！謝謝你，飛飛。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "飛飛把最後一願也送給別人了。你比誰都強大。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "等等。你們等一下。我還有話要說。"
+        }
+      ]
+    },
+    {
+      "id": "e1",
+      "npc": "spirit",
+      "need": {
+        "chain": "star",
+        "tier": 8
+      },
+      "reward": {
+        "seeds": 20,
+        "xp": 140,
+        "energy": 10
+      },
+      "chapter": "ending",
+      "flag": "e1",
+      "restore": 1,
+      "banter": "我再送你們一個願望。",
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "三顆氣球都用完了。可是你們沒有為自己留下一顆。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "這樣的心，值得再送一個願望。飛飛，這一次，請為你自己許。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "為我自己……"
+        }
+      ]
+    },
+    {
+      "id": "e2",
+      "npc": "jiejie",
+      "need": {
+        "chain": "garden",
+        "tier": 8
+      },
+      "reward": {
+        "seeds": 18,
+        "xp": 120,
+        "energy": 8
+      },
+      "chapter": "ending",
+      "flag": "e2",
+      "restore": 1,
+      "banter": "全村的花都開了。",
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "你們回來了！全村的花都開了。"
+        },
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "我帶了糖果。"
+        },
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "天黑也不怕了。我來了。"
+        },
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "兔子也來了。我們一起等飛飛許願。"
+        }
+      ]
+    },
+    {
+      "id": "e3",
+      "npc": "feifei",
+      "need": {
+        "chain": "star",
+        "tier": 8
+      },
+      "reward": {
+        "seeds": 24,
+        "xp": 180,
+        "energy": 20
+      },
+      "chapter": "ending",
+      "flag": "ch6-end",
+      "restore": 1,
+      "banter": "我想讓全世界都充滿歡笑。",
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "氣球精靈，我的願望是：成為能讓全世界充滿歡笑的人。"
+        },
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "這才是真正的強大——讓別人幸福的能力。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（跳得很高很高。尾巴上的黃星星，亮得像一盞小燈。）"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "願望，實現了！大家看——漫天的氣球升上去了！"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "好大好大的氣球秀！飛飛，你看，全村都在笑！"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我也笑出來了。謝謝你，眠花糖。謝謝每一個願望。"
+        },
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "微笑村歡迎你們隨時回來。新的故事，以後每週都會再加一點。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（拉著飛飛的手，一起看著藍藍的天。）"
         }
       ]
     }

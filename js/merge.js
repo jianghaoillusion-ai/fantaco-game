@@ -26,14 +26,52 @@ export function idx(cols, r, c) { return r * cols + c; }
 
 export function starterBoard(cols, rows) {
   const b = emptyBoard(cols, rows);
-  const put = (r, c, cell) => { b[idx(cols, r, c)] = cell; };
-  put(2, 3, { kind: "gen", gen: "star", tier: 1, uid: makeUid() });
-  put(3, 2, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(3, 4, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(4, 3, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(1, 1, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
-  put(1, 5, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  const put = (r, c, cell) => {
+    if (r < 0 || c < 0 || r >= rows || c >= cols) return;
+    b[idx(cols, r, c)] = cell;
+  };
+  const cr = Math.floor(rows / 2), cc = Math.floor(cols / 2);
+  put(cr - 1, cc, { kind: "gen", gen: "star", tier: 1, uid: makeUid() });
+  put(cr, cc - 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
+  put(cr, cc + 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
+  put(cr + 1, cc, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
+  put(cr - 2, Math.max(0, cc - 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  put(cr - 2, Math.min(cols - 1, cc + 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
   return b;
+}
+
+/** Scale items onto a new grid. Collisions go to the nearest empty cell; leftovers are returned for inventory. */
+export function remapBoard(board, oldCols, oldRows, newCols, newRows) {
+  const src = board || [];
+  if (!oldCols || !oldRows) {
+    oldCols = newCols;
+    oldRows = Math.max(1, Math.floor(src.length / Math.max(1, newCols)));
+  }
+  if (oldCols === newCols && oldRows === newRows && src.length === newCols * newRows) return { board: src, overflow: [] };
+  const next = emptyBoard(newCols, newRows);
+  const overflow = [];
+  const pending = [];
+  for (let r = 0; r < oldRows; r++) {
+    for (let c = 0; c < oldCols; c++) {
+      const cell = src[r * oldCols + c];
+      if (!cell) continue;
+      const nr = Math.round(r * (newRows - 1) / Math.max(1, oldRows - 1));
+      const nc = Math.round(c * (newCols - 1) / Math.max(1, oldCols - 1));
+      pending.push({ cell, nr: Math.max(0, Math.min(newRows - 1, nr)), nc: Math.max(0, Math.min(newCols - 1, nc)) });
+    }
+  }
+  for (const it of pending) {
+    const i = idx(newCols, it.nr, it.nc);
+    if (!next[i]) next[i] = it.cell;
+    else overflow.push(it.cell);
+  }
+  const still = [];
+  for (const cell of overflow) {
+    const e = firstEmpty(next);
+    if (e >= 0) next[e] = cell;
+    else still.push(cell);
+  }
+  return { board: next, overflow: still };
 }
 
 export function canMerge(a, b, chains, gens) {
@@ -125,7 +163,7 @@ export function keyOf(cell) {
 /** Endless / leftover slots: mix of easy, mid, hard orders from unlocked content. */
 export function makeProceduralOrder(ctx) {
   const { chains, chapter, discovered, npcsByChapter, seq, availableChains, region = 0, balance = {} } = ctx;
-  const order = ["village", "journey", "candy"];
+  const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
   const unlockedChains = Object.keys(chains).filter((id) => {
     if (availableChains) return availableChains.includes(id);
     const ch = chains[id].chapter;
@@ -165,7 +203,10 @@ export function makeProceduralOrder(ctx) {
 export const NPCS_BY_CHAPTER = {
   village: ["jiejie", "feifei", "apiao", "mian"],
   journey: ["feifei", "apiao", "spirit", "mian"],
-  candy: ["sika", "feifei", "apiao", "spirit"]
+  candy: ["sika", "feifei", "apiao", "spirit"],
+  bulu: ["bulu", "feifei", "apiao", "spirit"],
+  hate: ["hate", "feifei", "apiao", "spirit"],
+  ending: ["feifei", "apiao", "jiejie", "sika", "bulu", "hate", "spirit", "mian"]
 };
 
 export function xpLevel(xp, curve) {

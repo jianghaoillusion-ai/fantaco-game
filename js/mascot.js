@@ -1,9 +1,8 @@
 /**
- * 眠花糖 on the play screen.
- * Official TuZi GLB with warm toon shading + navy outline,
- * 3/4 camera so the yellow tail star stays visible,
- * squash-and-stretch bounce, sparkles on jump.
- * Fallback: official 2D art with the same animation.
+ * 眠花糖 on the play screen — official 2D art is primary.
+ * Idle bounce, squash-and-stretch, ear wiggle, periodic side pose
+ * so the yellow star-tail shows, jump pose + sparkles on merge.
+ * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
   idle: "assets/mascot/front.png",
@@ -19,10 +18,21 @@ const POSES = {
   face: "assets/mascot/face.png"
 };
 
+function want3d() {
+  try {
+    const q = new URLSearchParams(location.search).get("mascot");
+    if (q === "3d") return true;
+    if (q === "2d") return false;
+    return localStorage.getItem("fantaco.mascot.3d") === "1" || window.__MASCOT_3D === true;
+  } catch {
+    return false;
+  }
+}
+
 export function mountMascot(root) {
   root.innerHTML = `
     <div class="mascot-stage">
-      <canvas class="mascot-3d" width="512" height="512" aria-hidden="true"></canvas>
+      <canvas class="mascot-3d" width="512" height="512" aria-hidden="true" hidden></canvas>
       <img class="mascot-2d" alt="眠花糖" src="${POSES.idle}">
       <div class="mascot-sparkles" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
       <div class="mascot-bubble" hidden></div>
@@ -38,6 +48,7 @@ export function mountMascot(root) {
   let jumpVel = 0;
   let targetBounce = 0;
   let mode3d = false;
+  let lastIdlePose = "idle";
   const anim = { bounce: 0, squish: 1, tilt: 0, spin: 0, jump: 0 };
 
   function setPose(name, ms = 900) {
@@ -49,7 +60,7 @@ export function mountMascot(root) {
   function startJump(power = 1) {
     jump = Math.max(jump, 0.05);
     jumpVel = 0.062 * power;
-    targetBounce = 22 * power;
+    targetBounce = 18 * power;
   }
 
   function say(text, ms = 1600) {
@@ -82,20 +93,25 @@ export function mountMascot(root) {
       if (jump < 0) { jump = 0; jumpVel = jumpVel * -0.38; if (Math.abs(jumpVel) < 0.01) jumpVel = 0; }
     }
     if (performance.now() > moodUntil && !mode3d) {
-      const cycle = Math.floor(timer / 3) % 4;
-      const idlePose = ["idle", "idle2", "idle", "side"][cycle];
-      if (pose !== idlePose && pose !== "cheer" && pose !== "hero" && pose !== "wish") {
+      // Cycle front → idle smile → side (yellow star-tail wag) → back (star on the back).
+      const cycle = Math.floor(timer / 2.8) % 5;
+      const idlePose = ["idle", "idle2", "idle", "side", "back"][cycle];
+      if (pose !== idlePose && !["cheer", "hero", "wish"].includes(pose)) {
         pose = idlePose;
+        lastIdlePose = idlePose;
         img.src = POSES[idlePose];
       }
     }
     targetBounce += (0 - targetBounce) * 0.07;
-    const idleBob = Math.sin(timer * 3.4) * 14;
-    anim.bounce = idleBob + jump * 96 + targetBounce;
-    // squash on land / stretch at peak
+    const stageH = stage.clientHeight || 160;
+    const amp = Math.min(12, stageH * 0.07);
+    const idleBob = Math.sin(timer * 3.4) * amp;
+    anim.bounce = idleBob + jump * Math.min(72, stageH * 0.42) + targetBounce;
     const jumpStretch = jump > 0.2 ? -0.16 : (jumpVel < -0.02 ? 0.14 : 0);
-    anim.squish = 1 + Math.sin(timer * 3.4) * 0.07 + jumpStretch;
-    anim.tilt = Math.sin(timer * 1.35) * 5;
+    anim.squish = 1 + Math.sin(timer * 3.4) * 0.06 + jumpStretch;
+    // Gentle sway + a short ear-wiggle pulse every few seconds.
+    const earPulse = (timer % 5.4) < 0.55 ? Math.sin(timer * 38) * 5.5 : 0;
+    anim.tilt = Math.sin(timer * 1.35) * 4 + earPulse;
     anim.spin = Math.sin(timer * 0.85) * 0.22;
     anim.jump = jump;
     const sy = anim.squish, sx = 2 - sy;
@@ -107,26 +123,22 @@ export function mountMascot(root) {
   }
   requestAnimationFrame(tick);
 
-  let starting3d = false;
   const use2d = (err) => {
     if (err) console.warn("眠花糖 3D 載入失敗，改用官方平面圖", err);
     mode3d = false;
+    canvas.hidden = true;
     canvas.style.display = "none";
     img.style.display = "";
     img.style.opacity = "1";
   };
-  const start3d = () => {
-    if (starting3d || mode3d) return true;
-    if ((canvas.clientWidth || 0) < 8 || (canvas.clientHeight || 0) < 8) return false;
-    starting3d = true;
+
+  api.wake = () => {
+    // 2D is primary. 3D only boots when explicitly requested.
+    if (!want3d() || mode3d) return;
+    canvas.hidden = false;
+    canvas.style.display = "block";
     boot3d(canvas, img, () => anim, () => { mode3d = true; }, use2d).catch(use2d);
-    return true;
   };
-  api.wake = () => { if (!start3d()) requestAnimationFrame(() => start3d()); };
-  if (!start3d()) {
-    const ro = new ResizeObserver(() => { if (start3d()) ro.disconnect(); });
-    ro.observe(canvas.parentElement || canvas);
-  }
   return api;
 }
 
@@ -136,9 +148,7 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   const THREE = await import("three");
   const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
   const scene = new THREE.Scene();
-  // Closer 3/4 camera so the bunny fills the stage and the tail star peeks out.
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 40);
-  // Distance ~4.3 so the full 2-unit-tall bunny (with feet and tail star) fits.
   camera.position.set(2.45, 1.28, 3.85);
   camera.lookAt(0.0, 0.96, 0);
 
@@ -161,7 +171,6 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   ensureSize();
   new ResizeObserver(ensureSize).observe(canvas.parentElement || canvas);
 
-  // Bright, warm lighting so the body stays creamy white, not grey clay.
   scene.add(new THREE.AmbientLight(0xfff6e8, 1.55));
   const sun = new THREE.DirectionalLight(0xfff4d6, 1.05);
   sun.position.set(2.4, 4.6, 3.4);
@@ -173,24 +182,9 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   rim.position.set(-1.2, 1.0, -3.2);
   scene.add(rim);
 
-  const bodyRamp = makeToonRamp(THREE, [
-    [255, 228, 210],
-    [255, 244, 232],
-    [255, 251, 244],
-    [255, 255, 252]
-  ]);
-  const inkRamp = makeToonRamp(THREE, [
-    [36, 42, 72],
-    [50, 58, 92],
-    [70, 80, 120],
-    [90, 100, 140]
-  ]);
-  const starRamp = makeToonRamp(THREE, [
-    [230, 180, 0],
-    [255, 220, 40],
-    [255, 237, 0],
-    [255, 252, 160]
-  ]);
+  const bodyRamp = makeToonRamp(THREE, [[255, 228, 210], [255, 244, 232], [255, 251, 244], [255, 255, 252]]);
+  const inkRamp = makeToonRamp(THREE, [[36, 42, 72], [50, 58, 92], [70, 80, 120], [90, 100, 140]]);
+  const starRamp = makeToonRamp(THREE, [[230, 180, 0], [255, 220, 40], [255, 237, 0], [255, 252, 160]]);
 
   const gltf = await new Promise((resolve, reject) => {
     new GLTFLoader().load("assets/models/mianhuatang.glb", resolve, undefined, reject);
@@ -206,7 +200,6 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
     let kind = "body";
     if (!o.geometry.boundingBox) o.geometry.computeBoundingBox();
     const bb = o.geometry.boundingBox;
-    // The official tail star sits at the back (min z < -0.74) and low on the body.
     if (bb && bb.min.z < -0.74 && bb.max.y < 0.9) kind = "star";
     else if (c) {
       const hsl = { h: 0, s: 0, l: 0 };
@@ -225,7 +218,7 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
     o.material = mat;
     if (kind === "star") {
       o.scale.setScalar(1.55);
-      o.position.z -= 0.18; // peek out from behind the body
+      o.position.z -= 0.18;
       o.renderOrder = 2;
     } else {
       const out = new THREE.Mesh(o.geometry, outlineMat);
@@ -238,43 +231,16 @@ async function boot3d(canvas, img, getAnim, onReady, onFail) {
   }
   scene.add(bunny);
 
-  if (!ensureSize()) {
-    await new Promise((resolve) => {
-      const ro = new ResizeObserver(() => { if (ensureSize()) { ro.disconnect(); resolve(); } });
-      ro.observe(canvas.parentElement || canvas);
-      const iv = setInterval(() => { if (ensureSize()) { clearInterval(iv); ro.disconnect(); resolve(); } }, 200);
-    });
-  }
-
   img.style.opacity = "0";
   img.style.pointerEvents = "none";
   canvas.style.display = "block";
   onReady();
-
-  setTimeout(() => {
-    try {
-      const gl = renderer.getContext();
-      const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
-      if (!w || !h) { onFail?.(new Error("empty 3d buffer")); return; }
-      const step = Math.max(4, Math.floor(Math.min(w, h) / 24));
-      const buf = new Uint8Array(4);
-      let hits = 0;
-      for (let y = 0; y < h; y += step) {
-        for (let x = 0; x < w; x += step) {
-          gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf);
-          if (buf[3] > 16) hits++;
-        }
-      }
-      if (hits < 3) onFail?.(new Error("3d canvas has no pixels"));
-    } catch (e) { onFail?.(e); }
-  }, 900);
 
   const t0 = performance.now();
   function loop(now) {
     const t = (now - t0) / 1000;
     const a = getAnim();
     ensureSize();
-    // Base 3/4 yaw keeps the yellow tail star visible on the bunny's right; gentle sway.
     bunny.rotation.y = 0.95 + a.spin * 0.55;
     bunny.rotation.z = a.tilt * 0.012;
     bunny.position.y = a.bounce * 0.010;
