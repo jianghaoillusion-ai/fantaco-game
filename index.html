@@ -16,13 +16,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=10">
-  <link rel="stylesheet" href="css/home.css?v=10">
-  <link rel="stylesheet" href="css/story.css?v=10">
-  <link rel="stylesheet" href="css/bag.css?v=10">
-  <link rel="stylesheet" href="css/orders.css?v=10">
-  <link rel="stylesheet" href="css/settings.css?v=10">
-  <link rel="stylesheet" href="css/quality.css?v=10">
+  <link rel="stylesheet" href="css/app.css?v=11">
+  <link rel="stylesheet" href="css/home.css?v=11">
+  <link rel="stylesheet" href="css/story.css?v=11">
+  <link rel="stylesheet" href="css/bag.css?v=11">
+  <link rel="stylesheet" href="css/orders.css?v=11">
+  <link rel="stylesheet" href="css/settings.css?v=11">
+  <link rel="stylesheet" href="css/quality.css?v=11">
 </head>
 <body>
   <div id="app">
@@ -230,6 +230,7 @@
         <h2 id="result-title">這一章，完成了！</h2>
         <p id="result-sub"></p>
         <div id="result-lv" class="lv-badge"></div>
+        <div id="result-rewards" class="result-rewards"></div>
         <div id="result-lyrics" class="lyrics result-lyrics"></div>
         <button class="btn wide" id="btn-result-ok" type="button">繼續</button>
       </div>
@@ -239,14 +240,17 @@
     <div id="bag" class="overlay">
       <div class="modal bag-card">
         <h3>魔法袋</h3>
-        <p class="bag-hint">點一下物品，就可以放回棋盤空格。用星星種子可以加大袋子。</p>
+        <p class="bag-hint">點物品就能放回棋盤。用星星種子加大袋子。</p>
+        <div class="bag-pouch">
         <div id="inv-cells" class="inv-cells bag-grid"></div>
+        </div>
         <button class="btn" id="btn-bag-close" type="button">關閉</button>
       </div>
     </div>
 
     <div id="shop" class="overlay">
       <div class="modal shop-card">
+        <div class="shop-hero" aria-hidden="true"><img src="assets/ui/shop-header.webp" alt=""></div>
         <h3 id="shop-title">微笑小舖</h3>
         <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。</p>
         <div id="shop-list" class="shop-list"></div>
@@ -277,7 +281,7 @@
 
     <div id="settings-sheet" class="sheet-overlay">
       <div class="settings-card" role="dialog" aria-labelledby="settings-heading">
-        <img class="settings-mascot" src="assets/mascot/painted/front.png" alt="眠花糖" width="96">
+        <div class="settings-hero" aria-hidden="true"><img src="assets/ui/settings-header.webp" alt=""></div>
         <h3 id="settings-heading">設定</h3>
         <form id="name-form" class="name-form">
           <input id="name-edit" type="text" maxlength="12" autocomplete="nickname" placeholder="冒險者名字">
@@ -313,6 +317,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=10"></script>
+  <script type="module" src="js/app.js?v=11"></script>
 </body>
 </html>

@@ -1,21 +1,21 @@
-import { Auth } from "./auth.js?v=10";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=10";
-import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=10";
-import { mountMascot } from "./mascot.js?v=10";
-import { mountHome } from "./home.js?v=10";
-import { bindStory, startStory } from "./story.js?v=10";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=10";
-import { bagCap, migrateBagSlots } from "./bag.js?v=10";
-import { reserveItems } from "./merge.js?v=10";
-import { avatarSrc } from "./portraits.js?v=10";
+import { Auth } from "./auth.js?v=11";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=11";
+import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=11";
+import { mountMascot } from "./mascot.js?v=11";
+import { mountHome } from "./home.js?v=11";
+import { bindStory, startStory } from "./story.js?v=11";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=11";
+import { bagCap, migrateBagSlots } from "./bag.js?v=11";
+import { reserveItems } from "./merge.js?v=11";
+import { avatarSrc } from "./portraits.js?v=11";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=10";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=10";
-import { regionById } from "./world.js?v=10";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=10";
+} from "./merge.js?v=11";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=11";
+import { regionById } from "./world.js?v=11";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=11";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -49,7 +49,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=10");
+  const res = await fetch(url + "?v=11");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -788,8 +788,28 @@ function showClear({ chapterClear, leveled, o }) {
     ? `${chapter().title}　跟著歌詞，一起飛向藍藍天`
     : `現在是 Lv.${SAVE.level}　星星種子 ${SAVE.starSeeds}`;
   const lv = $("#result-lv");
-  if (leveled) { lv.style.display = ""; lv.textContent = `冒險者 ${SAVE.profile?.nickname || ""}　Lv.${SAVE.level}`; sfx.level(); }
-  else lv.style.display = "none";
+  if (leveled) {
+    lv.style.display = "";
+    lv.innerHTML = `<span class="lv-star" aria-hidden="true">★</span><b>Lv.${SAVE.level}</b>`;
+    sfx.level();
+  } else lv.style.display = "none";
+  const rewards = $("#result-rewards");
+  if (rewards) {
+    const coins = o?.reward?.coins ?? 0;
+    const seeds = o?.reward?.seeds || 0;
+    const mats = o?.reward?.materials || 0;
+    const def = o?.need ? itemDef(CHAINS, o.need.chain, o.need.tier) : null;
+    const piece = (src, label, extra="") => `<div class="rew-piece ${extra}"><img src="${src}" alt=""><b>${label}</b></div>`;
+    let icons = "";
+    if (coins) icons += piece("assets/ui/coin.png", "+" + coins);
+    if (seeds) icons += piece("assets/items/star-seed.png", "+" + seeds);
+    if (mats) icons += piece("assets/icons/material.png", "+" + mats);
+    if (def?.img) icons += piece(def.img, def.name || "", "item");
+    rewards.style.display = icons ? "" : "none";
+    rewards.innerHTML = icons
+      ? `<div class="rew-burst" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="rew-icons">${icons}</div>`
+      : "";
+  }
   const lyricsBox = $("#result-lyrics");
   if (chapterClear) {
     lyricsBox.style.display = "";

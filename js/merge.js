@@ -41,22 +41,30 @@ export function starterBoard(cols, rows) {
   put(2, 3, item("star", 2));
   put(4, 4, item("star", 3));
   put(6, 4, item("star", 7)); // 微笑氣球
+  put(5, 1, item("star", 4));
+  put(1, 3, item("star", 5));
   put(1, 2, item("garden", 1));
   put(3, 1, item("garden", 2));
   put(5, 3, item("garden", 3));
   put(2, 5, item("garden", 4));
   put(7, 2, item("garden", 5));
+  put(1, 1, item("garden", 6));
+  put(4, 1, item("garden", 8));
   put(1, 4, item("tea", 1));
   put(6, 1, item("tea", 2));
   put(3, 5, item("candy", 1));
   put(5, 5, item("candy", 2));
   put(6, 3, item("candy", 3));
+  put(3, 2, item("candy", 4));
+  put(2, 2, item("candy", 5));
+  put(4, 5, item("candy", 6));
   put(2, 1, item("magic", 1));
   put(7, 4, item("magic", 2));
   put(1, 5, item("magic", 3));
+  put(2, 4, item("magic", 4));
+  put(7, 3, item("magic", 5));
   put(7, 5, item("forest", 1));
-  put(5, 1, item("star", 4));
-  put(3, 2, item("candy", 4));
+  // five interiors left open so the board can still accept a merge (~86% full)
   return b;
 }
 

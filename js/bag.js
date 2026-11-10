@@ -74,7 +74,9 @@ export function createBag(ctx) {
     if (!box) return;
     box.classList.add("bag-grid");
     box.innerHTML = "";
-    for (let i = 0; i < BAG_MAX; i++) {
+    let visible = Math.min(BAG_MAX, Math.max(owned + 4, 8));
+    visible = Math.min(BAG_MAX, Math.ceil(visible / 4) * 4);
+    for (let i = 0; i < visible; i++) {
       const slot = document.createElement("div");
       const locked = i >= owned;
       slot.className = "inv-cell bag-pocket" + (locked ? " locked" : "") + (!locked && items[i] ? " filled" : "");
