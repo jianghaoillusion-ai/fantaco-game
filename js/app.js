@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=18";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=18";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=18";
-import { mountMascot } from "./mascot.js?v=18";
-import { mountHome } from "./home.js?v=18";
-import { bindStory, startStory } from "./story.js?v=18";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=18";
-import { bagCap, migrateBagSlots } from "./bag.js?v=18";
-import { reserveItems } from "./merge.js?v=18";
-import { avatarSrc } from "./portraits.js?v=18";
+import { Auth } from "./auth.js?v=19";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=19";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=19";
+import { mountMascot } from "./mascot.js?v=19";
+import { mountHome } from "./home.js?v=19";
+import { bindStory, startStory } from "./story.js?v=19";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=19";
+import { bagCap, migrateBagSlots } from "./bag.js?v=19";
+import { reserveItems } from "./merge.js?v=19";
+import { avatarSrc } from "./portraits.js?v=19";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=18";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=18";
-import { regionById } from "./world.js?v=18";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=18";
-import { bindTip, bindChromeTips } from "./tip.js?v=18";
+} from "./merge.js?v=19";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=19";
+import { regionById } from "./world.js?v=19";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=19";
+import { bindTip, bindChromeTips } from "./tip.js?v=19";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=18");
+  const res = await fetch(url + "?v=19");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -366,6 +366,11 @@ function applyBoardLayout() {
     board.style.setProperty("--cell", picked.cell + "px");
     board.style.setProperty("--gap", picked.gap + "px");
     board.style.setProperty("--pad", picked.pad + "px");
+    board.style.boxSizing = "content-box";
+    board.style.width = (COLS * picked.cell) + "px";
+    board.style.height = (ROWS * picked.cell) + "px";
+    board.style.marginLeft = "auto";
+    board.style.marginRight = "auto";
   }
   const need = !SAVE.board || SAVE.board.length !== COLS * ROWS || SAVE.boardCols !== COLS || SAVE.boardRows !== ROWS;
   if (need) {
@@ -883,14 +888,19 @@ function tryFulfill(loc, orderId) {
   ensureOrders();
   unlockGenerators();
   const fromCard = document.querySelector(`.order[data-id="${orderId}"]`);
+  fromCard?.classList.add("task-glow");
   const after = (leveled) => {
-    renderBoard(); renderOrders(); refreshHud();
-    if (o.outro) startStory(o.outro, () => {
-      if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
-      else { playMusic(SAVE.chapter); applyChapterLook(); maybeStoryIntro(); }
-    });
-    else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
-    else maybeStoryIntro();
+    const finish = () => {
+      renderBoard(); renderOrders(); refreshHud();
+      if (o.outro) startStory(o.outro, () => {
+        if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+        else { playMusic(SAVE.chapter); applyChapterLook(); maybeStoryIntro(); }
+      });
+      else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+      else maybeStoryIntro();
+    };
+    if (fromCard?.isConnected && systems?.fx?.completeTask) systems.fx.completeTask(fromCard, finish);
+    else finish();
   };
   const extras = { diamonds: gems || 0, seeds: o.reward.seeds || 0, energy: o.reward.energy || 0 };
   grantCoins(coins, fromCard, (leveled) => {

@@ -1,5 +1,5 @@
 /** Rewarded "ad": official 〈飛向藍藍天〉 MV via the YouTube IFrame Player API. Never real money. */
-import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=18";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=19";
 
 export const AD_DAILY = 5;
 export const AD_VIDEO_ID = "XPvIihQWrcA";

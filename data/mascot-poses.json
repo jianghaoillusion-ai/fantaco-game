@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "style": "official-sticker",
+  "note": "官方線稿貼紙是來源。painted 是遊戲目前使用的官方 2D，不要重繪。小頌可在 sticker 或 frames 補上新動作，或改 defaultSet。缺的槽位會退回 painted / fallback。",
+  "defaultSet": "painted",
+  "slots": [
+    "idle",
+    "idle2",
+    "blink",
+    "wave",
+    "jump",
+    "cheer",
+    "happy",
+    "sad",
+    "surprised",
+    "sleep",
+    "point",
+    "hold",
+    "sit",
+    "side",
+    "back",
+    "front",
+    "wish",
+    "hero",
+    "run",
+    "peek"
+  ],
+  "sets": {
+    "painted": {
+      "idle": "assets/mascot/painted/three.png",
+      "idle2": "assets/mascot/painted/front.png",
+      "cheer": "assets/mascot/painted/jump.png",
+      "jump": "assets/mascot/painted/jump.png",
+      "happy": "assets/mascot/painted/front.png",
+      "wish": "assets/mascot/painted/wish.png",
+      "hero": "assets/mascot/painted/hero.png",
+      "sit": "assets/mascot/painted/sit.png",
+      "sad": "assets/mascot/painted/sleep.png",
+      "sleep": "assets/mascot/painted/sleep.png",
+      "side": "assets/mascot/painted/side.png",
+      "run": "assets/mascot/painted/run.png",
+      "back": "assets/mascot/painted/back.png",
+      "front": "assets/mascot/painted/front.png",
+      "face": "assets/mascot/painted/face.png"
+    },
+    "sticker": {
+      "idle": "assets/mascot/sticker/front.png",
+      "idle2": "assets/mascot/sticker/front.png",
+      "front": "assets/mascot/sticker/front.png",
+      "jump": "assets/mascot/sticker/jump.png",
+      "cheer": "assets/mascot/sticker/hold-star.png",
+      "wave": "assets/mascot/sticker/wave.png",
+      "happy": "assets/mascot/sticker/wave.png",
+      "blink": "assets/mascot/sticker/blink.png",
+      "surprised": "assets/mascot/sticker/surprise.png",
+      "hold": "assets/mascot/sticker/hold-carrot.png",
+      "sleep": "assets/mascot/sticker/sleep.png",
+      "sad": "assets/mascot/sticker/sit-closed.png",
+      "sit": "assets/mascot/sticker/sit-closed.png",
+      "side": "assets/mascot/sticker/side.png",
+      "back": "assets/mascot/sticker/back.png",
+      "peek": "assets/mascot/sticker/peek.png",
+      "face": "assets/mascot/sticker/face.png",
+      "hero": "assets/mascot/sticker/hold-star.png"
+    },
+    "frames": {
+      "_comment": "給之後的短動畫影格（blink-01、wave-01…）。小頌推上來後在這裡列路徑即可。"
+    }
+  },
+  "reactions": {
+    "merge": "cheer",
+    "deliver": "cheer",
+    "sad": "sad",
+    "story-happy": "happy",
+    "story-wave": "wave",
+    "idle-blink": "blink"
+  }
+}

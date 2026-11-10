@@ -1,15 +1,15 @@
 /** Wires map, shop, fog, orders UI and fx so app.js only needs a thin hook. */
-import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=18";
-import { createFx } from "./fx.js?v=18";
-import { createShop } from "./shop.js?v=18";
-import { createBag } from "./bag.js?v=18";
-import { createOrdersUi } from "./orders-ui.js?v=18";
-import { createMap } from "./map.js?v=18";
-import { createAds } from "./ads.js?v=18";
-import { nearbyEmpty } from "./merge.js?v=18";
+import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=19";
+import { createFx } from "./fx.js?v=19";
+import { createShop } from "./shop.js?v=19";
+import { createBag } from "./bag.js?v=19";
+import { createOrdersUi } from "./orders-ui.js?v=19";
+import { createMap } from "./map.js?v=19";
+import { createAds } from "./ads.js?v=19";
+import { nearbyEmpty } from "./merge.js?v=19";
 import { createEvents } from "./events.js";
-import { createEventsUi } from "./events-ui.js?v=18";
-import { createBoardDrag } from "./drag.js?v=18";
+import { createEventsUi } from "./events-ui.js?v=19";
+import { createBoardDrag } from "./drag.js?v=19";
 
 export { GEN_POPS, GEN_COOL_MS };
 

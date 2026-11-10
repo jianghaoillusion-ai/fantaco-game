@@ -337,5 +337,25 @@ export function createFx(ctx) {
     setTimeout(() => close(false), 1500);
   }
 
-  return { flyTo, flyCoins: flyCoinsWrap, flyRewards, flyKind, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore, pulseHud };
+
+  /** Glow, then shrink/fade a completed order or task card. Caller should fly rewards first. */
+  function completeTask(el, done) {
+    if (!el || !el.isConnected) { done?.(); return; }
+    el.classList.add("task-glow");
+    const leave = () => {
+      el.classList.add("task-leave");
+      setTimeout(() => {
+        try { el.remove(); } catch {}
+        done?.();
+      }, 560);
+    };
+    if (el.classList.contains("task-glow") && el.dataset.glowed) leave();
+    else {
+      el.dataset.glowed = "1";
+      setTimeout(leave, 260);
+    }
+  }
+
+  return { flyTo, flyCoins: flyCoinsWrap, flyRewards, flyKind, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore, pulseHud, completeTask };
+
 }

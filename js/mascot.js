@@ -8,15 +8,29 @@ const POSES = {
   idle: "assets/mascot/painted/three.png",
   idle2: "assets/mascot/painted/front.png",
   cheer: "assets/mascot/painted/jump.png",
+  jump: "assets/mascot/painted/jump.png",
+  happy: "assets/mascot/painted/front.png",
   wish: "assets/mascot/painted/wish.png",
   hero: "assets/mascot/painted/hero.png",
   think: "assets/mascot/painted/sit.png",
+  sit: "assets/mascot/painted/sit.png",
   sleep: "assets/mascot/painted/sleep.png",
+  sad: "assets/mascot/painted/sleep.png",
   side: "assets/mascot/painted/side.png",
   run: "assets/mascot/painted/run.png",
   back: "assets/mascot/painted/back.png",
-  face: "assets/mascot/painted/face.png"
+  face: "assets/mascot/painted/face.png",
+  front: "assets/mascot/painted/front.png"
 };
+
+/** Load data/mascot-poses.json so later official sticker frames can drop in without a code change. */
+fetch("data/mascot-poses.json?v=19").then((r) => r.json()).then((man) => {
+  const setName = man.defaultSet || "painted";
+  const set = (man.sets && man.sets[setName]) || {};
+  for (const [k, v] of Object.entries(set)) {
+    if (typeof v === "string" && v && !v.startsWith("_")) POSES[k] = v;
+  }
+}).catch(() => {});
 
 function want3d() {
   try {
@@ -82,6 +96,15 @@ export function mountMascot(root) {
       else { setPose("wish", 800); startJump(0.85); }
     },
     order() { setPose("cheer", 1400); startJump(1.25); say("訂單完成！"); },
+    wave() { setPose(POSES.wave ? "wave" : "cheer", 1400); },
+    surprise() { setPose(POSES.surprised ? "surprised" : "jump", 1200); startJump(0.9); },
+    hold() { setPose(POSES.hold ? "hold" : "wish", 1400); },
+    blink() {
+      if (!POSES.blink || mode3d) return;
+      const prev = img.src;
+      img.src = POSES.blink;
+      setTimeout(() => { if (img.src.includes("blink")) img.src = prev; }, 160);
+    },
     idle() { if (performance.now() > moodUntil) setPose("idle", 0); }
   };
 
@@ -96,10 +119,13 @@ export function mountMascot(root) {
       // Cycle front → idle smile → side (yellow star-tail wag) → back (star on the back).
       const cycle = Math.floor(timer / 2.8) % 5;
       const idlePose = ["idle", "idle2", "side", "back", "idle"][cycle];
-      if (pose !== idlePose && !["cheer", "hero", "wish"].includes(pose)) {
+      const blinkOn = POSES.blink && (timer % 4.6) < 0.14;
+      if (blinkOn) {
+        img.src = POSES.blink;
+      } else if (pose !== idlePose && !["cheer", "hero", "wish", "wave"].includes(pose)) {
         pose = idlePose;
         lastIdlePose = idlePose;
-        img.src = POSES[idlePose];
+        img.src = POSES[idlePose] || POSES.idle;
       }
     }
     targetBounce += (0 - targetBounce) * 0.07;

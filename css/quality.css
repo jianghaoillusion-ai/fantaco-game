@@ -2594,3 +2594,181 @@ body.is-dragging .piece.origin-ghost{ opacity: .32; filter: grayscale(.1); }
   filter: grayscale(.2);
   box-shadow: none !important;
 }
+
+
+/* ========== v5.11: board fog + centre, no deliver toast, task leave, story scale, mascot idle ========== */
+
+/* Keep the 7×9 grid centred in its wood frame; fog clouds may peek past the edge */
+#play .scene{
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#play #board{
+  box-sizing: content-box !important;
+  width: calc(var(--cols, 7) * var(--cell, 48px)) !important;
+  height: calc(var(--rows, 9) * var(--cell, 48px)) !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  overflow: visible !important;
+  flex: none !important;
+}
+#play #board .cell.locked{
+  overflow: visible !important;
+  background-image: none !important;
+}
+#play #board .cell.locked .crate-art,
+#play #board .cell.locked .fog-cloud{
+  inset: -22% !important;
+  width: 144% !important;
+  height: 144% !important;
+  left: -22% !important;
+  top: -22% !important;
+  object-fit: contain !important;
+  z-index: 2;
+}
+
+/* Ready orders: green check + a pulsing 交付. No instructional toast. */
+#play .order.ready .give{
+  animation: give-pulse 1.15s ease-in-out infinite;
+}
+@keyframes give-pulse{
+  0%,100%{ transform: scale(1); }
+  50%{ transform: scale(1.08); box-shadow: 0 0 0 4px rgba(78,161,47,.35), 0 3px 0 #2e7018; }
+}
+@media (prefers-reduced-motion: reduce){
+  #play .order.ready .give{ animation: none !important; }
+}
+
+/* Completed task: glow, then shrink/fade so neighbours can spring in */
+.task-glow, #play .order.task-glow, .ev-card.task-glow, .ch-task.task-glow{
+  box-shadow: 0 0 0 3px rgba(255,225,74,.85), 0 0 18px rgba(255,200,40,.55) !important;
+  filter: brightness(1.12);
+  transition: box-shadow .2s, filter .2s;
+}
+#play .orders-row{ align-items: stretch; }
+#play .order, .ev-card, .ch-task{
+  transition: flex .4s cubic-bezier(.2,1.15,.3,1), width .4s cubic-bezier(.2,1.15,.3,1), margin .4s, padding .4s, opacity .35s, transform .35s;
+}
+.task-leave, #play .order.task-leave, .ev-card.task-leave, .ch-task.task-leave{
+  animation: task-leave .55s ease forwards;
+  pointer-events: none !important;
+  flex: 0 0 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-width: 0 !important;
+}
+@keyframes task-leave{
+  0%{ transform: scale(1); opacity: 1; }
+  35%{ transform: scale(1.06); opacity: 1; }
+  100%{ transform: scale(.2); opacity: 0; }
+}
+
+/* Story: speaker ~ half the screen, partner ~70% of the speaker, same ground line, head in view */
+#story .portraits,
+#portraits,
+#story #portraits{
+  overflow: visible !important;
+  background: transparent !important;
+}
+.story-actor,
+.story-actor.speak,
+.story-actor.speak.enter,
+.story-actor.dim,
+.story-actor.mascot.speak,
+.story-actor.mascot.speak.enter{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  overflow: visible !important;
+}
+.story-actor.speak,
+.story-actor.speak.enter,
+.story-actor.mascot.speak,
+.story-actor.mascot.speak.enter{
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: min(58%, 420px) !important;
+  height: 50vh !important;
+  max-height: 50vh !important;
+  transform: translateX(-50%) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: center !important;
+  z-index: 3 !important;
+}
+.story-actor.speak img,
+.story-actor.speak.enter img,
+.story-actor.mascot.speak img,
+.story-actor.mascot.speak.enter img{
+  height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  transform: none !important;
+}
+.story-actor.mascot.speak img,
+.story-actor.mascot.speak.enter img{
+  animation: mascot-idle 2.8s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+.story-actor.dim{
+  position: absolute !important;
+  top: auto !important;
+  bottom: 0 !important;
+  width: min(40%, 300px) !important;
+  height: 35vh !important;
+  max-height: 35vh !important;
+  opacity: 1 !important;
+  filter: brightness(.82) saturate(.88) !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  z-index: 1 !important;
+}
+.story-actor.dim img{
+  height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+.story-actor.dim[data-side="left"],
+#portraits .story-actor.dim:first-child{
+  left: 2% !important; right: auto !important; transform: none !important; justify-content: flex-start !important;
+}
+.story-actor.dim[data-side="right"],
+.story-actor.dim:last-child{
+  left: auto !important; right: 2% !important; transform: none !important; justify-content: flex-end !important;
+}
+@media (max-height: 700px){
+  .story-actor.speak, .story-actor.speak.enter,
+  .story-actor.mascot.speak, .story-actor.mascot.speak.enter{ height: 48vh !important; max-height: 48vh !important; }
+  .story-actor.dim{ height: 34vh !important; max-height: 34vh !important; }
+}
+
+/* Official mascot: idle bounce + ear-wiggle, never a restyle of the art */
+#title .hero{
+  animation: mascot-idle 2.6s ease-in-out infinite;
+  transform-origin: 50% 90%;
+}
+@keyframes mascot-idle{
+  0%,100%{ transform: translateY(0) rotate(-1.2deg); }
+  45%{ transform: translateY(-8px) rotate(1.5deg); }
+  60%{ transform: translateY(-7px) rotate(1.2deg); }
+}
+@media (prefers-reduced-motion: reduce){
+  #title .hero, .story-actor.mascot img, .mascot-2d{ animation: none !important; }
+}

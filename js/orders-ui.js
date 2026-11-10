@@ -1,5 +1,5 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=18";
-import { bindTip } from "./tip.js?v=18";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=19";
+import { bindTip } from "./tip.js?v=19";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
@@ -86,8 +86,18 @@ export function createOrdersUi(ctx) {
     sfx.daily();
     persist();
     const after = () => { ctx.refreshHud(); renderOrders(); renderChallengePanel(); };
-    if (ctx.fx?.flyRewards) ctx.fx.flyRewards({ seeds: 8, energy: 10 }, fromEl || document.querySelector(".daily-card"), after);
-    else after();
+    const rows = [...document.querySelectorAll("#challenge-tasks .ch-task")];
+    const fly = (next) => {
+      if (ctx.fx?.flyRewards) ctx.fx.flyRewards({ seeds: 8, energy: 10 }, fromEl || document.querySelector(".daily-card"), next);
+      else next();
+    };
+    fly(() => {
+      if (!rows.length || !ctx.fx?.completeTask) { after(); return; }
+      let left = rows.length;
+      rows.forEach((row, i) => {
+        setTimeout(() => ctx.fx.completeTask(row, () => { left -= 1; if (left <= 0) after(); }), i * 80);
+      });
+    });
   }
 
   function renderChallengePanel() {
@@ -196,10 +206,7 @@ export function createOrdersUi(ctx) {
         clickGive(o.id, card);
       });
       bindTip(card, npc.name, `${def?.name || ""}　${tip}`);
-      if (ready && !seenReady.has(o.id)) {
-        seenReady.add(o.id);
-        toast("可以交付囉！點「交付」交給朋友。");
-      }
+      if (ready && !seenReady.has(o.id)) seenReady.add(o.id);
       row.appendChild(card);
     }
     for (const id of [...seenReady]) {

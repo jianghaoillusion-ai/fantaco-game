@@ -1,6 +1,6 @@
 /** Travel Town-style side-event button + panel. Uses js/events.js; no real money. */
 import { formatEventLeft } from "./events.js";
-import { bindTip } from "./tip.js?v=18";
+import { bindTip } from "./tip.js?v=19";
 
 function needLabel(need, progress) {
   const p = progress || 0;
@@ -115,8 +115,10 @@ export function createEventsUi(ctx) {
     </article>`;
   }
 
+  let animating = 0;
   function render() {
     renderButton();
+    if (animating) return;
     const sheet = $("#event-sheet");
     if (sheet?.classList.contains("on")) renderPanel();
   }
@@ -146,19 +148,26 @@ export function createEventsUi(ctx) {
       const save = ctx.getSave();
       save.diamonds = (save.diamonds || 0) + reward.diamonds;
     }
+    const card = btn?.closest?.(".ev-card");
+    card?.classList.add("task-glow");
+    animating += 1;
     const after = () => {
+      animating = Math.max(0, animating - 1);
       persist();
       ctx.refreshHud?.();
       render();
     };
     const extras = { diamonds: reward.diamonds || 0 };
-    const finish = () => {
-      if (extras.diamonds && ctx.fx?.flyRewards) ctx.fx.flyRewards(extras, btn, after);
+    const leave = () => {
+      if (card && ctx.fx?.completeTask) ctx.fx.completeTask(card, after);
       else after();
+    };
+    const finish = () => {
+      if (extras.diamonds && ctx.fx?.flyRewards) ctx.fx.flyRewards(extras, btn, leave);
+      else leave();
     };
     if (reward.coins && grantCoins) grantCoins(reward.coins, btn, finish);
     else finish();
-    toast(`完成「${reward.name}」！`);
   }
 
   function bind() {

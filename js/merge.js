@@ -67,6 +67,8 @@ export function starterBoard(cols, rows) {
   put(6, 2, item("forest", 2));
   put(6, 5, item("candy", 7));
   put(7, 1, item("garden", 7));
+  put(3, 4, item("goods", 1));
+  put(5, 4, item("goods", 2));
   // two interiors left open beside the generators so new drops still have a seat
   return b;
 }
@@ -141,6 +143,7 @@ export function refillProduceQueue(genCell, gens, n = 10) {
   const q = [];
   for (let i = 0; i < n; i++) {
     if (def.id === "garden" && genCell.tier >= 2 && Math.random() < 0.08) q.push({ chain: "tea", tier: 1 });
+    else if (def.id === "star" && Math.random() < 0.1) q.push({ chain: "goods", tier: 1 });
     else q.push({ chain: def.produces, tier: pickTable(t.table) });
   }
   genCell.queue = q;

@@ -300,6 +300,41 @@
           "origin": "extended"
         }
       ]
+    },
+    "goods": {
+      "id": "goods",
+      "name": "官方小物",
+      "chapter": "village",
+      "items": [
+        {
+          "tier": 1,
+          "name": "眠花糖鑰匙圈",
+          "img": "assets/tiles/goods-1.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 2,
+          "name": "幸運鳥貼紙",
+          "img": "assets/tiles/goods-2.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "音符貼紙",
+          "img": "assets/tiles/goods-3.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "懷錶貼紙",
+          "img": "assets/tiles/goods-4.webp",
+          "rarity": "rare",
+          "origin": "official"
+        }
+      ]
     }
   },
   "generators": {
