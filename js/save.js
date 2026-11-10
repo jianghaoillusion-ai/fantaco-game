@@ -1,6 +1,7 @@
 import { migrateToFixedBoard } from "./board-layout.js";
 import { remapBoard, starterBoard } from "./merge.js";
-const KEY = "fantaco.mianhuatang.save.v2";
+const KEY = "fantaco.mianhuatang.save.v3";
+const PREVIOUS = "fantaco.mianhuatang.save.v2";
 const LEGACY = "fantaco.mianhuatang.save.v1";
 
 const ENERGY_MAX = 100;
@@ -15,10 +16,10 @@ export function configureEnergy(config = {}) {
 
 export function emptySave() {
   return {
-    version: 4,
+    version: 3,
     schemaVersion: 4,
     map: { regions: {}, unlockedGenerators: [], legacyChapters: [] },
-    fog: { openCount: 12, legacyOpen: false },
+    fog: { openCount: 12, legacyOpen: false, revealed: [] },
     magicBag: { capacity: 8, materials: {} },
     challenge: { day: "", orders: 0, claimed: false },
     generatorCooldowns: {},
@@ -53,23 +54,11 @@ export function emptySave() {
   };
 }
 
-function migrate(v1) {
-  const s = emptySave();
-  if (!v1) return s;
-  s.profile = v1.profile || null;
-  s.xp = v1.xp || 0;
-  s.level = v1.level || 1;
-  s.starSeeds = v1.starSeeds || 0;
-  s.treasures = v1.treasures || {};
-  s.flags = v1.flags || {};
-  return s;
-}
-
 export function normalizeSave(raw) {
   const base = emptySave();
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
   if ((raw.schemaVersion ?? raw.version ?? 1) > 4) throw new Error("存檔版本較新，請更新遊戲後再開啟");
-  const s = { ...base, ...raw, version: 4, schemaVersion: 4 };
+  const s = { ...base, ...raw, version: 3, schemaVersion: 4 };
   // Discard the retired field while preserving the rest of older saves.
   delete s.comboBest;
   for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures", "map", "fog", "magicBag", "challenge", "generatorCooldowns", "buildings"]) {
@@ -89,6 +78,7 @@ export function normalizeSave(raw) {
   s.magicBag.materials = Object.fromEntries(Object.entries(object(s.magicBag.materials)).filter(([, v]) => Number.isInteger(v) && v >= 0));
   s.magicBag.capacity = Math.max(8, Math.min(24, Math.floor(Number(s.magicBag.capacity) || 8)));
   s.fog.openCount = Math.max(12, Math.floor(Number(s.fog.openCount) || 12));
+  s.fog.revealed = [...new Set((Array.isArray(s.fog.revealed) ? s.fog.revealed : []).filter(i => Number.isInteger(i) && i >= 0 && i < 63))];
   s.challenge.orders = Math.max(0, Math.floor(Number(s.challenge.orders) || 0));
   if ((raw.schemaVersion ?? raw.version ?? 2) < 3 && s.board) {
     s.fog.legacyOpen = true;
@@ -127,20 +117,21 @@ export function normalizeSave(raw) {
 }
 
 export function loadSave() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) return normalizeSave(JSON.parse(raw));
-    const old = localStorage.getItem(LEGACY);
-    if (old) return migrate(JSON.parse(old));
-  } catch (error) {
-    if (error.message.includes("存檔版本")) throw error;
+  // Keep older keys as recovery copies; a malformed new save must not hide them.
+  for (const key of [KEY, PREVIOUS, LEGACY]) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) return normalizeSave(JSON.parse(raw));
+    } catch (error) {
+      if (error.message.includes("存檔版本")) throw error;
+    }
   }
   return emptySave();
 }
 
 export function writeSave(data) {
   if ((data.schemaVersion ?? data.version) > 4) throw new Error("存檔版本較新");
-  data.version = 4; data.schemaVersion = 4;
+  data.version = 3; data.schemaVersion = 4;
   data.updatedAt = Date.now();
   localStorage.setItem(KEY, JSON.stringify(data));
   // STUB: later POST JSON to Cloudflare Worker, persist in D1

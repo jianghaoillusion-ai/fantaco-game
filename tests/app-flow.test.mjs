@@ -67,7 +67,7 @@ test('新遊戲→所有新版故事→12張無限訂單→重讀存檔',async()
  }
  assert.equal(s.endless.completed,12);
  assert.equal(merge.endlessRegion(s.endless.completed,json('data/game.json').orders),3);
- const stored=JSON.parse(memory.get('fantaco.mianhuatang.save.v2'));
+ const stored=JSON.parse(memory.get('fantaco.mianhuatang.save.v3'));
  assert.deepEqual(stored.endless,{completed:12});assert.equal(stored.coins,s.coins);
  const loaded=save.loadSave();assert.deepEqual(loaded.board,stored.board);assert.deepEqual(loaded.orders,stored.orders);
 });
@@ -117,7 +117,7 @@ test('快速連續合成只領首次發現獎勵，重複物品不重領', async
   assert.equal(s.board[29], null); assert.equal(s.board[30].tier, 2);
   assert.equal(s.coins, coins); assert.equal(s.xp, xp); assert.equal(s.starSeeds, seeds+1);
  }
- const stored = JSON.parse(localStorage.getItem('fantaco.mianhuatang.save.v2'));
+ const stored = JSON.parse(localStorage.getItem('fantaco.mianhuatang.save.v3'));
  assert.equal('comboBest' in stored, false);
 });
 
@@ -133,6 +133,23 @@ test('魔法袋只扣星星種子，拒絕不足資源並保留擴充存檔', as
  assert.equal(s.starSeeds,0);assert.equal(s.coins,9999);
  assert.deepEqual(s.magicBag.materials,{wood:99});assert.equal(JSON.stringify(s.inventory),items);
  s.starSeeds=8;api.systems().shop.expandBag();assert.equal(s.starSeeds,8);
- assert.equal(JSON.parse(memory.get('fantaco.mianhuatang.save.v2')).magicBag.capacity,24);
+ assert.equal(JSON.parse(memory.get('fantaco.mianhuatang.save.v3')).magicBag.capacity,24);
  assert.equal(save.loadSave().magicBag.capacity,24);
+});
+
+test('滿盤不扣體力不塞背包，不相容落點不交換物品',async()=>{
+ const {api}=await harness();const s=api.save();s.unlockedClumps=['all'];
+ s.board=s.board.map((x,i)=>x||{kind:'item',chain:'star',tier:1,uid:'full-'+i});
+ const gi=s.board.findIndex(x=>x.kind==='gen'),energy=s.energy,inv=s.inventory.length;
+ api.tapGenerator({where:'board',i:gi,item:s.board[gi]});assert.equal(s.energy,energy);assert.equal(s.inventory.length,inv);
+ const a=s.board.findIndex(x=>x.chain==='star'),b=s.board.findIndex(x=>x.chain==='garden');
+ const before=JSON.stringify(s.board);api.moveOrMerge({where:'board',i:a,item:s.board[a]},Math.floor(b/7),b%7);assert.equal(JSON.stringify(s.board),before);
+});
+
+test('同材料訂單只允許領取預留給自己的 UID',async()=>{
+ const {api}=await harness();const s=api.save();s.board=Array(63).fill(null);s.inventory=[];
+ const need={chain:'star',tier:2},reward={coins:10};s.orders=[{id:'one',need,reward},{id:'two',need,reward}];
+ const item={kind:'item',...need,uid:'only'};s.board[31]=item;const loc={where:'board',i:31,item},coins=s.coins;
+ api.tryFulfill(loc,'two');assert.equal(s.coins,coins);assert.equal(s.board[31],item);
+ api.tryFulfill(loc,'one');assert.equal(s.coins,coins+10);assert.equal(s.board[31],null);
 });

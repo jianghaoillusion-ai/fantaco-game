@@ -1,22 +1,19 @@
+import { reserveOrderItems } from "./merge.js";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
   const { $, toast, sfx, persist, ENERGY, todayKey } = ctx;
 
-  function hasItem(need) {
+  function findNeed(order) {
     const save = ctx.getSave();
-    const match = (c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier;
-    return (save.board || []).some(match) || (save.inventory || []).some(match);
-  }
-
-  function findNeed(need) {
-    const save = ctx.getSave();
-    const i = (save.board || []).findIndex((c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier);
-    if (i >= 0) return { where: "board", i, item: save.board[i] };
-    const j = (save.inventory || []).findIndex((c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier);
-    if (j >= 0) return { where: "inv", i: j, item: save.inventory[j] };
+    reserveOrderItems(save);
+    for (const [where, cells] of [['board', save.board], ['inv', save.inventory]]) {
+      const i = (cells || []).findIndex(c => c?.uid && c.uid === order.reservedUid);
+      if (i >= 0) return {where, i, item: cells[i]};
+    }
     return null;
   }
+  function hasItem(order) { return !!findNeed(order); }
 
   function dailyState() {
     const save = ctx.getSave();
@@ -94,7 +91,7 @@ export function createOrdersUi(ctx) {
     for (const o of save.orders || []) {
       const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/mascot/front.png" };
       const def = ctx.itemDef(o.need.chain, o.need.tier);
-      const ready = hasItem(o.need);
+      const ready = hasItem(o);
       const coins = o.reward.coins ?? ((o.reward.seeds || 0) + 4);
       const card = document.createElement("div");
       card.className = "order" + (o.flag ? " story" : "") + (ready ? " ready" : "");
@@ -123,7 +120,7 @@ export function createOrdersUi(ctx) {
     const save = ctx.getSave();
     const o = (save.orders || []).find((x) => x.id === orderId);
     if (!o) return;
-    const loc = findNeed(o.need);
+    const loc = findNeed(o);
     if (!loc) { sfx.invalid(); toast("還沒做出來喔"); return; }
     const fromEl = document.querySelector(`.piece[data-uid="${loc.item.uid}"]`);
     ctx.fx?.flyTo(fromEl, card, () => ctx.tryFulfill(loc, orderId));

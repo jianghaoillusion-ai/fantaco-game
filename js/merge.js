@@ -192,8 +192,8 @@ export function makeProceduralOrder(ctx) {
   const slot = (seq || 0) % 4;
   let tier;
   if (slot === 0) tier = Math.min(maxT, Math.max(2, Math.min(cap, 2))); // easy
-  else if (slot === 3) tier = Math.min(maxT, Math.max(2, cap + (cap >= maxT ? 0 : 1))); // stretch
-  else tier = Math.min(maxT, Math.max(2, cap));
+  else if (slot === 3) tier = Math.min(maxT, Math.max(4, cap + (cap >= maxT ? 0 : 1))); // stretch
+  else tier = Math.min(maxT, Math.max(3, cap));
   tier = Math.max(2, Math.min(maxT, tier));
   const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
@@ -213,74 +213,61 @@ export function makeProceduralOrder(ctx) {
 }
 
 
-function shuffle(list) {
-  const a = list.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+/** Four stable slots: replacing an order retains its difficulty, including story orders. */
+export function fillOrderSlots(save, _slots, opts) {
+  const difficulties = ['easy', 'medium', 'medium', 'hard'];
+  const old = (save.orders || []).filter(o => o?.need);
+  const story = typeof opts.nextStory === 'function' ? opts.nextStory() : opts.nextStory;
+  const used = new Set(), usedNpcs = new Set();
+  const storySlot = story ? (story.need.tier <= 2 ? 0 : story.need.tier === 3 ? 1 : 3) : -1;
+  const npcs = [...new Set([...(opts.npcsByChapter[opts.chapter] || []), 'spirit'])];
+  save.orders = difficulties.map((difficulty, slot) => {
+    let order = old.find(o => o.slot === slot && o.difficulty === difficulty && !used.has(o.id));
+    if (story && slot === storySlot) order = old.find(o => o.id === story.id) || {...story};
+    if (!order || (order.flag && order.id !== story?.id)) {
+      order = makeProceduralOrder({...opts, seq: slot});
+    }
+    if (!order) return null;
+    used.add(order.id);
+    const npc = order.flag ? order.npc : npcs.find(n => !usedNpcs.has(n) && (slot > storySlot || n !== story?.npc)) || order.npc;
+    usedNpcs.add(npc);
+    return {...order, npc, slot, difficulty};
+  }).filter(Boolean);
+  reserveOrderItems(save);
 }
 
-function listProceduralCandidates(opts) {
-  const { chains, chapter, discovered, npcsByChapter, availableChains, region = 0, balance = {} } = opts;
-  const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
-  const unlocked = Object.keys(chains).filter((id) => {
-    if (availableChains) return availableChains.includes(id);
-    const ch = chains[id].chapter;
-    const okChapter = order.indexOf(ch) <= order.indexOf(chapter || "village");
-    if (!okChapter) return false;
-    if (id === "star" || id === "garden") return true;
-    return discoveredMax(discovered, id) >= 1;
-  });
-  const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
-  const out = [];
-  for (const chain of unlocked) {
-    const maxT = maxTier(chains, chain);
-    const starter = chain === "star" || chain === "garden";
-    const cap = region > 0 ? (balance.startTier ?? 2) + Math.floor((region - 1) / (balance.regionsPerTier ?? 2)) : Math.max(starter ? 3 : 2, discoveredMax(discovered, chain));
-    const top = Math.min(maxT, cap);
-    for (let tier = 2; tier <= top; tier++) {
-      const seeds = (balance.seedBase ?? 3) + tier * (balance.seedsPerTier ?? 2);
-      const xp = (balance.xpBase ?? 15) + tier * (balance.xpPerTier ?? 10);
-      for (const npc of npcs) {
-        out.push({
-          npc,
-          need: { chain, tier },
-          reward: { seeds, xp, energy: tier >= 4 ? 6 : 3, coins: (balance.coinBase ?? 5) + tier * (balance.coinsPerTier ?? 5) },
-          region,
-          chapter,
-          procedural: true
-        });
-      }
-    }
+/** Keep valid reservations, then allocate each remaining UID only once. */
+export function reserveOrderItems(save) {
+  const items = (save.board || []).concat(save.inventory || []).filter(x => x?.kind === 'item' && x.uid);
+  const used = new Set();
+  const matches = (item, o) => item.chain === o.need.chain && item.tier === o.need.tier;
+  for (const o of save.orders || []) {
+    const item = items.find(x => x.uid === o.reservedUid && matches(x, o) && !used.has(x.uid));
+    o.reservedUid = item?.uid || null;
+    if (item) used.add(item.uid);
   }
-  return out;
+  for (const o of save.orders || []) {
+    if (o.reservedUid) continue;
+    const item = items.find(x => matches(x, o) && !used.has(x.uid));
+    if (item) { o.reservedUid = item.uid; used.add(item.uid); }
+  }
 }
 
-/** Fill up to `slots` orders with unique customers and unique needs. */
-export function fillOrderSlots(save, slots, opts) {
-  save.orders = (save.orders || []).filter((o) => o && o.need);
-  const story = typeof opts.nextStory === "function" ? opts.nextStory() : opts.nextStory;
-  if (story && !save.orders.some((o) => o.id === story.id)) {
-    save.orders.unshift({ ...story });
+/** A due automatic producer waits when full; never charges energy or catches up in a burst. */
+export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.now()) {
+  const made = []; let blocked = false, changed = false;
+  for (let i = 0; i < save.board.length; i++) {
+    const gen = save.board[i], interval = gens[gen?.gen]?.autoMs;
+    if (gen?.kind !== 'gen' || !interval || !isOpen(i)) continue;
+    if (!Number.isFinite(gen.autoAt)) { gen.autoAt = now + interval; changed = true; continue; }
+    if (gen.autoAt > now) continue;
+    const empty = nearbyEmpty(save.board, cols, rows, i, isOpen);
+    if (empty < 0) { blocked = true; continue; }
+    const item = produceFrom(gen, gens);
+    if (!item) continue;
+    save.board[empty] = item; gen.autoAt = now + interval; made.push(item); changed = true;
   }
-  const needKey = (o) => `${o.need.chain}:${o.need.tier}`;
-  const candidates = shuffle(listProceduralCandidates(opts));
-  const take = (allowRepeatNeed, allowRepeatNpc) => {
-    for (const c of candidates) {
-      if (save.orders.length >= slots) return;
-      const npcs = new Set(save.orders.map((o) => o.npc));
-      const needs = new Set(save.orders.map(needKey));
-      if (!allowRepeatNpc && npcs.has(c.npc)) continue;
-      if (!allowRepeatNeed && needs.has(needKey(c))) continue;
-      save.orders.push({ ...c, id: "p-" + makeUid() });
-    }
-  };
-  take(false, false);
-  take(true, false);
-  take(true, true);
-  save.orders = save.orders.slice(0, slots);
+  return {made, blocked, changed};
 }
 
 export const NPCS_BY_CHAPTER = {

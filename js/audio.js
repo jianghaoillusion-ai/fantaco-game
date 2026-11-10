@@ -16,7 +16,7 @@ function ac() {
 }
 
 let settings = { music: true, sfx: true };
-export function setAudioSettings(s) { settings = { ...settings, ...s }; if (!settings.music) stopMusic(); }
+export function setAudioSettings(s) { settings = { ...settings, ...s }; if (!settings.music) { stopMusic(); document.querySelectorAll("audio[data-role='feixiang-clear']").forEach(el => { el.pause(); el.remove(); }); } }
 export function getAudioSettings() { return settings; }
 
 export function playMusic(chapterId) {

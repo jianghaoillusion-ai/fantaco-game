@@ -27,7 +27,8 @@ export function isAllOpen(save) {
 }
 
 export function isCellOpen(save, r, c, cols, rows) {
-  if (isAllOpen(save)) return true;
+  if (r < 0 || c < 0 || r >= rows || c >= cols) return false;
+  if (isAllOpen(save) || save.fog?.revealed?.includes(r * cols + c)) return true;
   const id = clumpOf(r, c, cols, rows);
   return (save.unlockedClumps || ["start"]).includes(id);
 }
@@ -151,4 +152,18 @@ export function formatCost(cost = {}, chains = {}) {
   if (cost.stars) bits.push(`${cost.stars} 星星種子`);
   for (const item of cost.items || []) bits.push(`${chains[item.chain]?.items?.[item.tier - 1]?.name || item.chain} Lv.${item.tier} ×${item.count ?? 1}`);
   return bits.join("　") || "免費";
+}
+
+/** Reveal just one orthogonal edge next to the merge destination. */
+export function revealMergeEdge(save, index, cols, rows) {
+  const r = Math.floor(index / cols), c = index % cols;
+  if (!isCellOpen(save, r, c, cols, rows)) return null;
+  for (const [dr, dc] of [[-1,0],[0,1],[1,0],[0,-1]]) {
+    const nr = r + dr, nc = c + dc;
+    if (nr < 0 || nc < 0 || nr >= rows || nc >= cols || isCellOpen(save, nr, nc, cols, rows)) continue;
+    const i = nr * cols + nc;
+    save.fog.revealed = [...(save.fog.revealed || []), i];
+    return i;
+  }
+  return null;
 }

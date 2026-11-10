@@ -113,14 +113,27 @@ export function createShop(ctx) {
       row.className = "shop-row";
       row.dataset.offerId = item.id;
       const price = formatCost(item.cost, ctx.getChains?.());
-      row.innerHTML = `<div class="body"><b>${item.name}</b><small>${item.desc}</small></div>
-        <div class="price">${price}</div>`;
+      const icon = item.item ? ctx.getChains?.()[item.item.chain]?.items?.[item.item.tier - 1]?.img : null;
+      row.innerHTML = `<div class="shop-art" aria-hidden="true">${icon ? `<img src="${icon}" alt="">` : `<span class="energy-icon">⚡</span>`}</div>
+        <div class="body"><b>${item.name}</b><div class="price">${price}</div></div>
+        <span class="shop-tip" role="tooltip" id="tip-${item.id}">${item.desc}</span>`;
+      row.tabIndex = 0;
+      row.setAttribute('aria-describedby', `tip-${item.id}`);
+      let hold;
+      const clearHold = () => { clearTimeout(hold); };
+      row.addEventListener('pointerdown', e => {
+        if (e.target.closest('button')) return;
+        hold = setTimeout(() => row.classList.add('show-tip'), 450);
+      });
+      row.addEventListener('pointerup', () => { clearHold(); setTimeout(() => row.classList.remove('show-tip'), 1800); });
+      row.addEventListener('pointercancel', () => { clearHold(); row.classList.remove('show-tip'); });
+      row.addEventListener('pointerleave', () => { clearHold(); row.classList.remove('show-tip'); });
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn green";
-      btn.style.minHeight = "36px";
+      btn.style.minHeight = "44px";
       btn.style.padding = "6px 12px";
-      btn.textContent = locked ? "還沒打開" : "換";
+      btn.textContent = locked ? "未解鎖" : "兌換";
       btn.disabled = locked || !canAfford(save, item.cost);
       btn.addEventListener("click", () => buy(item));
       row.appendChild(btn);

@@ -27,7 +27,7 @@ export function createFog(ctx) {
       crate.alt = "";
       crate.draggable = false;
       slot.appendChild(crate);
-      const cells = clumpCells(id, cols, rows);
+      const cells = clumpCells(id, cols, rows).filter(cell => !isOpenIndex(cell.i));
       const anchor = cells[Math.floor(cells.length / 2)] || cells[0];
       if (anchor && anchor.r === r && anchor.c === c) {
         const badge = document.createElement("div");
@@ -49,7 +49,8 @@ export function createFog(ctx) {
 
   function decorateGen(piece, item) {
     if (!piece) return;
-    const left = (item.coolUntil || 0) - Date.now();
+    const autoMs = ctx.getGenerators?.()[item.gen]?.autoMs;
+    const left = (autoMs ? item.autoAt || Date.now() + autoMs : item.coolUntil || 0) - Date.now();
     if (left > 0) {
       piece.classList.add("cooling");
       piece.classList.remove("ready");

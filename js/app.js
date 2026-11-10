@@ -5,10 +5,10 @@ import { mountMascot } from "./mascot.js";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
-  remapBoard, nearbyEmpty, fillOrderSlots, endlessRegion
+  remapBoard, nearbyEmpty, fillOrderSlots, endlessRegion, reserveOrderItems, tickAutoGenerators
 } from "./merge.js";
 import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
-import { regionById, isCellOpen, allBuildings } from "./world.js";
+import { regionById, isCellOpen, allBuildings, revealMergeEdge } from "./world.js";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -85,10 +85,10 @@ export async function boot() {
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); tickAutomatic(); }, 1000);
 }
 
-function persist() { tickEnergy(SAVE); if (GENS && SAVE.board) unlockGenerators(); writeSave(SAVE); syncCloud(SAVE); }
+function persist() { tickEnergy(SAVE); if (GENS && SAVE.board) unlockGenerators(); reserveOrderItems(SAVE); writeSave(SAVE); syncCloud(SAVE); }
 
 function show(name) {
   $$(".screen,.overlay").forEach((el) => el.classList.remove("on"));
@@ -342,12 +342,13 @@ function onBoardDown(e) {
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
   if (!loc) return;
+  if (dragging || (e.button != null && e.button !== 0)) return;
   const start = { x: e.clientX, y: e.clientY, t: Date.now() };
   dragging = { loc, piece, start, moved: false, ghost: null, pointerId: e.pointerId };
 }
 
 function onDragMove(e) {
-  if (!dragging) return;
+  if (!dragging || e.pointerId !== dragging.pointerId) return;
   const dx = e.clientX - dragging.start.x, dy = e.clientY - dragging.start.y;
   if (!dragging.moved && Math.hypot(dx, dy) < 10) return;
   if (!dragging.moved) {
@@ -367,42 +368,47 @@ function onDragMove(e) {
   highlightDrop(e);
 }
 
-function highlightDrop(e) {
-  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
-  const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
-  if (!cell || !dragging) return;
-  const item = dragging.loc.item;
-  if (cell.classList.contains("order")) {
-    const od = SAVE.orders.find((o) => o.id === cell.dataset.id);
-    if (od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier) cell.classList.add("hot");
-  } else {
-    const r = +cell.dataset.r, c = +cell.dataset.c;
-    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) return;
-    const dest = cellAt(r, c);
-    if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
+function validDrop(cell, loc) {
+  if (!cell || !validLocation(loc)) return false;
+  if (cell.classList.contains('order')) {
+    reserveOrderItems(SAVE);
+    return SAVE.orders.some(o => o.id === cell.dataset.id && o.reservedUid === loc.item.uid);
   }
+  if (cell.dataset.inv !== undefined) return !SAVE.inventory[+cell.dataset.inv];
+  const r = +cell.dataset.r, c = +cell.dataset.c;
+  if (!Number.isInteger(r) || !Number.isInteger(c) || !systems.fog.canDropAt(r,c)) return false;
+  const dest = cellAt(r,c);
+  return !dest || dest === loc.item || canMerge(loc.item, dest, CHAINS, GENS);
 }
-
+function clearDrop() {
+  $$('.cell.hot,.order.hot,.cell.invalid-drop,.order.invalid-drop').forEach(el => el.classList.remove('hot','invalid-drop'));
+}
+function highlightDrop(e) {
+  clearDrop();
+  const cell = document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.cell, .order');
+  if (cell && dragging) cell.classList.add(validDrop(cell, dragging.loc) ? 'hot' : 'invalid-drop');
+}
+function returnDrag(d) {
+  if (!d.ghost) return;
+  const rect = d.piece.getBoundingClientRect();
+  const ghost = d.ghost;
+  const animation = ghost.animate([
+    {left:ghost.style.left, top:ghost.style.top, transform:'scale(1.1)'},
+    {left:`${rect.x + rect.width/2}px`, top:`${rect.y + rect.height/2}px`, transform:'scale(1)'}
+  ], {duration:matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240, easing:'cubic-bezier(.2,.8,.3,1.15)'});
+  animation.onfinish = () => { ghost.remove(); d.piece.classList.remove('lifted'); };
+}
 function onDragUp(e) {
-  if (!dragging) return;
-  const d = dragging; dragging = null;
-  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
-  d.piece.classList.remove("lifted");
-  d.ghost?.remove();
-  if (e.type === "pointercancel") return;
+  if (!dragging || (e.pointerId != null && e.pointerId !== dragging.pointerId)) return;
+  const d = dragging; dragging = null; clearDrop();
+  if (e.type === 'pointercancel') { returnDrag(d); d.piece.classList.remove('lifted'); return; }
   if (!d.moved) { onTap(d.loc); return; }
-  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
-  if (!el) { sfx.drop(); return; }
-  if (el.classList.contains("order")) {
-    tryFulfill(d.loc, el.dataset.id);
-    return;
-  }
-  if (el.classList.contains("inv-cell") || el.dataset.inv !== undefined) {
-    moveToInventory(d.loc, el.dataset.inv === undefined ? -1 : +el.dataset.inv);
-    return;
-  }
-  const r = +el.dataset.r, c = +el.dataset.c;
-  moveOrMerge(d.loc, r, c);
+  const el = document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.cell, .order');
+  if (!validDrop(el,d.loc)) { sfx.invalid(); returnDrag(d); return; }
+  d.piece.classList.remove('lifted'); d.ghost?.remove();
+  if (el.classList.contains('order')) { tryFulfill(d.loc,el.dataset.id); return; }
+  if (el.dataset.inv !== undefined) { moveToInventory(d.loc,+el.dataset.inv); return; }
+  moveOrMerge(d.loc,+el.dataset.r,+el.dataset.c);
 }
 
 function validLocation(loc) {
@@ -434,7 +440,7 @@ function moveToInventory(loc, slot) {
       SAVE.inventory[loc.i] = dest;
       SAVE.inventory[slot] = src;
     }
-    sfx.drop(); persist(); renderBoard();
+    sfx.drop(); persist(); renderBoard(); renderOrders();
     return;
   }
   if (SAVE.inventory.filter(Boolean).length >= cap) {
@@ -445,7 +451,7 @@ function moveToInventory(loc, slot) {
   if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
   else SAVE.inventory.push(src);
   SAVE.inventory = SAVE.inventory.filter(Boolean);
-  sfx.drop(); persist(); renderBoard();
+  sfx.drop(); persist(); renderBoard(); renderOrders();
 }
 
 function removeFrom(loc) {
@@ -465,6 +471,7 @@ function onTap(loc) {
 function tapGenerator(loc) {
   tickEnergy(SAVE);
   const gen = loc.item;
+  if (GENS[gen.gen]?.autoMs) { toast("會自動產出，記得留空格喔"); return; }
   if (gen.coolUntil && gen.coolUntil > Date.now()) {
     const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
     sfx.invalid();
@@ -480,27 +487,18 @@ function tapGenerator(loc) {
   }
   const origin = loc.where === "board" ? loc.i : -1;
   let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
-  let toInv = false;
-  if (empty < 0) {
-    if (SAVE.inventory.length >= SAVE.magicBag.capacity) {
-      toast("棋盤和背包都滿了，先合一些吧");
-      sfx.invalid();
-      return;
-    }
-    toInv = true;
-  }
+  if (empty < 0) { toast("棋盤滿了，先合成或收進魔法袋吧"); sfx.invalid(); return; }
   const made = produceFrom(gen, GENS);
   if (!made) return;
   SAVE.energy -= 1;
   if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
   gen.pops = (gen.pops || 0) + 1;
   if (gen.pops >= GEN_POPS) { gen.pops = 0; gen.coolUntil = Date.now() + GEN_COOL_MS; }
-  if (toInv) SAVE.inventory.push(made);
-  else SAVE.board[empty] = made;
+  SAVE.board[empty] = made;
   discover(made);
   sfx.generate();
   persist();
-  renderBoard();
+  renderBoard(); renderOrders();
   refreshHud();
   systems?.fx.popAt(made.uid);
 }
@@ -517,23 +515,16 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   if (canMerge(src, dest, CHAINS, GENS)) {
     const merged = mergeCells(src, dest, CHAINS, GENS);
     removeFrom(loc);
     SAVE.board[destI] = merged;
+    revealMergeEdge(SAVE, destI, COLS, ROWS);
     onMerged(merged);
-    persist(); renderBoard();
-    return;
-  }
-  // swap
-  if (loc.where === "board") {
-    SAVE.board[loc.i] = dest;
-    SAVE.board[destI] = src;
-    sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   sfx.invalid();
@@ -674,9 +665,10 @@ function renderOrders() {
 
 function tryFulfill(loc, orderId) {
   if (!validLocation(loc)) return;
+  reserveOrderItems(SAVE);
   const o = SAVE.orders.find((x) => x.id === orderId);
   const item = loc.item;
-  if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
+  if (!o || o.reservedUid !== item.uid || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
   removeFrom(loc);
@@ -874,6 +866,7 @@ function systemCtx() {
     getGame: () => GAME,
     getMap: () => MAP,
     getChains: () => CHAINS,
+    getGenerators: () => GENS,
     getCols: () => COLS,
     getRows: () => ROWS,
     getSelected: () => selectedUid,
@@ -894,6 +887,17 @@ function systemCtx() {
 
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
 function completeTopOrder() { /* debug */ }
+
+let autoBlocked = false;
+function tickAutomatic() {
+  if (!systems || dragging || !$('#play').classList.contains('on') || $$('.overlay.on').length) return;
+  const result = tickAutoGenerators(SAVE, GENS, COLS, ROWS, systems.fog.isOpenIndex);
+  if (result.blocked && !autoBlocked) toast('棋盤滿了，自動產生器正在等空位');
+  autoBlocked = result.blocked;
+  for (const item of result.made) discover(item, {silent:true});
+  if (result.changed) persist();
+  if (result.made.length) { renderBoard(); renderOrders(); result.made.forEach(item => systems.fx.popAt(item.uid)); }
+}
 
 boot().catch((err) => {
   console.error(err);

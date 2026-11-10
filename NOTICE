@@ -1,0 +1,14 @@
+眠花糖的異想世界 — v7 implementation notice
+
+The v7 order reservation, edge reveal, automatic generator, shop tooltip,
+invalid-drop feedback and save migration changes are original implementation
+of the user's 2026-11-11 v7 requirements on this repository's existing code.
+No third-party merge-game source code has been copied or adapted in this change.
+
+Travel Town (Moon Active / Magmatic), Mystery Town and Foodstars screenshots
+in the separately supplied merge_ref material are visual/behavior references
+only. Their code and artwork are not licensed to or redistributed by this patch.
+This notice does not grant a license to FANTACO's existing official assets.
+
+Any future third-party code adaptation requires verification of a permissive
+license and preservation of its source URL, copyright and license text here.
