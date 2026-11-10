@@ -752,13 +752,8 @@ function moveOrMerge(loc, r, c) {
 }
 
 function onMerged(merged) {
-  const now = Date.now();
-  if (now - combo.at < 2200) combo.n += 1; else combo.n = 1;
-  combo.at = now;
-  SAVE.comboBest = Math.max(SAVE.comboBest || 0, combo.n);
   const tier = merged.tier || 1;
   sfx.merge(tier);
-  if (combo.n >= 2) { /* combo pop-up retired */ }
   mascot?.merge(tier);
   systems?.fx.revealMerge?.(merged.uid) || systems?.fx.popAt(merged.uid);
   const at = findCellByUid(merged.uid);
@@ -771,7 +766,6 @@ function onMerged(merged) {
   systems?.orders?.bumpTask?.("merges");
   discover(merged);
   if (tier >= 5) shake(10);
-  else if (combo.n >= 3) {}
   // first-discover gift
 }
 
@@ -810,14 +804,6 @@ function shake(n) {
   play.classList.add("shake");
   play.style.setProperty("--shake", n + "px");
   setTimeout(() => play.classList.remove("shake"), 400);
-}
-
-function floatCombo(n) {
-  const el = document.createElement("div");
-  el.className = "combo-float";
-  el.textContent = n >= 4 ? `超讚連擊 ×${n}` : `連擊 ×${n}`;
-  $("#play").appendChild(el);
-  setTimeout(() => el.remove(), 1200);
 }
 
 function renderInventory() {
