@@ -32,6 +32,54 @@ export function createFx(ctx) {
     }
   }
 
+  function revealMerge(uid) {
+    const el = document.querySelector(`.piece[data-uid="${uid}"]`);
+    if (!el) return;
+    el.classList.remove("pop-merge", "merge-reveal");
+    void el.offsetWidth;
+    el.classList.add("merge-reveal");
+    const burst = document.createElement("span");
+    burst.className = "merge-burst";
+    burst.setAttribute("aria-hidden", "true");
+    const pts = [[-22,-28],[24,-26],[32,6],[-30,8],[6,-36],[-8,30],[28,26],[-26,24]];
+    burst.innerHTML = pts.map(([x,y]) => `<i style="--dx:${x}px;--dy:${y}px"></i>`).join("");
+    el.appendChild(burst);
+    setTimeout(() => burst.remove(), 700);
+  }
+
+  function spawnArc(fromEl, toEl, done) {
+    if (!fromEl || !toEl) { done?.(); return; }
+    const a = fromEl.getBoundingClientRect();
+    const b = toEl.getBoundingClientRect();
+    const ghost = fromEl.cloneNode(true);
+    ghost.classList.add("spawn-ghost");
+    ghost.style.left = (a.left + a.width / 2) + "px";
+    ghost.style.top = (a.top + a.height / 2) + "px";
+    ghost.style.width = a.width + "px";
+    ghost.style.height = a.height + "px";
+    document.body.appendChild(ghost);
+    requestAnimationFrame(() => {
+      ghost.style.left = (b.left + b.width / 2) + "px";
+      ghost.style.top = (b.top + b.height / 2) + "px";
+      ghost.style.transform = "translate(-50%,-50%) scale(1)";
+    });
+    setTimeout(() => {
+      ghost.style.transform = "translate(-50%,-50%) scale(1.3)";
+      setTimeout(() => {
+        ghost.style.transform = "translate(-50%,-50%) scale(1)";
+        setTimeout(() => { ghost.remove(); done?.(); }, 120);
+      }, 150);
+    }, 250);
+  }
+
+  function bounceCell(el) {
+    if (!el) return;
+    el.classList.remove("cell-bounce", "bad");
+    void el.offsetWidth;
+    el.classList.add("cell-bounce", "bad");
+    setTimeout(() => el.classList.remove("cell-bounce", "bad"), 280);
+  }
+
   function coinPop(target, text) {
     const el = document.createElement("div");
     el.className = "coin-pop";
@@ -55,7 +103,7 @@ export function createFx(ctx) {
     $("#discover-img").alt = name;
     $("#discover-name").textContent = "新發現：" + name;
     const tier = item.tier ? `第 ${item.tier} 階` : "";
-    $("#discover-sub").textContent = `${tier}　已記進收集冊　＋1 星星種子`.trim();
+    $("#discover-sub").textContent = `${tier}　已記進魔法書　＋1 星星種子`.trim();
     box.classList.add("on");
   }
 
@@ -86,5 +134,5 @@ export function createFx(ctx) {
     setTimeout(() => layer.remove(), 1800);
   }
 
-  return { flyTo, popAt, coinPop, showDiscover, showInfo, celebrateRestore };
+  return { flyTo, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore };
 }

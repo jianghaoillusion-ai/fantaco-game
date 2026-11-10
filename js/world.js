@@ -26,10 +26,30 @@ export function isAllOpen(save) {
   return Array.isArray(save.unlockedClumps) && save.unlockedClumps.includes("all");
 }
 
+export function cellKey(r, c) { return r + "," + c; }
+
 export function isCellOpen(save, r, c, cols, rows) {
   if (isAllOpen(save)) return true;
+  if ((save.unlockedCells || []).includes(cellKey(r, c))) return true;
   const id = clumpOf(r, c, cols, rows);
   return (save.unlockedClumps || ["start"]).includes(id);
+}
+
+/** Orthogonal neighbor of an open cell that is itself still locked (fog contour). */
+export function isContour(save, r, c, cols, rows) {
+  if (r < 0 || c < 0 || r >= rows || c >= cols) return false;
+  if (isCellOpen(save, r, c, cols, rows)) return false;
+  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+  return dirs.some(([dr, dc]) => {
+    const rr = r + dr, cc = c + dc;
+    return rr >= 0 && cc >= 0 && rr < rows && cc < cols && isCellOpen(save, rr, cc, cols, rows);
+  });
+}
+
+export function unlockOneCell(save, r, c) {
+  if (!save.unlockedCells) save.unlockedCells = [];
+  const k = cellKey(r, c);
+  if (!save.unlockedCells.includes(k)) save.unlockedCells.push(k);
 }
 
 export function clumpCells(id, cols, rows) {
@@ -109,17 +129,28 @@ export function shopItemAvailable(save, item) {
 export function canAfford(save, cost = {}) {
   if ((cost.coins || 0) > (save.coins || 0)) return false;
   if ((cost.stars || 0) > (save.starSeeds || 0)) return false;
+  if ((cost.materials || 0) > (save.materials || 0)) return false;
   return true;
 }
 
 export function payCost(save, cost = {}) {
   save.coins = (save.coins || 0) - (cost.coins || 0);
   save.starSeeds = (save.starSeeds || 0) - (cost.stars || 0);
+  save.materials = (save.materials || 0) - (cost.materials || 0);
 }
 
 export function formatCost(cost = {}) {
   const bits = [];
   if (cost.coins) bits.push(`${cost.coins} 金幣`);
   if (cost.stars) bits.push(`${cost.stars} 星星種子`);
+  if (cost.materials) bits.push(`${cost.materials} 材料`);
   return bits.join("　") || "免費";
+}
+
+export function formatCostHtml(cost = {}) {
+  const bits = [];
+  if (cost.coins) bits.push(`<span class="price"><img src="assets/ui/coin.png" alt="">${cost.coins}</span>`);
+  if (cost.stars) bits.push(`<span class="price"><img src="assets/items/star-seed.png" alt="">${cost.stars}</span>`);
+  if (cost.materials) bits.push(`<span class="price"><img src="assets/icons/material.png" alt="">${cost.materials}</span>`);
+  return bits.join(" ") || "免費";
 }

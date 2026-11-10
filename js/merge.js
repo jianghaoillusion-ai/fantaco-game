@@ -103,16 +103,25 @@ function pickTable(table) {
   return table[0][0];
 }
 
+export function refillProduceQueue(genCell, gens, n = 10) {
+  const def = gens[genCell.gen];
+  const t = genDef(gens, genCell.gen, genCell.tier);
+  if (!def || !t) return;
+  const q = [];
+  for (let i = 0; i < n; i++) {
+    if (def.id === "garden" && genCell.tier >= 2 && Math.random() < 0.08) q.push({ chain: "tea", tier: 1 });
+    else q.push({ chain: def.produces, tier: pickTable(t.table) });
+  }
+  genCell.queue = q;
+}
+
 export function produceFrom(genCell, gens) {
   const def = gens[genCell.gen];
   const t = genDef(gens, genCell.gen, genCell.tier);
   if (!def || !t) return null;
-  const tier = pickTable(t.table);
-  // tiny chance of tea from garden 2
-  if (def.id === "garden" && genCell.tier >= 2 && Math.random() < 0.08) {
-    return { kind: "item", chain: "tea", tier: 1, uid: makeUid() };
-  }
-  return { kind: "item", chain: def.produces, tier, uid: makeUid() };
+  if (!genCell.queue || !genCell.queue.length) refillProduceQueue(genCell, gens);
+  const next = genCell.queue.shift();
+  return { kind: "item", chain: next.chain, tier: next.tier, uid: makeUid() };
 }
 
 export function firstEmpty(board) {
@@ -250,7 +259,14 @@ function listProceduralCandidates(opts) {
   return out;
 }
 
-/** Fill up to `slots` orders with unique customers and unique needs. */
+/** Fill slots with a guaranteed easy / mid / hard mix. One procedural order grants materials. */
+function difficultyOf(c, opts) {
+  const tier = c.need?.tier || 2;
+  if (tier <= 2) return "easy";
+  if (tier >= 4) return "hard";
+  return "mid";
+}
+
 export function fillOrderSlots(save, slots, opts) {
   save.orders = (save.orders || []).filter((o) => o && o.need);
   const story = typeof opts.nextStory === "function" ? opts.nextStory() : opts.nextStory;
@@ -258,21 +274,55 @@ export function fillOrderSlots(save, slots, opts) {
     save.orders.unshift({ ...story });
   }
   const needKey = (o) => `${o.need.chain}:${o.need.tier}`;
-  const candidates = shuffle(listProceduralCandidates(opts));
-  const take = (allowRepeatNeed, allowRepeatNpc) => {
-    for (const c of candidates) {
-      if (save.orders.length >= slots) return;
+  const all = listProceduralCandidates(opts);
+  const plan = slots >= 4 ? ["easy", "mid", "mid", "hard"] : ["easy", "mid", "hard"];
+  const usedPlan = save.orders.map((o) => o.procedural ? difficultyOf(o, opts) : "story");
+  const needed = [];
+  const counts = { easy: 0, mid: 0, hard: 0 };
+  for (const d of usedPlan) if (counts[d] != null) counts[d]++;
+  for (const d of plan) {
+    if (counts[d] > 0) counts[d]--;
+    else needed.push(d);
+  }
+  const take = (pool, allowRepeatNeed, allowRepeatNpc) => {
+    for (const c of pool) {
+      if (save.orders.length >= slots) return true;
       const npcs = new Set(save.orders.map((o) => o.npc));
       const needs = new Set(save.orders.map(needKey));
       if (!allowRepeatNpc && npcs.has(c.npc)) continue;
       if (!allowRepeatNeed && needs.has(needKey(c))) continue;
       save.orders.push({ ...c, id: "p-" + makeUid() });
+      return true;
     }
+    return false;
   };
-  take(false, false);
-  take(true, false);
-  take(true, true);
+  for (const d of needed) {
+    if (save.orders.length >= slots) break;
+    const pool = shuffle(all.filter((c) => difficultyOf(c, opts) === d));
+    if (take(pool, false, false)) continue;
+    if (take(pool, true, false)) continue;
+    if (take(shuffle(all), false, false)) continue;
+    take(shuffle(all), true, true);
+  }
+  if (save.orders.length && !save.orders.some((o) => o.reward?.materials)) {
+    const proc = save.orders.filter((o) => o.procedural);
+    const hard = proc.filter((o) => difficultyOf(o, opts) === "hard");
+    const target = hard[0] || proc[proc.length - 1];
+    if (target) target.reward = { ...(target.reward || {}), materials: 1 };
+  }
   save.orders = save.orders.slice(0, slots);
+}
+
+/** Bind at most one matching board/bag item to each order so two cards cannot claim the same uid. */
+export function reserveItems(orders, board, inv) {
+  const used = new Set();
+  for (const o of orders || []) {
+    const hit = [...(board || []), ...(inv || [])].find((c) =>
+      c && c.kind === "item" && c.chain === o.need.chain && c.tier === o.need.tier && !used.has(c.uid)
+    );
+    o.reservedUid = hit?.uid || null;
+    if (hit) used.add(hit.uid);
+  }
 }
 
 export const NPCS_BY_CHAPTER = {

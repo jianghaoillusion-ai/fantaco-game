@@ -1,0 +1,22 @@
+NOTICE
+
+眠花糖的異想世界 includes original game code and assets by FANTACO.
+
+The following open-source projects (MIT License) informed merge-board,
+fog-contour, and inventory-slot algorithms. No proprietary or unlicensed
+source code was copied.
+
+- Merge2 Core SDK / Merge2 UI View
+  MIT License, Copyright (c) 2023 Agava LLC
+  https://github.com/ArtemVetik/com.agava.merge2
+  https://github.com/ArtemVetik/com.agava.merge2uiview
+
+- Unity_MergeGame
+  MIT License, Copyright (c) 2026 MergeGame Template
+  https://github.com/dev-lime/Unity_MergeGame
+
+Chapter background music is original procedural synthesis (not AI-generated
+vocals or licensed songs). The level-clear sting is the official recording
+of 〈飛向藍藍天〉, used with the project owner's rights.
+
+See also README.md.

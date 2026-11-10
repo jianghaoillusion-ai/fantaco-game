@@ -1,15 +1,21 @@
-import { Auth } from "./auth.js";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js";
-import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js";
-import { mountMascot } from "./mascot.js";
+import { Auth } from "./auth.js?v=8";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=8";
+import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=8";
+import { mountMascot } from "./mascot.js?v=8";
+import { mountHome } from "./home.js?v=8";
+import { bindStory, startStory } from "./story.js?v=8";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=8";
+import { bagCap, migrateBagSlots } from "./bag.js?v=8";
+import { reserveItems } from "./merge.js?v=8";
+import { avatarSrc } from "./portraits.js?v=8";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
-import { regionById } from "./world.js";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js";
+} from "./merge.js?v=8";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=8";
+import { regionById } from "./world.js?v=8";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=8";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -23,6 +29,7 @@ let pendingStory = null;
 let energyTimer;
 let selectedUid = null;
 let systems;
+let home, settingsUi;
 
 let COLS = 7, ROWS = 9;
 const CHAPTER_END = {
@@ -42,7 +49,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=7");
+  const res = await fetch(url + "?v=8");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -78,10 +85,17 @@ export async function boot() {
   ensureOrders();
   unlockGenerators();
   persist();
+  migrateSettings(SAVE);
+  migrateBagSlots(SAVE, !!(SAVE.board && SAVE.board.length));
+  setAudioSettings(SAVE.settings);
   systems = attachSystems(systemCtx());
   bind();
   mascot = mountMascot($("#mascot-root"));
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh };
+  home = mountHome({ $, getSave: () => SAVE });
+  settingsUi = createSettingsUi({ $, persist, getSave: () => SAVE, show });
+  settingsUi.bind();
+  bindStory({ $, sfx, show, chapterBg: () => getComputedStyle($("#play") || document.documentElement).getPropertyValue("--chapter-bg") });
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
@@ -105,11 +119,11 @@ function show(name) {
     });
   } else if (name === "title") {
     playMusic("village");
+    home?.refresh?.();
   } else if (name === "book") renderBook();
   else if (name === "redeem") $("#redeem-count").textContent = SAVE.starSeeds;
   else if (name === "lyrics") renderLyrics();
-  else if (name === "settings") renderSettings();
-  else if (name === "map") renderMap();
+    else if (name === "map") renderMap();
   else if (name === "daily") renderDaily();
   refreshHud();
 }
@@ -148,13 +162,9 @@ function bind() {
   $("#btn-redeem")?.addEventListener("click", () => { sfx.tap(); show("redeem"); });
   $("#btn-lyrics")?.addEventListener("click", () => { sfx.tap(); show("lyrics"); });
   $("#btn-howto")?.addEventListener("click", () => { sfx.tap(); show("howto"); });
-  $("#btn-settings")?.addEventListener("click", () => { sfx.tap(); show("settings"); });
-  $("#btn-map")?.addEventListener("click", () => { sfx.tap(); show("map"); });
+    $("#btn-map")?.addEventListener("click", () => { sfx.tap(); show("map"); });
   $("#btn-daily")?.addEventListener("click", () => { sfx.tap(); show("daily"); });
   $$("[data-back]").forEach((b) => b.addEventListener("click", () => { sfx.tap(); show(b.dataset.back); }));
-
-  $("#btn-story-next")?.addEventListener("click", nextStory);
-  $("#btn-story-skip")?.addEventListener("click", () => { storyIdx = storyQueue.length; nextStory(); });
 
   $("#name-form")?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -162,13 +172,6 @@ function bind() {
     if (!n) return toast("請輸入名稱");
     SAVE.profile = { ...(SAVE.profile || {}), nickname: n };
     persist(); refreshHud(); toast("名稱已更新"); sfx.tap();
-  });
-  $("#tog-music")?.addEventListener("change", (e) => {
-    SAVE.settings.music = e.target.checked; setAudioSettings(SAVE.settings); persist();
-    if (e.target.checked) playMusic(SAVE.chapter); else stopMusic();
-  });
-  $("#tog-sfx")?.addEventListener("change", (e) => {
-    SAVE.settings.sfx = e.target.checked; setAudioSettings(SAVE.settings); persist();
   });
 
   $("#btn-claim-daily")?.addEventListener("click", claimDaily);
@@ -208,6 +211,11 @@ function refreshHud() {
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
   $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins || 0; });
+  $$("[data-mats]").forEach((el) => { el.textContent = SAVE.materials || 0; });
+  const cap = bagCap(SAVE);
+  const filled = (SAVE.inventory || []).filter(Boolean).length;
+  const invEl = document.getElementById("inv-count");
+  if (invEl) invEl.textContent = `${filled}/${cap}`;
   $$("[data-energy]").forEach((el) => { el.textContent = SAVE.energy; });
   $$("[data-energy-max]").forEach((el) => { el.textContent = ENERGY.max; });
   const wait = nextEnergyIn(SAVE);
@@ -311,6 +319,11 @@ function makePiece(item) {
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
   el.title = name;
+  const wanted = (SAVE.orders || []).some((o) =>
+    item.kind === "item" && o.need?.chain === item.chain && o.need?.tier === item.tier
+    && (!o.reservedUid || o.reservedUid === item.uid)
+  );
+  if (wanted) el.insertAdjacentHTML("beforeend", '<span class="want-check">✓</span>');
   return el;
 }
 
@@ -367,30 +380,41 @@ function onDragMove(e) {
 }
 
 function highlightDrop(e) {
-  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
+  $$(".cell.hot,.cell.bad,.order.hot").forEach((el) => el.classList.remove("hot", "bad"));
   const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
   if (!cell || !dragging) return;
   const item = dragging.loc.item;
   if (cell.classList.contains("order")) {
     const od = SAVE.orders.find((o) => o.id === cell.dataset.id);
-    if (od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier) cell.classList.add("hot");
+    const ok = od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier
+      && (!od.reservedUid || od.reservedUid === item.uid);
+    cell.classList.add(ok ? "hot" : "bad");
   } else {
     const r = +cell.dataset.r, c = +cell.dataset.c;
-    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) return;
+    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) {
+      cell.classList.add("bad");
+      return;
+    }
     const dest = cellAt(r, c);
     if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
+    else if (dragging.loc.where !== "board") cell.classList.add("bad");
   }
 }
 
 function onDragUp(e) {
   if (!dragging) return;
   const d = dragging; dragging = null;
-  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
+  $$(".cell.hot,.cell.bad,.order.hot,.order.bad").forEach((el) => el.classList.remove("hot", "bad"));
   d.piece.classList.remove("lifted");
   d.ghost?.remove();
   if (!d.moved) { onTap(d.loc); return; }
-  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
-  if (!el) { sfx.drop(); return; }
+  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order, .inv-cell");
+  if (!el) {
+    sfx.invalid();
+    const src = d.piece.closest(".cell") || d.piece;
+    systems?.fx.bounceCell?.(src);
+    return;
+  }
   if (el.classList.contains("order")) {
     tryFulfill(d.loc, el.dataset.id);
     return;
@@ -404,7 +428,7 @@ function onDragUp(e) {
 }
 
 function moveToInventory(loc, slot) {
-  const cap = GAME.board?.inventory || 8;
+  const cap = bagCap(SAVE);
   const src = loc.item;
   if (loc.where === "inv") {
     if (slot < 0 || slot === loc.i) return;
@@ -416,7 +440,7 @@ function moveToInventory(loc, slot) {
       // after remove, indices shift if loc.i < slot
       const at = loc.i < slot ? slot - 1 : slot;
       SAVE.inventory.splice(at, 0, src);
-      SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+      SAVE.inventory = SAVE.inventory.filter(Boolean);
     } else if (canMerge(src, dest, CHAINS, GENS)) {
       const merged = mergeCells(src, dest, CHAINS, GENS);
       SAVE.inventory[slot] = merged;
@@ -437,7 +461,7 @@ function moveToInventory(loc, slot) {
   SAVE.inventory = SAVE.inventory.filter(Boolean);
   if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
   else SAVE.inventory.push(src);
-  SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+  SAVE.inventory = SAVE.inventory.filter(Boolean);
   sfx.drop(); persist(); renderBoard();
 }
 
@@ -475,12 +499,23 @@ function tapGenerator(loc) {
   let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
   let toInv = false;
   if (empty < 0) {
-    if (SAVE.inventory.length >= (GAME.board?.inventory || 8)) {
-      toast("棋盤和背包都滿了，先合一些吧");
+    if (SAVE.inventory.filter(Boolean).length >= bagCap(SAVE)) {
+      toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
       sfx.invalid();
       return;
     }
     toInv = true;
+  }
+  const chargeMax = gen.chargeMax || GENS[gen.gen]?.chargeMax;
+  if (chargeMax) {
+    gen.charge = (gen.charge || 0) + 1;
+    if (gen.charge < chargeMax) {
+      sfx.tap();
+      toast(`蓄力 ${gen.charge}/${chargeMax}`);
+      persist(); renderBoard();
+      return;
+    }
+    gen.charge = 0;
   }
   const made = produceFrom(gen, GENS);
   if (!made) return;
@@ -493,13 +528,23 @@ function tapGenerator(loc) {
   discover(made);
   sfx.generate();
   persist();
+  const fromEl = document.querySelector(`.piece[data-uid="${gen.uid}"]`);
   renderBoard();
   refreshHud();
-  systems?.fx.popAt(made.uid);
+  const toEl = toInv ? document.getElementById("btn-bag") : document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
+  if (systems?.fx.spawnArc && fromEl && toEl) systems.fx.spawnArc(fromEl, toEl, () => systems.fx.popAt(made.uid));
+  else systems?.fx.popAt(made.uid);
 }
 
 function moveOrMerge(loc, r, c) {
-  if (systems && !systems.fog.canDropAt(r, c)) { sfx.invalid(); toast("這一格還沒揭開"); return; }
+  if (systems && !systems.fog.canDropAt(r, c)) {
+    sfx.invalid();
+    toast("這一格還沒揭開");
+    systems.fx.bounceCell?.(document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`));
+    const src = document.querySelector(`.piece[data-uid="${loc.item.uid}"]`)?.closest(".cell");
+    systems.fx.bounceCell?.(src);
+    return;
+  }
   const destI = idx(COLS, r, c);
   const src = loc.item;
   const dest = SAVE.board[destI];
@@ -541,7 +586,13 @@ function onMerged(merged) {
   sfx.merge(tier);
   if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
   mascot?.merge(tier);
-  systems?.fx.popAt(merged.uid);
+  systems?.fx.revealMerge?.(merged.uid) || systems?.fx.popAt(merged.uid);
+  const at = findCellByUid(merged.uid);
+  if (at?.where === "board") {
+    const cols = COLS;
+    systems?.fog.revealAdjacent?.(Math.floor(at.i / cols), at.i % cols);
+  }
+  try { navigator.vibrate?.(12); } catch {}
   discover(merged);
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) shake(6);
@@ -628,6 +679,7 @@ function ensureOrders() {
     seq: SAVE.ordersDone || 0,
     nextStory: nextStoryOrder
   });
+  reserveItems(SAVE.orders, SAVE.board, SAVE.inventory);
 }
 
 function hasGen(id) {
@@ -641,8 +693,9 @@ function grantGen(id, tier = 1) {
     ? nearbyEmpty(SAVE.board, COLS, ROWS, -1, systems.fog.isOpenIndex)
     : firstEmpty(SAVE.board);
   const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
+  if (GENS[id]?.autoMs) { cell.autoMs = GENS[id].autoMs; cell.coolUntil = Date.now() + GENS[id].autoMs; }
   if (empty >= 0) SAVE.board[empty] = cell;
-  else if (SAVE.inventory.length < (GAME.board?.inventory || 8)) SAVE.inventory.push(cell);
+  else if (SAVE.inventory.filter(Boolean).length < bagCap(SAVE)) SAVE.inventory.push(cell);
   else return false;
   toast(`新的產生器：${GENS[id]?.name || id}`);
   return true;
@@ -658,6 +711,7 @@ function unlockGenerators() {
 }
 
 function renderOrders() {
+  reserveItems(SAVE.orders || [], SAVE.board, SAVE.inventory);
   if (systems?.orders) systems.orders.renderOrders();
 }
 
@@ -667,11 +721,15 @@ function tryFulfill(loc, orderId) {
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
+  if (o.reservedUid && item.uid !== o.reservedUid) {
+    sfx.invalid(); toast("這件是另一張訂單要的"); return;
+  }
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
   SAVE.starSeeds += o.reward.seeds || 0;
   SAVE.coins = (SAVE.coins || 0) + (o.reward.coins ?? ((o.reward.seeds || 0) + 4));
+  if (o.reward.materials) SAVE.materials = (SAVE.materials || 0) + o.reward.materials;
   systems?.orders.bumpDaily();
   const before = SAVE.level;
   SAVE.xp += o.reward.xp || 0;
@@ -720,41 +778,6 @@ function maybeStoryIntro() {
   persist();
   startStory(o.intro, () => show("play"));
   return true;
-}
-
-function startStory(lines, done) {
-  storyQueue = lines || [];
-  storyIdx = 0;
-  storyDoneFn = done;
-  if (!storyQueue.length) { done?.(); return; }
-  show("story");
-  renderStory();
-}
-
-function renderStory() {
-  const line = storyQueue[Math.min(storyIdx, storyQueue.length - 1)];
-  if (!line) return;
-  $("#bubble-who").textContent = line.speaker || "";
-  $("#bubble-tx").textContent = line.text || "";
-  const hold = $("#portraits");
-  hold.innerHTML = "";
-  const map = { mascot: "assets/mascot/wish.png", feifei: "assets/chars/feifei.png", apiao: "assets/chars/apiao.png", sika: "assets/chars/sika.png", jiejie: "assets/chars/jiejie.png", spirit: "assets/chars/spirit.png", bulu: "assets/chars/bulu.png", hate: "assets/chars/hate.png" };
-  const src = map[line.portrait] || map.mascot;
-  const img = new Image(); img.src = src; img.alt = line.speaker || "";
-  hold.appendChild(img);
-  if (line.portrait && line.portrait !== "mascot") {
-    const m = new Image(); m.src = "assets/mascot/front.png"; m.alt = "眠花糖"; m.className = "dim";
-    hold.appendChild(m);
-  }
-}
-
-function nextStory() {
-  sfx.tap();
-  storyIdx += 1;
-  if (storyIdx >= storyQueue.length) {
-    const fn = storyDoneFn; storyDoneFn = null;
-    show("play"); fn?.();
-  } else renderStory();
 }
 
 function showClear({ chapterClear, leveled, o }) {
@@ -813,7 +836,7 @@ function renderMap() {
 function renderDaily() {
   const today = todayKey();
   const claimed = SAVE.daily?.day === today && SAVE.daily.claimed;
-  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的免費禮物在這裡，完全不用花錢。";
+  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的禮物在這裡。";
   $("#btn-claim-daily").disabled = claimed;
 }
 
@@ -873,6 +896,8 @@ function systemCtx() {
     makeUid, ENERGY, todayKey,
     itemDef: (chain, tier) => itemDef(CHAINS, chain, tier),
     maxTier: (chain) => maxTier(CHAINS, chain),
+    getGens: () => GENS,
+    avatarSrc,
     get mascot() { return mascot; },
     showInfo: (item) => systems?.fx.showInfo(item)
   };

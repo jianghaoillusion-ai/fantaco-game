@@ -3,16 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>眠花糖與魔法氣球物語｜FANTACO 魔幻藝術節</title>
-  <meta name="description" content="FANTACO 官方免費親子合成遊戲。把兩個一樣的寶物合在一起，幫飛飛實現願望。">
+  <title>眠花糖的異想世界</title>
+  <meta name="description" content="和眠花糖一起，把兩個一樣的寶物合在一起，走進異想世界。">
   <meta name="theme-color" content="#3b4468">
+  <meta property="og:title" content="眠花糖的異想世界">
+  <meta property="og:description" content="和眠花糖一起，把兩個一樣的寶物合在一起，走進異想世界。">
+  <meta property="og:image" content="https://jianghaoillusion-ai.github.io/fantaco-game/assets/ui/app-icon.png">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/app.css?v=8">
+  <link rel="stylesheet" href="css/home.css?v=8">
+  <link rel="stylesheet" href="css/story.css?v=8">
+  <link rel="stylesheet" href="css/bag.css?v=8">
+  <link rel="stylesheet" href="css/orders.css?v=8">
+  <link rel="stylesheet" href="css/settings.css?v=8">
 </head>
 <body>
   <div id="app">
@@ -31,42 +40,52 @@
     </section>
 
     <section id="title" class="screen">
-      <div class="balloon-bg" aria-hidden="true">
-        <span style="left:8%;top:18%;background:#f4a7bf;animation-delay:0s"></span>
-        <span style="left:22%;top:8%;background:#ffed00;animation-delay:.6s"></span>
-        <span style="right:12%;top:16%;background:#8dc073;animation-delay:1s"></span>
-        <span style="right:24%;top:6%;background:#fff;animation-delay:1.6s"></span>
-      </div>
+      <div class="balloon-bg" aria-hidden="true"></div>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
-      <h1>眠花糖與魔法氣球物語</h1>
-      <p class="tag">把兩個一樣的寶物合在一起，幫飛飛實現願望</p>
-      <img class="hero" src="assets/mascot/hero.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
+      <h1>眠花糖的異想世界</h1>
+      <img class="hero" src="assets/mascot/three.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
       <div class="actions">
         <button class="btn wide" id="btn-play">開始冒險</button>
-        <div class="row">
-          <button class="btn ghost" id="btn-map">故事地圖</button>
-          <button class="btn ghost" id="btn-book">收集冊</button>
-        </div>
-        <div class="row">
-          <button class="btn ghost" id="btn-daily">每日禮物</button>
-          <button class="btn ghost" id="btn-redeem">兌換禮品</button>
-        </div>
-        <div class="row">
-          <button class="btn ghost" id="btn-lyrics">飛向藍藍天</button>
-          <button class="btn ghost" id="btn-howto">怎麼玩</button>
-          <button class="btn ghost" id="btn-settings">設定</button>
+        <div class="home-dock" role="navigation" aria-label="主畫面">
+          <button class="home-ico" id="btn-map" type="button" title="打開世界地圖，修復小建築">
+            <span class="tile"><img src="assets/icons/map.png" alt=""></span>故事地圖
+          </button>
+          <button class="home-ico" id="btn-book" type="button" title="看看收集到的寶物">
+            <span class="tile"><img src="assets/icons/book.png" alt=""></span>魔法書
+          </button>
+          <button class="home-ico" id="btn-daily" type="button" title="每天都可以來領一份禮物">
+            <span class="tile"><img src="assets/icons/clock.png" alt=""></span>
+            <span class="home-dot" hidden></span>
+            <span class="home-count" hidden></span>
+            每日禮物
+          </button>
+          <button class="home-ico" id="btn-redeem" type="button" title="用星星種子換禮物">
+            <span class="tile"><img src="assets/icons/gift.png" alt=""></span>兌換禮品
+          </button>
+          <button class="home-ico" id="btn-lyrics" type="button" title="聽聽主題曲">
+            <span class="tile"><img src="assets/icons/song.png" alt=""></span>飛向藍藍天
+          </button>
+          <button class="home-ico" id="btn-howto" type="button" title="合成與訂單的玩法">
+            <span class="tile"><img src="assets/icons/howto.png" alt=""></span>怎麼玩
+          </button>
+          <button class="home-ico" id="btn-settings" type="button" title="音樂、音效與名字">
+            <span class="tile"><img src="assets/icons/gear.png" alt=""></span>設定
+          </button>
         </div>
       </div>
-      <p class="notice">完全免費　沒有內購　能量會自己回來　冒險者：<span data-nick>小朋友</span>　<span data-level>Lv.1</span></p>
     </section>
 
     <section id="play" class="screen">
       <div class="play-frame">
         <div class="hud play-hud">
-          <span class="pill level" data-level>Lv.1</span>
+          <span class="pill level"><span data-level>Lv.1</span><span class="xpbar"><i data-xp></i></span></span>
           <span class="pill energy" title="能量會慢慢回來">⚡ <span data-energy>100</span>/<span data-energy-max>100</span>　<small data-energy-in>已滿</small></span>
-          <span class="pill coins"><img src="assets/ui/coin.svg" alt=""> <span data-coins>0</span></span>
+          <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
           <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+          <span class="pill mats" title="修復材料"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
+          <button type="button" id="btn-hud-settings" class="icon-btn hud-gear" aria-label="設定" title="設定">
+            <img src="assets/icons/gear.png" alt="">
+          </button>
         </div>
         <div id="orders" class="orders" aria-label="訂單"></div>
         <div class="scene">
@@ -82,7 +101,11 @@
           <button type="button" id="btn-sell" class="sell-btn">出售</button>
         </div>
         <div class="toolbar">
-          <button type="button" id="btn-bag" class="tool-btn bag">魔法袋 <span id="inv-count">0/8</span></button>
+          <button type="button" id="btn-bag" class="tool-btn bag-icon" aria-label="魔法袋" title="打開魔法袋">
+            <img src="assets/icons/bag.png" alt="">
+            <span class="bag-badge" id="inv-count">0/6</span>
+            <small>魔法袋</small>
+          </button>
           <button type="button" id="btn-go-map" class="tool-btn map">地圖</button>
           <button type="button" id="btn-go-shop" class="tool-btn shop">小舖</button>
           <button type="button" class="tool-btn ghost" data-back="title">主畫面</button>
@@ -94,34 +117,31 @@
       <div class="hud">
         <button class="icon-btn" data-back="play" aria-label="返回棋盤">←</button>
         <span class="pill level" data-level>Lv.1</span>
-        <span class="pill coins"><img src="assets/ui/coin.svg" alt=""> <span data-coins>0</span></span>
+        <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
         <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
         <button type="button" id="btn-map-shop" class="btn ghost" style="min-height:40px;padding:8px 14px">小舖</button>
       </div>
       <h2 style="text-align:center;margin:4px 0 4px">微笑村地圖</h2>
-      <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。完全不用花錢。</p>
+      <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。</p>
       <div class="town-map" id="nodes"></div>
     </section>
 
     <section id="story" class="screen">
-      <div class="hud" style="width:min(720px,100%);margin:0 auto 8px">
-        <span></span>
-        <button class="btn ghost" id="btn-story-skip" type="button">略過</button>
-      </div>
+      <button class="btn ghost story-skip" id="btn-story-skip" type="button">略過</button>
       <div class="story-stage">
         <div class="portraits" id="portraits"></div>
-        <div class="bubble">
+        <div class="bubble" id="story-bubble">
           <div class="who" id="bubble-who"></div>
           <p id="bubble-tx"></p>
+          <span class="tap-hint">點一下繼續</span>
         </div>
-        <button class="btn wide" id="btn-story-next" type="button">下一步</button>
       </div>
     </section>
 
     <section id="book" class="screen pane">
       <div class="hud">
         <button class="icon-btn" data-back="title" aria-label="返回">←</button>
-        <h2>收集冊</h2>
+        <h2>魔法書</h2>
         <span></span>
       </div>
       <p class="lede">第一次合成到的寶物會記在這裡。稀有度只跟遊戲進度有關，沒有轉蛋，也不用花錢。</p>
@@ -163,11 +183,11 @@
       <ol class="howto">
         <li>點一下「產生器」（帶閃電的寶箱或窩），會花 1 點能量，跳出道具。</li>
         <li>把兩個一樣的道具拖在一起，就會合成更高一級。</li>
-        <li>上面是角色訂單。湊齊他們要的東西，點綠色的「交給他」，就能拿到金幣、星星種子和經驗。</li>
-        <li>能量會慢慢自己回來，每天還有免費禮物。完全不用花錢。</li>
+        <li>上面是角色訂單。湊齊他們要的東西，點那張訂單卡片就可以交給他們，拿到金幣、星星種子和經驗。</li>
+        <li>能量會慢慢自己回來，每天還有禮物可以領。</li>
         <li>完成故事訂單，就能打開下一章。平常的訂單會一直出，可以一直玩。</li>
         <li>棋盤滿了，點左下角的「魔法袋」把道具先收起來。點格子上的物品，可以看到名稱，也可以賣掉多餘的（第 1 階不能賣）。</li>
-        <li>點「地圖」用金幣和星星種子打開新地區、修復建築。點「小舖」可買道具或回復能量。全部只用遊戲裡的金幣和種子，沒有儲值，也沒有廣告。</li>
+        <li>點「地圖」用金幣和星星種子打開新地區、修復建築。點「小舖」可買道具或回復能量。</li>
       </ol>
     </section>
 
@@ -177,16 +197,7 @@
         <h2>設定</h2>
         <span></span>
       </div>
-      <div class="modal" style="margin:16px auto">
-        <h3>冒險者名稱</h3>
-        <form id="name-form" class="name-form">
-          <input id="name-edit" type="text" maxlength="12" autocomplete="nickname">
-          <button class="btn" type="submit">儲存</button>
-        </form>
-        <label class="tog"><input id="tog-music" type="checkbox" checked> 音樂</label>
-        <label class="tog"><input id="tog-sfx" type="checkbox" checked> 音效</label>
-        <p class="notice">每一章有自己的音樂。過關或升級時會播放官方〈飛向藍藍天〉的副歌，並顯示歌詞。</p>
-      </div>
+      <p class="lede" style="text-align:center;margin-top:24px">請從主畫面或遊戲裡的齒輪打開設定。</p>
     </section>
 
     <section id="daily" class="screen pane">
@@ -197,7 +208,7 @@
       </div>
       <div class="modal" style="margin:24px auto;text-align:center">
         <img src="assets/mascot/wish.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
-        <p id="daily-status">今天的免費禮物在這裡，完全不用花錢。</p>
+        <p id="daily-status">今天的禮物在這裡。</p>
         <p class="notice">連續來領，能量和星星種子會多一點點。</p>
         <button class="btn wide" id="btn-claim-daily" type="button">領取今日禮物</button>
       </div>
@@ -218,7 +229,7 @@
     <div id="bag" class="overlay">
       <div class="modal bag-card">
         <h3>魔法袋</h3>
-        <p class="notice">點一下物品，就可以放回棋盤空格。</p>
+        <p class="bag-hint">點一下物品，就可以放回棋盤空格。用星星種子可以加大袋子。</p>
         <div id="inv-cells" class="inv-cells bag-grid"></div>
         <button class="btn" id="btn-bag-close" type="button">關閉</button>
       </div>
@@ -227,7 +238,7 @@
     <div id="shop" class="overlay">
       <div class="modal shop-card">
         <h3 id="shop-title">微笑小舖</h3>
-        <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。完全免費，沒有儲值，也沒有廣告。</p>
+        <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。</p>
         <div id="shop-list" class="shop-list"></div>
         <button class="btn" id="btn-shop-close" type="button">關閉</button>
       </div>
@@ -254,6 +265,33 @@
       </div>
     </div>
 
+    <div id="settings-sheet" class="sheet-overlay">
+      <div class="settings-card" role="dialog" aria-labelledby="settings-heading">
+        <h3 id="settings-heading">設定</h3>
+        <form id="name-form" class="name-form">
+          <input id="name-edit" type="text" maxlength="12" autocomplete="nickname" placeholder="冒險者名字">
+          <button class="btn" type="submit">儲存</button>
+        </form>
+        <div class="set-row">
+          <div class="set-head">
+            <img src="assets/icons/song.png" alt="">
+            <span>音樂</span>
+            <label class="tog"><input id="tog-music" type="checkbox" checked></label>
+          </div>
+          <input id="vol-music" type="range" min="0" max="100" value="72" aria-label="音樂音量">
+        </div>
+        <div class="set-row">
+          <div class="set-head">
+            <img src="assets/icons/gear.png" alt="">
+            <span>音效</span>
+            <label class="tog"><input id="tog-sfx" type="checkbox" checked></label>
+          </div>
+          <input id="vol-sfx" type="range" min="0" max="100" value="85" aria-label="音效音量">
+        </div>
+        <button class="btn wide" id="btn-settings-close" type="button">完成</button>
+      </div>
+    </div>
+
     <div id="toast" class="toast" role="status"></div>
   </div>
   <script type="importmap">
@@ -264,6 +302,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/app.js?v=8"></script>
 </body>
 </html>

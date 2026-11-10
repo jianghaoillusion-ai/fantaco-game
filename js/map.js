@@ -2,7 +2,7 @@
 import {
   regionById, isRegionUnlocked, regionVisible, regionUnlockBlocked,
   allBuildings, buildingDef, formatCost, payCost, canAfford
-} from "./world.js";
+} from "./world.js?v=8";
 
 export function createMap(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, startStory, applyChapterLook, playMusic } = ctx;
@@ -70,6 +70,7 @@ export function createMap(ctx) {
     const row = document.createElement("div");
     row.className = "bldg";
     const next = b.costs?.[lv];
+    const mats = b.materials?.[lv] || 0;
     const needOk = !b.need || (() => {
       const [id, n] = b.need.split(":");
       return (save.buildings?.[id] || 0) >= Number(n || 1);
@@ -81,8 +82,10 @@ export function createMap(ctx) {
       go.className = "btn green go";
       go.style.minHeight = "36px";
       go.style.padding = "6px 12px";
-      go.textContent = needOk ? `修復 ${next} 金幣` : "先修好前面的";
-      go.disabled = !needOk || (save.coins || 0) < next;
+      const matLabel = mats ? `　${mats} 材料` : "";
+      go.innerHTML = needOk ? `修復 ${next} <img src="assets/ui/coin.png" alt="" style="width:14px;height:14px;display:inline"> ${matLabel}` : "先修好前面的";
+      const afford = (save.coins || 0) >= next && (save.materials || 0) >= mats;
+      go.disabled = !needOk || !afford;
       go.addEventListener("click", () => restoreBuilding(b, region));
       row.appendChild(go);
     } else {
@@ -134,13 +137,16 @@ export function createMap(ctx) {
     const save = ctx.getSave();
     const lv = save.buildings?.[b.id] || 0;
     const cost = b.costs?.[lv];
+    const mats = b.materials?.[lv] || 0;
     if (cost == null) return;
     if ((save.coins || 0) < cost) { sfx.invalid(); toast("金幣還不夠"); return; }
+    if ((save.materials || 0) < mats) { sfx.invalid(); toast("還差修復材料，去做材料訂單吧"); return; }
     if (b.need) {
       const [id, n] = b.need.split(":");
       if ((save.buildings?.[id] || 0) < Number(n || 1)) { toast("先修好前面的建築"); return; }
     }
     save.coins -= cost;
+    if (mats) save.materials = (save.materials || 0) - mats;
     save.buildings[b.id] = lv + 1;
     const xp = b.xp?.[lv] || 20;
     save.xp = (save.xp || 0) + xp;

@@ -1,5 +1,5 @@
 {
-  "note": "地區資料。商店只用金幣和星星種子，沒有儲值與廣告。",
+  "note": "地區資料。商店只用金幣和星星種子。",
   "regions": [
     {
       "id": "village",
@@ -17,12 +17,14 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "歡迎回來，微笑村永遠為你開著門。"
+          "text": "歡迎回來，微笑村永遠為你開著門。",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（跳一跳。先從村子中間的格子開始玩吧。）"
+          "text": "（跳一跳。先從村子中間的格子開始玩吧。）",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -45,7 +47,12 @@
             30,
             40
           ],
-          "clump": "inner-n"
+          "clump": "inner-n",
+          "materials": [
+            0,
+            1,
+            1
+          ]
         },
         {
           "id": "florist",
@@ -61,7 +68,10 @@
             25
           ],
           "need": "stage:1",
-          "clump": "inner-e"
+          "clump": "inner-e",
+          "materials": [
+            0
+          ]
         }
       ]
     },
@@ -84,17 +94,20 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "這座微笑城堡，是我為了微笑大賽新修的地方。"
+          "text": "這座微笑城堡，是我為了微笑大賽新修的地方。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "好高的門！獎盃是不是就放在裡面？"
+          "text": "好高的門！獎盃是不是就放在裡面？",
+          "expr": "happy"
         },
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "等舞台修好、門打開，我們一起把大廳打掃乾淨。"
+          "text": "等舞台修好、門打開，我們一起把大廳打掃乾淨。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -114,7 +127,11 @@
             25,
             35
           ],
-          "clump": "inner-w"
+          "clump": "inner-w",
+          "materials": [
+            0,
+            1
+          ]
         }
       ]
     },
@@ -137,12 +154,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "這是我出發的小坡。每次走到這裡，就會想起微笑村的燈。"
+          "text": "這是我出發的小坡。每次走到這裡，就會想起微笑村的燈。",
+          "expr": "determined"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "走吧，飛飛。坡的另一邊，還有更大的世界。"
+          "text": "走吧，飛飛。坡的另一邊，還有更大的世界。",
+          "expr": "determined"
         }
       ],
       "buildings": [
@@ -159,7 +178,10 @@
           "xp": [
             20
           ],
-          "clump": "inner-s"
+          "clump": "inner-s",
+          "materials": [
+            0
+          ]
         }
       ]
     },
@@ -181,12 +203,14 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "這座探險丘是我最喜歡的秘密基地。山洞就在後面！"
+          "text": "這座探險丘是我最喜歡的秘密基地。山洞就在後面！",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "好高。我們慢慢走，沿路採蘑菇。"
+          "text": "好高。我們慢慢走，沿路採蘑菇。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -203,7 +227,10 @@
           "xp": [
             30
           ],
-          "clump": "outer-n"
+          "clump": "outer-n",
+          "materials": [
+            1
+          ]
         }
       ]
     },
@@ -225,12 +252,14 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "哈哈哈哈——你們找到魔法袋谷啦！三次願望，就是從這裡開始的。"
+          "text": "哈哈哈哈——你們找到魔法袋谷啦！三次願望，就是從這裡開始的。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "袋裡的氣球，要想清楚再用。"
+          "text": "袋裡的氣球，要想清楚再用。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -247,7 +276,10 @@
           "xp": [
             40
           ],
-          "clump": "outer-w"
+          "clump": "outer-w",
+          "materials": [
+            0
+          ]
         }
       ]
     },
@@ -269,12 +301,14 @@
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "歡迎來到糖果巷。以前路人都不停下來，現在我想把巷子變好看。"
+          "text": "歡迎來到糖果巷。以前路人都不停下來，現在我想把巷子變好看。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我們一起擺攤，讓更多人看見你的糖果。"
+          "text": "我們一起擺攤，讓更多人看見你的糖果。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -291,7 +325,10 @@
           "xp": [
             50
           ],
-          "clump": "outer-e"
+          "clump": "outer-e",
+          "materials": [
+            1
+          ]
         }
       ]
     },
@@ -302,7 +339,7 @@
       "source": "new",
       "chapter": "bulu",
       "music": "journey",
-      "bg": "assets/bg/journey.webp",
+      "bg": "assets/bg/bulu.webp",
       "npc": "bulu",
       "unlock": {
         "coins": 120,
@@ -313,12 +350,14 @@
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "天一黑，我就不敢走。如果林子裡有燈，我就比較不怕。"
+          "text": "天一黑，我就不敢走。如果林子裡有燈，我就比較不怕。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我們一盞一盞點亮。你不是一個人。"
+          "text": "我們一盞一盞點亮。你不是一個人。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -335,7 +374,10 @@
           "xp": [
             50
           ],
-          "clump": "outer-s"
+          "clump": "outer-s",
+          "materials": [
+            0
+          ]
         }
       ]
     },
@@ -346,7 +388,7 @@
       "source": "new",
       "chapter": "hate",
       "music": "candy",
-      "bg": "assets/bg/village.webp",
+      "bg": "assets/bg/hate.webp",
       "npc": "hate",
       "unlock": {
         "coins": 140,
@@ -357,12 +399,14 @@
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "我想在這裡變出兔子，讓大家為我拍手。可是我還是有點怕。"
+          "text": "我想在這裡變出兔子，讓大家為我拍手。可是我還是有點怕。",
+          "expr": "worried"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我們先把劇場修好。上台的時候，我們都在下面看。"
+          "text": "我們先把劇場修好。上台的時候，我們都在下面看。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -379,7 +423,10 @@
           "xp": [
             60
           ],
-          "clump": "outer-n"
+          "clump": "outer-n",
+          "materials": [
+            1
+          ]
         }
       ]
     },
@@ -390,7 +437,7 @@
       "source": "new",
       "chapter": "ending",
       "music": "village",
-      "bg": "assets/bg/village.webp",
+      "bg": "assets/bg/ending.webp",
       "npc": "feifei",
       "unlock": {
         "coins": 160,
@@ -401,12 +448,14 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "這座廣場，是為了你們的願望而打開的。"
+          "text": "這座廣場，是為了你們的願望而打開的。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "真正的強大，是讓別人幸福的能力。我想讓這裡充滿歡笑。"
+          "text": "真正的強大，是讓別人幸福的能力。我想讓這裡充滿歡笑。",
+          "expr": "happy"
         }
       ],
       "buildings": [
@@ -423,14 +472,17 @@
           "xp": [
             80
           ],
-          "clump": null
+          "clump": null,
+          "materials": [
+            0
+          ]
         }
       ]
     }
   ],
   "shop": {
     "title": "微笑小舖",
-    "notice": "只用遊戲裡的金幣和星星種子。完全免費，沒有儲值，也沒有廣告。",
+    "notice": "只用遊戲裡的金幣和星星種子。",
     "items": [
       {
         "id": "energy-20",

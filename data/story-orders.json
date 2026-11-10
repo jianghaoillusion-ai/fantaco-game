@@ -20,22 +20,26 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "歡迎來到微笑村！今天是一年一度的微笑大賽。"
+          "text": "歡迎來到微笑村！今天是一年一度的微笑大賽。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "好多旗子、好多花朵……好熱鬧喔。"
+          "text": "好多旗子、好多花朵……好熱鬧喔。",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（跳一跳。把兩個一樣的道具疊在一起，就會變成更好的東西喔。）"
+          "text": "（跳一跳。把兩個一樣的道具疊在一起，就會變成更好的東西喔。）",
+          "expr": "happy"
         },
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "先幫我合成一顆「小星星貼紙」好嗎？交給我就行。"
+          "text": "先幫我合成一顆「小星星貼紙」好嗎？交給我就行。",
+          "expr": "determined"
         }
       ]
     },
@@ -59,22 +63,26 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我……我也想參加微笑大賽。可是好緊張……"
+          "text": "我……我也想參加微笑大賽。可是好緊張……",
+          "expr": "worried"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "沒關係啦！我和眠花糖都會幫你加油！"
+          "text": "沒關係啦！我和眠花糖都會幫你加油！",
+          "expr": "happy"
         },
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "飛飛，把心裡的微笑拿出來就好。不必跟別人比。"
+          "text": "飛飛，把心裡的微笑拿出來就好。不必跟別人比。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "如果有一顆閃亮星，我好像就比較有勇氣了。"
+          "text": "如果有一顆閃亮星，我好像就比較有勇氣了。",
+          "expr": "happy"
         }
       ]
     },
@@ -98,17 +106,20 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "參賽的小朋友都到齊了。飛飛，準備好了嗎？"
+          "text": "參賽的小朋友都到齊了。飛飛，準備好了嗎？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我的嘴巴……好像忘記怎麼往上彎。"
+          "text": "我的嘴巴……好像忘記怎麼往上彎。",
+          "expr": "sad"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "那我們先做一對許願雙星，當作加油牌！"
+          "text": "那我們先做一對許願雙星，當作加油牌！",
+          "expr": "happy"
         }
       ]
     },
@@ -132,12 +143,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "微笑村的花好香。可以幫我摘一朵黃花嗎？"
+          "text": "微笑村的花好香。可以幫我摘一朵黃花嗎？",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（用耳朵朝花圃點了點。）"
+          "text": "（用耳朵朝花圃點了點。）",
+          "expr": "happy"
         }
       ]
     },
@@ -161,12 +174,14 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "頒獎台上還缺一朵白玫瑰。飛飛，你願意幫忙嗎？"
+          "text": "頒獎台上還缺一朵白玫瑰。飛飛，你願意幫忙嗎？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "願意！可是我看別人笑得那麼好看，又有點……不知道自己行不行。"
+          "text": "願意！可是我看別人笑得那麼好看，又有點……不知道自己行不行。",
+          "expr": "happy"
         }
       ]
     },
@@ -190,12 +205,14 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "嘿，我也要一朵藍花！拿來跟飛飛配成對。"
+          "text": "嘿，我也要一朵藍花！拿來跟飛飛配成對。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "謝謝你，阿飄。有你在，我比較不怕。"
+          "text": "謝謝你，阿飄。有你在，我比較不怕。",
+          "expr": "happy"
         }
       ]
     },
@@ -219,39 +236,46 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "大賽結束了。大家都很開心，可是我還是有點空空的。"
+          "text": "大賽結束了。大家都很開心，可是我還是有點空空的。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想找真正的快樂。也許，我的舞台不在這裡……"
+          "text": "我想找真正的快樂。也許，我的舞台不在這裡……",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（指向遠方，又指指星星茶壺。）"
+          "text": "（指向遠方，又指指星星茶壺。）",
+          "expr": "happy"
         },
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "去看看吧。微笑村的門，永遠為你開著。"
+          "text": "去看看吧。微笑村的門，永遠為你開著。",
+          "expr": "happy"
         }
       ],
       "outro": [
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "謝謝你，眠花糖。有這把星星茶壺，我好像可以笑出來了。"
+          "text": "謝謝你，眠花糖。有這把星星茶壺，我好像可以笑出來了。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "那我們離開微笑村，到外面的世界冒險囉！"
+          "text": "那我們離開微笑村，到外面的世界冒險囉！",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（點頭。山洞小路，已經打開了。）"
+          "text": "（點頭。山洞小路，已經打開了。）",
+          "expr": "happy"
         }
       ]
     },
@@ -275,17 +299,20 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "我們離開微笑村啦！前面有小山、小溪，還有山洞。"
+          "text": "我們離開微笑村啦！前面有小山、小溪，還有山洞。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "咦？洞穴裡有紅蘑菇耶。"
+          "text": "咦？洞穴裡有紅蘑菇耶。",
+          "expr": "surprised"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（小心探頭，又快速縮回來。）"
+          "text": "（小心探頭，又快速縮回來。）",
+          "expr": "happy"
         }
       ]
     },
@@ -309,12 +336,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "小溪好涼。我們沿著水聲走，好不好？"
+          "text": "小溪好涼。我們沿著水聲走，好不好？",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "好啊。不過山洞比較黑，先採一叢蘑菇照路吧。"
+          "text": "好啊。不過山洞比較黑，先採一叢蘑菇照路吧。",
+          "expr": "happy"
         }
       ]
     },
@@ -338,12 +367,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "再採一朵藍蘑菇，也許就能照亮山洞。"
+          "text": "再採一朵藍蘑菇，也許就能照亮山洞。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "小心腳下！我好像踢到一個軟軟的袋子。"
+          "text": "小心腳下！我好像踢到一個軟軟的袋子。",
+          "expr": "happy"
         }
       ]
     },
@@ -367,17 +398,20 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？"
+          "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？",
+          "expr": "surprised"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "哇！你是……氣球做的人嗎？"
+          "text": "哇！你是……氣球做的人嗎？",
+          "expr": "surprised"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "是詐騙嗎？……你真的是氣球精靈？先拿出愛心撲克牌來證明一下！"
+          "text": "是詐騙嗎？……你真的是氣球精靈？先拿出愛心撲克牌來證明一下！",
+          "expr": "happy"
         }
       ]
     },
@@ -401,22 +435,26 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！"
+          "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "三次？那我要許跑車、大餐，還有機器人！"
+          "text": "三次？那我要許跑車、大餐，還有機器人！",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "先不要急。這種願望，要想清楚再用。"
+          "text": "先不要急。這種願望，要想清楚再用。",
+          "expr": "happy"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "說得好。先用一張黑桃撲克牌，當作見面禮吧。"
+          "text": "說得好。先用一張黑桃撲克牌，當作見面禮吧。",
+          "expr": "happy"
         }
       ]
     },
@@ -440,12 +478,14 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "想好了再把氣球拿出來。先用藍藍天藥水暖暖身手。"
+          "text": "想好了再把氣球拿出來。先用藍藍天藥水暖暖身手。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "藍藍天……聽起來就像一首歌。"
+          "text": "藍藍天……聽起來就像一首歌。",
+          "expr": "happy"
         }
       ]
     },
@@ -469,24 +509,28 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "阿飄說可以許跑車、大餐或機器人……但我想先把魔法袋留下來，繼續走。"
+          "text": "阿飄說可以許跑車、大餐或機器人……但我想先把魔法袋留下來，繼續走。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "也行啦。反正前面好像還有人需要幫忙。"
+          "text": "也行啦。反正前面好像還有人需要幫忙。",
+          "expr": "happy"
         }
       ],
       "outro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "想好了再把氣球拿出來。我會再出現的。哈哈哈哈！"
+          "text": "想好了再把氣球拿出來。我會再出現的。哈哈哈哈！",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "前面有人在賣糖果，我們去看看吧。"
+          "text": "前面有人在賣糖果，我們去看看吧。",
+          "expr": "happy"
         }
       ]
     },
@@ -510,22 +554,26 @@
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "糖果……好吃的糖果……有沒有人要買……"
+          "text": "糖果……好吃的糖果……有沒有人要買……",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想買一盒。哇，好好吃！"
+          "text": "我想買一盒。哇，好好吃！",
+          "expr": "surprised"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "真的好好吃。可是路人都走過去了。"
+          "text": "真的好好吃。可是路人都走過去了。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "先幫西卡做一個杯子蛋糕，讓他重拾力氣。"
+          "text": "先幫西卡做一個杯子蛋糕，讓他重拾力氣。",
+          "expr": "happy"
         }
       ]
     },
@@ -549,12 +597,14 @@
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "如果有一個漂亮的糖果盒，客人也許會停下來。"
+          "text": "如果有一個漂亮的糖果盒，客人也許會停下來。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "對呀。好吃的東西，也要用有創意的方法讓大家看見。"
+          "text": "對呀。好吃的東西，也要用有創意的方法讓大家看見。",
+          "expr": "happy"
         }
       ]
     },
@@ -578,12 +628,14 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "再來一個雙層蛋糕！我負責試吃，飛飛負責加油。"
+          "text": "再來一個雙層蛋糕！我負責試吃，飛飛負責加油。",
+          "expr": "happy"
         },
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "謝謝你們還願意停下來。好久沒有人這樣對我說話了。"
+          "text": "謝謝你們還願意停下來。好久沒有人這樣對我說話了。",
+          "expr": "happy"
         }
       ]
     },
@@ -607,12 +659,14 @@
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "如果攤子旁邊有一朵藍玫瑰，看起來會不會更有精神？"
+          "text": "如果攤子旁邊有一朵藍玫瑰，看起來會不會更有精神？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "會的。我們一起把它變好看。"
+          "text": "會的。我們一起把它變好看。",
+          "expr": "happy"
         }
       ]
     },
@@ -636,17 +690,20 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想把第一個願望送給西卡。先讓糖果塔立起來。"
+          "text": "我想把第一個願望送給西卡。先讓糖果塔立起來。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "你真的要把氣球用在別人身上？"
+          "text": "你真的要把氣球用在別人身上？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "嗯。看見西卡笑，我好像也比較有力氣了。"
+          "text": "嗯。看見西卡笑，我好像也比較有力氣了。",
+          "expr": "happy"
         }
       ]
     },
@@ -670,34 +727,40 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "氣球精靈，我的願望是：幫助西卡，讓他可以用有創意的方法，把好吃的糖果賣出去。"
+          "text": "氣球精靈，我的願望是：幫助西卡，讓他可以用有創意的方法，把好吃的糖果賣出去。",
+          "expr": "happy"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "這份願望，我聽見了。"
+          "text": "這份願望，我聽見了。",
+          "expr": "happy"
         }
       ],
       "outro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "願望，實現了！"
+          "text": "願望，實現了！",
+          "expr": "happy"
         },
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "謝謝你，飛飛！大家，來買糖果囉────"
+          "text": "謝謝你，飛飛！大家，來買糖果囉────",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "飛飛，你笑囉！這一顆氣球，用得很值得。"
+          "text": "飛飛，你笑囉！這一顆氣球，用得很值得。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。"
+          "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。",
+          "expr": "determined"
         }
       ]
     },
@@ -721,17 +784,20 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "天色暗下來了。前面草叢裡，好像有人在發抖。"
+          "text": "天色暗下來了。前面草叢裡，好像有人在發抖。",
+          "expr": "happy"
         },
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "你、你們好……我叫布魯。天一黑，我的腳就不敢往前走。"
+          "text": "你、你們好……我叫布魯。天一黑，我的腳就不敢往前走。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "沒關係，我們先採些蘑菇，讓路亮一點。"
+          "text": "沒關係，我們先採些蘑菇，讓路亮一點。",
+          "expr": "happy"
         }
       ]
     },
@@ -755,17 +821,20 @@
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "星星茶壺如果會亮，我是不是就能再走幾步？"
+          "text": "星星茶壺如果會亮，我是不是就能再走幾步？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "會的。我們陪你走，你不是一個人。"
+          "text": "會的。我們陪你走，你不是一個人。",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（把茶壺輕輕推到布魯面前。）"
+          "text": "（把茶壺輕輕推到布魯面前。）",
+          "expr": "happy"
         }
       ]
     },
@@ -789,12 +858,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "這是勇氣藥水。不是讓黑夜消失，是讓心裡亮一點。"
+          "text": "這是勇氣藥水。不是讓黑夜消失，是讓心裡亮一點。",
+          "expr": "happy"
         },
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "我試試看……還是有點怕。可是我還想再走。"
+          "text": "我試試看……還是有點怕。可是我還想再走。",
+          "expr": "worried"
         }
       ]
     },
@@ -818,12 +889,14 @@
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "那邊有一顆很大的微笑氣球。我……我想躲進去。裡面會不會比較不黑？"
+          "text": "那邊有一顆很大的微笑氣球。我……我想躲進去。裡面會不會比較不黑？",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "先別急著躲。我們把氣球帶過來，一起看一看。"
+          "text": "先別急著躲。我們把氣球帶過來，一起看一看。",
+          "expr": "happy"
         }
       ]
     },
@@ -847,12 +920,14 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "我們用蘑菇圈把氣球圍起來，像一圈小燈。"
+          "text": "我們用蘑菇圈把氣球圍起來，像一圈小燈。",
+          "expr": "happy"
         },
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "真的比較亮了。可是我還是好想有一個不會消失的光。"
+          "text": "真的比較亮了。可是我還是好想有一個不會消失的光。",
+          "expr": "happy"
         }
       ]
     },
@@ -876,34 +951,40 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "氣球精靈，我的第二個願望：幫助怕黑的布魯，讓他有勇氣走進那顆大氣球，也有勇氣再走出來。"
+          "text": "氣球精靈，我的第二個願望：幫助怕黑的布魯，讓他有勇氣走進那顆大氣球，也有勇氣再走出來。",
+          "expr": "determined"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "害怕沒有關係。願意再走一步，就是很勇敢。"
+          "text": "害怕沒有關係。願意再走一步，就是很勇敢。",
+          "expr": "determined"
         }
       ],
       "outro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "願望，實現了！"
+          "text": "願望，實現了！",
+          "expr": "happy"
         },
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "我走進大氣球了……裡面不像我想的那麼黑。謝謝你，飛飛。"
+          "text": "我走進大氣球了……裡面不像我想的那麼黑。謝謝你，飛飛。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "你看，你已經走出來了。"
+          "text": "你看，你已經走出來了。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "還剩最後一顆氣球。我們得想清楚再許。"
+          "text": "還剩最後一顆氣球。我們得想清楚再許。",
+          "expr": "happy"
         }
       ]
     },
@@ -927,17 +1008,20 @@
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "大家好……我是哈特。我想表演魔術，可是一上台，帽子裡什麼也變不出來。"
+          "text": "大家好……我是哈特。我想表演魔術，可是一上台，帽子裡什麼也變不出來。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "你已經戴著很漂亮的帽子了。我們先幫你整理一頂紫緞帶禮帽吧。"
+          "text": "你已經戴著很漂亮的帽子了。我們先幫你整理一頂紫緞帶禮帽吧。",
+          "expr": "happy"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "謝謝。其實我最想變出一隻兔子，讓大家為我拍手。"
+          "text": "謝謝。其實我最想變出一隻兔子，讓大家為我拍手。",
+          "expr": "happy"
         }
       ]
     },
@@ -961,17 +1045,20 @@
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "如果有一頂真正的魔術高帽，也許兔子就會出現。"
+          "text": "如果有一頂真正的魔術高帽，也許兔子就會出現。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "高帽我們可以做。可是自信，可能要你自己拿出來。"
+          "text": "高帽我們可以做。可是自信，可能要你自己拿出來。",
+          "expr": "happy"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "我知道。可是我好怕大家笑我。"
+          "text": "我知道。可是我好怕大家笑我。",
+          "expr": "worried"
         }
       ]
     },
@@ -995,12 +1082,14 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我們在小舞台旁邊放一朵白玫瑰，當作開場。"
+          "text": "我們在小舞台旁邊放一朵白玫瑰，當作開場。",
+          "expr": "happy"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "好美。可是我還是不敢走上去。"
+          "text": "好美。可是我還是不敢走上去。",
+          "expr": "happy"
         }
       ]
     },
@@ -1024,17 +1113,20 @@
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "飛飛，只剩最後一顆氣球了。你自己也好想許一個願望吧？"
+          "text": "飛飛，只剩最後一顆氣球了。你自己也好想許一個願望吧？",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我想過。我想變得更勇敢，想有一個自己的舞台……"
+          "text": "我想過。我想變得更勇敢，想有一個自己的舞台……",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "可是我看著哈特，又想起西卡和布魯。真正讓我高興的，好像是他們笑出來的時候。"
+          "text": "可是我看著哈特，又想起西卡和布魯。真正讓我高興的，好像是他們笑出來的時候。",
+          "expr": "happy"
         }
       ]
     },
@@ -1058,12 +1150,14 @@
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "不管氣球許不許願，我想先練習一次。請大家來看一場小小的花園秀。"
+          "text": "不管氣球許不許願，我想先練習一次。請大家來看一場小小的花園秀。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我們都在這裡看。你不是一個人上台。"
+          "text": "我們都在這裡看。你不是一個人上台。",
+          "expr": "happy"
         }
       ]
     },
@@ -1087,39 +1181,46 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我決定了。氣球精靈，最後一個願望：幫助哈特變出他最想要的兔子，也讓他找回上台的自信。"
+          "text": "我決定了。氣球精靈，最後一個願望：幫助哈特變出他最想要的兔子，也讓他找回上台的自信。",
+          "expr": "happy"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "飛飛……這是你最後一顆氣球耶。"
+          "text": "飛飛……這是你最後一顆氣球耶。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "沒關係。看見你敢笑著走上去，就是我的願望。"
+          "text": "沒關係。看見你敢笑著走上去，就是我的願望。",
+          "expr": "happy"
         }
       ],
       "outro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "願望，實現了！"
+          "text": "願望，實現了！",
+          "expr": "happy"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "兔子……真的出來了！我……我也可以讓大家開心！謝謝你，飛飛。"
+          "text": "兔子……真的出來了！我……我也可以讓大家開心！謝謝你，飛飛。",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "飛飛把最後一願也送給別人了。你比誰都強大。"
+          "text": "飛飛把最後一願也送給別人了。你比誰都強大。",
+          "expr": "happy"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "等等。你們等一下。我還有話要說。"
+          "text": "等等。你們等一下。我還有話要說。",
+          "expr": "happy"
         }
       ]
     },
@@ -1143,17 +1244,20 @@
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "三顆氣球都用完了。可是你們沒有為自己留下一顆。"
+          "text": "三顆氣球都用完了。可是你們沒有為自己留下一顆。",
+          "expr": "happy"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "這樣的心，值得再送一個願望。飛飛，這一次，請為你自己許。"
+          "text": "這樣的心，值得再送一個願望。飛飛，這一次，請為你自己許。",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "為我自己……"
+          "text": "為我自己……",
+          "expr": "happy"
         }
       ]
     },
@@ -1177,22 +1281,26 @@
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "你們回來了！全村的花都開了。"
+          "text": "你們回來了！全村的花都開了。",
+          "expr": "happy"
         },
         {
           "speaker": "西卡",
           "portrait": "sika",
-          "text": "我帶了糖果。"
+          "text": "我帶了糖果。",
+          "expr": "happy"
         },
         {
           "speaker": "布魯",
           "portrait": "bulu",
-          "text": "天黑也不怕了。我來了。"
+          "text": "天黑也不怕了。我來了。",
+          "expr": "determined"
         },
         {
           "speaker": "哈特",
           "portrait": "hate",
-          "text": "兔子也來了。我們一起等飛飛許願。"
+          "text": "兔子也來了。我們一起等飛飛許願。",
+          "expr": "happy"
         }
       ]
     },
@@ -1216,44 +1324,52 @@
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "氣球精靈，我的願望是：成為能讓全世界充滿歡笑的人。"
+          "text": "氣球精靈，我的願望是：成為能讓全世界充滿歡笑的人。",
+          "expr": "happy"
         },
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "這才是真正的強大——讓別人幸福的能力。"
+          "text": "這才是真正的強大——讓別人幸福的能力。",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（跳得很高很高。尾巴上的黃星星，亮得像一盞小燈。）"
+          "text": "（跳得很高很高。尾巴上的黃星星，亮得像一盞小燈。）",
+          "expr": "happy"
         }
       ],
       "outro": [
         {
           "speaker": "氣球精靈",
           "portrait": "spirit",
-          "text": "願望，實現了！大家看——漫天的氣球升上去了！"
+          "text": "願望，實現了！大家看——漫天的氣球升上去了！",
+          "expr": "happy"
         },
         {
           "speaker": "阿飄",
           "portrait": "apiao",
-          "text": "好大好大的氣球秀！飛飛，你看，全村都在笑！"
+          "text": "好大好大的氣球秀！飛飛，你看，全村都在笑！",
+          "expr": "happy"
         },
         {
           "speaker": "飛飛",
           "portrait": "feifei",
-          "text": "我也笑出來了。謝謝你，眠花糖。謝謝每一個願望。"
+          "text": "我也笑出來了。謝謝你，眠花糖。謝謝每一個願望。",
+          "expr": "happy"
         },
         {
           "speaker": "微笑姐姐",
           "portrait": "jiejie",
-          "text": "微笑村歡迎你們隨時回來。新的故事，以後每週都會再加一點。"
+          "text": "微笑村歡迎你們隨時回來。新的故事，以後每週都會再加一點。",
+          "expr": "happy"
         },
         {
           "speaker": "眠花糖",
           "portrait": "mascot",
-          "text": "（拉著飛飛的手，一起看著藍藍的天。）"
+          "text": "（拉著飛飛的手，一起看著藍藍的天。）",
+          "expr": "happy"
         }
       ]
     }

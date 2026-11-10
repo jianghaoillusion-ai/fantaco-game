@@ -268,13 +268,14 @@ a{color:var(--ink)}
 
 
 /* ===== v5 Travel Town-style play chrome ===== */
-.play-hud{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:nowrap;margin:0 0 6px;flex:none}
+.play-hud{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;margin:0 0 6px;flex:none}
 .pill{display:inline-flex;align-items:center;gap:4px;background:#fff;border-radius:999px;padding:5px 10px;box-shadow:var(--shadow);font-weight:700;color:var(--ink);font-size:13px;white-space:nowrap;flex:none}
 .pill img{width:18px;height:18px}
 .pill.energy{background:linear-gradient(180deg,#fff,#fff8c4)}
 .pill.energy small{font-size:11px;color:var(--muted);font-weight:700}
 .pill.level{background:linear-gradient(180deg,#e8f4ff,#fff);min-width:52px;justify-content:center}
 .pill.coins{background:linear-gradient(180deg,#fffde8,#fff)}
+.pill.mats{background:linear-gradient(180deg,#fff5e8,#fff)}
 
 #play{padding-bottom:calc(6px + var(--safe-b))}
 .orders{flex-direction:column;gap:6px;justify-content:flex-start;padding:0 2px 6px;align-items:stretch}
@@ -442,3 +443,19 @@ a{color:var(--ink)}
   .tool-btn{min-height:40px;padding:6px 4px;font-size:12px}
   .item-info{min-height:36px;padding:4px 8px;margin-top:2px}
 }
+
+#shop-notice{display:none!important}
+
+@media (max-width: 480px) {
+  .play-hud{flex-wrap:nowrap;gap:3px}
+  .play-hud .pill{padding:3px 6px;font-size:11px}
+  .play-hud .pill.energy small{display:none}
+  .play-hud .xpbar{min-width:28px;flex:0 0 32px}
+  .play-hud .pill.level{min-width:0}
+  .hud-gear{width:28px;height:28px;flex:none}
+  .hud-gear img{width:18px;height:18px}
+}
+
+#shop.overlay .modal,#shop .shop-card{display:flex;flex-direction:column;max-height:82vh;padding-bottom:16px}
+#shop-list{overflow:auto;padding-bottom:20px;flex:1;min-height:0;max-height:58vh}
+#result-lv:empty,#result-lyrics:empty{display:none}

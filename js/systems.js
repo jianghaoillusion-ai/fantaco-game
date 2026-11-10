@@ -1,10 +1,11 @@
 /** Wires map, shop, fog, orders UI and fx so app.js only needs a thin hook. */
-import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js";
-import { createFx } from "./fx.js";
-import { createShop } from "./shop.js";
-import { createOrdersUi } from "./orders-ui.js";
-import { createMap } from "./map.js";
-import { nearbyEmpty } from "./merge.js";
+import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=8";
+import { createFx } from "./fx.js?v=8";
+import { createShop } from "./shop.js?v=8";
+import { createBag } from "./bag.js?v=8";
+import { createOrdersUi } from "./orders-ui.js?v=8";
+import { createMap } from "./map.js?v=8";
+import { nearbyEmpty } from "./merge.js?v=8";
 
 export { GEN_POPS, GEN_COOL_MS };
 
@@ -12,6 +13,8 @@ export function attachSystems(ctx) {
   const fx = createFx(ctx);
   ctx.fx = fx;
   const fog = createFog(ctx);
+  const bag = createBag(ctx);
+  ctx.bag = bag;
   const shop = createShop(ctx);
   const orders = createOrdersUi(ctx);
   const map = createMap(ctx);
@@ -19,9 +22,10 @@ export function attachSystems(ctx) {
   ctx.emptyOpenCell = () => nearbyEmpty(ctx.getSave().board, ctx.getCols(), ctx.getRows(), -1, fog.isOpenIndex);
 
   function bind() {
+    bag.bind();
     shop.bind();
     map.bind();
   }
 
-  return { fx, fog, shop, orders, map, bind, GEN_POPS, GEN_COOL_MS };
+  return { fx, fog, shop, bag, orders, map, bind, GEN_POPS, GEN_COOL_MS };
 }

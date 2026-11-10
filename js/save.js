@@ -8,7 +8,7 @@ export const ENERGY = { max: ENERGY_MAX, regenMs: REGEN_MS };
 
 export function emptySave() {
   return {
-    version: 2,
+    version: 3,
     profile: null,
     xp: 0,
     level: 1,
@@ -16,10 +16,13 @@ export function emptySave() {
     energy: ENERGY_MAX,
     energyAt: Date.now(),
     coins: 0,
+    materials: 0,
     board: null,
     boardCols: 7,
     boardRows: 9,
     inventory: [],
+    inventorySlots: 6,
+    unlockedCells: [],
     orders: [],
     storyDone: [],
     chapter: "village",
@@ -31,7 +34,7 @@ export function emptySave() {
     treasures: {},
     discovered: {},
     flags: {},
-    settings: { music: true, sfx: true },
+    settings: { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 },
     daily: { day: "", streak: 0, claimed: false, challenge: 0, challengeClaimed: false },
     comboBest: 0,
     ordersDone: 0,
@@ -64,12 +67,43 @@ export function loadSave() {
       if (!loaded.region) loaded.region = loaded.chapter || "village";
       // Existing boards already filled a full rectangle — keep them fully open.
       if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
+      migrateV3(loaded);
       return loaded;
     }
     const old = localStorage.getItem(LEGACY);
     if (old) return migrate(JSON.parse(old));
   } catch {}
   return emptySave();
+}
+
+
+function migrateV3(s) {
+  if (!s || s.version >= 3) {
+    if (s.materials == null) s.materials = 0;
+    if (s.unlockedCells == null) s.unlockedCells = [];
+    if (s.inventorySlots == null) {
+      const filled = (s.inventory || []).filter(Boolean).length;
+      s.inventorySlots = Math.max(6, filled, s.bagSlots || 8);
+    }
+    if (s.settings) {
+      if (s.settings.musicVol == null) s.settings.musicVol = 0.72;
+      if (s.settings.sfxVol == null) s.settings.sfxVol = 0.85;
+    }
+    s.version = 3;
+    return s;
+  }
+  s.materials = s.materials || 0;
+  s.unlockedCells = s.unlockedCells || [];
+  const filled = (s.inventory || []).filter(Boolean).length;
+  // Existing v2 saves had 8 bag slots; never shrink, never drop items.
+  s.inventorySlots = Math.max(8, filled, s.inventorySlots || 0, s.bagSlots || 0);
+  if (!s.settings) s.settings = { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 };
+  else {
+    if (s.settings.musicVol == null) s.settings.musicVol = 0.72;
+    if (s.settings.sfxVol == null) s.settings.sfxVol = 0.85;
+  }
+  s.version = 3;
+  return s;
 }
 
 export function writeSave(data) {

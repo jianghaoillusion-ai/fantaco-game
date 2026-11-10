@@ -8,7 +8,10 @@
       "bg": "assets/bg/village.webp",
       "music": "village",
       "unlock": "start",
-      "generators": ["star", "garden"],
+      "generators": [
+        "star",
+        "garden"
+      ],
       "restoreSteps": 7
     },
     {
@@ -19,7 +22,12 @@
       "bg": "assets/bg/journey.webp",
       "music": "journey",
       "unlock": "story:ch1-end",
-      "generators": ["star", "garden", "forest", "magic"],
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic"
+      ],
       "restoreSteps": 7
     },
     {
@@ -30,7 +38,13 @@
       "bg": "assets/bg/candy.webp",
       "music": "candy",
       "unlock": "story:ch2-end",
-      "generators": ["star", "garden", "forest", "magic", "candy"],
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic",
+        "candy"
+      ],
       "restoreSteps": 6
     },
     {
@@ -38,10 +52,16 @@
       "number": 4,
       "title": "第二願：布魯",
       "subtitle": "怕黑的夜晚",
-      "bg": "assets/bg/journey.webp",
+      "bg": "assets/bg/bulu.webp",
       "music": "journey",
       "unlock": "story:ch3-end",
-      "generators": ["star", "garden", "forest", "magic", "candy"],
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic",
+        "candy"
+      ],
       "restoreSteps": 6
     },
     {
@@ -49,10 +69,16 @@
       "number": 5,
       "title": "最後一願：哈特",
       "subtitle": "找回自信",
-      "bg": "assets/bg/village.webp",
+      "bg": "assets/bg/hate.webp",
       "music": "candy",
       "unlock": "story:ch4-end",
-      "generators": ["star", "garden", "forest", "magic", "candy"],
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic",
+        "candy"
+      ],
       "restoreSteps": 6
     },
     {
@@ -60,10 +86,16 @@
       "number": 6,
       "title": "漫天氣球",
       "subtitle": "充滿歡笑",
-      "bg": "assets/bg/village.webp",
+      "bg": "assets/bg/ending.webp",
       "music": "village",
       "unlock": "story:ch5-end",
-      "generators": ["star", "garden", "forest", "magic", "candy"],
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic",
+        "candy"
+      ],
       "restoreSteps": 3
     }
   ]

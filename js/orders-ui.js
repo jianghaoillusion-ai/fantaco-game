@@ -3,17 +3,30 @@
 export function createOrdersUi(ctx) {
   const { $, toast, sfx, persist, ENERGY, todayKey } = ctx;
 
-  function hasItem(need) {
+  function hasItem(orderOrNeed, reservedUid) {
     const save = ctx.getSave();
-    const match = (c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier;
+    const need = orderOrNeed.need || orderOrNeed;
+    const uid = reservedUid || orderOrNeed.reservedUid;
+    const match = (c) => {
+      if (!c || c.kind !== "item" || c.chain !== need.chain || c.tier !== need.tier) return false;
+      if (uid) return c.uid === uid;
+      return true;
+    };
     return (save.board || []).some(match) || (save.inventory || []).some(match);
   }
 
-  function findNeed(need) {
+  function findNeed(orderOrNeed, reservedUid) {
     const save = ctx.getSave();
-    const i = (save.board || []).findIndex((c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier);
+    const need = orderOrNeed.need || orderOrNeed;
+    const uid = reservedUid || orderOrNeed.reservedUid;
+    const match = (c) => {
+      if (!c || c.kind !== "item" || c.chain !== need.chain || c.tier !== need.tier) return false;
+      if (uid) return c.uid === uid;
+      return true;
+    };
+    const i = (save.board || []).findIndex(match);
     if (i >= 0) return { where: "board", i, item: save.board[i] };
-    const j = (save.inventory || []).findIndex((c) => c && c.kind === "item" && c.chain === need.chain && c.tier === need.tier);
+    const j = (save.inventory || []).findIndex(match);
     if (j >= 0) return { where: "inv", i: j, item: save.inventory[j] };
     return null;
   }
@@ -91,26 +104,26 @@ export function createOrdersUi(ctx) {
     const row = document.createElement("div");
     row.className = "orders-row";
     for (const o of save.orders || []) {
-      const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/mascot/front.png" };
+      const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/chars/avatars/mascot.png" };
       const def = ctx.itemDef(o.need.chain, o.need.tier);
-      const ready = hasItem(o.need);
+      const ready = hasItem(o);
       const coins = o.reward.coins ?? ((o.reward.seeds || 0) + 4);
+      const avatar = (ctx.avatarSrc?.(o.npc) || npc.portrait || "").replace(/assets\/chars\/(\w+)\.png/, "assets/chars/avatars/$1.png");
+      const tip = `＋${coins} 金幣　＋${o.reward.seeds || 0} 星星種子` + (o.reward.materials ? `　＋${o.reward.materials} 材料` : "");
       const card = document.createElement("div");
       card.className = "order" + (o.flag ? " story" : "") + (ready ? " ready" : "");
       card.dataset.id = o.id;
+      card.title = `${npc.name}　${def?.name || ""}　${tip}`;
       card.innerHTML = `
-        <img class="npc" src="${npc.portrait}" alt="${npc.name}">
-        <div class="who"><b>${npc.name}</b>${o.flag ? '<span class="story-tag">故事</span>' : ""}</div>
+        ${o.flag ? '<span class="book-badge"><img src="assets/icons/book.png" alt="故事"></span>' : ""}
+        ${ready ? '<span class="check-badge" aria-hidden="true">✓</span><span class="check-spark"></span>' : ""}
+        <img class="npc" src="${avatar}" alt="${npc.name}">
         <div class="need">
-          <img src="${def?.img || ""}" alt="">
-          <span>${def?.name || ""}</span>
-        </div>
-        ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
-        <div class="rew">＋${coins} 金幣　＋${o.reward.seeds || 0} 種子</div>
-        <button type="button" class="give" ${ready ? "" : "disabled"}>交給他</button>`;
-      card.querySelector(".give")?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        clickGive(o.id, card);
+          <img class="${ready ? "have" : "missing"}" src="${def?.img || ""}" alt="${def?.name || ""}">
+        </div>`;
+      card.addEventListener("click", () => {
+        if (ready) clickGive(o.id, card);
+        else { sfx.invalid(); toast("還沒做出來喔"); }
       });
       row.appendChild(card);
     }
@@ -121,7 +134,7 @@ export function createOrdersUi(ctx) {
     const save = ctx.getSave();
     const o = (save.orders || []).find((x) => x.id === orderId);
     if (!o) return;
-    const loc = findNeed(o.need);
+    const loc = findNeed(o);
     if (!loc) { sfx.invalid(); toast("還沒做出來喔"); return; }
     const fromEl = document.querySelector(`.piece[data-uid="${loc.item.uid}"]`);
     ctx.fx?.flyTo(fromEl, card, () => ctx.tryFulfill(loc, orderId));

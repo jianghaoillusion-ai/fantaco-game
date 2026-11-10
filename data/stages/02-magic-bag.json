@@ -4,43 +4,151 @@
   "title": "神祕魔法袋",
   "subtitle": "保護從天而降的袋子",
   "theme": "journey",
-  "unlock": { "type": "stageCleared", "stageId": "01-smile-contest" },
+  "unlock": {
+    "type": "stageCleared",
+    "stageId": "01-smile-contest"
+  },
   "mapLabel": "山洞小路",
   "intro": [
-    { "speaker": "阿飄", "portrait": "apiao", "text": "我們離開微笑村啦！前面有小山、小溪，還有山洞。" },
-    { "speaker": "飛飛", "portrait": "feifei", "text": "眠花糖也一起來了，我就沒那麼害怕。" },
-    { "speaker": "飛飛", "portrait": "feifei", "text": "咦？天上有東西掉下來……一個袋子？" },
-    { "speaker": "阿飄", "portrait": "apiao", "text": "等等，周圍冒出黑影嘀嘀，想把袋子搶走！" },
-    { "speaker": "氣球精靈", "portrait": "spirit", "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？" }
+    {
+      "speaker": "阿飄",
+      "portrait": "apiao",
+      "text": "我們離開微笑村啦！前面有小山、小溪，還有山洞。",
+      "expr": "happy"
+    },
+    {
+      "speaker": "飛飛",
+      "portrait": "feifei",
+      "text": "眠花糖也一起來了，我就沒那麼害怕。",
+      "expr": "worried"
+    },
+    {
+      "speaker": "飛飛",
+      "portrait": "feifei",
+      "text": "咦？天上有東西掉下來……一個袋子？",
+      "expr": "surprised"
+    },
+    {
+      "speaker": "阿飄",
+      "portrait": "apiao",
+      "text": "等等，周圍冒出黑影嘀嘀，想把袋子搶走！",
+      "expr": "happy"
+    },
+    {
+      "speaker": "氣球精靈",
+      "portrait": "spirit",
+      "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？",
+      "expr": "surprised"
+    }
   ],
   "battle": {
     "objective": "趕走黑影嘀嘀，守護魔法袋",
     "playerHp": 5,
     "sky": "#c9ddf5",
     "ground": "#8dbf80",
-    "protect": { "type": "bag", "x": 0.5, "y": 0.42, "hp": 8 },
+    "protect": {
+      "type": "bag",
+      "x": 0.5,
+      "y": 0.42,
+      "hp": 8
+    },
     "waves": [
-      { "at": 0.3, "spawns": [
-        { "type": "shadow", "x": 0.18, "y": 0.30, "hp": 3 },
-        { "type": "shadow", "x": 0.82, "y": 0.30, "hp": 3 }
-      ]},
-      { "at": 7, "spawns": [
-        { "type": "shadow", "x": 0.15, "y": 0.22, "hp": 3 },
-        { "type": "shadow", "x": 0.50, "y": 0.16, "hp": 4 },
-        { "type": "shadow", "x": 0.85, "y": 0.22, "hp": 3 }
-      ]},
-      { "at": 15, "spawns": [
-        { "type": "shadow", "x": 0.30, "y": 0.18, "hp": 5 },
-        { "type": "fog", "x": 0.70, "y": 0.20, "hp": 4 },
-        { "type": "shadow", "x": 0.55, "y": 0.28, "hp": 5 }
-      ]}
+      {
+        "at": 0.3,
+        "spawns": [
+          {
+            "type": "shadow",
+            "x": 0.18,
+            "y": 0.3,
+            "hp": 3
+          },
+          {
+            "type": "shadow",
+            "x": 0.82,
+            "y": 0.3,
+            "hp": 3
+          }
+        ]
+      },
+      {
+        "at": 7,
+        "spawns": [
+          {
+            "type": "shadow",
+            "x": 0.15,
+            "y": 0.22,
+            "hp": 3
+          },
+          {
+            "type": "shadow",
+            "x": 0.5,
+            "y": 0.16,
+            "hp": 4
+          },
+          {
+            "type": "shadow",
+            "x": 0.85,
+            "y": 0.22,
+            "hp": 3
+          }
+        ]
+      },
+      {
+        "at": 15,
+        "spawns": [
+          {
+            "type": "shadow",
+            "x": 0.3,
+            "y": 0.18,
+            "hp": 5
+          },
+          {
+            "type": "fog",
+            "x": 0.7,
+            "y": 0.2,
+            "hp": 4
+          },
+          {
+            "type": "shadow",
+            "x": 0.55,
+            "y": 0.28,
+            "hp": 5
+          }
+        ]
+      }
     ],
-    "rewards": { "xp": 60, "starSeeds": [5, 8] }
+    "rewards": {
+      "xp": 60,
+      "starSeeds": [
+        5,
+        8
+      ]
+    }
   },
   "outro": [
-    { "speaker": "氣球精靈", "portrait": "spirit", "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！" },
-    { "speaker": "阿飄", "portrait": "apiao", "text": "飛飛！你可以許一輛跑車、一頓大餐，或一台機器人欸！" },
-    { "speaker": "飛飛", "portrait": "feifei", "text": "這些聽起來很棒，可是現在好像不是我最想要的。我想先留下來，繼續走。" },
-    { "speaker": "氣球精靈", "portrait": "spirit", "text": "想好了再把氣球拿出來。我會再出現的。哈哈哈哈！" }
+    {
+      "speaker": "氣球精靈",
+      "portrait": "spirit",
+      "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！",
+      "expr": "happy"
+    },
+    {
+      "speaker": "阿飄",
+      "portrait": "apiao",
+      "text": "飛飛！你可以許一輛跑車、一頓大餐，或一台機器人欸！",
+      "expr": "happy"
+    },
+    {
+      "speaker": "飛飛",
+      "portrait": "feifei",
+      "text": "這些聽起來很棒，可是現在好像不是我最想要的。我想先留下來，繼續走。",
+      "expr": "happy"
+    },
+    {
+      "speaker": "氣球精靈",
+      "portrait": "spirit",
+      "text": "想好了再把氣球拿出來。我會再出現的。哈哈哈哈！",
+      "expr": "happy"
+    }
   ]
 }

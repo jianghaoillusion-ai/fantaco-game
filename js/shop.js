@@ -1,57 +1,13 @@
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
-import { shopItemAvailable, canAfford, payCost, formatCost } from "./world.js";
+import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=8";
+import { bagCap } from "./bag.js?v=8";
 
 export function createShop(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, ENERGY } = ctx;
 
-  function openBag() {
-    const bag = $("#bag");
-    if (!bag) return;
-    renderInventory();
-    bag.classList.add("on");
-  }
-
-  function closeBag() {
-    $("#bag")?.classList.remove("on");
-  }
-
-  function renderInventory() {
-    const box = $("#inv-cells");
-    if (!box) return;
-    const save = ctx.getSave();
-    const cap = ctx.getGame().board?.inventory || 8;
-    const filled = (save.inventory || []).filter(Boolean).length;
-    const slots = Math.max(cap, save.inventory?.length || 0);
-    const countEl = $("#inv-count");
-    if (countEl) countEl.textContent = `${filled}/${Math.max(cap, filled)}`;
-    box.innerHTML = "";
-    box.classList.add("bag-grid");
-    for (let i = 0; i < slots; i++) {
-      const slot = document.createElement("div");
-      slot.className = "cell inv-cell";
-      slot.dataset.inv = i;
-      if (save.inventory[i]) slot.appendChild(ctx.makePiece(save.inventory[i]));
-      slot.addEventListener("click", () => {
-        if (save.inventory[i]) placeFromBag(i);
-      });
-      box.appendChild(slot);
-    }
-  }
-
-  function placeFromBag(i) {
-    const save = ctx.getSave();
-    const item = save.inventory[i];
-    if (!item) return;
-    const empty = ctx.emptyOpenCell();
-    if (empty < 0) { sfx.invalid(); toast("棋盤沒有空位了"); return; }
-    save.inventory.splice(i, 1);
-    save.board[empty] = item;
-    sfx.drop();
-    persist();
-    refresh();
-    renderInventory();
-    toast("放到棋盤上了");
-  }
+  function openBag() { ctx.bag?.openBag(); }
+  function closeBag() { ctx.bag?.closeBag(); }
+  function renderInventory() { ctx.bag?.renderInventory(); }
 
   function sellSelected() {
     const uid = ctx.getSelected?.();
@@ -86,28 +42,42 @@ export function createShop(ctx) {
     const title = $("#shop-title");
     const notice = $("#shop-notice");
     const list = $("#shop-list");
-    if (title) title.textContent = shop.title;
-    if (notice) notice.textContent = shop.notice;
+    if (title) {
+      title.textContent = shop.title;
+      title.title = shop.notice || "只用遊戲裡的金幣和星星種子";
+    }
+    if (notice) notice.textContent = "";
     if (!list) return;
     list.innerHTML = "";
     for (const item of shop.items || []) {
       const locked = !shopItemAvailable(save, item);
       const row = document.createElement("div");
-      row.className = "shop-row";
-      const price = formatCost(item.cost);
-      row.innerHTML = `<div class="body"><b>${item.name}</b><small>${item.desc}</small></div>
-        <div class="price">${price}</div>`;
+      row.className = "shop-row" + (locked ? " locked" : "");
+      row.title = item.desc || item.name;
+      const icon = shopIcon(item);
+      row.innerHTML = `<img class="icon" src="${icon}" alt="">
+        <b>${item.name}</b>
+        <div class="price">${formatCostHtml(item.cost)}</div>`;
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn green";
-      btn.style.minHeight = "36px";
-      btn.style.padding = "6px 12px";
       btn.textContent = locked ? "還沒打開" : "換";
       btn.disabled = locked || !canAfford(save, item.cost);
       btn.addEventListener("click", () => buy(item));
       row.appendChild(btn);
       list.appendChild(row);
     }
+  }
+
+  function shopIcon(item) {
+    if (item.item) {
+      const def = ctx.itemDef?.(item.item.chain, item.item.tier);
+      if (def?.img) return def.img;
+    }
+    if (item.energy === 20) return "assets/icons/shop-energy-20.png";
+    if (item.energy === 50) return "assets/icons/shop-energy-50.png";
+    if (item.energy === "full") return "assets/icons/shop-energy-full.png";
+    return "assets/ui/coin.png";
   }
 
   function buy(item) {
@@ -122,7 +92,7 @@ export function createShop(ctx) {
       save.energy = Math.min(ENERGY.max, save.energy + add);
       sfx.daily(); toast(`能量 +${add}`);
     } else if (item.item) {
-      const cap = ctx.getGame().board?.inventory || 8;
+      const cap = bagCap(save);
       if ((save.inventory || []).filter(Boolean).length >= cap) {
         sfx.invalid(); toast("魔法袋滿了"); return;
       }
@@ -139,8 +109,6 @@ export function createShop(ctx) {
   }
 
   function bind() {
-    $("#btn-bag")?.addEventListener("click", () => { sfx.tap(); openBag(); });
-    $("#btn-bag-close")?.addEventListener("click", () => { sfx.tap(); closeBag(); });
     $("#btn-go-shop")?.addEventListener("click", () => { sfx.tap(); openShop(); });
     $("#btn-map-shop")?.addEventListener("click", () => { sfx.tap(); openShop(); });
     $("#btn-shop-close")?.addEventListener("click", () => { sfx.tap(); closeShop(); });
