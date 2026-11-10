@@ -1,0 +1,531 @@
+{
+  "note": "每週新地區只要在 regions 加一筆。source 為 official 的是原作地點或角色；new 是為遊戲新創作的地點，會在地圖上標示「新創作」。商店只用金幣和星星種子，沒有儲值與廣告。",
+  "regions": [
+    {
+      "id": "village",
+      "name": "微笑村",
+      "subtitle": "微笑大賽的家鄉",
+      "source": "official",
+      "chapter": "village",
+      "music": "village",
+      "bg": "assets/bg/village.webp",
+      "npc": "jiejie",
+      "unlock": {
+        "type": "start"
+      },
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "歡迎回來，微笑村永遠為你開著門。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（跳一跳。先從村子中間的格子開始玩吧。）"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "stage",
+          "name": "微笑舞台",
+          "desc": "村子最重要的小舞台。修好以後，大家更想笑。",
+          "costs": [
+            20,
+            40,
+            70
+          ],
+          "unlocks": [
+            null,
+            "garden",
+            null
+          ],
+          "xp": [
+            20,
+            30,
+            40
+          ],
+          "clump": "inner-n"
+        },
+        {
+          "id": "florist",
+          "name": "花店",
+          "desc": "把花圃重新打開，花朵才會回來。",
+          "costs": [
+            30
+          ],
+          "unlocks": [
+            "garden"
+          ],
+          "xp": [
+            25
+          ],
+          "need": "stage:1",
+          "clump": "inner-e"
+        }
+      ]
+    },
+    {
+      "id": "castle",
+      "name": "微笑城堡",
+      "subtitle": "大賽獎盃住的地方",
+      "source": "new",
+      "chapter": "village",
+      "music": "village",
+      "bg": "assets/bg/village.webp",
+      "npc": "jiejie",
+      "unlock": {
+        "coins": 30,
+        "stars": 6,
+        "needBuilding": "stage:1",
+        "needRegion": "village"
+      },
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "這座微笑城堡，是我為了微笑大賽新修的地方。【新創作】"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "好高的門！獎盃是不是就放在裡面？"
+        },
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "等舞台修好、門打開，我們一起把大廳打掃乾淨。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "hall",
+          "name": "大賽大廳",
+          "desc": "把大廳的旗子重新掛起來。",
+          "costs": [
+            35,
+            60
+          ],
+          "unlocks": [
+            null,
+            null
+          ],
+          "xp": [
+            25,
+            35
+          ],
+          "clump": "inner-w"
+        }
+      ]
+    },
+    {
+      "id": "slope",
+      "name": "飛飛的出發坡",
+      "subtitle": "離開村子的第一道坡",
+      "source": "new",
+      "chapter": "journey",
+      "music": "journey",
+      "bg": "assets/bg/journey.webp",
+      "npc": "feifei",
+      "unlock": {
+        "coins": 50,
+        "stars": 10,
+        "needRegion": "castle",
+        "needFlag": "ch1-end"
+      },
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "這是我出發的小坡。【新創作】每次走到這裡，就會想起微笑村的燈。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "走吧，飛飛。坡的另一邊，還有更大的世界。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "bench",
+          "name": "出發長椅",
+          "desc": "修一張可以坐下來打氣的椅子。",
+          "costs": [
+            40
+          ],
+          "unlocks": [
+            null
+          ],
+          "xp": [
+            20
+          ],
+          "clump": "inner-s"
+        }
+      ]
+    },
+    {
+      "id": "hill",
+      "name": "阿飄的探險丘",
+      "subtitle": "愛探險的人會來這裡",
+      "source": "new",
+      "chapter": "journey",
+      "music": "journey",
+      "bg": "assets/bg/journey.webp",
+      "npc": "apiao",
+      "unlock": {
+        "coins": 60,
+        "stars": 12,
+        "needRegion": "slope"
+      },
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "這座探險丘是我最喜歡的秘密基地。【新創作】山洞就在後面！"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "好高。我們慢慢走，沿路採蘑菇。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "lookout",
+          "name": "瞭望樹屋",
+          "desc": "修好樹屋，就能看到更遠的路。",
+          "costs": [
+            50
+          ],
+          "unlocks": [
+            "forest"
+          ],
+          "xp": [
+            30
+          ],
+          "clump": "outer-n"
+        }
+      ]
+    },
+    {
+      "id": "bagvalley",
+      "name": "魔法袋谷",
+      "subtitle": "氣球精靈出現的地方",
+      "source": "new",
+      "chapter": "journey",
+      "music": "journey",
+      "bg": "assets/bg/journey.webp",
+      "npc": "spirit",
+      "unlock": {
+        "coins": 80,
+        "stars": 15,
+        "needRegion": "hill"
+      },
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "哈哈哈哈——你們找到魔法袋谷啦！【新創作】三次願望，就是從這裡開始的。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "袋裡的氣球，要想清楚再用。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "sack",
+          "name": "神奇袋口",
+          "desc": "把袋口整理好，魔術道具才不會跑掉。",
+          "costs": [
+            70
+          ],
+          "unlocks": [
+            "magic"
+          ],
+          "xp": [
+            40
+          ],
+          "clump": "outer-w"
+        }
+      ]
+    },
+    {
+      "id": "candylane",
+      "name": "西卡的糖果巷",
+      "subtitle": "香甜的小巷",
+      "source": "new",
+      "chapter": "candy",
+      "music": "candy",
+      "bg": "assets/bg/candy.webp",
+      "npc": "sika",
+      "unlock": {
+        "coins": 100,
+        "stars": 18,
+        "needRegion": "bagvalley"
+      },
+      "intro": [
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "歡迎來到糖果巷。【新創作】以前路人都不停下來，現在我想把巷子變好看。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我們一起擺攤，讓更多人看見你的糖果。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "stall",
+          "name": "糖果攤",
+          "desc": "給西卡一個漂亮的攤位。",
+          "costs": [
+            80
+          ],
+          "unlocks": [
+            "candy"
+          ],
+          "xp": [
+            50
+          ],
+          "clump": "outer-e"
+        }
+      ]
+    },
+    {
+      "id": "lamplight",
+      "name": "布魯的夜燈林",
+      "subtitle": "把小路點亮",
+      "source": "new",
+      "chapter": "bulu",
+      "music": "journey",
+      "bg": "assets/bg/journey.webp",
+      "npc": "bulu",
+      "unlock": {
+        "coins": 120,
+        "stars": 22,
+        "needRegion": "candylane"
+      },
+      "intro": [
+        {
+          "speaker": "布魯",
+          "portrait": "bulu",
+          "text": "天一黑，我就不敢走。如果林子裡有燈，我就比較不怕。【新創作】"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我們一盞一盞點亮。你不是一個人。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "lamp",
+          "name": "夜燈小路",
+          "desc": "給怕黑的布魯一盞不會熄的燈。",
+          "costs": [
+            90
+          ],
+          "unlocks": [
+            null
+          ],
+          "xp": [
+            50
+          ],
+          "clump": "outer-s"
+        }
+      ]
+    },
+    {
+      "id": "theater",
+      "name": "哈特的魔術劇場",
+      "subtitle": "找回自信的小舞台",
+      "source": "new",
+      "chapter": "hate",
+      "music": "candy",
+      "bg": "assets/bg/village.webp",
+      "npc": "hate",
+      "unlock": {
+        "coins": 140,
+        "stars": 26,
+        "needRegion": "lamplight"
+      },
+      "intro": [
+        {
+          "speaker": "哈特",
+          "portrait": "hate",
+          "text": "我想在這裡變出兔子，讓大家為我拍手。【新創作】可是我還是有點怕。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我們先把劇場修好。上台的時候，我們都在下面看。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "show",
+          "name": "魔術小台",
+          "desc": "哈特可以在這裡練習變出兔子。",
+          "costs": [
+            100
+          ],
+          "unlocks": [
+            null
+          ],
+          "xp": [
+            60
+          ],
+          "clump": "outer-n"
+        }
+      ]
+    },
+    {
+      "id": "plaza",
+      "name": "漫天氣球廣場",
+      "subtitle": "充滿歡笑的終章",
+      "source": "new",
+      "chapter": "ending",
+      "music": "village",
+      "bg": "assets/bg/village.webp",
+      "npc": "feifei",
+      "unlock": {
+        "coins": 160,
+        "stars": 30,
+        "needRegion": "theater"
+      },
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "這座廣場，是為了你們的願望而打開的。【新創作】"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "真正的強大，是讓別人幸福的能力。我想讓這裡充滿歡笑。"
+        }
+      ],
+      "buildings": [
+        {
+          "id": "fountain",
+          "name": "許願噴泉",
+          "desc": "讓氣球從廣場中央升上去。",
+          "costs": [
+            120
+          ],
+          "unlocks": [
+            null
+          ],
+          "xp": [
+            80
+          ],
+          "clump": null
+        }
+      ]
+    }
+  ],
+  "shop": {
+    "title": "微笑小舖",
+    "notice": "只用遊戲裡的金幣和星星種子。完全免費，沒有儲值，也沒有廣告。",
+    "items": [
+      {
+        "id": "energy-20",
+        "name": "能量點心",
+        "desc": "立刻回復 20 點能量。",
+        "energy": 20,
+        "cost": {
+          "coins": 25
+        }
+      },
+      {
+        "id": "energy-50",
+        "name": "能量麵包",
+        "desc": "立刻回復 50 點能量。",
+        "energy": 50,
+        "cost": {
+          "coins": 50
+        }
+      },
+      {
+        "id": "energy-full",
+        "name": "能量便當",
+        "desc": "把能量回滿。",
+        "energy": "full",
+        "cost": {
+          "stars": 15
+        }
+      },
+      {
+        "id": "star-1",
+        "name": "星點",
+        "desc": "得到 1 個星點，放到背包。",
+        "item": {
+          "kind": "item",
+          "chain": "star",
+          "tier": 1
+        },
+        "cost": {
+          "coins": 10
+        }
+      },
+      {
+        "id": "star-2",
+        "name": "小星星貼紙",
+        "desc": "得到 1 張小星星貼紙，放到背包。",
+        "item": {
+          "kind": "item",
+          "chain": "star",
+          "tier": 2
+        },
+        "cost": {
+          "coins": 20
+        }
+      },
+      {
+        "id": "garden-1",
+        "name": "嫩芽",
+        "desc": "得到 1 株嫩芽，放到背包。",
+        "item": {
+          "kind": "item",
+          "chain": "garden",
+          "tier": 1
+        },
+        "cost": {
+          "coins": 12
+        }
+      },
+      {
+        "id": "candy-1",
+        "name": "糖粒",
+        "desc": "得到 1 顆糖粒，放到背包。",
+        "item": {
+          "kind": "item",
+          "chain": "candy",
+          "tier": 1
+        },
+        "cost": {
+          "coins": 18
+        },
+        "needRegion": "candylane"
+      },
+      {
+        "id": "magic-1",
+        "name": "梅花撲克牌",
+        "desc": "得到 1 張梅花撲克牌，放到背包。",
+        "item": {
+          "kind": "item",
+          "chain": "magic",
+          "tier": 1
+        },
+        "cost": {
+          "coins": 18
+        },
+        "needRegion": "bagvalley"
+      }
+    ]
+  }
+}
