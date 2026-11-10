@@ -1,0 +1,16 @@
+/* Minimal functional states. Theme and animation are owned by visual-polish. */
+.cell.fog { opacity: .3; background: #aab6c6; }
+.generator-countdown { position: absolute; bottom: 0; right: 0; background: #fff; border-radius: 6px; font-size: 12px; }
+.piece.cooling { filter: saturate(.5); }
+.map-region { display: flex; flex-direction: column; align-items: stretch; }
+.map-region .repair-region { white-space: normal; }
+.shop-offers { display: grid; gap: 12px; padding: 16px; }
+.challenge-card { display: flex; gap: 8px; justify-content: center; font-size: 12px; }
+.inventory:not(.open) .inv-cells, .inventory:not(.open) .bag-panel { display: none; }
+.inventory.open { max-height: 45dvh; overflow: auto; }
+.inventory.open .inv-cells { display: flex; flex-wrap: wrap; }
+.bag-panel { display: flex; gap: 8px; align-items: center; }
+.order-give { padding: 6px 10px; font-size: 13px; }
+.order { flex-wrap: wrap; }
+.order .body { min-width: 0; flex: 1 1 100px; }
+.order .order-give { flex: 1 0 100%; white-space: nowrap; }

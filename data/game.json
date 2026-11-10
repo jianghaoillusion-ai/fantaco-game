@@ -198,13 +198,14 @@
     "regenMs": 90000,
     "dailyGiftEnergy": 25,
     "dailyGiftSeeds": 8,
-    "cost": 1
+    "cost": 1,
+    "cooldownMs": 2000
   },
   "board": {
     "cols": 7,
     "rows": 6,
     "inventory": 8,
-    "orders": 4
+    "orders": 3
   },
   "npcs": {
     "jiejie": {

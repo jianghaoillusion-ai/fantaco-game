@@ -1,17 +1,23 @@
+import { loadMapData } from "./map-adapter.js";
+import { repairRegion, mapChapterOpen, expandBag } from "./map-loop.js";
+import { buyOffer } from "./shop-logic.js";
+import { arrangeFogBoard, isCellOpen, firstOpenEmpty } from "./board-loop.js";
+import { recordOrder, claimChallenge, challengeState } from "./daily-challenge.js";
+import { emitGameplay, renderRegionControls, renderShopControls, renderChallenge } from "./loop-ui.js";
 import { Auth } from "./auth.js";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY, configureEnergy } from "./save.js";
 import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js";
 import { mountMascot } from "./mascot.js";
 import {
-  starterBoard, canMerge, mergeCells, firstEmpty, keyOf,
-  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx, generateItem, endlessRegion, remapBoard
+  starterBoard, canMerge, mergeCells, keyOf,
+  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, makeUid, idx, generateItem, endlessRegion
 } from "./merge.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-let GAME, CHAINS, GENS, CHAPTERS, STORY;
-let SAVE = loadSave();
+let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
+let SAVE;
 let mascot;
 let dragging = null;
 let selectedUid = null;
@@ -43,12 +49,14 @@ async function fetchJSON(url) {
 }
 
 export async function boot() {
+  SAVE = loadSave();
   [GAME, CHAINS, CHAPTERS, STORY] = await Promise.all([
     fetchJSON("data/game.json"),
     fetchJSON("data/chains.json"),
     fetchJSON("data/chapters.json"),
     fetchJSON("data/story-orders.json")
   ]);
+  MAP = await loadMapData(fetchJSON);
   GENS = CHAINS.generators;
   CHAINS = CHAINS.chains;
   CHAPTERS = CHAPTERS.chapters;
@@ -63,6 +71,7 @@ export async function boot() {
     SAVE.boardCols = COLS;
     SAVE.boardRows = ROWS;
   }
+  arrangeFogBoard(SAVE, COLS, ROWS);
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
@@ -73,11 +82,11 @@ export async function boot() {
   persist();
   bind();
   mascot = mountMascot($("#mascot-root"));
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, repair: repairMapRegion, buy: purchaseOffer, claimChallenge: collectChallenge };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); refreshLoopTimers(); }, 1000);
 }
 
 function persist() {
@@ -109,6 +118,7 @@ function show(name) {
   else if (name === "settings") renderSettings();
   else if (name === "map") renderMap();
   else if (name === "daily") renderDaily();
+  else if (name === "shop") renderShopControls($("#shop-offers"), SAVE, MAP, purchaseOffer);
   refreshHud();
   if (name === "play" && !$("#result").classList.contains("on")) maybeFirstIntro();
 }
@@ -141,6 +151,13 @@ function bind() {
   $("#btn-lyrics")?.addEventListener("click", () => { sfx.tap(); show("lyrics"); });
   $("#btn-howto")?.addEventListener("click", () => { sfx.tap(); show("howto"); });
   $("#btn-settings")?.addEventListener("click", () => { sfx.tap(); show("settings"); });
+  $("#btn-map-play")?.addEventListener("click", () => show("map"));
+  $("#btn-shop")?.addEventListener("click", () => show("shop"));
+  $("#btn-bag-expand")?.addEventListener("click", () => {
+    const result = expandBag(SAVE);
+    if (result.error) return transactionError(result.error);
+    persist(); renderInventory(); refreshHud(); emitGameplay("bag-expanded", { capacity: SAVE.magicBag.capacity });
+  });
   $("#btn-map")?.addEventListener("click", () => { sfx.tap(); show("map"); });
   $("#btn-daily")?.addEventListener("click", () => { sfx.tap(); show("daily"); });
   $$("[data-back]").forEach((b) => b.addEventListener("click", () => { sfx.tap(); show(b.dataset.back); }));
@@ -310,15 +327,8 @@ function applyBoardLayout() {
     board.style.setProperty("--pad", picked.pad + "px");
   }
   if (sizeChanged) {
-    const oldC = SAVE.boardCols || 7;
-    const oldR = SAVE.boardRows || Math.max(1, Math.floor((SAVE.board || []).length / Math.max(1, oldC)));
     if (SAVE.board && SAVE.board.length) {
-      const { board: next, overflow } = remapBoard(SAVE.board, oldC, oldR, COLS, ROWS);
-      SAVE.board = next;
-      const cap = GAME.board?.inventory || 8;
-      for (const cell of overflow) {
-        if (SAVE.inventory.filter(Boolean).length < cap) SAVE.inventory.push(cell);
-      }
+      arrangeFogBoard(SAVE, COLS, ROWS);
     } else {
       SAVE.board = starterBoard(COLS, ROWS);
     }
@@ -342,7 +352,8 @@ function renderBoard() {
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       const slot = document.createElement("div");
-      slot.className = "cell";
+      slot.className = "cell" + (isCellOpen(SAVE, idx(COLS, r, c)) ? "" : " fog locked");
+      slot.dataset.locked = String(!isCellOpen(SAVE, idx(COLS, r, c)));
       slot.dataset.r = r; slot.dataset.c = c;
       const item = cellAt(r, c);
       if (item) slot.appendChild(makePiece(item));
@@ -351,6 +362,8 @@ function renderBoard() {
   }
   renderInventory();
   refreshSelection();
+  refreshLoopTimers();
+  renderOrders();
 }
 
 function itemRarity(item) {
@@ -364,9 +377,17 @@ function makePiece(item) {
   el.className = "piece" + (item.kind === "gen" ? " gen" : "") + " r-" + rarity;
   el.dataset.uid = item.uid;
   el.dataset.rarity = rarity;
+  if (item.kind === "gen") {
+    el.dataset.cooldownUntil = SAVE.generatorCooldowns[item.uid] || 0;
+    if (+el.dataset.cooldownUntil > Date.now()) el.classList.add("cooling");
+  }
   const img = infoImg(item);
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
+  if (item.kind === "gen") {
+    const timer = document.createElement("span"); timer.className = "generator-countdown";
+    timer.dataset.generatorTimer = item.uid; el.appendChild(timer);
+  }
   el.title = name;
   return el;
 }
@@ -433,7 +454,7 @@ function highlightDrop(e) {
   } else {
     const r = +cell.dataset.r, c = +cell.dataset.c;
     const dest = cellAt(r, c);
-    if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
+    if ((cell.dataset.inv !== undefined || isCellOpen(SAVE, idx(COLS, r, c))) && (!dest || canMerge(item, dest, CHAINS, GENS))) cell.classList.add("hot");
   }
 }
 
@@ -459,8 +480,13 @@ function onDragUp(e) {
   moveOrMerge(d.loc, r, c);
 }
 
+function validLocation(loc) {
+  return loc && (loc.where === "board" ? SAVE.board : SAVE.inventory)[loc.i] === loc.item;
+}
+
 function moveToInventory(loc, slot) {
-  const cap = GAME.board?.inventory || 8;
+  if (!validLocation(loc)) return;
+  const cap = SAVE.magicBag.capacity;
   const src = loc.item;
   if (loc.where === "inv") {
     if (slot < 0 || slot === loc.i) return;
@@ -472,7 +498,7 @@ function moveToInventory(loc, slot) {
       // after remove, indices shift if loc.i < slot
       const at = loc.i < slot ? slot - 1 : slot;
       SAVE.inventory.splice(at, 0, src);
-      SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+      SAVE.inventory = SAVE.inventory.filter(Boolean);
     } else if (canMerge(src, dest, CHAINS, GENS)) {
       const merged = mergeCells(src, dest, CHAINS, GENS);
       SAVE.inventory[slot] = merged;
@@ -486,14 +512,14 @@ function moveToInventory(loc, slot) {
     sfx.drop(); persist(); renderBoard();
     return;
   }
-  if (SAVE.inventory.filter(Boolean).length >= cap && (slot < 0 || SAVE.inventory[slot])) {
+  if (SAVE.inventory.filter(Boolean).length >= cap) {
     sfx.invalid(); toast("背包滿了"); return;
   }
   removeFrom(loc);
   SAVE.inventory = SAVE.inventory.filter(Boolean);
   if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
   else SAVE.inventory.push(src);
-  SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+  SAVE.inventory = SAVE.inventory.filter(Boolean);
   sfx.drop(); persist(); renderBoard();
 }
 
@@ -504,6 +530,11 @@ function removeFrom(loc) {
 
 function onTap(loc) {
   const item = loc.item;
+  if (loc.where === "inv") {
+    const empty = firstOpenEmpty(SAVE);
+    if (empty < 0) return toast("棋盤滿了");
+    moveOrMerge(loc, Math.floor(empty / COLS), empty % COLS); return;
+  }
   selectedUid = item.kind === "item" ? item.uid : null;
   refreshSelection();
   if (item.kind === "gen") { tapGenerator(loc); return; }
@@ -535,9 +566,11 @@ function tapGenerator(loc) {
     if (result.error === "energy") {
       sfx.energy(); mascot?.sad();
       toast(`體力用完了，${Math.ceil(nextEnergyIn(SAVE) / 1000)} 秒後恢復 1 點`);
+    } else if (result.error === "cooldown") { toast(`產生器冷卻中，${Math.ceil(result.remainingMs / 1000)} 秒後可用`);
     } else { sfx.invalid(); toast("棋盤滿了，先合成、交訂單或移到背包吧"); }
     return;
   }
+  emitGameplay("generated", { uid: loc.item.uid, ...result });
   const made = result.item;
   discover(made);
   sfx.generate();
@@ -557,7 +590,9 @@ function tapGenerator(loc) {
 }
 
 function moveOrMerge(loc, r, c) {
+  if (!validLocation(loc)) return;
   const destI = idx(COLS, r, c);
+  if (!isCellOpen(SAVE, destI)) { toast("到地圖修復建築，就能揭開迷霧"); return; }
   const src = loc.item;
   const dest = SAVE.board[destI];
   // same cell
@@ -566,7 +601,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   if (canMerge(src, dest, CHAINS, GENS)) {
@@ -574,7 +609,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   // swap
@@ -582,7 +617,7 @@ function moveOrMerge(loc, r, c) {
     SAVE.board[loc.i] = dest;
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   sfx.invalid();
@@ -599,6 +634,7 @@ function onMerged(merged) {
   if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
   mascot?.merge(tier);
   discover(merged);
+  emitGameplay("merged", { item: merged, combo: combo.n });
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) shake(6);
   // first-discover gift
@@ -614,6 +650,7 @@ function discover(cell, opts = {}) {
       SAVE.treasures[defNameId(def)] = (SAVE.treasures[defNameId(def)] || 0) + 1;
       if (!opts.silent) {
         SAVE.starSeeds += 1;
+        emitGameplay("discovered", { item: cell, definition: def });
         toast(`新發現：${def.name}　＋1 星星種子`);
       }
     }
@@ -652,13 +689,19 @@ function floatCombo(n) {
 function renderInventory() {
   const box = $("#inv-cells");
   box.innerHTML = "";
-  const cap = GAME.board?.inventory || 8;
+  const cap = SAVE.magicBag.capacity;
+  $("#bag-materials").textContent = `修復木材 ${SAVE.magicBag.materials.wood || 0}`;
+  $("#btn-bag-expand").textContent = `擴充一格　${10 + (cap - 8) * 5} 星星種子`;
+  $("#btn-bag-expand").disabled = cap >= 24;
   $("#inv-count").textContent = `${SAVE.inventory.length}/${cap}`;
-  for (let i = 0; i < cap; i++) {
+  for (let i = 0; i < Math.max(cap, SAVE.inventory.length); i++) {
     const slot = document.createElement("div");
     slot.className = "cell inv-cell";
     slot.dataset.inv = i;
-    if (SAVE.inventory[i]) slot.appendChild(makePiece(SAVE.inventory[i]));
+    if (SAVE.inventory[i]) {
+      slot.appendChild(makePiece(SAVE.inventory[i]));
+
+    }
     box.appendChild(slot);
   }
 }
@@ -673,6 +716,7 @@ function hasStoryFlag(flag) {
   return SAVE.storyDone.includes(flag) || STORY.some(o => o.flag === flag && storyCompleted(o));
 }
 function chapterUnlocked(id) {
+  if (!mapChapterOpen(SAVE, MAP, id)) return false;
   if (id === "village") return true;
   if (id === "journey") return SAVE.storyDone.includes("ch1-end") || SAVE.storyDone.includes("v5");
   if (id === "candy") return SAVE.storyDone.includes("ch2-end") || SAVE.storyDone.includes("j5");
@@ -700,12 +744,12 @@ function ensureOrders() {
   const available = availableChains();
   SAVE.orders = (SAVE.orders || []).filter(o => o?.procedural && o.need && o.reward &&
     itemDef(CHAINS, o.need.chain, o.need.tier) && available.includes(o.need.chain));
-  const slots = GAME.board?.orders || 4;
+  const slots = Math.max(2, Math.min(3, GAME.board?.orders || 3));
   // keep current story order first if any
   const story = nextStoryOrder();
   const hasStory = SAVE.orders.some((o) => !o.procedural && story && o.id === story.id);
   if (story && !hasStory && !SAVE.orders.some((o) => o.id === story.id)) {
-    SAVE.orders.unshift({ ...story });
+    SAVE.orders.unshift({ ...story, reward: { ...story.reward, coins: story.reward.coins ?? (5 + story.need.tier * 5) } });
   }
   // fill procedural
   let guard = 0;
@@ -722,7 +766,7 @@ function ensureOrders() {
     });
     if (!o) break;
     // avoid duplicate needs
-    if (SAVE.orders.some((x) => x.need.chain === o.need.chain && x.need.tier === o.need.tier)) continue;
+    if (SAVE.orders.length >= 2 && SAVE.orders.some((x) => x.need.chain === o.need.chain && x.need.tier === o.need.tier)) continue;
     SAVE.orders.push(o);
   }
   SAVE.orders = SAVE.orders.slice(0, slots);
@@ -735,10 +779,10 @@ function hasGen(id) {
 
 function grantGen(id, tier = 1) {
   if (hasGen(id)) return false;
-  const empty = firstEmpty(SAVE.board);
+  const empty = firstOpenEmpty(SAVE);
   const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
   if (empty >= 0) SAVE.board[empty] = cell;
-  else if (SAVE.inventory.length < (GAME.board?.inventory || 8)) SAVE.inventory.push(cell);
+  else if (SAVE.inventory.length < SAVE.magicBag.capacity) SAVE.inventory.push(cell);
   else return false;
   toast(`新的產生器：${GENS[id]?.name || id}`);
   return true;
@@ -746,7 +790,7 @@ function grantGen(id, tier = 1) {
 
 function unlockGenerators() {
   for (const gen of Object.values(GENS)) {
-    if (gen.unlock === "start" || (gen.unlock.startsWith("story:") && hasStoryFlag(gen.unlock.slice(6)))) grantGen(gen.id);
+    if (SAVE.map.unlockedGenerators.includes(gen.id) || gen.unlock === "start" || (gen.unlock.startsWith("story:") && hasStoryFlag(gen.unlock.slice(6)))) grantGen(gen.id);
   }
 }
 
@@ -770,12 +814,20 @@ function renderOrders() {
         ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
         <div class="rew">＋${o.reward.coins || 0} 金幣　＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
       </div>`;
+    const give = document.createElement("button"); give.className = "btn order-give"; give.textContent = "交給他";
+    const match = SAVE.board.concat(SAVE.inventory).find(x => x?.kind === "item" && x.chain === o.need.chain && x.tier === o.need.tier);
+    give.disabled = !match; card.classList.toggle("ready", !!match);
+    give.addEventListener("click", () => { const loc = findCellByUid(match?.uid); if (loc) tryFulfill(loc, o.id); });
+    card.appendChild(give);
     box.appendChild(card);
   }
+  renderChallenge($("#challenge-card"), SAVE, collectChallenge);
+  refreshLoopTimers();
 }
 
 function tryFulfill(loc, orderId) {
   const o = SAVE.orders.find((x) => x.id === orderId);
+  if (!validLocation(loc)) return;
   const item = loc.item;
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
@@ -784,12 +836,14 @@ function tryFulfill(loc, orderId) {
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
+  recordOrder(SAVE);
+  emitGameplay("order-completed", { order: o, item, from: { where: loc.where, index: loc.i } });
   SAVE.coins += o.reward.coins || 0;
   if (wasEndless && o.procedural) SAVE.endless.completed += 1;
   SAVE.starSeeds += o.reward.seeds || 0;
   const before = SAVE.level;
   SAVE.xp += o.reward.xp || 0;
-  SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
+  // Level now follows repairs; XP remains recorded for compatibility.
   tickEnergy(SAVE);
   if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
   if (o.flag) SAVE.storyDone.push(o.flag);
@@ -801,7 +855,7 @@ function tryFulfill(loc, orderId) {
   mascot?.order();
   const leveled = SAVE.level > before;
   const chapterClear = Object.values(CHAPTER_END).includes(o.flag);
-  if (chapterClear && CHAPTER_NEXT[o.chapter]) SAVE.chapter = CHAPTER_NEXT[o.chapter];
+  if (chapterClear && CHAPTER_NEXT[o.chapter] && chapterUnlocked(CHAPTER_NEXT[o.chapter])) SAVE.chapter = CHAPTER_NEXT[o.chapter];
   unlockGenerators();
   ensureOrders();
   persist();
@@ -923,36 +977,45 @@ function renderBook() {
 }
 
 function renderMap() {
-  const box = $("#nodes");
-  box.innerHTML = "";
-  for (const ch of CHAPTERS) {
-    const locked = !chapterUnlocked(ch.id);
-    const active = SAVE.chapter === ch.id;
-    const btn = document.createElement("button");
-    btn.className = "node" + (locked ? " locked" : "") + (active ? " active" : "");
-    const pct = Math.min(100, Math.round(((SAVE.restore[ch.id] || 0) / (ch.restoreSteps || 5)) * 100));
-    btn.innerHTML = `<img class="thumb" src="${ch.bg}" alt="">
-      <div><div class="num">第 ${ch.number} 章</div><h3>${ch.title}${active ? "　正在這裡" : ""}</h3>
-      <small>${locked ? "先完成前面的故事" : ch.subtitle + "　村莊恢復 " + pct + "%"}</small></div>`;
-    if (!locked) btn.addEventListener("click", () => {
-      SAVE.chapter = ch.id; persist(); sfx.tap(); show("play");
-    });
-    box.appendChild(btn);
-  }
-  if (mainComplete()) {
-    const node = document.createElement("button");
-    node.className = "node";
-    const progress = SAVE.endless.completed % GAME.orders.ordersPerRegion;
-    node.innerHTML = `<img class="thumb" src="assets/mascot/front.png" alt=""><div><h3>探索區域 ${currentRegion()}</h3><small>已完成 ${progress}／${GAME.orders.ordersPerRegion} 張訂單</small></div>`;
-    node.addEventListener("click", () => show("play"));
-    box.appendChild(node);
-  }
-  const soon = document.createElement("div");
-  soon.className = "node soon";
-  soon.innerHTML = `<img class="thumb" src="assets/mascot/sleep.png" alt="">
-    <div><div class="num">即將到來<span class="soon-mark">每週更新</span></div>
-    <h3>新的小故事製作中</h3><small>故事會一直加。平常的訂單也不會停，可以一直玩下去。</small></div>`;
-  box.appendChild(soon);
+  renderRegionControls($("#nodes"), SAVE, MAP, CHAINS, repairMapRegion);
+}
+
+function transactionError(code) {
+  const messages = { coins: "金幣不足，再完成幾張訂單吧", starSeeds: "星星種子不足", items: "還缺指定道具，可從棋盤或魔法袋交付", materials: "還缺修復木材，完成訂單就能取得", locked: "先修好前一區", complete: "已經完成了", "energy-full": "體力已滿", "bag-full": "魔法袋滿了，先取出道具", claimed: "今天已經領過了", orders: "先完成三張訂單" };
+  toast(messages[code] || "目前無法完成這個操作");
+}
+function repairMapRegion(id) {
+  const result = repairRegion(SAVE, MAP, id);
+  if (result.error) { transactionError(result.error); return result; }
+  const next = CHAPTER_NEXT[SAVE.chapter];
+  if (next && chapterUnlocked(next)) SAVE.chapter = next;
+  unlockGenerators(); ensureOrders(); persist(); renderMap(); refresh();
+  emitGameplay("map-repaired", result);
+  toast(result.complete ? "修復完成！新的區域開放了" : "修復完成，迷霧散開了");
+  return result;
+}
+function purchaseOffer(id) {
+  tickEnergy(SAVE);
+  const result = buyOffer(SAVE, MAP, id, ENERGY.max);
+  if (result.error) { transactionError(result.error); return result; }
+  persist(); refreshHud(); emitGameplay("shop-purchased", result); toast("已放入魔法袋／補充體力");
+  return result;
+}
+function collectChallenge() {
+  const result = claimChallenge(SAVE);
+  if (result.error) return transactionError(result.error);
+  persist(); renderOrders(); refreshHud(); emitGameplay("challenge-claimed", result);
+}
+function refreshLoopTimers() {
+  const previous = SAVE.challenge.day, state = challengeState(SAVE);
+  if (previous && previous !== state.day) { persist(); renderChallenge($("#challenge-card"), SAVE, collectChallenge); }
+  const seconds = Math.ceil(state.remainingMs / 1000);
+  $$("[data-challenge-countdown]").forEach(el => { el.textContent = `${Math.floor(seconds / 3600)}:${String(Math.floor(seconds / 60) % 60).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`; });
+  $$("[data-generator-timer]").forEach(el => {
+    const remaining = Math.max(0, Math.ceil(((SAVE.generatorCooldowns[el.dataset.generatorTimer] || 0) - Date.now()) / 1000));
+    el.textContent = remaining ? `${remaining}s` : "";
+    el.parentElement?.classList.toggle("cooling", remaining > 0);
+  });
 }
 
 function renderDaily() {
@@ -1003,5 +1066,7 @@ function completeTopOrder() { /* debug */ }
 
 boot().catch((err) => {
   console.error(err);
-  document.body.innerHTML = "<p style='padding:40px;font-family:sans-serif'>遊戲載入失敗，請重新整理。</p>";
+  const message = document.createElement("p");
+  message.textContent = err.message.includes("存檔版本") ? err.message : "遊戲載入失敗，請重新整理。";
+  document.body.replaceChildren(message);
 });

@@ -13,6 +13,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/app.css">
+  <link rel="stylesheet" href="css/loop-controls.css">
 </head>
 <body>
   <div id="app">
@@ -72,6 +73,7 @@
       </div>
       <div class="chapter-chip"><span data-chapter>微笑村</span></div>
       <div id="orders" class="orders" aria-label="訂單"></div>
+      <div id="challenge-card" class="challenge-card"></div>
       <div class="play-main">
         <aside class="mascot-col">
           <div id="mascot-root"></div>
@@ -79,8 +81,11 @@
         <div id="board" class="board" role="grid" aria-label="合成棋盤"></div>
       </div>
       <div id="inventory" class="inventory">
-        <button type="button" id="btn-inv-toggle" class="inv-toggle">背包 <span id="inv-count">0/8</span></button>
+        <button type="button" id="btn-inv-toggle" class="inv-toggle">魔法袋 <span id="inv-count">0/8</span></button>
         <button type="button" id="btn-sell" class="inv-toggle" hidden>出售</button>
+        <button type="button" id="btn-map-play" class="inv-toggle">微笑村地圖</button>
+        <button type="button" id="btn-shop" class="inv-toggle">商店</button>
+        <div class="bag-panel"><span id="bag-materials"></span><button type="button" id="btn-bag-expand">擴充一格</button></div>
         <div id="inv-cells" class="inv-cells"></div>
       </div>
       </div>
@@ -95,12 +100,19 @@
         <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
       </div>
       <h2 style="text-align:center;margin:4px 0 12px">故事地圖</h2>
+      <button class="btn" data-back="play">回盤面</button>
+      <p><span data-coins></span> 金幣　<span data-seeds></span> 星星種子</p>
       <div class="map-path">
         <div class="path-line" aria-hidden="true"></div>
         <div class="nodes" id="nodes"></div>
       </div>
     </section>
 
+    <section id="shop" class="screen pane">
+      <button class="btn" data-back="play">回盤面</button>
+      <h2>商店</h2><p><span data-coins></span> 金幣　<span data-seeds></span> 星星種子</p>
+      <div id="shop-offers" class="shop-offers"></div>
+    </section>
     <section id="story" class="screen">
       <div class="hud" style="width:min(720px,100%);margin:0 auto 8px">
         <span></span>
