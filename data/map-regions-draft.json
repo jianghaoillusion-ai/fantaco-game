@@ -1,0 +1,431 @@
+{
+  "format": "fantaco-map-draft-1",
+  "regions": [
+    {
+      "id": "village",
+      "name": "微笑村",
+      "requires": [],
+      "steps": [
+        {
+          "id": "village-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 10,
+            "starSeeds": 2,
+            "items": [
+              {
+                "chain": "star",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "village-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 20,
+            "starSeeds": 3,
+            "items": [
+              {
+                "chain": "star",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": [
+              "garden"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "castle",
+      "name": "微笑城堡",
+      "requires": [
+        "village"
+      ],
+      "steps": [
+        {
+          "id": "castle-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 25,
+            "starSeeds": 3,
+            "items": [
+              {
+                "chain": "garden",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "castle-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 35,
+            "starSeeds": 4,
+            "items": [
+              {
+                "chain": "garden",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": [
+              "tea"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "forest",
+      "name": "魔幻森林",
+      "requires": [
+        "castle"
+      ],
+      "steps": [
+        {
+          "id": "forest-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 40,
+            "starSeeds": 4,
+            "items": [
+              {
+                "chain": "star",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "forest-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 50,
+            "starSeeds": 5,
+            "items": [
+              {
+                "chain": "star",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": [
+              "forest"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "candy",
+      "name": "西卡的糖果屋",
+      "requires": [
+        "forest"
+      ],
+      "steps": [
+        {
+          "id": "candy-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 55,
+            "starSeeds": 5,
+            "items": [
+              {
+                "chain": "forest",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "candy-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 65,
+            "starSeeds": 6,
+            "items": [
+              {
+                "chain": "forest",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": [
+              "candy"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "bulu",
+      "name": "布魯的舞台",
+      "requires": [
+        "candy"
+      ],
+      "steps": [
+        {
+          "id": "bulu-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 70,
+            "starSeeds": 6,
+            "items": [
+              {
+                "chain": "candy",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "bulu-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 80,
+            "starSeeds": 7,
+            "items": [
+              {
+                "chain": "candy",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": [
+              "magic"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "hate",
+      "name": "哈特的城堡",
+      "requires": [
+        "bulu"
+      ],
+      "steps": [
+        {
+          "id": "hate-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 85,
+            "starSeeds": 7,
+            "items": [
+              {
+                "chain": "magic",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "hate-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 95,
+            "starSeeds": 8,
+            "items": [
+              {
+                "chain": "magic",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        }
+      ]
+    },
+    {
+      "id": "sky",
+      "name": "藍藍天",
+      "requires": [
+        "hate"
+      ],
+      "steps": [
+        {
+          "id": "sky-1",
+          "name": "整理入口",
+          "cost": {
+            "coins": 100,
+            "starSeeds": 8,
+            "items": [
+              {
+                "chain": "tea",
+                "tier": 2,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 1
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        },
+        {
+          "id": "sky-2",
+          "name": "修復舞台",
+          "cost": {
+            "coins": 110,
+            "starSeeds": 9,
+            "items": [
+              {
+                "chain": "tea",
+                "tier": 3,
+                "count": 1
+              }
+            ],
+            "materials": {
+              "wood": 2
+            }
+          },
+          "reward": {
+            "cells": 4,
+            "generators": []
+          }
+        }
+      ]
+    }
+  ],
+  "chapterGates": {
+    "journey": "village",
+    "candy": "castle",
+    "bulu": "candy",
+    "hate": "bulu",
+    "ending": "hate"
+  },
+  "shop": [
+    {
+      "id": "energy-coins",
+      "name": "補充 20 體力",
+      "cost": {
+        "coins": 30
+      },
+      "energy": 20
+    },
+    {
+      "id": "energy-seeds",
+      "name": "補充 40 體力",
+      "cost": {
+        "starSeeds": 12
+      },
+      "energy": 40
+    },
+    {
+      "id": "star-item",
+      "name": "小星星貼紙",
+      "cost": {
+        "coins": 15
+      },
+      "item": {
+        "chain": "star",
+        "tier": 2
+      }
+    },
+    {
+      "id": "garden-item",
+      "name": "小樹叢",
+      "cost": {
+        "starSeeds": 4
+      },
+      "item": {
+        "chain": "garden",
+        "tier": 2
+      }
+    }
+  ]
+}

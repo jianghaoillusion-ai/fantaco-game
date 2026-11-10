@@ -13,7 +13,13 @@ export function configureEnergy(config = {}) {
 
 export function emptySave() {
   return {
-    version: 2,
+    version: 3,
+    schemaVersion: 3,
+    map: { regions: {}, unlockedGenerators: [], legacyChapters: [] },
+    fog: { openCount: 12, legacyOpen: false },
+    magicBag: { capacity: 8, materials: {} },
+    challenge: { day: "", orders: 0, claimed: false },
+    generatorCooldowns: {},
     profile: null,
     coins: 0,
     endless: { completed: 0 },
@@ -57,8 +63,9 @@ function migrate(v1) {
 export function normalizeSave(raw) {
   const base = emptySave();
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
-  const s = { ...base, ...raw };
-  for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures"]) {
+  if ((raw.schemaVersion ?? raw.version ?? 1) > 3) throw new Error("存檔版本較新，請更新遊戲後再開啟");
+  const s = { ...base, ...raw, version: 3, schemaVersion: 3 };
+  for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures", "map", "fog", "magicBag", "challenge", "generatorCooldowns"]) {
     s[key] = { ...base[key], ...(raw[key] && typeof raw[key] === "object" && !Array.isArray(raw[key]) ? raw[key] : {}) };
   }
   for (const key of ["inventory", "orders", "storyDone"]) s[key] = Array.isArray(raw[key]) ? raw[key] : [];
@@ -68,6 +75,19 @@ export function normalizeSave(raw) {
   }
   if (!Number.isFinite(s.endless.completed) || s.endless.completed < 0) s.endless.completed = 0;
   if (!Number.isFinite(s.energyAt) || s.energyAt < 0) s.energyAt = Date.now();
+  const object = x => x && typeof x === "object" && !Array.isArray(x) ? x : {};
+  s.map.regions = Object.fromEntries(Object.entries(object(s.map.regions)).filter(([, v]) => Number.isInteger(v) && v >= 0));
+  s.map.unlockedGenerators = Array.isArray(s.map.unlockedGenerators) ? s.map.unlockedGenerators.filter(x => typeof x === 'string') : [];
+  s.map.legacyChapters = Array.isArray(s.map.legacyChapters) ? s.map.legacyChapters.filter(x => typeof x === 'string') : [];
+  s.magicBag.materials = Object.fromEntries(Object.entries(object(s.magicBag.materials)).filter(([, v]) => Number.isInteger(v) && v >= 0));
+  s.magicBag.capacity = Math.max(8, Math.min(24, Math.floor(Number(s.magicBag.capacity) || 8)));
+  s.fog.openCount = Math.max(12, Math.floor(Number(s.fog.openCount) || 12));
+  s.challenge.orders = Math.max(0, Math.floor(Number(s.challenge.orders) || 0));
+  if ((raw.schemaVersion ?? raw.version ?? 2) < 3 && s.board) {
+    s.fog.legacyOpen = true;
+    const chapters = ['village','journey','candy','bulu','hate','ending'];
+    s.map.legacyChapters = chapters.slice(0, Math.max(0, chapters.indexOf(s.chapter)) + 1);
+  }
   return s;
 }
 
@@ -77,11 +97,15 @@ export function loadSave() {
     if (raw) return normalizeSave(JSON.parse(raw));
     const old = localStorage.getItem(LEGACY);
     if (old) return migrate(JSON.parse(old));
-  } catch {}
+  } catch (error) {
+    if (error.message.includes("存檔版本")) throw error;
+  }
   return emptySave();
 }
 
 export function writeSave(data) {
+  if ((data.schemaVersion ?? data.version) > 3) throw new Error("存檔版本較新");
+  data.version = 3; data.schemaVersion = 3;
   data.updatedAt = Date.now();
   localStorage.setItem(KEY, JSON.stringify(data));
   // STUB: later POST JSON to Cloudflare Worker, persist in D1

@@ -19,7 +19,7 @@ async function harness(initial){
  const document={baseURI:'http://localhost/',body:new Element(),createElement:()=>new Element(),getElementById:id=>el('#'+id),querySelector:el,querySelectorAll:s=>s==='.screen,.overlay'?[...elements.values()]:[],addEventListener(){}};
  const context=vm.createContext({...save,...merge,document,window:{addEventListener(){}},Image:Element,URL,Date,Math,console,
  fetch:async url=>({ok:true,json:async()=>json(url.split('?')[0])}),
- setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},matchMedia:()=>({matches:true}),
+ requestAnimationFrame(){},setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},matchMedia:()=>({matches:true}),
  Auth:{},mountMascot:()=>new Proxy({}, {get:()=>()=>{}}),sfx:new Proxy({}, {get:()=>()=>{}}),
  setAudioSettings(){},getAudioSettings(){return {}},playMusic(){},stopMusic(){},unlockAudio(){},playClearTheme:async()=>{}});
  let src=readFileSync(new URL('js/app.js',root),'utf8').replace(/^import[\s\S]*?from ".*?";\n/gm,'').replace('export async function boot','async function boot');
@@ -42,7 +42,7 @@ test('新遊戲→15張故事訂單→12張無限訂單→重讀存檔',async()=
   const item={kind:'item',...o.need,uid:'test-'+o.id};s.board[i]=item;
   const coins=s.coins,xp=s.xp,seeds=s.starSeeds;
   api.tryFulfill({where:'board',i,item},o.id);
-  assert.equal(s.coins,coins+o.reward.coins);assert.equal(s.xp,xp+o.reward.xp);assert.equal(s.starSeeds,seeds+o.reward.seeds);
+  assert.equal(s.coins,coins+(o.reward.coins||0));assert.equal(s.xp,xp+o.reward.xp);assert.equal(s.starSeeds,seeds+o.reward.seeds);
   assert.ok(s.storyDone.includes(o.flag));
   const paid=s.coins;
   api.tryFulfill({where:'board',i,item},o.id);assert.equal(s.coins,paid,'cannot collect twice');
