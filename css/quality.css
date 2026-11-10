@@ -922,7 +922,7 @@
 
 /* ========== v5.6: unified type, plain wanted cells, shop/bag tips, TT clear, HUD XP ========== */
 
-#app, body, button, input, .btn, h1, h2, h3, h4, .combo-float, .pill, .lv-badge,
+#app, body, button, input, .btn, h1, h2, h3, h4, .pill, .lv-badge,
 .order, .toast, .modal, .home-ico, .tool-btn, .shop-tile, .bag-card, .game-tip{
   font-family: var(--sans) !important;
 }
@@ -1575,7 +1575,6 @@ body:has(#bag.overlay.on) #toast,
 body:has(#settings-sheet.on) #toast,
 body:has(#result.overlay.on) #toast{ opacity: 0 !important; pointer-events: none !important; }
 
-.combo-float{ display: none !important; }
 
 /* Story: head fully on screen under the skip button; fade into the bubble; dim partner at 70% */
 #story .story-skip,
