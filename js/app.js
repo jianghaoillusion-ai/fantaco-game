@@ -1,21 +1,22 @@
-import { Auth } from "./auth.js?v=11";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=11";
-import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=11";
-import { mountMascot } from "./mascot.js?v=11";
-import { mountHome } from "./home.js?v=11";
-import { bindStory, startStory } from "./story.js?v=11";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=11";
-import { bagCap, migrateBagSlots } from "./bag.js?v=11";
-import { reserveItems } from "./merge.js?v=11";
-import { avatarSrc } from "./portraits.js?v=11";
+import { Auth } from "./auth.js?v=14";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=14";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=14";
+import { mountMascot } from "./mascot.js?v=14";
+import { mountHome } from "./home.js?v=14";
+import { bindStory, startStory } from "./story.js?v=14";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=14";
+import { bagCap, migrateBagSlots } from "./bag.js?v=14";
+import { reserveItems } from "./merge.js?v=14";
+import { avatarSrc } from "./portraits.js?v=14";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=11";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=11";
-import { regionById } from "./world.js?v=11";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=11";
+} from "./merge.js?v=14";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=14";
+import { regionById } from "./world.js?v=14";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=14";
+import { bindTip } from "./tip.js?v=14";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -28,6 +29,7 @@ let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
 let selectedUid = null;
+let wandArmed = false;
 let systems;
 let home, settingsUi;
 
@@ -49,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=11");
+  const res = await fetch(url + "?v=14");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -211,6 +213,7 @@ function refreshHud() {
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
   $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins || 0; });
+  $$("[data-diamonds]").forEach((el) => { el.textContent = SAVE.diamonds || 0; });
   $$("[data-mats]").forEach((el) => { el.textContent = SAVE.materials || 0; });
   const cap = bagCap(SAVE);
   const filled = (SAVE.inventory || []).filter(Boolean).length;
@@ -226,13 +229,72 @@ function refreshHud() {
       el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
     }
   });
-  const curve = GAME.xpCurve || [0, 40, 100];
-  const lo = curve[Math.min(SAVE.level, curve.length) - 1] ?? 0;
-  const hi = curve[SAVE.level] ?? (lo + 100);
-  const pct = Math.max(0, Math.min(1, (SAVE.xp - lo) / Math.max(1, hi - lo)));
-  $$("[data-xp]").forEach((el) => { el.style.width = (pct * 100) + "%"; });
+  const { have, need, pct } = xpProgress();
+  if (!refreshHud._deferXp) {
+    $$("[data-xp]").forEach((el) => { el.style.width = (pct * 100) + "%"; });
+  }
+  bindXpTips(have, need);
+  systems?.ads?.syncLabels?.();
   const ch = chapter();
   $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = ch.title; });
+}
+
+function bindXpTips(have, need) {
+  $$("[data-xp-tip]").forEach((el) => {
+    bindTip(el, "經驗", () => `${have} / ${need}　金幣 ${SAVE.coins || 0}`);
+  });
+}
+
+function xpProgress() {
+  const curve = GAME?.xpCurve || [0, 40, 100];
+  const earned = SAVE.coinsEarned ?? SAVE.xp ?? 0;
+  SAVE.xp = earned;
+  SAVE.level = xpLevel(earned, curve);
+  const lo = curve[Math.min(SAVE.level, curve.length) - 1] ?? 0;
+  const hi = curve[SAVE.level] ?? (lo + 100);
+  const have = Math.max(0, earned - lo);
+  const need = Math.max(1, hi - lo);
+  const pct = Math.max(0, Math.min(1, have / need));
+  return { have, need, pct, earned, lo, hi };
+}
+
+function applyCoins(n) {
+  n = Math.max(0, Math.floor(n || 0));
+  if (!n) return false;
+  SAVE.coins = (SAVE.coins || 0) + n;
+  SAVE.coinsEarned = (SAVE.coinsEarned || 0) + n;
+  SAVE.xp = SAVE.coinsEarned;
+  const before = SAVE.level;
+  SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
+  if (SAVE.level > before) SAVE.diamonds = (SAVE.diamonds || 0) + 2;
+  return SAVE.level > before;
+}
+
+function grantCoins(n, fromEl, then) {
+  const prev = xpProgress().pct;
+  const leveled = applyCoins(n);
+  persist();
+  if (n > 0) {
+    $$("[data-xp]").forEach((el) => {
+      el.style.transition = "none";
+      el.style.width = (prev * 100) + "%";
+    });
+    refreshHud._deferXp = true;
+    refreshHud();
+    refreshHud._deferXp = false;
+    sfx.coin();
+    const finish = () => {
+      $$("[data-xp]").forEach((el) => { el.style.transition = ""; });
+      refreshHud();
+      then?.(leveled);
+    };
+    if (systems?.fx?.flyCoins) systems.fx.flyCoins(fromEl, document.querySelector("#play .lv-badge, [data-xp-tip]"), finish);
+    else finish();
+  } else {
+    refreshHud();
+    then?.(leveled);
+  }
+  return leveled;
 }
 
 function toast(msg) {
@@ -296,6 +358,7 @@ function renderBoard() {
       const item = cellAt(r, c);
       if (item) slot.appendChild(makePiece(item));
       systems?.fog.decorateCell(slot, r, c, item);
+      if (item && isWantedItem(item)) slot.classList.add("wanted");
       board.appendChild(slot);
     }
   }
@@ -319,12 +382,14 @@ function makePiece(item) {
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
   el.title = name;
-  const wanted = (SAVE.orders || []).some((o) =>
-    item.kind === "item" && o.need?.chain === item.chain && o.need?.tier === item.tier
+  return el;
+}
+function isWantedItem(item) {
+  if (!item || item.kind !== "item") return false;
+  return (SAVE.orders || []).some((o) =>
+    o.need?.chain === item.chain && o.need?.tier === item.tier
     && (!o.reservedUid || o.reservedUid === item.uid)
   );
-  if (wanted) el.insertAdjacentHTML("beforeend", '<span class="want-check">✓</span>');
-  return el;
 }
 
 function infoImg(item) {
@@ -470,8 +535,29 @@ function removeFrom(loc) {
   else SAVE.inventory.splice(loc.i, 1);
 }
 
+function armWand() {
+  if ((SAVE.boosters?.wand || 0) < 1) { sfx.invalid(); toast("還沒有合成棒"); return; }
+  wandArmed = true;
+  toast("點棋盤上的道具，讓它升一階。");
+}
+
 function onTap(loc) {
   const item = loc.item;
+  if (wandArmed && item?.kind === "item") {
+    wandArmed = false;
+    const max = maxTier(CHAINS, item.chain);
+    if ((item.tier || 1) >= max) { sfx.invalid(); toast("已經是最高一階了"); return; }
+    SAVE.boosters.wand = Math.max(0, (SAVE.boosters.wand || 0) - 1);
+    item.tier += 1;
+    persist();
+    sfx.merge(item.tier);
+    toast("合成棒發動，升了一階！");
+    systems?.fx.popAt?.(item.uid);
+    renderBoard();
+    refreshHud();
+    systems?.bag?.renderInventory?.();
+    return;
+  }
   selectedUid = item.uid;
   systems?.fx.showInfo(item);
   sfx.tap();
@@ -493,6 +579,7 @@ function tapGenerator(loc) {
     mascot?.sad();
     const s = Math.ceil(nextEnergyIn(SAVE) / 1000);
     toast(`能量還在回來的路上（${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}）`);
+    systems?.ads?.openEnergyPrompt?.();
     return;
   }
   const origin = loc.where === "board" ? loc.i : -1;
@@ -728,12 +815,16 @@ function tryFulfill(loc, orderId) {
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
   SAVE.starSeeds += o.reward.seeds || 0;
-  SAVE.coins = (SAVE.coins || 0) + (o.reward.coins ?? ((o.reward.seeds || 0) + 4));
+  let coins = o.reward.coins ?? ((o.reward.seeds || 0) + 4);
+  if (SAVE.boosters?.clear > 0) {
+    SAVE.boosters.clear -= 1;
+    coins *= 2;
+    toast("過關道具發動，金幣加倍！");
+  }
   if (o.reward.materials) SAVE.materials = (SAVE.materials || 0) + o.reward.materials;
+  const gems = o.reward.diamonds ?? (o.flag ? 2 : 1);
+  if (gems) SAVE.diamonds = (SAVE.diamonds || 0) + gems;
   systems?.orders.bumpDaily();
-  const before = SAVE.level;
-  SAVE.xp += o.reward.xp || 0;
-  SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
   if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
   if (o.flag) SAVE.storyDone.push(o.flag);
   if (o.restore) {
@@ -742,14 +833,13 @@ function tryFulfill(loc, orderId) {
   }
   sfx.order();
   mascot?.order();
-  const leveled = SAVE.level > before;
   const chapterClear = Object.values(CHAPTER_END).includes(o.flag);
   if (chapterClear && CHAPTER_NEXT[o.chapter]) SAVE.chapter = CHAPTER_NEXT[o.chapter];
   ensureOrders();
   unlockGenerators();
-  persist();
-  renderBoard(); renderOrders(); refreshHud();
-  const after = () => {
+  const fromCard = document.querySelector(`.order[data-id="${orderId}"]`);
+  const after = (leveled) => {
+    renderBoard(); renderOrders(); refreshHud();
     if (o.outro) startStory(o.outro, () => {
       if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
       else { playMusic(SAVE.chapter); applyChapterLook(); maybeStoryIntro(); }
@@ -757,7 +847,7 @@ function tryFulfill(loc, orderId) {
     else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
     else maybeStoryIntro();
   };
-  after();
+  grantCoins(coins, fromCard, after);
 }
 
 let storyQueue = [], storyIdx = 0, storyDoneFn = null;
@@ -788,21 +878,25 @@ function showClear({ chapterClear, leveled, o }) {
     ? `${chapter().title}　跟著歌詞，一起飛向藍藍天`
     : `現在是 Lv.${SAVE.level}　星星種子 ${SAVE.starSeeds}`;
   const lv = $("#result-lv");
-  if (leveled) {
+  if (lv) {
     lv.style.display = "";
-    lv.innerHTML = `<span class="lv-star" aria-hidden="true">★</span><b>Lv.${SAVE.level}</b>`;
-    sfx.level();
-  } else lv.style.display = "none";
+    lv.innerHTML = `<span class="lv-star" aria-hidden="true"><img src="assets/items/star-seed.png" alt=""></span><b>Lv.${SAVE.level}</b>`;
+  }
+  if (leveled) sfx.level();
+  const ok = $("#btn-result-ok");
+  if (ok) ok.textContent = "領取";
   const rewards = $("#result-rewards");
   if (rewards) {
     const coins = o?.reward?.coins ?? 0;
     const seeds = o?.reward?.seeds || 0;
     const mats = o?.reward?.materials || 0;
+    const gems = o?.reward?.diamonds ?? (o?.flag ? 2 : 1);
     const def = o?.need ? itemDef(CHAINS, o.need.chain, o.need.tier) : null;
     const piece = (src, label, extra="") => `<div class="rew-piece ${extra}"><img src="${src}" alt=""><b>${label}</b></div>`;
     let icons = "";
     if (coins) icons += piece("assets/ui/coin.png", "+" + coins);
     if (seeds) icons += piece("assets/items/star-seed.png", "+" + seeds);
+    if (gems) icons += piece("assets/ui/diamond.png", "+" + gems);
     if (mats) icons += piece("assets/icons/material.png", "+" + mats);
     if (def?.img) icons += piece(def.img, def.name || "", "item");
     rewards.style.display = icons ? "" : "none";
@@ -815,7 +909,6 @@ function showClear({ chapterClear, leveled, o }) {
     lyricsBox.style.display = "";
     lyricsBox.innerHTML = (GAME.lyrics.endingLines || []).map((l) => `<p>${l}</p>`).join("");
     pendingAfterClear = () => { playMusic(SAVE.chapter); applyChapterLook(); show("play"); maybeStoryIntro(); };
-    playClearTheme().then(() => {});
   } else {
     lyricsBox.style.display = "none";
     pendingAfterClear = () => { playMusic(SAVE.chapter); show("play"); maybeStoryIntro(); };
@@ -907,8 +1000,8 @@ function systemCtx() {
     getRows: () => ROWS,
     getSelected: () => selectedUid,
     setSelected: (u) => { selectedUid = u; },
-    persist, toast, sfx, show, refresh, refreshHud,
-    startStory, applyChapterLook, playMusic,
+    persist, toast, sfx, show, refresh, refreshHud, grantCoins, applyCoins,
+    startStory, applyChapterLook, playMusic, pauseMusic, resumeMusic,
     makePiece, infoName, infoImg, findCellByUid, removeFrom,
     tryFulfill: (loc, id) => tryFulfill(loc, id),
     grantGen: (id, tier) => grantGen(id, tier),
@@ -919,7 +1012,8 @@ function systemCtx() {
     getGens: () => GENS,
     avatarSrc,
     get mascot() { return mascot; },
-    showInfo: (item) => systems?.fx.showInfo(item)
+    showInfo: (item) => systems?.fx.showInfo(item),
+    armWand
   };
 }
 

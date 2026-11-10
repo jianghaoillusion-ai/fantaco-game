@@ -1,6 +1,13 @@
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
-import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=11";
-import { bagCap } from "./bag.js?v=11";
+import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=14";
+import { bagCap } from "./bag.js?v=14";
+import { bindTip, hideTip } from "./tip.js?v=14";
+
+const DIAMOND_ITEMS = [
+  { id: "boost-energy", name: "能量加持", desc: "立刻回復 30 點能量。", energy: 30, cost: { diamonds: 5 } },
+  { id: "boost-wand", name: "合成棒", desc: "點棋盤上一個道具，讓它升一階。", booster: "wand", cost: { diamonds: 8 } },
+  { id: "boost-clear", name: "過關道具", desc: "下一次完成訂單時，金幣獎勵加倍。", booster: "clear", cost: { diamonds: 10 } }
+];
 
 export function createShop(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, ENERGY } = ctx;
@@ -17,22 +24,39 @@ export function createShop(ctx) {
     if ((loc.item.tier || 1) <= 1) { sfx.invalid(); toast("第 1 階不能賣，合高一點再賣吧"); return; }
     const coins = loc.item.tier * 2;
     ctx.removeFrom(loc);
-    ctx.getSave().coins = (ctx.getSave().coins || 0) + coins;
     ctx.setSelected?.(null);
-    sfx.tap();
     toast(`賣掉了，得到 ${coins} 金幣`);
     persist();
+    ctx.grantCoins?.(coins, document.querySelector("#btn-sell") || loc);
     refresh();
     ctx.showInfo?.(null);
   }
 
   function openShop() {
+    hideTip();
     renderShop();
     $("#shop")?.classList.add("on");
   }
 
   function closeShop() {
     $("#shop")?.classList.remove("on");
+  }
+
+  function shopQty(item) {
+    if (item.energy === "full") return "滿";
+    if (item.energy) return "×" + item.energy;
+    return "×1";
+  }
+
+  function shopIcon(item) {
+    if (item.item) {
+      const def = ctx.itemDef?.(item.item.chain, item.item.tier);
+      if (def?.img) return def.img;
+    }
+    if (item.energy) return "assets/icons/energy.png";
+    if (item.booster === "wand") return "assets/tiles/star-1.png";
+    if (item.booster === "clear") return "assets/icons/gift.png";
+    return "assets/ui/diamond.png";
   }
 
   function renderShop() {
@@ -49,35 +73,36 @@ export function createShop(ctx) {
     if (notice) notice.textContent = "";
     if (!list) return;
     list.innerHTML = "";
-    for (const item of shop.items || []) {
+    const energy = [];
+    const tools = [];
+    const special = [...DIAMOND_ITEMS];
+    for (const item of shop.items || []) (item.energy ? energy : tools).push(item);
+    const addRibbon = (label) => {
+      const h = document.createElement("div");
+      h.className = "shop-ribbon";
+      h.textContent = label;
+      list.appendChild(h);
+    };
+    const addCard = (item) => {
       const locked = !shopItemAvailable(save, item);
-      const row = document.createElement("div");
-      row.className = "shop-row" + (locked ? " locked" : "");
-      row.title = item.desc || item.name;
+      const card = document.createElement("div");
+      card.className = "shop-tile" + (locked ? " locked" : "");
       const icon = shopIcon(item);
-      row.innerHTML = `<img class="icon" src="${icon}" alt="">
-        <b>${item.name}</b>
-        <div class="price">${formatCostHtml(item.cost)}</div>`;
+      card.innerHTML = `<span class="shop-qty">${shopQty(item)}</span>
+        <img class="icon" src="${icon}" alt="">`;
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "btn green";
-      btn.textContent = locked ? "還沒打開" : "換";
+      btn.className = "btn green shop-buy";
+      btn.innerHTML = locked ? '<span class="lock" aria-hidden="true"></span>' : formatCostHtml(item.cost);
       btn.disabled = locked || !canAfford(save, item.cost);
-      btn.addEventListener("click", () => buy(item));
-      row.appendChild(btn);
-      list.appendChild(row);
-    }
-  }
-
-  function shopIcon(item) {
-    if (item.item) {
-      const def = ctx.itemDef?.(item.item.chain, item.item.tier);
-      if (def?.img) return def.img;
-    }
-    if (item.energy === 20) return "assets/icons/shop-energy-20.png";
-    if (item.energy === 50) return "assets/icons/shop-energy-50.png";
-    if (item.energy === "full") return "assets/icons/shop-energy-full.png";
-    return "assets/ui/coin.png";
+      btn.addEventListener("click", (e) => { e.stopPropagation(); buy(item); });
+      card.appendChild(btn);
+      bindTip(card, item.name, item.desc || "");
+      list.appendChild(card);
+    };
+    if (energy.length) { addRibbon("能量"); energy.forEach(addCard); }
+    if (tools.length) { addRibbon("道具"); tools.forEach(addCard); }
+    if (special.length) { addRibbon("鑽石"); special.forEach(addCard); }
   }
 
   function buy(item) {
@@ -91,6 +116,11 @@ export function createShop(ctx) {
       payCost(save, item.cost);
       save.energy = Math.min(ENERGY.max, save.energy + add);
       sfx.daily(); toast(`能量 +${add}`);
+    } else if (item.booster) {
+      payCost(save, item.cost);
+      save.boosters = save.boosters || { wand: 0, clear: 0 };
+      save.boosters[item.booster] = (save.boosters[item.booster] || 0) + 1;
+      sfx.daily(); toast(item.booster === "wand" ? "合成棒已放進升級道具" : "過關道具已放進升級道具");
     } else if (item.item) {
       const cap = bagCap(save);
       if ((save.inventory || []).filter(Boolean).length >= cap) {

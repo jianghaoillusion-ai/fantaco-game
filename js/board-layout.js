@@ -9,8 +9,8 @@ export const MAX_CELL = 72;
 export function fitBoardCell(availW, availH) {
   const cols = BOARD_COLS;
   const rows = BOARD_ROWS;
-  const gap = availW < 430 ? 3 : 5;
-  const pad = availW < 430 ? 4 : 6;
+  const gap = 0;
+  const pad = availW < 430 ? 2 : 3;
   const border = 8;
   const cellW = (availW - pad * 2 - gap * (cols - 1) - border) / cols;
   const cellH = (availH - pad * 2 - gap * (rows - 1) - border) / rows;

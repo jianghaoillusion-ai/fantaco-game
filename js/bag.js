@@ -1,4 +1,5 @@
 /** Expandable magic bag. Slot unlocks cost only 星星種子. Never real money. */
+import { bindTip, hideTip } from "./tip.js?v=14";
 
 export const BAG_START = 6;
 export const BAG_MAX = 20;
@@ -49,6 +50,7 @@ export function createBag(ctx) {
   }
 
   function openBag() {
+    hideTip();
     renderInventoryFull();
     const bag = $("#bag");
     if (!bag) return;
@@ -91,11 +93,43 @@ export function createBag(ctx) {
           e.stopPropagation();
           buySlot(i + 1);
         });
+        bindTip(slot, "還沒打開", `用 ${cost} 顆星星種子打開這一格`);
       } else if (items[i]) {
-        slot.appendChild(ctx.makePiece(items[i]));
+        const piece = ctx.makePiece(items[i]);
+        slot.appendChild(piece);
         slot.addEventListener("click", () => placeFromBag(i));
+        bindTip(slot, ctx.infoName(items[i]), "點一下，放回棋盤空位。");
       }
       box.appendChild(slot);
+    }
+    renderBagMats(save);
+  }
+
+  function matTile(src, name, use, count) {
+    const el = document.createElement("div");
+    el.className = "bag-mat";
+    el.innerHTML = `<img src="${src}" alt=""><span class="qty">×${count}</span>`;
+    bindTip(el, name, use);
+    return el;
+  }
+
+  function renderBagMats(save) {
+    const up = document.getElementById("bag-upgrade");
+    const sup = document.getElementById("bag-supply");
+    if (up) {
+      up.innerHTML = "";
+      up.appendChild(matTile("assets/icons/material.png", "修復材料", "用來修復地圖上的小建築。", save.materials || 0));
+      up.appendChild(matTile("assets/items/star-seed.png", "星星種子", "用來加大魔法袋，或之後兌換禮物。", save.starSeeds || 0));
+      const wand = matTile("assets/tiles/star-1.png", "合成棒", "點一下，再點棋盤上的道具，讓它升一階。", save.boosters?.wand || 0);
+      wand.addEventListener("click", (e) => { e.stopPropagation(); ctx.armWand?.(); });
+      up.appendChild(wand);
+      up.appendChild(matTile("assets/icons/gift.png", "過關道具", "下一次完成訂單時，金幣獎勵會加倍。", save.boosters?.clear || 0));
+    }
+    if (sup) {
+      const max = ctx.ENERGY?.max || 100;
+      const n = save.energy || 0;
+      sup.innerHTML = "";
+      sup.appendChild(matTile("assets/icons/energy.png", "能量", `現在 ${n} / ${max}。產生器會用到，會慢慢自己回來。`, n));
     }
   }
 

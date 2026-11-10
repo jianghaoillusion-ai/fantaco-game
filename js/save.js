@@ -8,7 +8,7 @@ export const ENERGY = { max: ENERGY_MAX, regenMs: REGEN_MS };
 
 export function emptySave() {
   return {
-    version: 3,
+    version: 4,
     profile: null,
     xp: 0,
     level: 1,
@@ -16,7 +16,11 @@ export function emptySave() {
     energy: ENERGY_MAX,
     energyAt: Date.now(),
     coins: 0,
+    coinsEarned: 0,
+    diamonds: 0,
     materials: 0,
+    boosters: { wand: 0, clear: 0 },
+    ads: { day: "", count: 0 },
     board: null,
     boardCols: 7,
     boardRows: 9,
@@ -68,10 +72,11 @@ export function loadSave() {
       // Existing boards already filled a full rectangle — keep them fully open.
       if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
       migrateV3(loaded);
+      migrateEconomy(loaded);
       return loaded;
     }
     const old = localStorage.getItem(LEGACY);
-    if (old) return migrate(JSON.parse(old));
+    if (old) { const m = migrate(JSON.parse(old)); migrateEconomy(m); return m; }
   } catch {}
   return emptySave();
 }
@@ -103,6 +108,20 @@ function migrateV3(s) {
     if (s.settings.sfxVol == null) s.settings.sfxVol = 0.85;
   }
   s.version = 3;
+  return s;
+}
+
+function migrateEconomy(s) {
+  if (!s) return s;
+  if (s.diamonds == null) s.diamonds = 0;
+  if (s.coins == null) s.coins = 0;
+  if (s.coinsEarned == null) s.coinsEarned = Math.max(s.xp || 0, 0);
+  s.xp = s.coinsEarned;
+  if (!s.boosters) s.boosters = { wand: 0, clear: 0 };
+  if (s.boosters.wand == null) s.boosters.wand = 0;
+  if (s.boosters.clear == null) s.boosters.clear = 0;
+  if (!s.ads) s.ads = { day: "", count: 0 };
+  s.version = Math.max(s.version || 0, 4);
   return s;
 }
 

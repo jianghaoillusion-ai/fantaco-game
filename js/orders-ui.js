@@ -2,6 +2,7 @@
 
 export function createOrdersUi(ctx) {
   const { $, toast, sfx, persist, ENERGY, todayKey } = ctx;
+  const seenReady = new Set();
 
   function hasItem(orderOrNeed, reservedUid) {
     const save = ctx.getSave();
@@ -109,7 +110,8 @@ export function createOrdersUi(ctx) {
       const ready = hasItem(o);
       const coins = o.reward.coins ?? ((o.reward.seeds || 0) + 4);
       const avatar = (ctx.avatarSrc?.(o.npc) || npc.portrait || "").replace(/assets\/chars\/(\w+)\.png/, "assets/chars/avatars/$1.png");
-      const tip = `＋${coins} 金幣　＋${o.reward.seeds || 0} 星星種子` + (o.reward.materials ? `　＋${o.reward.materials} 材料` : "");
+      const gems = o.reward.diamonds ?? (o.flag ? 2 : 1);
+      const tip = `＋${coins} 金幣　＋${o.reward.seeds || 0} 星星種子` + (gems ? `　＋${gems} 鑽石` : "") + (o.reward.materials ? `　＋${o.reward.materials} 材料` : "");
       const card = document.createElement("div");
       card.className = "order" + (o.flag ? " story" : "") + (ready ? " ready" : "");
       card.dataset.id = o.id;
@@ -118,15 +120,27 @@ export function createOrdersUi(ctx) {
         ${o.flag ? '<span class="book-badge"><img src="assets/icons/book.png" alt="故事"></span>' : ""}
         ${ready ? '<span class="check-badge" aria-hidden="true">✓</span><span class="check-spark"></span>' : ""}
         <img class="npc" src="${avatar}" alt="${npc.name}">
-        <div class="need">
+        <div class="need${ready ? " have" : ""}">
           <img class="${ready ? "have" : "missing"}" src="${def?.img || ""}" alt="${def?.name || ""}">
         </div>
-        <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>`;
+        <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/ui/diamond.png" alt="">${gems}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>
+        ${ready ? '<button type="button" class="give">交付</button>' : ""}`;
       card.addEventListener("click", () => {
         if (ready) clickGive(o.id, card);
         else { sfx.invalid(); toast("還沒做出來喔"); }
       });
+      card.querySelector(".give")?.addEventListener("click", (e) => {
+        e.stopPropagation();
+        clickGive(o.id, card);
+      });
+      if (ready && !seenReady.has(o.id)) {
+        seenReady.add(o.id);
+        toast("可以交付囉！點「交付」交給朋友。");
+      }
       row.appendChild(card);
+    }
+    for (const id of [...seenReady]) {
+      if (!(save.orders || []).some((x) => x.id === id)) seenReady.delete(id);
     }
     box.appendChild(row);
   }

@@ -86,6 +86,16 @@ export function stopMusic() {
   }
 }
 
+export function pauseMusic() {
+  try { musicEl.el?.pause(); } catch {}
+}
+
+export function resumeMusic() {
+  if (!settings.music || musicGain() === 0) return;
+  if (musicEl.el) { musicEl.el.play().catch(() => {}); return; }
+  if (lastMusicId) playMusic(lastMusicId);
+}
+
 export function playClearTheme() {
   /* Official 〈飛向藍藍天〉 chorus clip (from 飛向藍藍天_MMM v1.wav, ~28s). */
   stopMusic();
@@ -166,5 +176,10 @@ export const sfx = {
   energy() { beep(240, 0.18, "square", 0.03); },
   level() { beep(392, 0.12, "sine", 0.05); beep(523, 0.12, "sine", 0.05, 0.1); beep(659, 0.12, "sine", 0.05, 0.2); beep(784, 0.28, "sine", 0.06, 0.32); },
   daily() { beep(700, 0.1, "sine", 0.05); beep(900, 0.14, "sine", 0.05, 0.08); },
-  combo(n) { beep(500 + n * 80, 0.1, "triangle", 0.055); }
+  combo(n) { beep(500 + n * 80, 0.1, "triangle", 0.055); },
+  coin() {
+    beep(880, 0.09, "sine", 0.032);
+    beep(1240, 0.11, "triangle", 0.028, 0.05);
+    beep(1760, 0.09, "sine", 0.018, 0.1);
+  }
 };

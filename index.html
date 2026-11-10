@@ -13,16 +13,13 @@
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=11">
-  <link rel="stylesheet" href="css/home.css?v=11">
-  <link rel="stylesheet" href="css/story.css?v=11">
-  <link rel="stylesheet" href="css/bag.css?v=11">
-  <link rel="stylesheet" href="css/orders.css?v=11">
-  <link rel="stylesheet" href="css/settings.css?v=11">
-  <link rel="stylesheet" href="css/quality.css?v=11">
+  <link rel="stylesheet" href="css/app.css?v=14">
+  <link rel="stylesheet" href="css/home.css?v=14">
+  <link rel="stylesheet" href="css/story.css?v=14">
+  <link rel="stylesheet" href="css/bag.css?v=14">
+  <link rel="stylesheet" href="css/orders.css?v=14">
+  <link rel="stylesheet" href="css/settings.css?v=14">
+  <link rel="stylesheet" href="css/quality.css?v=14">
 </head>
 <body>
   <div id="app">
@@ -68,6 +65,11 @@
           <button class="home-ico" id="btn-lyrics" type="button" title="聽聽主題曲">
             <span class="tile"><img src="assets/icons/song.png" alt=""></span>飛向藍藍天
           </button>
+          <button class="home-ico ad-entry" id="btn-watch-ad" type="button" data-open-ad title="看〈飛向藍藍天〉領獎勵">
+            <span class="tile"><img src="assets/icons/tv.png" alt=""></span>
+            <span class="ad-badge" data-ad-left>5</span>
+            看影片
+          </button>
           <button class="home-ico" id="btn-howto" type="button" title="合成與訂單的玩法">
             <span class="tile"><img src="assets/icons/howto.png" alt=""></span>怎麼玩
           </button>
@@ -78,9 +80,13 @@
     <section id="play" class="screen">
       <div class="play-frame">
         <div class="hud play-hud">
-          <span class="lv-badge" aria-label="等級"><span class="lv-star" aria-hidden="true">★</span><b data-level>Lv.1</b><span class="xpbar"><i data-xp></i></span></span>
+          <span class="lv-badge" aria-label="等級與金幣經驗" data-xp-tip>
+            <span class="lv-star" aria-hidden="true"><img src="assets/ui/coin.png" alt=""></span>
+            <b data-level>Lv.1</b>
+            <span class="xpbar" aria-hidden="true"><i data-xp></i></span>
+          </span>
           <span class="pill energy" title="能量會慢慢回來"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span><span class="emax">/<span data-energy-max>100</span></span><small data-energy-in>已滿</small></span>
-          <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
+          <span class="pill diamonds" title="鑽石"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
           <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
           <span class="pill mats" title="修復材料"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
           <button type="button" id="btn-hud-settings" class="icon-btn hud-gear" aria-label="設定" title="設定">
@@ -126,8 +132,8 @@
     <section id="map" class="screen pane">
       <div class="hud">
         <button class="icon-btn" data-back="play" aria-label="返回棋盤">←</button>
-        <span class="lv-badge compact" aria-label="等級"><span class="lv-star" aria-hidden="true">★</span><b data-level>Lv.1</b></span>
-        <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
+        <span class="lv-badge compact" aria-label="等級與金幣經驗" data-xp-tip><span class="lv-star" aria-hidden="true"><img src="assets/ui/coin.png" alt=""></span><b data-level>Lv.1</b><span class="xpbar compact-bar" aria-hidden="true"><i data-xp></i></span></span>
+        <span class="pill diamonds" title="鑽石"><img src="assets/ui/diamond.png" alt=""> <span data-diamonds>0</span></span>
         <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
         <button type="button" id="btn-map-shop" class="btn map-shop">小舖</button>
       </div>
@@ -226,24 +232,37 @@
 
     <div id="result" class="overlay">
       <div class="modal result-card">
-        <img src="assets/mascot/painted/hero.png" alt="眠花糖" width="160" style="margin:0 auto 8px">
+        <div id="result-lv" class="lv-badge result-lv-top"></div>
         <h2 id="result-title">這一章，完成了！</h2>
         <p id="result-sub"></p>
-        <div id="result-lv" class="lv-badge"></div>
-        <div id="result-rewards" class="result-rewards"></div>
+        <div class="unlock-panel">
+          <h4>解鎖</h4>
+          <div id="result-rewards" class="result-rewards"></div>
+        </div>
+        <img class="result-hero" src="assets/mascot/painted/hero.png" alt="眠花糖">
         <div id="result-lyrics" class="lyrics result-lyrics"></div>
-        <button class="btn wide" id="btn-result-ok" type="button">繼續</button>
+        <button class="btn green wide" id="btn-result-ok" type="button">領取</button>
       </div>
     </div>
 
 
     <div id="bag" class="overlay">
       <div class="modal bag-card">
-        <h3>魔法袋</h3>
-        <p class="bag-hint">點物品就能放回棋盤。用星星種子加大袋子。</p>
-        <div class="bag-pouch">
-        <div id="inv-cells" class="inv-cells bag-grid"></div>
-        </div>
+        <section class="bag-section bag-stored">
+          <h3>魔法袋</h3>
+          <p class="bag-hint">點物品就能放回棋盤。用星星種子加大袋子。</p>
+          <div class="bag-pouch">
+            <div id="inv-cells" class="inv-cells bag-grid"></div>
+          </div>
+        </section>
+        <section class="bag-section bag-upgrade">
+          <h4>升級道具</h4>
+          <div id="bag-upgrade" class="bag-mats"></div>
+        </section>
+        <section class="bag-section bag-supply">
+          <h4>補給</h4>
+          <div id="bag-supply" class="bag-mats"></div>
+        </section>
         <button class="btn" id="btn-bag-close" type="button">關閉</button>
       </div>
     </div>
@@ -254,6 +273,10 @@
         <h3 id="shop-title">微笑小舖</h3>
         <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。</p>
         <div id="shop-list" class="shop-list"></div>
+        <button class="btn ghost ad-entry" id="btn-shop-ad" type="button" data-open-ad>
+          <img src="assets/icons/tv.png" alt="" width="28" height="28">看影片領獎勵
+          <span class="ad-badge">剩下 <span data-ad-left>5</span>/5</span>
+        </button>
         <button class="btn" id="btn-shop-close" type="button">關閉</button>
       </div>
     </div>
@@ -307,6 +330,29 @@
       </div>
     </div>
 
+    <div id="energy-prompt" class="overlay">
+      <div class="modal energy-card">
+        <img src="assets/icons/energy.png" alt="" width="72" style="margin:0 auto 8px">
+        <h3>能量用完了</h3>
+        <p>看一支〈飛向藍藍天〉，就能領一點能量、鑽石或金幣。不用花錢。</p>
+        <p>今天還剩 <b data-ad-left>5</b>/5 次</p>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
+          <button class="btn green" id="btn-ad-from-energy" type="button" data-open-ad>看影片</button>
+          <button class="btn ghost" id="btn-energy-later" type="button">以後再說</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="ad-sheet" class="overlay">
+      <div class="modal ad-card">
+        <h3>看影片領獎勵</h3>
+        <p>今天還剩 <b data-ad-left>5</b>/5 次。要看到最後才會得到獎勵。</p>
+        <div class="ad-frame"><div id="ad-player"></div></div>
+        <p id="ad-prize" class="notice">看完可以領：能量、鑽石或金幣</p>
+        <button class="btn ghost" id="btn-ad-close" type="button">關閉</button>
+      </div>
+    </div>
+
     <div id="toast" class="toast" role="status"></div>
   </div>
   <script type="importmap">
@@ -317,6 +363,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=11"></script>
+  <script type="module" src="js/app.js?v=14"></script>
 </body>
 </html>

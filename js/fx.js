@@ -150,5 +150,50 @@ export function createFx(ctx) {
     setTimeout(() => layer.remove(), 1800);
   }
 
-  return { flyTo, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore };
+  function flyCoins(fromEl, toEl, done) {
+    const a = (fromEl instanceof Element ? fromEl.getBoundingClientRect() : null)
+      || { left: innerWidth * 0.5, top: innerHeight * 0.45, width: 0, height: 0 };
+    const badge = toEl instanceof Element ? toEl : document.querySelector("#play .lv-badge, [data-xp-tip], .lv-badge");
+    const b = badge?.getBoundingClientRect?.()
+      || { left: 24, top: 24, width: 32, height: 32 };
+    const x0 = a.left + a.width / 2;
+    const y0 = a.top + a.height / 2;
+    const x1 = b.left + b.width * 0.22;
+    const y1 = b.top + b.height / 2;
+    const n = 6;
+    let left = n;
+    for (let i = 0; i < n; i++) {
+      const img = document.createElement("img");
+      img.src = "assets/ui/coin.png";
+      img.alt = "";
+      img.className = "fly-coin";
+      img.style.left = x0 + "px";
+      img.style.top = y0 + "px";
+      document.body.appendChild(img);
+      const spread = (i - (n - 1) / 2) * 36;
+      const midX = (x0 + x1) / 2 + spread;
+      const midY = Math.min(y0, y1) - 70 - (i % 3) * 18;
+      const delay = i * 55;
+      const anim = img.animate([
+        { transform: "translate(-50%,-50%) scale(.35) rotate(0deg)", opacity: 0.9, offset: 0 },
+        { transform: `translate(${midX - x0 - 0}px, ${midY - y0}px) scale(1) rotate(180deg)`, opacity: 1, offset: 0.48 },
+        { transform: `translate(${x1 - x0}px, ${y1 - y0}px) scale(.45) rotate(360deg)`, opacity: 1, offset: 1 }
+      ], { duration: 680, delay, easing: "cubic-bezier(.22,.61,.36,1)", fill: "forwards" });
+      anim.onfinish = () => {
+        img.remove();
+        left -= 1;
+        if (left <= 0) {
+          if (badge) {
+            badge.classList.remove("lv-spin");
+            void badge.offsetWidth;
+            badge.classList.add("lv-spin");
+            setTimeout(() => badge.classList.remove("lv-spin"), 700);
+          }
+          done?.();
+        }
+      };
+    }
+  }
+
+  return { flyTo, flyCoins, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore };
 }

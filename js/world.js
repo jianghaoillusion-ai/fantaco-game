@@ -133,6 +133,7 @@ export function canAfford(save, cost = {}) {
   if ((cost.coins || 0) > (save.coins || 0)) return false;
   if ((cost.stars || 0) > (save.starSeeds || 0)) return false;
   if ((cost.materials || 0) > (save.materials || 0)) return false;
+  if ((cost.diamonds || 0) > (save.diamonds || 0)) return false;
   return true;
 }
 
@@ -140,6 +141,7 @@ export function payCost(save, cost = {}) {
   save.coins = (save.coins || 0) - (cost.coins || 0);
   save.starSeeds = (save.starSeeds || 0) - (cost.stars || 0);
   save.materials = (save.materials || 0) - (cost.materials || 0);
+  save.diamonds = (save.diamonds || 0) - (cost.diamonds || 0);
 }
 
 export function formatCost(cost = {}) {
@@ -147,6 +149,7 @@ export function formatCost(cost = {}) {
   if (cost.coins) bits.push(`${cost.coins} 金幣`);
   if (cost.stars) bits.push(`${cost.stars} 星星種子`);
   if (cost.materials) bits.push(`${cost.materials} 材料`);
+  if (cost.diamonds) bits.push(`${cost.diamonds} 鑽石`);
   return bits.join("　") || "免費";
 }
 
@@ -155,5 +158,6 @@ export function formatCostHtml(cost = {}) {
   if (cost.coins) bits.push(`<span class="price"><img src="assets/ui/coin.png" alt="">${cost.coins}</span>`);
   if (cost.stars) bits.push(`<span class="price"><img src="assets/items/star-seed.png" alt="">${cost.stars}</span>`);
   if (cost.materials) bits.push(`<span class="price"><img src="assets/icons/material.png" alt="">${cost.materials}</span>`);
+  if (cost.diamonds) bits.push(`<span class="price"><img src="assets/ui/diamond.png" alt="">${cost.diamonds}</span>`);
   return bits.join(" ") || "免費";
 }
