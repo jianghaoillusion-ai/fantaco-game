@@ -10,7 +10,8 @@
       "reward": {
         "seeds": 4,
         "xp": 20,
-        "energy": 0
+        "energy": 0,
+        "coins": 15
       },
       "chapter": "village",
       "flag": "v1",
@@ -53,7 +54,8 @@
       "reward": {
         "seeds": 5,
         "xp": 30,
-        "energy": 5
+        "energy": 5,
+        "coins": 20
       },
       "chapter": "village",
       "flag": "v2",
@@ -133,7 +135,8 @@
       "reward": {
         "seeds": 5,
         "xp": 30,
-        "energy": 0
+        "energy": 0,
+        "coins": 20
       },
       "chapter": "village",
       "flag": "v3",
@@ -195,7 +198,8 @@
       "reward": {
         "seeds": 6,
         "xp": 40,
-        "energy": 5
+        "energy": 5,
+        "coins": 25
       },
       "chapter": "village",
       "flag": "v4",
@@ -226,7 +230,8 @@
       "reward": {
         "seeds": 10,
         "xp": 60,
-        "energy": 8
+        "energy": 8,
+        "coins": 30
       },
       "chapter": "village",
       "flag": "ch1-end",
@@ -289,7 +294,8 @@
       "reward": {
         "seeds": 6,
         "xp": 40,
-        "energy": 0
+        "energy": 0,
+        "coins": 15
       },
       "chapter": "journey",
       "flag": "j1",
@@ -357,7 +363,8 @@
       "reward": {
         "seeds": 7,
         "xp": 50,
-        "energy": 5
+        "energy": 5,
+        "coins": 20
       },
       "chapter": "journey",
       "flag": "j2",
@@ -388,7 +395,8 @@
       "reward": {
         "seeds": 8,
         "xp": 55,
-        "energy": 5
+        "energy": 5,
+        "coins": 20
       },
       "chapter": "journey",
       "flag": "j3",
@@ -468,7 +476,8 @@
       "reward": {
         "seeds": 8,
         "xp": 60,
-        "energy": 5
+        "energy": 5,
+        "coins": 25
       },
       "chapter": "journey",
       "flag": "j4",
@@ -499,7 +508,8 @@
       "reward": {
         "seeds": 12,
         "xp": 80,
-        "energy": 10
+        "energy": 10,
+        "coins": 35
       },
       "chapter": "journey",
       "flag": "ch2-end",
@@ -544,7 +554,8 @@
       "reward": {
         "seeds": 8,
         "xp": 50,
-        "energy": 5
+        "energy": 5,
+        "coins": 20
       },
       "chapter": "candy",
       "flag": "c1",
@@ -587,7 +598,8 @@
       "reward": {
         "seeds": 10,
         "xp": 60,
-        "energy": 5
+        "energy": 5,
+        "coins": 25
       },
       "chapter": "candy",
       "flag": "c2",
@@ -618,7 +630,8 @@
       "reward": {
         "seeds": 10,
         "xp": 70,
-        "energy": 5
+        "energy": 5,
+        "coins": 30
       },
       "chapter": "candy",
       "flag": "c3",
@@ -680,7 +693,8 @@
       "reward": {
         "seeds": 14,
         "xp": 90,
-        "energy": 8
+        "energy": 8,
+        "coins": 35
       },
       "chapter": "candy",
       "flag": "c4",
@@ -717,7 +731,8 @@
       "reward": {
         "seeds": 18,
         "xp": 120,
-        "energy": 15
+        "energy": 15,
+        "coins": 40
       },
       "chapter": "candy",
       "flag": "ch3-end",

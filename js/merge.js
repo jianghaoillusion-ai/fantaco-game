@@ -175,6 +175,25 @@ export function produceFrom(genCell, gens) {
   return { kind: "item", chain: next.chain, tier: next.tier, uid: makeUid() };
 }
 
+/** Full boards never spend energy or silently send generated items to inventory. */
+export function generateItem(save, generator, gens, energy, random = Math.random) {
+  const spaces = save.board.map((cell, i) => cell ? -1 : i).filter(i => i >= 0);
+  if (!spaces.length) return { error: "full" };
+  const cost = energy.cost ?? 1;
+  if (save.energy < cost) return { error: "energy" };
+  const item = produceFrom(generator, gens);
+  if (!item) return { error: "generator" };
+  const index = spaces[Math.floor(random() * spaces.length)];
+  if (save.energy >= energy.max) save.energyAt = Date.now();
+  save.energy -= cost;
+  save.board[index] = item;
+  return { item, index };
+}
+
+export function endlessRegion(completed, balance) {
+  return 1 + Math.floor(completed / balance.ordersPerRegion);
+}
+
 export function firstEmpty(board) {
   return board.findIndex((c) => !c);
 }
@@ -234,15 +253,16 @@ export function makeProceduralOrder(ctx) {
   const { chains, chapter, discovered, npcsByChapter, seq } = ctx;
   const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
   const unlockedChains = Object.keys(chains).filter((id) => {
+    if (availableChains) return availableChains.includes(id);
     const ch = chains[id].chapter;
     return order.indexOf(ch) <= order.indexOf(chapter);
   }).filter((id) => {
-    if (id === "star" || id === "garden") return true;
+    if (availableChains || id === "star" || id === "garden") return true;
     return discoveredMax(discovered, id) >= 1;
   });
   if (!unlockedChains.length) return null;
   const chain = unlockedChains[Math.floor(Math.random() * unlockedChains.length)];
-  const cap = Math.max(2, discoveredMax(discovered, chain));
+  const cap = region > 0 ? (balance.startTier ?? 2) + Math.floor((region - 1) / (balance.regionsPerTier ?? 2)) : Math.max(2, discoveredMax(discovered, chain));
   const maxT = maxTier(chains, chain);
   // 4 slots style: vary difficulty by seq % 4
   const slot = (seq || 0) % 4;
@@ -253,14 +273,16 @@ export function makeProceduralOrder(ctx) {
   tier = Math.max(2, Math.min(maxT, tier));
   const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
-  const seeds = 3 + tier * 2 + (slot === 3 ? 6 : 0);
-  const xp = 15 + tier * 10 + (slot === 3 ? 20 : 0);
-  const energy = slot === 3 ? 6 : (slot === 0 ? 0 : 3);
+  const seeds = (balance.seedBase ?? 3) + tier * (balance.seedsPerTier ?? 2) + (slot === 3 ? (balance.hardSeeds ?? 6) : 0);
+  const xp = (balance.xpBase ?? 15) + tier * (balance.xpPerTier ?? 10) + (slot === 3 ? (balance.hardXp ?? 20) : 0);
+  const energy = slot === 3 ? (balance.hardEnergy ?? 6) : (slot === 0 ? 0 : (balance.energy ?? 3));
+  const coins = (balance.coinBase ?? 5) + tier * (balance.coinsPerTier ?? 5);
   return {
     id: "p-" + makeUid(),
     npc,
     need: { chain, tier },
-    reward: { seeds, xp, energy },
+    reward: { seeds, xp, energy, coins },
+    region,
     chapter,
     procedural: true
   };
