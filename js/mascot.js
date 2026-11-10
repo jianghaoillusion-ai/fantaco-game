@@ -5,26 +5,26 @@
  * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
-  idle: "assets/mascot/painted/three.png",
-  idle2: "assets/mascot/painted/front.png",
-  cheer: "assets/mascot/painted/jump.png",
-  jump: "assets/mascot/painted/jump.png",
-  happy: "assets/mascot/painted/front.png",
-  wish: "assets/mascot/painted/wish.png",
-  hero: "assets/mascot/painted/hero.png",
-  think: "assets/mascot/painted/sit.png",
-  sit: "assets/mascot/painted/sit.png",
-  sleep: "assets/mascot/painted/sleep.png",
-  sad: "assets/mascot/painted/sleep.png",
-  side: "assets/mascot/painted/side.png",
-  run: "assets/mascot/painted/run.png",
-  back: "assets/mascot/painted/back.png",
-  face: "assets/mascot/painted/face.png",
-  front: "assets/mascot/painted/front.png"
+  idle: "assets/mascot/sticker/three.png",
+  idle2: "assets/mascot/sticker/front.png",
+  cheer: "assets/mascot/sticker/jump.png",
+  jump: "assets/mascot/sticker/jump.png",
+  happy: "assets/mascot/sticker/front.png",
+  wish: "assets/mascot/sticker/hold-star.png",
+  hero: "assets/mascot/sticker/hero.png",
+  think: "assets/mascot/sticker/sit-closed.png",
+  sit: "assets/mascot/sticker/sit-closed.png",
+  sleep: "assets/mascot/sticker/sleep.png",
+  sad: "assets/mascot/sticker/sleep.png",
+  side: "assets/mascot/sticker/side.png",
+  run: "assets/mascot/sticker/run.png",
+  back: "assets/mascot/sticker/back.png",
+  face: "assets/mascot/sticker/face.png",
+  front: "assets/mascot/sticker/front.png"
 };
 
 /** Load data/mascot-poses.json so later official sticker frames can drop in without a code change. */
-fetch("data/mascot-poses.json?v=19").then((r) => r.json()).then((man) => {
+fetch("data/mascot-poses.json?v=24").then((r) => r.json()).then((man) => {
   const setName = man.defaultSet || "painted";
   const set = (man.sets && man.sets[setName]) || {};
   for (const [k, v] of Object.entries(set)) {

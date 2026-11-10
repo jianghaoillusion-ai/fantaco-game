@@ -8,6 +8,23 @@ export function itemDef(chains, chain, tier) {
   return chains[chain]?.items?.[tier - 1] || null;
 }
 
+/** Up to 5 icons around the current tier, for Travel Town-style chain peeks. */
+export function chainPreview(chains, chain, tier) {
+  const items = chains?.[chain]?.items || [];
+  if (!items.length) return [];
+  const i = Math.max(0, (tier || 1) - 1);
+  let start = Math.max(0, i - 2);
+  let end = Math.min(items.length, start + 5);
+  start = Math.max(0, end - 5);
+  return items.slice(start, end).map((it, k) => ({
+    img: it.img,
+    name: it.name,
+    tier: start + k + 1,
+    current: start + k + 1 === (tier || 1)
+  }));
+}
+
+
 export function genDef(gens, id, tier) {
   const g = gens[id];
   if (!g) return null;

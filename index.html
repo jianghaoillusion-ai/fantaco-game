@@ -13,20 +13,20 @@
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/app.css?v=19">
-  <link rel="stylesheet" href="css/home.css?v=19">
-  <link rel="stylesheet" href="css/story.css?v=19">
-  <link rel="stylesheet" href="css/bag.css?v=19">
-  <link rel="stylesheet" href="css/orders.css?v=19">
-  <link rel="stylesheet" href="css/settings.css?v=19">
-  <link rel="stylesheet" href="css/quality.css?v=19">
+  <link rel="stylesheet" href="css/app.css?v=24">
+  <link rel="stylesheet" href="css/home.css?v=24">
+  <link rel="stylesheet" href="css/story.css?v=24">
+  <link rel="stylesheet" href="css/bag.css?v=24">
+  <link rel="stylesheet" href="css/orders.css?v=24">
+  <link rel="stylesheet" href="css/settings.css?v=24">
+  <link rel="stylesheet" href="css/quality.css?v=24">
 </head>
 <body>
   <div id="app">
 
     <section id="profile" class="screen">
       <div class="modal" style="margin:auto">
-        <img src="assets/mascot/painted/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/sticker/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <h2>先取一個暱稱</h2>
         <p>給自己或小朋友一個冒險的名字。<br>進度會記在這台裝置上。</p>
         <form id="nick-form">
@@ -44,7 +44,7 @@
       </button>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
       <h1>眠花糖的異想世界</h1>
-      <img class="hero" src="assets/mascot/painted/jump.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
+      <img class="hero" src="assets/mascot/sticker/jump.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
       <div class="actions">
         <button class="btn wide" id="btn-play">開始冒險</button>
         <div class="home-dock" role="navigation" aria-label="主畫面">
@@ -99,6 +99,7 @@
           <img class="info-thumb" id="info-thumb" alt="" hidden>
           <div class="info-text">
             <b id="info-name"></b>
+            <span class="info-chain" id="info-chain" hidden></span>
             <span id="info-hint"></span>
           </div>
           <button type="button" id="btn-sell" class="sell-btn" disabled>出售</button>
@@ -215,7 +216,7 @@
         <span></span>
       </div>
       <div class="modal" style="margin:24px auto;text-align:center">
-        <img src="assets/mascot/painted/wish.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/sticker/hold-star.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <p id="daily-status">今天的禮物在這裡。</p>
         <p class="notice">連續來領，能量和星星種子會多一點點。</p>
         <button class="btn wide" id="btn-claim-daily" type="button">領取今日禮物</button>
@@ -231,7 +232,7 @@
           <h4>解鎖</h4>
           <div id="result-rewards" class="result-rewards"></div>
         </div>
-        <img class="result-hero" src="assets/mascot/painted/hero.png" alt="眠花糖">
+        <img class="result-hero" src="assets/mascot/sticker/hold-star.png" alt="眠花糖">
         <div id="result-lyrics" class="lyrics result-lyrics"></div>
         <button class="btn green wide" id="btn-result-ok" type="button">領取</button>
       </div>
@@ -377,6 +378,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=19"></script>
+  <script type="module" src="js/app.js?v=24"></script>
 </body>
 </html>

@@ -2772,3 +2772,347 @@ body.is-dragging .piece.origin-ghost{ opacity: .32; filter: grayscale(.1); }
 @media (prefers-reduced-motion: reduce){
   #title .hero, .story-actor.mascot img, .mascot-2d{ animation: none !important; }
 }
+
+
+/* ========== v5.12: item popover, story bubble, partner sides ========== */
+
+.game-tip{
+  min-width: 0;
+  width: max-content;
+  max-width: min(228px, calc(100vw - 16px));
+  padding: 8px 10px;
+  white-space: nowrap;
+}
+.game-tip.has-chain{ max-width: min(228px, calc(100vw - 16px)); }
+.game-tip b{ font-size: 13px; white-space: nowrap; }
+.game-tip span{ font-size: 11px; margin-top: 2px; }
+.game-tip span.game-tip-chain,
+.game-tip-chain{
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 3px !important;
+  margin-top: 6px !important;
+  white-space: nowrap !important;
+  width: max-content !important;
+}
+.game-tip-chain img{
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1px rgba(40,24,8,.2));
+  opacity: .72;
+}
+.game-tip-chain img.now{
+  width: 28px;
+  height: 28px;
+  opacity: 1;
+  outline: 2px solid #f0c040;
+  outline-offset: 1px;
+  border-radius: 6px;
+  background: #fff8d8;
+}
+#item-info .info-chain{
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+}
+#item-info .info-chain[hidden]{ display: none !important; }
+#item-info .info-chain img{
+  width: 22px; height: 22px; object-fit: contain;
+}
+#item-info .info-chain img.now{
+  width: 28px; height: 28px;
+  outline: 2px solid #c9843a;
+  outline-offset: 1px;
+  border-radius: 6px;
+  background: #fff8d8;
+}
+#item-info #info-hint:empty{ display: none; }
+
+/* Story bubble: 2–3 full lines, never clipped mid-sentence */
+#story .story-stage{
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-end !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+}
+#story .portraits,
+#portraits,
+#story #portraits{
+  overflow: visible !important;
+  bottom: 196px !important;
+  top: 0 !important;
+}
+#story .bubble,
+#story-bubble{
+  flex: none !important;
+  position: relative !important;
+  z-index: 8 !important;
+  min-height: 172px !important;
+  max-height: none !important;
+  overflow: visible !important;
+  padding: 14px 16px 28px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 640px !important;
+  margin: 0 auto !important;
+}
+#story .bubble p,
+#bubble-tx{
+  overflow: visible !important;
+  max-height: none !important;
+  min-height: 4.8em !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  white-space: pre-wrap !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+  line-break: loose !important;
+}
+@media (max-width: 400px){
+  #story .bubble p, #bubble-tx{ font-size: 15px !important; }
+}
+
+/* Partners stay on their sides; speaker does not sit on top of them */
+#story #portraits .story-actor.speak,
+#story #portraits .story-actor.speak.enter,
+#story #portraits .story-actor.mascot.speak,
+#story #portraits .story-actor.mascot.speak.enter{
+  width: min(44%, 320px) !important;
+  height: 50vh !important;
+  max-height: 50vh !important;
+  left: 50% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) !important;
+  overflow: visible !important;
+  align-items: flex-end !important;
+  z-index: 3 !important;
+}
+#story #portraits.has-left:not(.has-right) .story-actor.speak,
+#story #portraits.has-left:not(.has-right) .story-actor.speak.enter{
+  left: 62% !important;
+}
+#story #portraits.has-right:not(.has-left) .story-actor.speak,
+#story #portraits.has-right:not(.has-left) .story-actor.speak.enter{
+  left: 38% !important;
+}
+#story #portraits.has-left.has-right .story-actor.speak,
+#story #portraits.has-left.has-right .story-actor.speak.enter{
+  left: 50% !important;
+  width: min(40%, 280px) !important;
+}
+#story #portraits .story-actor.speak img,
+#story #portraits .story-actor.speak.enter img,
+#story #portraits .story-actor.mascot.speak img,
+#story #portraits .story-actor.mascot.speak.enter img{
+  height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+
+#story #portraits .story-actor.dim,
+#story #portraits .story-actor.dim:first-child,
+#story #portraits .story-actor.dim:last-child,
+#story #portraits .story-actor.dim:nth-of-type(1),
+#portraits .story-actor.dim:first-child,
+.story-actor.dim:last-child{
+  width: min(30%, 210px) !important;
+  height: 35vh !important;
+  max-height: 35vh !important;
+  top: auto !important;
+  bottom: 0 !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+  filter: brightness(.82) saturate(.88) !important;
+  z-index: 2 !important;
+  align-items: flex-end !important;
+}
+#story #portraits .story-actor.dim img,
+#story #portraits .story-actor.dim:first-child img,
+#story #portraits .story-actor.dim:last-child img{
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+#story #portraits .story-actor.dim[data-side="left"],
+#story #portraits .story-actor.dim[data-side="left"]:first-child,
+#story #portraits .story-actor.dim[data-side="left"]:last-child,
+#story #portraits .story-actor.dim[data-side="left"]:nth-of-type(1){
+  left: 1% !important;
+  right: auto !important;
+  transform: none !important;
+  justify-content: flex-start !important;
+}
+#story #portraits .story-actor.dim[data-side="right"],
+#story #portraits .story-actor.dim[data-side="right"]:first-child,
+#story #portraits .story-actor.dim[data-side="right"]:last-child,
+#story #portraits .story-actor.dim[data-side="right"]:nth-of-type(1){
+  left: auto !important;
+  right: 1% !important;
+  transform: none !important;
+  justify-content: flex-end !important;
+}
+@media (max-height: 700px){
+  #story #portraits .story-actor.speak,
+  #story #portraits .story-actor.speak.enter{ height: 48vh !important; max-height: 48vh !important; }
+  #story #portraits .story-actor.dim,
+  #story #portraits .story-actor.dim:first-child,
+  #story #portraits .story-actor.dim:last-child{ height: 34vh !important; max-height: 34vh !important; }
+  #story .bubble, #story-bubble{ min-height: 156px !important; }
+  #story .portraits, #portraits, #story #portraits{ bottom: 180px !important; }
+}
+
+/* ========== v5.12: head-height normalised story scale ==========
+   Speaker body (微笑姐姐 hair-to-feet) ≈ 50vh. Partners use the same
+   head scale at 88%. Shared ground line; feet sit behind the bubble.
+   Do not size portraits by box height — that made 飛飛's chibi head
+   larger than 微笑姐姐's. */
+#story .portraits,
+#portraits,
+#story #portraits{
+  --target-head: calc(50vh * 186 / 659);
+  --partner-mul: 0.88;
+  --ground: 132px;
+  overflow: visible !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  pointer-events: none;
+}
+#story .bubble,
+#story-bubble{
+  position: relative !important;
+  z-index: 8 !important;
+}
+#story #portraits .story-actor,
+#story #portraits .story-actor.speak,
+#story #portraits .story-actor.speak.enter,
+#story #portraits .story-actor.mascot,
+#story #portraits .story-actor.mascot.speak,
+#story #portraits .story-actor.mascot.speak.enter,
+#story #portraits .story-actor.dim,
+#story #portraits .story-actor.dim:first-child,
+#story #portraits .story-actor.dim:last-child,
+#story #portraits .story-actor.dim:nth-of-type(1),
+#portraits .story-actor,
+#portraits .story-actor.dim:first-child{
+  --img-w: 540;
+  --img-h: 720;
+  --head-h: 200;
+  --feet: 687;
+  --role-mul: 1;
+  --scale: calc(var(--target-head) / var(--head-h) * var(--role-mul));
+  width: auto !important;
+  height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  top: auto !important;
+  bottom: var(--ground) !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  pointer-events: none;
+}
+#story #portraits .story-actor.mascot,
+#story #portraits .story-actor.mascot.speak,
+#story #portraits .story-actor.mascot.speak.enter{
+  --img-w: 248;
+  --img-h: 441;
+  --head-h: 105;
+  --feet: 429;
+}
+#story #portraits .story-actor.speak,
+#story #portraits .story-actor.speak.enter,
+#story #portraits .story-actor.mascot.speak,
+#story #portraits .story-actor.mascot.speak.enter{
+  --role-mul: 1;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  justify-content: center !important;
+  z-index: 3 !important;
+  filter: drop-shadow(0 16px 18px rgba(59,68,104,.2)) !important;
+}
+#story #portraits.has-left:not(.has-right) .story-actor.speak,
+#story #portraits.has-left:not(.has-right) .story-actor.speak.enter{
+  left: 62% !important;
+}
+#story #portraits.has-right:not(.has-left) .story-actor.speak,
+#story #portraits.has-right:not(.has-left) .story-actor.speak.enter{
+  left: 38% !important;
+}
+#story #portraits.has-left.has-right .story-actor.speak,
+#story #portraits.has-left.has-right .story-actor.speak.enter{
+  left: 50% !important;
+}
+#story #portraits .story-actor.dim,
+#story #portraits .story-actor.dim:first-child,
+#story #portraits .story-actor.dim:last-child,
+#story #portraits .story-actor.dim:nth-of-type(1),
+#portraits .story-actor.dim:first-child,
+.story-actor.dim:last-child{
+  --role-mul: var(--partner-mul);
+  opacity: 1 !important;
+  filter: brightness(.82) saturate(.88) drop-shadow(0 12px 14px rgba(59,68,104,.16)) !important;
+  z-index: 2 !important;
+}
+#story #portraits .story-actor.dim[data-side="left"],
+#story #portraits .story-actor.dim[data-side="left"]:first-child,
+#story #portraits .story-actor.dim[data-side="left"]:last-child,
+#story #portraits .story-actor.dim[data-side="left"]:nth-of-type(1){
+  left: 1% !important;
+  right: auto !important;
+  transform: none !important;
+  justify-content: flex-start !important;
+}
+#story #portraits .story-actor.dim[data-side="right"],
+#story #portraits .story-actor.dim[data-side="right"]:first-child,
+#story #portraits .story-actor.dim[data-side="right"]:last-child,
+#story #portraits .story-actor.dim[data-side="right"]:nth-of-type(1){
+  left: auto !important;
+  right: 1% !important;
+  transform: none !important;
+  justify-content: flex-end !important;
+}
+#story #portraits .story-actor img,
+#story #portraits .story-actor.speak img,
+#story #portraits .story-actor.speak.enter img,
+#story #portraits .story-actor.mascot img,
+#story #portraits .story-actor.mascot.speak img,
+#story #portraits .story-actor.mascot.speak.enter img,
+#story #portraits .story-actor.dim img,
+#story #portraits .story-actor.dim:first-child img,
+#story #portraits .story-actor.dim:last-child img{
+  height: calc(var(--img-h) * var(--scale)) !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: bottom center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  margin-bottom: calc((var(--feet) - var(--img-h)) * var(--scale)) !important;
+}
+@media (max-height: 700px){
+  #story .portraits, #portraits, #story #portraits{ --ground: 120px; }
+  #story .bubble, #story-bubble{ min-height: 156px !important; }
+}
+@media (min-width: 700px) and (min-height: 900px){
+  #story .portraits, #portraits, #story #portraits{ --ground: 148px; }
+}

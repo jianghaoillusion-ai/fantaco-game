@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=19";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=19";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=19";
-import { mountMascot } from "./mascot.js?v=19";
-import { mountHome } from "./home.js?v=19";
-import { bindStory, startStory } from "./story.js?v=19";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=19";
-import { bagCap, migrateBagSlots } from "./bag.js?v=19";
-import { reserveItems } from "./merge.js?v=19";
-import { avatarSrc } from "./portraits.js?v=19";
+import { Auth } from "./auth.js?v=24";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=24";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=24";
+import { mountMascot } from "./mascot.js?v=24";
+import { mountHome } from "./home.js?v=24";
+import { bindStory, startStory } from "./story.js?v=24";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=24";
+import { bagCap, migrateBagSlots } from "./bag.js?v=24";
+import { reserveItems } from "./merge.js?v=24";
+import { avatarSrc } from "./portraits.js?v=24";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
-  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
+  itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=19";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=19";
-import { regionById } from "./world.js?v=19";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=19";
-import { bindTip, bindChromeTips } from "./tip.js?v=19";
+} from "./merge.js?v=24";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=24";
+import { regionById } from "./world.js?v=24";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=24";
+import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=24";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=19");
+  const res = await fetch(url + "?v=24");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -422,7 +422,8 @@ function makePiece(item) {
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
   el.removeAttribute("title");
-  bindTip(el, name, "拖到一樣的上面，就可以合成。");
+  const chain = item.kind === "item" ? chainPreview(CHAINS, item.chain, item.tier) : [];
+  bindTip(el, name, "", { chain, avoidNeighbors: true, avoid: "#play .orders-row, #play .order, .play-hud" });
   return el;
 }
 function isWantedItem(item) {
@@ -598,6 +599,7 @@ function onTap(loc) {
     systems?.bag?.renderInventory?.();
     return;
   }
+  hideTip();
   selectedUid = item.uid;
   systems?.fx.showInfo(item);
   sfx.tap();
@@ -1079,6 +1081,7 @@ function systemCtx() {
     makeUid, ENERGY, todayKey,
     itemDef: (chain, tier) => itemDef(CHAINS, chain, tier),
     maxTier: (chain) => maxTier(CHAINS, chain),
+    chainPreview: (chain, tier) => chainPreview(CHAINS, chain, tier),
     getGens: () => GENS,
     avatarSrc,
     get mascot() { return mascot; },

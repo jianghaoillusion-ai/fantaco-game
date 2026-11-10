@@ -117,6 +117,8 @@ export function createFx(ctx) {
       bar.hidden = true;
       $("#info-name").textContent = "";
       $("#info-hint").textContent = "";
+      const chainBox = $("#info-chain");
+      if (chainBox) { chainBox.hidden = true; chainBox.innerHTML = ""; }
       if ($("#btn-sell")) $("#btn-sell").disabled = true;
       if (thumb) { thumb.hidden = true; thumb.removeAttribute("src"); }
       return;
@@ -129,15 +131,19 @@ export function createFx(ctx) {
       if (src) { thumb.src = src; thumb.hidden = false; }
       else { thumb.hidden = true; thumb.removeAttribute("src"); }
     }
+    const hint = $("#info-hint");
+    const chainBox = $("#info-chain");
+    const chain = item.kind === "item" ? (ctx.chainPreview?.(item.chain, item.tier) || []) : [];
+    if (chainBox) {
+      chainBox.hidden = !chain.length;
+      chainBox.innerHTML = chain.map((it) => `<img class="${it.current ? "now" : ""}" src="${it.img || ""}" alt="">`).join("");
+    }
     if (item.kind === "gen") {
       const cool = item.coolUntil && item.coolUntil > Date.now();
-      const lv = item.tier ? `第 ${item.tier} 階　` : "";
-      $("#info-hint").textContent = lv + (cool ? "還在休息，等一下再點。" : "點一下就會產出（花 1 點能量）。");
+      if (hint) hint.textContent = cool ? "休息中" : "";
       if ($("#btn-sell")) $("#btn-sell").disabled = true;
     } else {
-      const max = ctx.maxTier?.(item.chain) || 99;
-      const lv = item.tier ? `第 ${item.tier} 階　` : "";
-      $("#info-hint").textContent = lv + (item.tier >= max ? "已經是最高一階了。" : "再合一個一樣的，就會升階。");
+      if (hint) hint.textContent = "";
       if ($("#btn-sell")) $("#btn-sell").disabled = item.tier <= 1;
     }
   }

@@ -1,5 +1,5 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=19";
-import { bindTip } from "./tip.js?v=19";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=24";
+import { bindTip, hideTip } from "./tip.js?v=24";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
@@ -169,8 +169,8 @@ export function createOrdersUi(ctx) {
       <span class="daily-bar-track"><i style="width:${pct}%"></i></span>
       <span class="daily-timer">${st.claimed ? "完成" : st.left}</span>
       ${st.allDone && !st.claimed ? '<span class="daily-claim-dot" aria-hidden="true">✓</span>' : ""}`;
-    daily.addEventListener("click", (e) => { e.stopPropagation(); openChallenge(); });
-    bindTip(daily, "今日挑戰", st.claimed ? "今天完成囉" : `${st.done}/${st.goal}　還有 ${st.left}`);
+    daily.addEventListener("click", (e) => { e.stopPropagation(); hideTip(); openChallenge(); });
+    bindTip(daily, "今日挑戰", st.claimed ? "今天完成囉" : `${st.done}/${st.goal}`, { prefer: "left", avoid: "#play .orders-row, #play .order, .play-hud" });
     head.appendChild(daily);
     box.appendChild(head);
     bindChallenge();
@@ -198,11 +198,13 @@ export function createOrdersUi(ctx) {
         <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/ui/diamond.png" alt="">${gems}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>
         ${ready ? '<button type="button" class="give">交付</button>' : '<span class="give-slot" aria-hidden="true"></span>'}`;
       card.addEventListener("click", () => {
+        hideTip();
         if (ready) clickGive(o.id, card);
         else { sfx.invalid(); toast("還沒做出來喔"); }
       });
       card.querySelector(".give")?.addEventListener("click", (e) => {
         e.stopPropagation();
+        hideTip();
         clickGive(o.id, card);
       });
       bindTip(card, npc.name, `${def?.name || ""}　${tip}`);
