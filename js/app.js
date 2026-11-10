@@ -187,6 +187,7 @@ function bind() {
     if (pendingAfterClear) { const fn = pendingAfterClear; pendingAfterClear = null; fn(); }
     else { playMusic(SAVE.chapter); show("play"); }
   });
+  $("#btn-bag-close")?.addEventListener("click", () => $("#inventory").classList.remove("open"));
   $("#btn-inv-toggle")?.addEventListener("click", () => $("#inventory").classList.toggle("open"));
 
   $("#play").addEventListener("pointerdown", onBoardDown);

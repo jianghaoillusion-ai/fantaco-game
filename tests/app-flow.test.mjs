@@ -55,6 +55,9 @@ test('新遊戲→所有新版故事與地圖修復→12張無限訂單→重讀
   api.ensureOrders();finishDialogs();
   const o=s.orders.find(x=>!x.procedural);
   assert.equal(o.id,expected.id);
+  const definitions=json('data/chains.json');
+  assert.ok(definitions.chains[o.need.chain].items[o.need.tier-1], 'story tier exists '+o.id);
+  assert.ok(s.board.concat(s.inventory).some(x=>x?.kind==='gen'&&definitions.generators[x.gen]?.produces===o.need.chain),'story source available '+o.id);
   assert.ok(s.flags['seen-intro-'+o.id],o.id+' intro');
   const i=s.board.findIndex(x=>!x);
   const item={kind:'item',...o.need,uid:'test-'+o.id};s.board[i]=item;
