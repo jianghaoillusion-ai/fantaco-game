@@ -31,12 +31,17 @@ export function starterBoard(cols, rows) {
     b[idx(cols, r, c)] = cell;
   };
   const cr = Math.floor(rows / 2), cc = Math.floor(cols / 2);
-  put(cr - 1, cc, { kind: "gen", gen: "star", tier: 1, uid: makeUid() });
+  // 2 village generators + 8 varied items across chains/tiers, leaving empties in the open start area.
+  put(cr, cc, { kind: "gen", gen: "star", tier: 1, uid: makeUid() });
+  put(cr - 1, cc, { kind: "gen", gen: "garden", tier: 1, uid: makeUid() });
   put(cr, cc - 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(cr, cc + 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
   put(cr + 1, cc, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(cr - 2, Math.max(0, cc - 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
-  put(cr - 2, Math.min(cols - 1, cc + 2), { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  put(cr - 2, cc, { kind: "item", chain: "star", tier: 2, uid: makeUid() });
+  put(cr, cc + 2, { kind: "item", chain: "star", tier: 3, uid: makeUid() });
+  put(cr + 1, cc - 2, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
+  put(cr - 1, cc - 2, { kind: "item", chain: "garden", tier: 2, uid: makeUid() });
+  put(cr + 2, cc, { kind: "item", chain: "garden", tier: 3, uid: makeUid() });
+  put(cr - 1, cc + 2, { kind: "item", chain: "tea", tier: 1, uid: makeUid() });
   return b;
 }
 

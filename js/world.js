@@ -16,8 +16,7 @@ export function clumpOf(r, c, cols, rows) {
   const cr = (rows - 1) / 2, cc = (cols - 1) / 2;
   const dr = r - cr, dc = c - cc;
   const m = Math.abs(dr) + Math.abs(dc);
-  const oddCorner = Math.abs(dr) === 2 && Math.abs(dc) === 2 && dr * dc > 0;
-  if (m <= 2 && !oddCorner) return "start";
+  if (m <= 3) return "start";
   const dir = Math.abs(dr) >= Math.abs(dc) ? (dr < 0 ? "n" : "s") : (dc < 0 ? "w" : "e");
   return (m <= 4 ? "inner-" : "outer-") + dir;
 }

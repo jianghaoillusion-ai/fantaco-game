@@ -1,6 +1,6 @@
 /** Story scenes: big portraits, matching expressions, typewriter + mouth, filled stage. */
 
-import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=8";
+import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=9";
 
 let queue = [], idx = 0, doneFn = null;
 let typing = false, typed = "", full = "", typeTimer = 0, mouthTimer = 0, talking = false;
@@ -32,7 +32,7 @@ function applyBg() {
   const el = $("#story");
   if (!el) return;
   el.style.setProperty("--story-bg", bg);
-  const wash = "linear-gradient(180deg,rgba(251,252,246,.06),rgba(251,252,246,.22) 58%,rgba(251,252,246,.72))";
+  const wash = "linear-gradient(180deg,rgba(8,12,16,.04),rgba(8,12,16,.10) 62%,rgba(8,12,16,.42))";
   el.style.backgroundImage = wash + ", " + bg;
   el.style.backgroundSize = "cover";
   el.style.backgroundPosition = "center";
@@ -82,12 +82,13 @@ function render() {
       } else {
         const others = cast.filter((x) => x !== speaker);
         const side = others.indexOf(id) % 2 === 0 ? "right" : "left";
+        fig.dataset.side = side;
         if (side === "left") {
-          fig.style.left = "0";
-          fig.style.transform = "translateX(-80%)";
+          fig.style.left = "14%";
+          fig.style.transform = "translateX(-50%)";
         } else {
-          fig.style.left = "100%";
-          fig.style.transform = "translateX(-18%)";
+          fig.style.left = "86%";
+          fig.style.transform = "translateX(-50%)";
         }
       }
     }

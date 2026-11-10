@@ -16,12 +16,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=8">
-  <link rel="stylesheet" href="css/home.css?v=8">
-  <link rel="stylesheet" href="css/story.css?v=8">
-  <link rel="stylesheet" href="css/bag.css?v=8">
-  <link rel="stylesheet" href="css/orders.css?v=8">
-  <link rel="stylesheet" href="css/settings.css?v=8">
+  <link rel="stylesheet" href="css/app.css?v=9">
+  <link rel="stylesheet" href="css/home.css?v=9">
+  <link rel="stylesheet" href="css/story.css?v=9">
+  <link rel="stylesheet" href="css/bag.css?v=9">
+  <link rel="stylesheet" href="css/orders.css?v=9">
+  <link rel="stylesheet" href="css/settings.css?v=9">
+  <link rel="stylesheet" href="css/quality.css?v=9">
 </head>
 <body>
   <div id="app">
@@ -40,7 +41,9 @@
     </section>
 
     <section id="title" class="screen">
-      <div class="balloon-bg" aria-hidden="true"></div>
+      <button class="home-settings" id="btn-settings" type="button" title="音樂、音效與名字" aria-label="設定">
+        <img src="assets/icons/gear.png" alt="">
+      </button>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
       <h1>眠花糖的異想世界</h1>
       <img class="hero" src="assets/mascot/three.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
@@ -68,9 +71,6 @@
           <button class="home-ico" id="btn-howto" type="button" title="合成與訂單的玩法">
             <span class="tile"><img src="assets/icons/howto.png" alt=""></span>怎麼玩
           </button>
-          <button class="home-ico" id="btn-settings" type="button" title="音樂、音效與名字">
-            <span class="tile"><img src="assets/icons/gear.png" alt=""></span>設定
-          </button>
         </div>
       </div>
     </section>
@@ -79,7 +79,7 @@
       <div class="play-frame">
         <div class="hud play-hud">
           <span class="pill level"><span data-level>Lv.1</span><span class="xpbar"><i data-xp></i></span></span>
-          <span class="pill energy" title="能量會慢慢回來">⚡ <span data-energy>100</span>/<span data-energy-max>100</span>　<small data-energy-in>已滿</small></span>
+          <span class="pill energy" title="能量會慢慢回來"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span>/<span data-energy-max>100</span>　<small data-energy-in>已滿</small></span>
           <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
           <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
           <span class="pill mats" title="修復材料"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
@@ -93,22 +93,32 @@
           <div id="mascot-root" class="mascot-corner"></div>
           <div id="board" class="board" role="grid" aria-label="合成棋盤"></div>
         </div>
-        <div class="item-info" id="item-info" hidden>
+        <div class="item-info" id="item-info">
+          <img class="info-thumb" id="info-thumb" alt="" hidden>
           <div class="info-text">
-            <b id="info-name"></b>
-            <span id="info-hint"></span>
+            <b id="info-name">點選棋盤上的東西</b>
+            <span id="info-hint">合兩個一樣的，交給訂單。</span>
           </div>
-          <button type="button" id="btn-sell" class="sell-btn">出售</button>
+          <button type="button" id="btn-sell" class="sell-btn" disabled>出售</button>
         </div>
         <div class="toolbar">
-          <button type="button" id="btn-bag" class="tool-btn bag-icon" aria-label="魔法袋" title="打開魔法袋">
+          <button type="button" id="btn-bag" class="tool-btn bag bag-icon" aria-label="魔法袋" title="打開魔法袋">
             <img src="assets/icons/bag.png" alt="">
             <span class="bag-badge" id="inv-count">0/6</span>
             <small>魔法袋</small>
           </button>
-          <button type="button" id="btn-go-map" class="tool-btn map">地圖</button>
-          <button type="button" id="btn-go-shop" class="tool-btn shop">小舖</button>
-          <button type="button" class="tool-btn ghost" data-back="title">主畫面</button>
+          <button type="button" id="btn-go-map" class="tool-btn map" aria-label="地圖">
+            <img src="assets/icons/map.png" alt="">
+            <small>地圖</small>
+          </button>
+          <button type="button" id="btn-go-shop" class="tool-btn shop" aria-label="小舖">
+            <img src="assets/icons/shop.png" alt="">
+            <small>小舖</small>
+          </button>
+          <button type="button" class="tool-btn home ghost" data-back="title" aria-label="主畫面">
+            <img src="assets/icons/home.png" alt="">
+            <small>主畫面</small>
+          </button>
         </div>
       </div>
     </section>
@@ -302,6 +312,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=8"></script>
+  <script type="module" src="js/app.js?v=9"></script>
 </body>
 </html>

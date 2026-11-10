@@ -1,21 +1,21 @@
-import { Auth } from "./auth.js?v=8";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=8";
-import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=8";
-import { mountMascot } from "./mascot.js?v=8";
-import { mountHome } from "./home.js?v=8";
-import { bindStory, startStory } from "./story.js?v=8";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=8";
-import { bagCap, migrateBagSlots } from "./bag.js?v=8";
-import { reserveItems } from "./merge.js?v=8";
-import { avatarSrc } from "./portraits.js?v=8";
+import { Auth } from "./auth.js?v=9";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=9";
+import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=9";
+import { mountMascot } from "./mascot.js?v=9";
+import { mountHome } from "./home.js?v=9";
+import { bindStory, startStory } from "./story.js?v=9";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=9";
+import { bagCap, migrateBagSlots } from "./bag.js?v=9";
+import { reserveItems } from "./merge.js?v=9";
+import { avatarSrc } from "./portraits.js?v=9";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=8";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=8";
-import { regionById } from "./world.js?v=8";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=8";
+} from "./merge.js?v=9";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=9";
+import { regionById } from "./world.js?v=9";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=9";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -49,7 +49,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=8");
+  const res = await fetch(url + "?v=9");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -95,7 +95,7 @@ export async function boot() {
   settingsUi = createSettingsUi({ $, persist, getSave: () => SAVE, show });
   settingsUi.bind();
   bindStory({ $, sfx, show, chapterBg: () => getComputedStyle($("#play") || document.documentElement).getPropertyValue("--chapter-bg") });
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
@@ -136,7 +136,7 @@ function applyChapterLook() {
   const play = $("#play");
   const bgPath = region?.bg || ch.bg;
   const bg = new URL(bgPath, document.baseURI).href;
-  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.35), rgba(251,252,246,.55) 60%, var(--cream)), url("${bg}")`;
+  play.style.backgroundImage = `url("${bg}")`;
   play.style.setProperty("--chapter-bg", `url("${bg}")`);
   play.dataset.chapterId = ch.id;
   play.dataset.regionId = SAVE.region || ch.id;

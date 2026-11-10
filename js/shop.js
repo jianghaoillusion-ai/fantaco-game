@@ -1,6 +1,6 @@
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
-import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=8";
-import { bagCap } from "./bag.js?v=8";
+import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=9";
+import { bagCap } from "./bag.js?v=9";
 
 export function createShop(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, ENERGY } = ctx;
