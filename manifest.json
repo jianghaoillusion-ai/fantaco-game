@@ -1,0 +1,12 @@
+{
+  "name": "眠花糖與魔法氣球物語",
+  "short_name": "眠花糖",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fbfcf6",
+  "theme_color": "#3b4468",
+  "lang": "zh-Hant",
+  "icons": [
+    { "src": "assets/ui/icon-192.png", "sizes": "192x192", "type": "image/png" }
+  ]
+}

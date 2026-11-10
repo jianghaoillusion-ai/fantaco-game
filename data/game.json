@@ -1,0 +1,65 @@
+{
+  "title": "眠花糖與魔法氣球物語",
+  "subtitle": "FANTACO 魔幻藝術節",
+  "tagline": "在魔幻森林裡，眠花糖陪你一起實現奇妙夢想",
+  "xpCurve": [0, 40, 100, 180, 280, 400, 540, 700, 880, 1100],
+  "dropRates": [
+    { "rarity": "common", "label": "普通", "rate": 0.70, "color": "#8dc073" },
+    { "rarity": "rare", "label": "稀有", "rate": 0.22, "color": "#5b7fd6" },
+    { "rarity": "epic", "label": "史詩", "rate": 0.07, "color": "#9b59c6" },
+    { "rarity": "legendary", "label": "傳說", "rate": 0.01, "color": "#e0a106" }
+  ],
+  "starSeedName": "星星種子",
+  "lyrics": {
+    "title": "飛向藍藍天",
+    "lyricist": "呂濟寬",
+    "composer": "小橋",
+    "source": "YouTube 官方 MV 說明文字",
+    "sourceUrl": "https://youtu.be/XPvIihQWrcA",
+    "lines": [
+      "飛～～～ 飛～～～ 飛向藍藍天",
+      "繽紛的王國　快樂的力量",
+      "大大的笑容　點亮小小的願望",
+      "勇敢張開翅膀",
+      "也能像老鷹一樣飛翔",
+      "圓圓的氣球　圓一個夢想",
+      "小小的心願　藏著大大的力量",
+      "探索未知方向",
+      "眠花糖會守護在身旁",
+      "讓我們歡迎　眠花糖",
+      "飛～～～飛向藍藍天　帶著笑臉 一起去冒險",
+      "飛～～～穿過白雲間　迎向陽光 追逐著閃電",
+      "飛～～～飛向藍藍天　帶著笑臉 希望在天邊",
+      "飛～～～穿過白雲間　迎向陽光 夢想在起飛",
+      "只要相信 都能夠實現",
+      "只要相信 都能夠實現"
+    ],
+    "endingLines": [
+      "飛～～～飛向藍藍天　帶著笑臉 一起去冒險",
+      "飛～～～穿過白雲間　迎向陽光 夢想在起飛",
+      "只要相信 都能夠實現"
+    ]
+  },
+  "items": [
+    { "id": "star-white", "name": "小星星貼紙", "rarity": "common", "img": "assets/items/star-white.png" },
+    { "id": "flower-yellow", "name": "黃花貼紙", "rarity": "common", "img": "assets/items/flower-yellow.png" },
+    { "id": "flower-blue", "name": "藍花貼紙", "rarity": "common", "img": "assets/items/flower-blue.png" },
+    { "id": "bush", "name": "微笑村小樹叢", "rarity": "common", "img": "assets/items/bush.png" },
+    { "id": "carrot", "name": "眠花糖的紅蘿蔔", "rarity": "common", "img": "assets/items/carrot.png" },
+    { "id": "teacup", "name": "下午茶杯子", "rarity": "rare", "img": "assets/items/teacup.png" },
+    { "id": "rose-blue", "name": "藍玫瑰", "rarity": "rare", "img": "assets/items/rose-blue.png" },
+    { "id": "rose-white", "name": "白玫瑰", "rarity": "rare", "img": "assets/items/rose-white.png" },
+    { "id": "mushroom-red", "name": "紅蘑菇", "rarity": "rare", "img": "assets/items/mushroom-red.png" },
+    { "id": "mushroom-blue", "name": "藍蘑菇", "rarity": "rare", "img": "assets/items/mushroom-blue.png" },
+    { "id": "cupcake", "name": "微笑杯子蛋糕", "rarity": "rare", "img": "assets/items/cupcake.png" },
+    { "id": "candy", "name": "西卡的糖果盒", "rarity": "rare", "img": "assets/items/candy.png" },
+    { "id": "potion-blue", "name": "藍藍天藥水", "rarity": "epic", "img": "assets/items/potion-blue.png" },
+    { "id": "potion-red", "name": "勇氣藥水", "rarity": "epic", "img": "assets/items/potion-red.png" },
+    { "id": "card-heart", "name": "愛心撲克牌", "rarity": "epic", "img": "assets/items/card-heart.png" },
+    { "id": "card-spade", "name": "黑桃撲克牌", "rarity": "epic", "img": "assets/items/card-spade.png" },
+    { "id": "card-club", "name": "梅花撲克牌", "rarity": "epic", "img": "assets/items/card-club.png" },
+    { "id": "teapot", "name": "星星茶壺", "rarity": "legendary", "img": "assets/items/teapot.png" },
+    { "id": "hat", "name": "魔術高帽", "rarity": "legendary", "img": "assets/items/hat.png" },
+    { "id": "hat-purple", "name": "紫緞帶禮帽", "rarity": "legendary", "img": "assets/items/hat-purple.png" }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "01-smile-contest",
+  "number": 1,
+  "title": "微笑大賽",
+  "subtitle": "趕走緊張霧",
+  "theme": "village",
+  "unlock": { "type": "start" },
+  "mapLabel": "微笑村",
+  "intro": [
+    { "speaker": "微笑姐姐", "portrait": "jiejie", "text": "歡迎來到微笑村！今天是一年一度的微笑大賽。" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "我……我也想參加。可是好緊張……" },
+    { "speaker": "阿飄", "portrait": "apiao", "text": "沒關係啦！我和眠花糖都會幫你加油！" },
+    { "speaker": "眠花糖", "portrait": "mascot", "text": "（點點頭，站到飛飛身旁。）" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "呀！台上冒出好多緊張霧，我的笑容都被擋住了……" },
+    { "speaker": "微笑姐姐", "portrait": "jiejie", "text": "眠花糖，用星星把霧驅散吧！點螢幕或按空白鍵，就能放出微笑星星。" }
+  ],
+  "battle": {
+    "objective": "趕走所有緊張霧，幫飛飛重新微笑",
+    "playerHp": 5,
+    "sky": "#dce8f8",
+    "ground": "#cad9a4",
+    "waves": [
+      { "at": 0.2, "spawns": [
+        { "type": "fog", "x": 0.28, "y": 0.32, "hp": 3 },
+        { "type": "fog", "x": 0.62, "y": 0.28, "hp": 3 }
+      ]},
+      { "at": 8, "spawns": [
+        { "type": "fog", "x": 0.20, "y": 0.22, "hp": 3 },
+        { "type": "fog", "x": 0.50, "y": 0.18, "hp": 4 },
+        { "type": "fog", "x": 0.78, "y": 0.26, "hp": 3 }
+      ]},
+      { "at": 18, "spawns": [
+        { "type": "fog", "x": 0.50, "y": 0.20, "hp": 8, "scale": 1.45, "label": "好大的緊張霧！" }
+      ]}
+    ],
+    "rewards": { "xp": 50, "starSeeds": [4, 7] }
+  },
+  "outro": [
+    { "speaker": "飛飛", "portrait": "feifei", "text": "霧散了……謝謝你，眠花糖。我好像可以笑出來了。" },
+    { "speaker": "阿飄", "portrait": "apiao", "text": "看吧看吧！飛飛笑囉！" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "可是我想找真正的快樂。也許，我的舞台不在這裡。" },
+    { "speaker": "眠花糖", "portrait": "mascot", "text": "（指向遠方。一起去冒險吧。）" }
+  ]
+}

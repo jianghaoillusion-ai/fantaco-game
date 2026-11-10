@@ -1,0 +1,8 @@
+{
+  "comment": "每週新關卡：新增一個 data/stages/<id>.json，並把 id 加到這個清單。不必改程式。",
+  "stages": [
+    "01-smile-contest",
+    "02-magic-bag",
+    "03-sika"
+  ]
+}

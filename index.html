@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>眠花糖與魔法氣球物語｜FANTACO 魔幻藝術節</title>
+  <meta name="description" content="FANTACO 官方免費親子遊戲。扮演眠花糖，陪飛飛尋找真正的快樂。">
+  <meta name="theme-color" content="#3b4468">
+  <link rel="icon" type="image/png" href="assets/ui/favicon.png">
+  <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <div id="app">
+
+    <section id="profile" class="screen">
+      <div class="modal" style="margin:auto">
+        <img src="assets/mascot/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <h2>先取一個暱稱</h2>
+        <p>給自己或小朋友一個冒險的名字。<br>進度會記在這台裝置上。</p>
+        <form id="nick-form">
+          <input id="nick" type="text" maxlength="12" placeholder="例如：小星星" autocomplete="nickname" required>
+          <div style="margin-top:16px"><button class="btn wide" type="submit">開始</button></div>
+        </form>
+        <p class="notice">預覽版使用本機存檔。Google 登入與雲端存檔稍後再接上。</p>
+      </div>
+    </section>
+
+    <section id="title" class="screen">
+      <div class="balloon-bg" aria-hidden="true">
+        <span style="left:8%;top:18%;background:#f4a7bf;animation-delay:0s"></span>
+        <span style="left:22%;top:8%;background:#ffed00;animation-delay:.6s"></span>
+        <span style="right:12%;top:16%;background:#8dc073;animation-delay:1s"></span>
+        <span style="right:24%;top:6%;background:#fff;animation-delay:1.6s"></span>
+      </div>
+      <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
+      <h1>眠花糖與魔法氣球物語</h1>
+      <p class="tag">在魔幻森林裡，眠花糖陪你一起實現奇妙夢想</p>
+      <img class="hero" src="assets/mascot/hero.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
+      <div class="actions">
+        <button class="btn wide" id="btn-start">開始冒險</button>
+        <div class="row">
+          <button class="btn ghost" id="btn-book">收集冊</button>
+          <button class="btn ghost" id="btn-redeem">兌換禮品</button>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="btn-lyrics">飛向藍藍天</button>
+          <button class="btn ghost" id="btn-howto">怎麼玩</button>
+        </div>
+      </div>
+      <p class="notice">完全免費　沒有內購　給全家人一起玩　冒險者：<span data-nick>小朋友</span></p>
+    </section>
+
+    <section id="map" class="screen">
+      <div class="hud">
+        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
+        <span class="chip"><span data-nick></span></span>
+        <span class="chip" data-level>Lv.1</span>
+        <div class="xpbar" title="經驗"><i data-xp></i></div>
+        <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+      </div>
+      <h2 style="text-align:center;margin:4px 0 12px">冒險地圖</h2>
+      <div class="map-path">
+        <div class="path-line" aria-hidden="true"></div>
+        <div class="nodes" id="nodes"></div>
+      </div>
+    </section>
+
+    <section id="story" class="screen">
+      <div class="hud" style="width:min(720px,100%);margin:0 auto 8px">
+        <button class="icon-btn" data-back="map" aria-label="回地圖">←</button>
+        <span></span>
+        <button class="btn ghost" id="btn-story-skip" type="button">略過</button>
+      </div>
+      <div class="story-stage">
+        <div class="portraits" id="portraits"></div>
+        <div class="bubble">
+          <div class="who" id="bubble-who"></div>
+          <div class="tx" id="bubble-tx"></div>
+        </div>
+      </div>
+      <div class="story-actions">
+        <button class="btn" id="btn-story-next">下一步</button>
+      </div>
+    </section>
+
+    <section id="battle" class="screen">
+      <div class="battle-hud">
+        <button class="icon-btn" id="btn-pause" aria-label="暫停">⏸</button>
+        <div class="obj" id="obj">趕走緊張霧</div>
+        <div class="hearts" id="hearts" aria-label="微笑值"></div>
+      </div>
+      <canvas id="game" width="1280" height="720"></canvas>
+      <div class="pad">
+        <div class="cluster">
+          <button class="pad-btn" id="pad-left" aria-label="向左">←</button>
+          <button class="pad-btn" id="pad-right" aria-label="向右">→</button>
+        </div>
+        <button class="pad-btn star" id="pad-star" aria-label="放出星星">★</button>
+        <button class="pad-btn" id="pad-jump" aria-label="跳">↑</button>
+      </div>
+      <div class="hint desk">方向鍵移動　空白鍵跳躍　J 或 Z 放出星星　也可直接點畫面</div>
+    </section>
+
+    <section id="book" class="screen">
+      <div class="hud">
+        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
+        <h2 style="flex:1;text-align:center">收集冊</h2>
+        <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+      </div>
+      <p style="text-align:center;color:var(--muted);margin:0 0 4px">寶藏只從遊玩掉落。掉落率公開，沒有付費轉蛋。</p>
+      <div class="rates" id="rates"></div>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <section id="redeem" class="screen">
+      <div class="hud">
+        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
+        <h2 style="flex:1;text-align:center">兌換禮品</h2>
+      </div>
+      <div class="seed-hero">
+        <img src="assets/items/star-seed.png" alt="星星種子">
+        <div class="n" id="redeem-count">0</div>
+        <p>顆星星種子</p>
+      </div>
+      <div class="coming">
+        <h3>實體禮品兌換　即將開放</h3>
+        <p>之後可以用星星種子換 FANTACO 的實體小禮物。<br>現在先專心收集，不必留下地址或個人資料。</p>
+      </div>
+      <p class="notice">現場活動的專屬兌換碼／QR 也會在之後開放，這一版先把位置留好。</p>
+    </section>
+
+    <section id="lyrics" class="screen">
+      <div class="hud">
+        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
+        <h2 style="flex:1;text-align:center" id="lyrics-title">〈飛向藍藍天〉</h2>
+        <span></span>
+      </div>
+      <div id="ending-note" class="coming" style="display:none;margin-bottom:14px">
+        <h3>第一個願望，實現了</h3>
+        <p>飛飛把願望送給了西卡。故事還會繼續——<br>每週都會推出新關卡。最後一願，將會送給哈特。</p>
+      </div>
+      <div class="lyrics-box">
+        <p id="lyrics-credit" style="text-align:center;font-weight:700;color:var(--ink)"></p>
+        <p class="src" id="lyrics-src" style="text-align:center"></p>
+        <div id="lyrics-lines"></div>
+      </div>
+    </section>
+
+    <section id="howto" class="screen">
+      <div class="hud">
+        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
+        <h2 style="flex:1;text-align:center">怎麼玩</h2>
+        <span></span>
+      </div>
+      <div class="coming" style="text-align:left">
+        <h3>操作</h3>
+        <p style="margin:8px 0 16px">手機、平板：點畫面放出星星，用下方按鈕走路和跳躍。<br>電腦：方向鍵移動，空白鍵跳躍，J 或 Z 放出星星，也可以直接點。</p>
+        <h3>冒險</h3>
+        <p style="margin:8px 0 16px">你是眠花糖。用微笑星星趕走緊張霧、洩氣怪和黑影嘀嘀，幫飛飛完成願望。打怪不會受傷畫面，只是把憂憂驅散。</p>
+        <h3>收集</h3>
+        <p style="margin:8px 0 16px">過關會得到經驗、星星種子和寶藏。寶藏分成普通、稀有、史詩、傳說，機率寫在收集冊裡。星星種子以後可換實體禮品，現在先收集就好。</p>
+        <h3>完全免費</h3>
+        <p>沒有內購，沒有付費轉蛋。這是 FANTACO 魔幻藝術節給全家人的遊戲。</p>
+      </div>
+    </section>
+
+    <div id="result" class="overlay" role="dialog" aria-modal="true">
+      <div class="modal">
+        <img src="assets/mascot/wish.png" alt="" width="120" style="margin:0 auto">
+        <h2 id="result-title">過關了！</h2>
+        <p id="result-sub"></p>
+        <div class="lvup" id="result-lv" style="display:none"></div>
+        <div class="drops" id="result-drops"></div>
+        <button class="btn wide" id="btn-result-ok">繼續</button>
+      </div>
+    </div>
+
+    <div id="fail" class="overlay" role="dialog" aria-modal="true">
+      <div class="modal">
+        <img src="assets/mascot/sit.png" alt="" width="120" style="margin:0 auto">
+        <h2>再試一次</h2>
+        <p>眠花糖還在！微笑值用完了，我們重新出發就好。</p>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+          <button class="btn" id="btn-retry">再來一次</button>
+          <button class="btn ghost" id="btn-fail-map">回地圖</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

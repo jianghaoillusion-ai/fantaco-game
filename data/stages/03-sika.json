@@ -1,0 +1,45 @@
+{
+  "id": "03-sika",
+  "number": 3,
+  "title": "第一願：西卡",
+  "subtitle": "讓糖果重新充滿力氣",
+  "theme": "candy",
+  "unlock": { "type": "stageCleared", "stageId": "02-magic-bag" },
+  "mapLabel": "糖果小路",
+  "intro": [
+    { "speaker": "西卡", "portrait": "sika", "text": "糖果……好吃的糖果……有沒有人要買……" },
+    { "speaker": "阿飄", "portrait": "apiao", "text": "聽他這樣叫賣，糖果吃起來會是苦的吧。" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "我想買一盒。哇，好好吃！西卡，你的糖果這麼棒，怎麼會賣不出去？" },
+    { "speaker": "西卡", "portrait": "sika", "text": "我越想賣出去就越緊張。洩氣怪把我的力氣都吸走了……" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "我想把第一個願望送給西卡。眠花糖，先幫我們趕走洩氣怪吧！" }
+  ],
+  "battle": {
+    "objective": "趕走洩氣怪，把力氣還給西卡的糖果",
+    "playerHp": 5,
+    "sky": "#fde8c8",
+    "ground": "#e8b86d",
+    "waves": [
+      { "at": 0.2, "spawns": [
+        { "type": "deflate", "x": 0.30, "y": 0.30, "hp": 4 },
+        { "type": "deflate", "x": 0.70, "y": 0.28, "hp": 4 }
+      ]},
+      { "at": 8, "spawns": [
+        { "type": "deflate", "x": 0.22, "y": 0.22, "hp": 4 },
+        { "type": "fog", "x": 0.50, "y": 0.20, "hp": 3 },
+        { "type": "deflate", "x": 0.78, "y": 0.24, "hp": 4 }
+      ]},
+      { "at": 17, "spawns": [
+        { "type": "deflate", "x": 0.50, "y": 0.18, "hp": 9, "scale": 1.4, "label": "好大的洩氣怪！" }
+      ]}
+    ],
+    "rewards": { "xp": 70, "starSeeds": [6, 9] }
+  },
+  "outro": [
+    { "speaker": "飛飛", "portrait": "feifei", "text": "氣球精靈，我的願望是：幫助西卡，讓他可以用有創意的方法，把好吃的糖果賣出去。" },
+    { "speaker": "氣球精靈", "portrait": "spirit", "text": "看我做什麼？把氣球戳破啊！……願望，實現了！" },
+    { "speaker": "西卡", "portrait": "sika", "text": "謝謝你，飛飛！我好像又有力氣了。大家，來買糖果囉────" },
+    { "speaker": "阿飄", "portrait": "apiao", "text": "飛飛，你笑囉！這一顆氣球，用得很值得。" },
+    { "speaker": "飛飛", "portrait": "feifei", "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。" }
+  ],
+  "endingNote": true
+}
