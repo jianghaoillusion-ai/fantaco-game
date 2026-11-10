@@ -21,12 +21,18 @@ export function createFog(ctx) {
       slot.classList.add("locked");
       const id = clumpOf(r, c, cols, rows);
       slot.dataset.clump = id;
+      const crate = document.createElement("img");
+      crate.className = "crate-art";
+      crate.src = "assets/tiles/crate.png";
+      crate.alt = "";
+      crate.draggable = false;
+      slot.appendChild(crate);
       const cells = clumpCells(id, cols, rows);
       const anchor = cells[Math.floor(cells.length / 2)] || cells[0];
       if (anchor && anchor.r === r && anchor.c === c) {
         const badge = document.createElement("div");
         badge.className = "fog-badge";
-        badge.textContent = String(CLUMP_COSTS[id] || 0);
+        badge.innerHTML = `<img src="assets/ui/coin.svg" alt="">${CLUMP_COSTS[id] || 0}`;
         slot.appendChild(badge);
       }
       return;

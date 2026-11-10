@@ -6,6 +6,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import * as save from '../js/save.js';
 import * as merge from '../js/merge.js';
+import * as layout from '../js/board-layout.js';
 import * as world from '../js/world.js';
 import {attachSystems} from '../js/systems.js';
 import {GEN_POPS,GEN_COOL_MS} from '../js/fog.js';
@@ -22,7 +23,7 @@ async function harness(initial){
  const elements=new Map();const el=s=>{if(!elements.has(s))elements.set(s,new Element());return elements.get(s);};
  const document={baseURI:'http://localhost/',body:new Element(),createElement:()=>new Element(),getElementById:id=>el('#'+id),querySelector:el,dispatchEvent(){},querySelectorAll:s=>s==='.screen,.overlay'?[...elements.values()]:[],addEventListener(){}};
  globalThis.document=document;
- const context=vm.createContext({...save,...merge,...world,attachSystems,GEN_POPS,GEN_COOL_MS,document,window:{addEventListener(){}},Image:Element,URL,Date,Math,console,
+ const context=vm.createContext({...save,...merge,...world,...layout,attachSystems,GEN_POPS,GEN_COOL_MS,document,window:{addEventListener(){}},Image:Element,URL,Date,Math,console,
  fetch:async url=>({ok:true,json:async()=>json(url.split('?')[0])}),
  requestAnimationFrame(){},setTimeout(){return 1},clearTimeout(){},setInterval(){return 1},matchMedia:()=>({matches:true}),
  Auth:{},mountMascot:()=>new Proxy({}, {get:()=>()=>{}}),sfx:new Proxy({}, {get:()=>()=>{}}),

@@ -5,10 +5,11 @@ import { mountMascot } from "./mascot.js";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
-  nearbyEmpty, endlessRegion
+  remapBoard, nearbyEmpty, fillOrderSlots, endlessRegion
 } from "./merge.js";
 import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
 import { regionById, isCellOpen, allBuildings } from "./world.js";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -41,7 +42,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=6");
+  const res = await fetch(url + "?v=7");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -60,18 +61,16 @@ export async function boot() {
   STORY = STORY.orders;
   configureEnergy(GAME.energy);
   tickEnergy(SAVE);
-  COLS = SAVE.boardCols || COLS;
-  ROWS = SAVE.boardRows || ROWS;
   if (!SAVE.unlockedRegions) SAVE.unlockedRegions = ["village"];
   if (!SAVE.region) SAVE.region = "village";
   if (!SAVE.board) {
-    SAVE.board = starterBoard(COLS, ROWS);
-    SAVE.boardCols = COLS;
-    SAVE.boardRows = ROWS;
     if (!SAVE.unlockedClumps) SAVE.unlockedClumps = ["start"];
   } else if (!SAVE.unlockedClumps) {
     SAVE.unlockedClumps = ["all"];
   }
+  migrateToFixedBoard(SAVE, { remapBoard, starterBoard });
+  COLS = BOARD_COLS;
+  ROWS = BOARD_ROWS;
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
@@ -239,13 +238,7 @@ function toast(msg) {
 }
 
 
-/* ---------- responsive board ---------- */
-function pickBoardSize(availW, availH) {
-  const cols = 7, rows = 9, gap = availW < 430 ? 4 : 6, pad = availW < 430 ? 6 : 8;
-  const cell = Math.max(1, Math.floor(Math.min((availW - pad * 2 - gap * 6 - 8) / cols, (availH - pad * 2 - gap * 8 - 8) / rows)));
-  return { cols, rows, cell, gap, pad };
-}
-
+/* ---------- fixed 7×9 board; only the cell size scales ---------- */
 function measureBoardBox() {
   const scene = $(".scene") || $(".play-main");
   if (!scene) return { w: 360, h: 400 };
@@ -254,14 +247,15 @@ function measureBoardBox() {
 
 function applyBoardLayout() {
   const box = measureBoardBox();
-  const picked = pickBoardSize(box.w, box.h);
+  const picked = fitBoardCell(box.w, box.h);
+  COLS = BOARD_COLS;
+  ROWS = BOARD_ROWS;
   const frame = $(".play-frame") || $("#play");
   if (frame) {
     const fw = (frame.clientWidth || box.w) - 24;
     const invCell = Math.max(40, Math.min(64, Math.floor((fw - 6 * 7) / 8)));
     frame.style.setProperty("--inv-cell", invCell + "px");
   }
-  COLS = 7; ROWS = 9;
   const board = $("#board");
   if (board) {
     board.style.setProperty("--cols", String(COLS));
@@ -269,6 +263,12 @@ function applyBoardLayout() {
     board.style.setProperty("--cell", picked.cell + "px");
     board.style.setProperty("--gap", picked.gap + "px");
     board.style.setProperty("--pad", picked.pad + "px");
+  }
+  const need = !SAVE.board || SAVE.board.length !== COLS * ROWS || SAVE.boardCols !== COLS || SAVE.boardRows !== ROWS;
+  if (need) {
+    migrateToFixedBoard(SAVE, { remapBoard, starterBoard });
+    persist();
+    renderBoard();
   }
   return picked;
 }
@@ -641,34 +641,21 @@ function nextStoryOrder() {
 
 function ensureOrders() {
   const available = availableChains();
-  SAVE.orders = (SAVE.orders || []).filter(o => o?.procedural && o.need && o.reward &&
-    itemDef(CHAINS, o.need.chain, o.need.tier) && available.includes(o.need.chain));
-  const slots = Math.max(2, Math.min(3, GAME.board?.orders || 3));
-  // keep current story order first if any
-  const story = nextStoryOrder();
-  const hasStory = SAVE.orders.some((o) => !o.procedural && story && o.id === story.id);
-  if (story && !hasStory && !SAVE.orders.some((o) => o.id === story.id)) {
-    SAVE.orders.unshift({ ...story, reward: { ...story.reward, coins: story.reward.coins ?? (5 + story.need.tier * 5) } });
-  }
-  // fill procedural
-  let guard = 0;
-  while (SAVE.orders.length < slots && guard++ < 8) {
-    const o = makeProceduralOrder({
-      chains: CHAINS,
-      chapter: SAVE.chapter,
-      discovered: SAVE.discovered,
-      npcsByChapter: NPCS_BY_CHAPTER,
-      seq: SAVE.orderSeq++,
-      availableChains: available,
-      region: mainComplete() ? currentRegion() : 0,
-      balance: GAME.orders
-    });
-    if (!o) break;
-    // avoid duplicate needs
-    if (SAVE.orders.length >= 2 && SAVE.orders.some((x) => x.need.chain === o.need.chain && x.need.tier === o.need.tier)) continue;
-    SAVE.orders.push(o);
-  }
-  SAVE.orders = SAVE.orders.slice(0, slots);
+  SAVE.orders = (SAVE.orders || []).filter(o => o?.procedural && o.need && o.reward && itemDef(CHAINS, o.need.chain, o.need.tier) && available.includes(o.need.chain));
+  fillOrderSlots(SAVE, GAME.board?.orders || 3, {
+    chains: CHAINS,
+    chapter: SAVE.chapter,
+    discovered: SAVE.discovered,
+    npcsByChapter: NPCS_BY_CHAPTER,
+    seq: SAVE.orderSeq++,
+    availableChains: available,
+    region: mainComplete() ? currentRegion() : 0,
+    balance: GAME.orders,
+    nextStory: () => {
+      const story = nextStoryOrder();
+      return story ? { ...story, reward: { ...story.reward, coins: story.reward.coins ?? (5 + story.need.tier * 5) } } : null;
+    }
+  });
 }
 
 function hasGen(id) {

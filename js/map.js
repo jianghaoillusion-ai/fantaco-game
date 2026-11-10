@@ -16,12 +16,12 @@ export function createMap(ctx) {
     const map = ctx.getMap();
     box.innerHTML = "";
     box.classList.add("town-map");
+    box.classList.remove("world-map");
     for (const region of map.regions || []) {
       if (!regionVisible(map, save, region)) continue;
       const open = isRegionUnlocked(save, region.id);
       const card = document.createElement("article");
       card.className = "region-card" + (open ? "" : " locked") + (save.region === region.id ? " active" : "");
-      const src = "";
       card.dataset.regionId = region.id;
       const thumb = region.bg || "assets/bg/village.webp";
       const blocked = open ? null : regionUnlockBlocked(map, save, region);
@@ -30,7 +30,7 @@ export function createMap(ctx) {
         <img class="thumb" src="${thumb}" alt="">
         <div>
           <div class="num">${open ? "已打開" : "還沒打開"}</div>
-          <h3>${region.name}${src}</h3>
+          <h3>${region.name}</h3>
           <small>${region.subtitle || ""}</small>
           ${open ? "" : `<div class="costs">打開需要：${region.unlock?.type === "start" ? "開場即開放" : cost}${blocked ? "　（" + blocked + "）" : ""}</div>`}
         </div>
@@ -102,8 +102,7 @@ export function createMap(ctx) {
     if (blocked) { sfx.invalid(); toast(blocked); return; }
     pendingRegion = region;
     $("#region-buy-title").textContent = "打開「" + region.name + "」";
-    const tag = region.source === "new" ? "這是為遊戲新創作的地點。" : "";
-    $("#region-buy-sub").textContent = (region.subtitle || "") + (tag ? " " + tag : "");
+    $("#region-buy-sub").textContent = region.subtitle || "";
     $("#region-buy-cost").textContent = formatCost(region.unlock, ctx.getChains?.());
     $("#region-buy")?.classList.add("on");
   }
@@ -161,11 +160,13 @@ export function createMap(ctx) {
       save.unlockedClumps.push(b.clump);
     }
     emitGameplay("map-repaired", { id: region.id, buildingId: b.id, step: lv + 1, complete: lv + 1 === b.costs.length });
-    sfx.order();
+    sfx.level();
     toast(`修好了${b.name}！＋${xp} 經驗`);
     persist();
     refreshHud();
     renderMap();
+    ctx.fx?.celebrateRestore?.(b.name);
+    ctx.playMusic?.(region?.music || region?.chapter || ch);
     ctx.mascot?.cheer?.();
   }
 

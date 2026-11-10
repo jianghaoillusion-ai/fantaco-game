@@ -20,11 +20,13 @@ export function createShop(ctx) {
     if (!box) return;
     const save = ctx.getSave();
     const cap = save.magicBag?.capacity || ctx.getGame().board?.inventory || 8;
+    const filled = (save.inventory || []).filter(Boolean).length;
+    const slots = Math.max(cap, save.inventory?.length || 0);
     const countEl = $("#inv-count");
-    if (countEl) countEl.textContent = `${(save.inventory || []).filter(Boolean).length}/${cap}`;
+    if (countEl) countEl.textContent = `${filled}/${Math.max(cap, filled)}`;
     box.innerHTML = "";
     box.classList.add("bag-grid");
-    for (let i = 0; i < Math.max(cap, save.inventory.length); i++) {
+    for (let i = 0; i < slots; i++) {
       const slot = document.createElement("div");
       slot.className = "cell inv-cell";
       slot.dataset.inv = i;

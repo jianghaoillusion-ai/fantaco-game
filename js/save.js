@@ -1,4 +1,5 @@
-import { remapBoard } from "./merge.js";
+import { migrateToFixedBoard } from "./board-layout.js";
+import { remapBoard, starterBoard } from "./merge.js";
 const KEY = "fantaco.mianhuatang.save.v2";
 const LEGACY = "fantaco.mianhuatang.save.v1";
 
@@ -115,8 +116,9 @@ export function normalizeSave(raw) {
   if (s.board) {
     const oldCols = Number.isInteger(raw.boardCols) && raw.boardCols > 0 ? raw.boardCols : 7;
     const oldRows = Math.max(Number.isInteger(raw.boardRows) ? raw.boardRows : 0, Math.ceil(s.board.length / oldCols));
-    const { board, overflow } = remapBoard(s.board, oldCols, oldRows, 7, 9);
-    s.board = board; s.inventory = [...s.inventory, ...overflow];
+    s.boardCols = oldCols; s.boardRows = oldRows;
+    s.inventory = [...s.inventory];
+    migrateToFixedBoard(s, { remapBoard, starterBoard });
   }
   s.boardCols = 7; s.boardRows = 9;
   if (!s.unlockedRegions.includes(s.region)) s.region = 'village';

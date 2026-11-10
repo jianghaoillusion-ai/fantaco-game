@@ -5,8 +5,8 @@
  * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
-  idle: "assets/mascot/front.png",
-  idle2: "assets/mascot/idle.png",
+  idle: "assets/mascot/three.png",
+  idle2: "assets/mascot/front.png",
   cheer: "assets/mascot/jump.png",
   wish: "assets/mascot/wish.png",
   hero: "assets/mascot/hero.png",
@@ -95,7 +95,7 @@ export function mountMascot(root) {
     if (performance.now() > moodUntil && !mode3d) {
       // Cycle front → idle smile → side (yellow star-tail wag) → back (star on the back).
       const cycle = Math.floor(timer / 2.8) % 5;
-      const idlePose = ["idle", "idle2", "idle", "side", "back"][cycle];
+      const idlePose = ["idle", "idle2", "side", "back", "idle"][cycle];
       if (pose !== idlePose && !["cheer", "hero", "wish"].includes(pose)) {
         pose = idlePose;
         lastIdlePose = idlePose;
