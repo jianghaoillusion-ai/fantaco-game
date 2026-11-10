@@ -100,13 +100,14 @@ export function createOrdersUi(ctx) {
       card.className = "order" + (o.flag ? " story" : "") + (ready ? " ready" : "");
       card.dataset.id = o.id;
       card.innerHTML = `
-        <img class="npc" src="${npc.portrait}" alt="${npc.name}">
+        ${ready ? '<span class="order-check" role="img" aria-label="材料已備齊">✓</span>' : ""}
+        <span class="npc" data-npc="${o.npc}"><img src="${npc.portrait}" alt="${npc.name}"></span>
         <div class="who"><b>${npc.name}</b>${o.flag ? '<span class="story-tag">故事</span>' : ""}</div>
         <div class="need">
           <img src="${def?.img || ""}" alt="">
           <span>${def?.name || ""}</span>
         </div>
-        ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
+        <div class="banter">${o.banter || ""}</div>
         <div class="rew">＋${coins} 金幣　＋${o.reward.seeds || 0} 種子</div>
         <button type="button" class="give" ${ready ? "" : "disabled"}>交給他</button>`;
       card.querySelector(".give")?.addEventListener("click", (e) => {

@@ -41,3 +41,7 @@ localStorage key 保留 `fantaco.mianhuatang.save.v2`，payload 升為 schema 4�
 瀏覽器：`PLAYWRIGHT_MODULE=<既有 playwright/index.mjs> SCREENSHOT_DIR=<截圖資料夾> node tests/browser-flow.mjs`，先於 127.0.0.1:18765 啟動靜態伺服器。iPhone 15（393×852）、iPad（820×1180）驗證盤面、迷霧、修復、解鎖、商店、重讀及旋轉不丟物。實體 Safari 與手繪地圖拖曳／雙指縮放尚待 PR #2 整合驗收。
 
 依本輪指示以 PR 交付，不另產出 zip 或 Drive 副本。
+
+## v6 魔法袋與訂單
+
+魔法袋從 8 格開始，每次只扣 8 星星種子增加 4 格，上限 24 格（沿用既有存檔容量上限）。不足種子或已滿級不扣資源，舊容量與超額物品保留。訂單卡固定各列高度，材料存在棋盤或袋內時右上角顯示勾勾；頭像以 CSS 裁切既有角色圖，未新增美術素材。

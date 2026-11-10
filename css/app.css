@@ -441,3 +441,19 @@ a{color:var(--ink)}
   .tool-btn{min-height:40px;padding:6px 4px;font-size:12px}
   .item-info{min-height:36px;padding:4px 8px;margin-top:2px}
 }
+
+/* Equal card rows and head-only crops of the existing character artwork. */
+.order{position:relative}
+.order .who{height:16px;flex:none}
+.order .need{height:28px;flex:none}
+.order .banter{height:13px;flex:none}
+.order .rew{margin-top:auto}
+.order .npc{display:block;position:relative;overflow:hidden}
+.order .npc img{position:absolute;width:250%;max-width:none;height:auto;left:-75%;top:-16%}
+.order .npc[data-npc="jiejie"] img{width:320%;left:-115%;top:-23%}
+.order .npc[data-npc="spirit"] img{width:330%;left:-117%;top:-90%}
+.order .npc[data-npc="hate"] img{width:240%;left:-83%;top:-18%}
+.order .npc[data-npc="mian"] img{width:240%;left:-70%;top:-15%}
+.order-check{position:absolute;right:3px;top:3px;width:22px;height:22px;border-radius:50%;background:var(--green);color:#fff;border:2px solid #fff;font-weight:700;display:grid;place-items:center;z-index:1;line-height:1}
+#bag .modal{max-height:90dvh;overflow-y:auto}
+#btn-bag-expand{margin-bottom:10px}

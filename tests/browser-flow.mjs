@@ -17,16 +17,27 @@ try {
   assert.match(await page.title(), /眠花糖的異想世界/);
   assert.equal(await page.locator('#title h1').innerText(), '眠花糖的異想世界');
   await page.waitForTimeout(600);
-  if(out)await page.screenshot({path:`${out}/v5-${device}-home.png`});
+  if(out)await page.screenshot({path:`${out}/v6-${device}-home.png`});
   await page.click('#btn-play');
   const dismiss=async()=>{for(let n=0;n<8 && await page.locator('#story.on').count();n++)await page.click('#btn-story-skip');};
-  const shot=async(name)=>{await page.waitForTimeout(400);if(out)await page.screenshot({path:`${out}/v5-${device}-${name}.png`});};
+  const shot=async(name)=>{await page.waitForTimeout(400);if(out)await page.screenshot({path:`${out}/v6-${device}-${name}.png`});};
   await dismiss();await page.waitForTimeout(400);
   assert.equal(await page.locator('#board .cell').count(),63);
   assert.equal(await page.locator('#board .cell:not(.locked)').count(),13);
   const rect=await page.locator('#board').boundingBox();assert.ok(rect.x>=0&&rect.x+rect.width<=width+1&&rect.y+rect.height<=height+1,JSON.stringify(rect));
   assert.deepEqual(await page.evaluate(()=>[window.__GAME.save().boardCols,window.__GAME.save().boardRows]),[7,9]);
   await shot('board-fog');
+  await page.evaluate(()=>{const s=window.__GAME.save();const need=s.orders[0].need;s.inventory=[{kind:'item',...need,uid:'ready-fixture'}];s.starSeeds=16;s.coins=500;window.__GAME.refresh();});
+  const cards=await page.locator('.orders-row .order').evaluateAll(els=>els.map(e=>{const r=e.getBoundingClientRect();return {y:r.y,h:r.height,button:e.querySelector('.give').getBoundingClientRect().y};}));
+  assert.ok(cards.every(c=>c.y===cards[0].y&&c.h===cards[0].h&&c.button===cards[0].button),JSON.stringify(cards));
+  assert.equal(await page.locator('.order.ready .order-check').count(),await page.locator('.order.ready').count());
+  assert.ok(await page.locator('.order-check').count()>0);
+  await shot('orders-ready');
+  await page.click('#btn-bag');await page.click('#btn-bag-expand');
+  assert.deepEqual(await page.evaluate(()=>{const s=window.__GAME.save();return [s.magicBag.capacity,s.starSeeds,s.coins]}),[12,8,500]);
+  await shot('bag-expanded');await page.click('#btn-bag-close');
+  await page.evaluate(()=>{window.__GAME.save().inventory=[];window.__GAME.refresh();});
+
   await page.locator('#board .piece.gen').first().click({force:true});
   assert.equal(await page.evaluate(()=>window.__GAME.save().energy),99);
   if(await page.locator('#discover.on').count())await page.click('#btn-discover-ok');
@@ -46,6 +57,7 @@ try {
   assert.equal(await page.evaluate(()=>window.__GAME.save().energy),20);await shot('shop');
   await page.reload();await page.waitForFunction(()=>window.__GAME);
   assert.equal(await page.evaluate(()=>window.__GAME.save().buildings.stage),1);
+  assert.equal(await page.evaluate(()=>window.__GAME.save().magicBag.capacity),12);
   assert.ok(await page.evaluate(()=>window.__GAME.save().unlockedRegions.includes('castle')));
   assert.equal(await page.evaluate(()=>window.__GAME.save().inventory.length),1);
   await page.click('#btn-play');await dismiss();await page.waitForTimeout(200);await shot('board-restored');

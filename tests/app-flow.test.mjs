@@ -120,3 +120,19 @@ test('快速連續合成只領首次發現獎勵，重複物品不重領', async
  const stored = JSON.parse(localStorage.getItem('fantaco.mianhuatang.save.v2'));
  assert.equal('comboBest' in stored, false);
 });
+
+
+test('魔法袋只扣星星種子，拒絕不足資源並保留擴充存檔', async () => {
+ const {api,memory}=await harness();const s=api.save();
+ s.coins=9999;s.starSeeds=7;s.magicBag.materials={wood:99};
+ const items=JSON.stringify(s.inventory);
+ api.systems().shop.expandBag();
+ assert.equal(s.magicBag.capacity,8);assert.equal(s.starSeeds,7);
+ s.starSeeds=32;
+ for(const cap of [12,16,20,24]){api.systems().shop.expandBag();assert.equal(s.magicBag.capacity,cap);}
+ assert.equal(s.starSeeds,0);assert.equal(s.coins,9999);
+ assert.deepEqual(s.magicBag.materials,{wood:99});assert.equal(JSON.stringify(s.inventory),items);
+ s.starSeeds=8;api.systems().shop.expandBag();assert.equal(s.starSeeds,8);
+ assert.equal(JSON.parse(memory.get('fantaco.mianhuatang.save.v2')).magicBag.capacity,24);
+ assert.equal(save.loadSave().magicBag.capacity,24);
+});

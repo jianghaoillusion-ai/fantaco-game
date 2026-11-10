@@ -15,11 +15,30 @@ export function createShop(ctx) {
     $("#bag")?.classList.remove("on");
   }
 
+  function expandBag() {
+    const save = ctx.getSave();
+    const cap = save.magicBag.capacity;
+    if (cap >= 24) return;
+    const cost = 8;
+    if (save.starSeeds < cost) { sfx.invalid(); toast("星星種子不夠喔"); return; }
+    save.starSeeds -= cost;
+    save.magicBag.capacity = Math.min(24, cap + 4);
+    persist();
+    refreshHud();
+    renderInventory();
+    sfx.tap();
+  }
+
   function renderInventory() {
     const box = $("#inv-cells");
     if (!box) return;
     const save = ctx.getSave();
     const cap = save.magicBag?.capacity || ctx.getGame().board?.inventory || 8;
+    const expand = $("#btn-bag-expand");
+    if (expand) {
+      expand.textContent = cap >= 24 ? "魔法袋已擴到最大" : `增加 ${Math.min(4, 24 - cap)} 格 · 8 星星種子`;
+      expand.disabled = cap >= 24 || save.starSeeds < 8;
+    }
     const filled = (save.inventory || []).filter(Boolean).length;
     const slots = Math.max(cap, save.inventory?.length || 0);
     const countEl = $("#inv-count");
@@ -144,6 +163,7 @@ export function createShop(ctx) {
 
   function bind() {
     $("#btn-bag")?.addEventListener("click", () => { sfx.tap(); openBag(); });
+    $("#btn-bag-expand")?.addEventListener("click", expandBag);
     $("#btn-bag-close")?.addEventListener("click", () => { sfx.tap(); closeBag(); });
     $("#btn-go-shop")?.addEventListener("click", () => { sfx.tap(); openShop(); });
     $("#btn-map-shop")?.addEventListener("click", () => { sfx.tap(); openShop(); });
@@ -151,5 +171,5 @@ export function createShop(ctx) {
     $("#btn-sell")?.addEventListener("click", sellSelected);
   }
 
-  return { openBag, closeBag, openShop, closeShop, renderShop, renderInventory, sellSelected, buy, bind };
+  return { expandBag, openBag, closeBag, openShop, closeShop, renderShop, renderInventory, sellSelected, buy, bind };
 }
