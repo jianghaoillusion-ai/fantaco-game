@@ -178,7 +178,7 @@
         </form>
         <label class="tog"><input id="tog-music" type="checkbox" checked> 音樂</label>
         <label class="tog"><input id="tog-sfx" type="checkbox" checked> 音效</label>
-        <p class="notice">音樂是為每一章新寫的短旋律。過關時會唱〈飛向藍藍天〉的歌詞；官方錄音若尚未放進來，會先用一段原創的慶祝音樂。</p>
+        <p class="notice">每一章有自己的音樂。過關或升級時會播放官方〈飛向藍藍天〉的副歌，並顯示歌詞。</p>
       </div>
     </section>
 
@@ -209,6 +209,14 @@
 
     <div id="toast" class="toast" role="status"></div>
   </div>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
   <script type="module" src="js/app.js"></script>
 </body>
 </html>

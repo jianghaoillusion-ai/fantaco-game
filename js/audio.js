@@ -1,4 +1,4 @@
-/* Original synthesized chapter BGM + Web Audio SFX. Official 飛向藍藍天 recording is reserved at assets/audio/feixiang-sting.ogg if added later; we ship an original clear fanfare and show the lyrics. */
+/* Chapter BGM is original. Level/chapter clear plays the official 〈飛向藍藍天〉 chorus clip (assets/audio/feixiang-sting.*). */
 let ctx, unlocked = false;
 const musicEl = { el: null, id: null };
 
@@ -44,25 +44,26 @@ export function stopMusic() {
 }
 
 export function playClearTheme() {
+  /* Official 〈飛向藍藍天〉 chorus clip (from 飛向藍藍天_MMM v1.wav, ~28s). */
   stopMusic();
   if (!settings.music) return Promise.resolve();
   const el = new Audio();
-  const prefer = "assets/audio/feixiang-sting.ogg";
-  const fallbackOgg = "assets/audio/sting-clear.ogg";
-  const fallbackMp3 = "assets/audio/sting-clear.mp3";
-  // official sting file is optional; fall back to original fanfare
-  return fetch(prefer, { method: "HEAD" }).then((r) => {
-    if (r.ok) el.src = prefer;
-    else el.src = el.canPlayType("audio/ogg") ? fallbackOgg : fallbackMp3;
-    el.volume = 0.55;
+  const m4a = "assets/audio/feixiang-sting.m4a";
+  const ogg = "assets/audio/feixiang-sting.ogg";
+  if (el.canPlayType("audio/mp4") || el.canPlayType("audio/aac")) el.src = m4a;
+  else el.src = ogg;
+  el.volume = 0.62;
+  el.setAttribute("data-role", "feixiang-clear");
+  document.querySelectorAll("audio[data-role='feixiang-clear']").forEach((n) => n.remove());
+  document.body.appendChild(el);
+  const played = el.play().catch(() => {
+    // Safari/old engines: try the other container, still the official recording
+    el.src = el.src.endsWith(".m4a") ? ogg : m4a;
     return el.play().catch(() => {});
-  }).catch(() => {
-    el.src = el.canPlayType("audio/ogg") ? fallbackOgg : fallbackMp3;
-    el.volume = 0.55;
-    return el.play().catch(() => {});
-  }).then(() => new Promise((res) => {
+  });
+  return played.then(() => new Promise((res) => {
     el.onended = res;
-    setTimeout(res, 9000);
+    setTimeout(res, 30000);
   }));
 }
 

@@ -229,6 +229,14 @@
     "mian": {
       "name": "眠花糖",
       "portrait": "assets/mascot/front.png"
+    },
+    "bulu": {
+      "name": "布魯",
+      "portrait": "assets/chars/bulu.png"
+    },
+    "hate": {
+      "name": "哈特",
+      "portrait": "assets/chars/hate.png"
     }
   }
 }
