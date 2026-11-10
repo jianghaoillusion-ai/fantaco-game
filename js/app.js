@@ -67,6 +67,7 @@ function show(name) {
     renderOrders();
     applyChapterLook();
     playMusic(SAVE.chapter);
+    mascot?.wake?.();
   } else if (name === "title") {
     playMusic("village");
   } else if (name === "book") renderBook();

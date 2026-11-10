@@ -103,16 +103,30 @@ export function mountMascot(root) {
   }
   requestAnimationFrame(tick);
 
-  boot3d(canvas, img, () => anim, () => { mode3d = true; }).catch((err) => {
-    console.warn("眠花糖 3D 載入失敗，改用官方平面圖", err);
+  let starting3d = false;
+  const use2d = (err) => {
+    if (err) console.warn("眠花糖 3D 載入失敗，改用官方平面圖", err);
+    mode3d = false;
     canvas.style.display = "none";
     img.style.display = "";
     img.style.opacity = "1";
-  });
+  };
+  const start3d = () => {
+    if (starting3d || mode3d) return true;
+    if ((canvas.clientWidth || 0) < 8 || (canvas.clientHeight || 0) < 8) return false;
+    starting3d = true;
+    boot3d(canvas, img, () => anim, () => { mode3d = true; }, use2d).catch(use2d);
+    return true;
+  };
+  api.wake = () => { if (!start3d()) requestAnimationFrame(() => start3d()); };
+  if (!start3d()) {
+    const ro = new ResizeObserver(() => { if (start3d()) ro.disconnect(); });
+    ro.observe(canvas.parentElement || canvas);
+  }
   return api;
 }
 
-async function boot3d(canvas, img, getAnim, onReady) {
+async function boot3d(canvas, img, getAnim, onReady, onFail) {
   const ok = !!window.WebGLRenderingContext;
   if (!ok) throw new Error("no webgl");
   const THREE = await import("three");
@@ -147,42 +161,54 @@ async function boot3d(canvas, img, getAnim, onReady) {
     new GLTFLoader().load("assets/models/mianhuatang.glb", resolve, undefined, reject);
   });
   const bunny = gltf.scene;
-  const outlineMat = new THREE.MeshBasicMaterial({
-    color: 0x3b4468, side: THREE.BackSide, depthWrite: true
-  });
-  const meshes = [];
-  bunny.traverse((o) => { if (o.isMesh) meshes.push(o); });
-  for (const o of meshes) {
-    // Unlit fill matches official line-art (white body, ink features, yellow star).
-    const name = (o.name || o.parent?.name || "").toLowerCase();
-    let hex = 0xfbfcf6;
-    const c = o.material && o.material.color;
-    if (c) {
-      // yellow-ish -> star; dark -> face; else cream body
-      const hsl = { h:0, s:0, l:0 }; c.getHSL(hsl);
-      if (hsl.s > 0.4 && (c.r > 0.7 && c.g > 0.6 && c.b < 0.4)) hex = 0xffed00;
-      else if (hsl.l < 0.4) hex = 0x3b4468;
-      else hex = 0xfbfcf6;
-    }
-    o.material = new THREE.MeshBasicMaterial({ color: hex });
-    const out = new THREE.Mesh(o.geometry, outlineMat);
-    out.name = "outline";
-    out.scale.setScalar(1.035);
-    out.renderOrder = 0;
-    o.renderOrder = 1;
-    o.add(out);
-  }
-  // model already sits on y=0, height ~2
+  // Keep official GLB materials (cream body, ink face, yellow tail star).
   scene.add(bunny);
+
+  const ensureSize = () => {
+    const w = canvas.clientWidth || 0, h = canvas.clientHeight || 0;
+    if (w < 8 || h < 8) return false;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / Math.max(1, h);
+    camera.updateProjectionMatrix();
+    return true;
+  };
+  if (!ensureSize()) {
+    await new Promise((resolve) => {
+      const ro = new ResizeObserver(() => { if (ensureSize()) { ro.disconnect(); resolve(); } });
+      ro.observe(canvas.parentElement || canvas);
+      const iv = setInterval(() => { if (ensureSize()) { clearInterval(iv); ro.disconnect(); resolve(); } }, 200);
+    });
+  }
+
   img.style.opacity = "0";
   img.style.pointerEvents = "none";
   canvas.style.display = "block";
   onReady();
 
+  // If the canvas stays empty (hidden-at-boot WebGL / software renderer), go back to official 2D.
+  setTimeout(() => {
+    try {
+      const gl = renderer.getContext();
+      const w = gl.drawingBufferWidth, h = gl.drawingBufferHeight;
+      if (!w || !h) { onFail?.(new Error("empty 3d buffer")); return; }
+      const step = Math.max(4, Math.floor(Math.min(w, h) / 24));
+      const buf = new Uint8Array(4);
+      let hits = 0;
+      for (let y = 0; y < h; y += step) {
+        for (let x = 0; x < w; x += step) {
+          gl.readPixels(x, y, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+          if (buf[3] > 16) hits++;
+        }
+      }
+      if (hits < 3) onFail?.(new Error("3d canvas has no pixels"));
+    } catch (e) { onFail?.(e); }
+  }, 900);
+
   const t0 = performance.now();
   function loop(now) {
     const t = (now - t0) / 1000;
     const a = getAnim();
+    ensureSize();
     bunny.rotation.y = 0.35 + a.spin * 0.45;
     bunny.rotation.z = a.tilt * 0.012;
     bunny.position.y = a.bounce * 0.012;
