@@ -1,21 +1,21 @@
-import { Auth } from "./auth.js?v=9";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=9";
-import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=9";
-import { mountMascot } from "./mascot.js?v=9";
-import { mountHome } from "./home.js?v=9";
-import { bindStory, startStory } from "./story.js?v=9";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=9";
-import { bagCap, migrateBagSlots } from "./bag.js?v=9";
-import { reserveItems } from "./merge.js?v=9";
-import { avatarSrc } from "./portraits.js?v=9";
+import { Auth } from "./auth.js?v=10";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=10";
+import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=10";
+import { mountMascot } from "./mascot.js?v=10";
+import { mountHome } from "./home.js?v=10";
+import { bindStory, startStory } from "./story.js?v=10";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=10";
+import { bagCap, migrateBagSlots } from "./bag.js?v=10";
+import { reserveItems } from "./merge.js?v=10";
+import { avatarSrc } from "./portraits.js?v=10";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=9";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=9";
-import { regionById } from "./world.js?v=9";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=9";
+} from "./merge.js?v=10";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=10";
+import { regionById } from "./world.js?v=10";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=10";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -49,7 +49,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=9");
+  const res = await fetch(url + "?v=10");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }

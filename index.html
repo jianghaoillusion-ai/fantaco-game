@@ -16,20 +16,20 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/app.css?v=9">
-  <link rel="stylesheet" href="css/home.css?v=9">
-  <link rel="stylesheet" href="css/story.css?v=9">
-  <link rel="stylesheet" href="css/bag.css?v=9">
-  <link rel="stylesheet" href="css/orders.css?v=9">
-  <link rel="stylesheet" href="css/settings.css?v=9">
-  <link rel="stylesheet" href="css/quality.css?v=9">
+  <link rel="stylesheet" href="css/app.css?v=10">
+  <link rel="stylesheet" href="css/home.css?v=10">
+  <link rel="stylesheet" href="css/story.css?v=10">
+  <link rel="stylesheet" href="css/bag.css?v=10">
+  <link rel="stylesheet" href="css/orders.css?v=10">
+  <link rel="stylesheet" href="css/settings.css?v=10">
+  <link rel="stylesheet" href="css/quality.css?v=10">
 </head>
 <body>
   <div id="app">
 
     <section id="profile" class="screen">
       <div class="modal" style="margin:auto">
-        <img src="assets/mascot/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/painted/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <h2>先取一個暱稱</h2>
         <p>給自己或小朋友一個冒險的名字。<br>進度會記在這台裝置上。</p>
         <form id="nick-form">
@@ -46,7 +46,7 @@
       </button>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
       <h1>眠花糖的異想世界</h1>
-      <img class="hero" src="assets/mascot/three.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
+      <img class="hero" src="assets/mascot/painted/three.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
       <div class="actions">
         <button class="btn wide" id="btn-play">開始冒險</button>
         <div class="home-dock" role="navigation" aria-label="主畫面">
@@ -78,8 +78,8 @@
     <section id="play" class="screen">
       <div class="play-frame">
         <div class="hud play-hud">
-          <span class="pill level"><span data-level>Lv.1</span><span class="xpbar"><i data-xp></i></span></span>
-          <span class="pill energy" title="能量會慢慢回來"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span>/<span data-energy-max>100</span>　<small data-energy-in>已滿</small></span>
+          <span class="lv-badge" aria-label="等級"><span class="lv-star" aria-hidden="true">★</span><b data-level>Lv.1</b><span class="xpbar"><i data-xp></i></span></span>
+          <span class="pill energy" title="能量會慢慢回來"><img src="assets/icons/energy.png" alt=""> <span data-energy>100</span><span class="emax">/<span data-energy-max>100</span></span><small data-energy-in>已滿</small></span>
           <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
           <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
           <span class="pill mats" title="修復材料"><img src="assets/icons/material.png" alt=""> <span data-mats>0</span></span>
@@ -126,10 +126,10 @@
     <section id="map" class="screen pane">
       <div class="hud">
         <button class="icon-btn" data-back="play" aria-label="返回棋盤">←</button>
-        <span class="pill level" data-level>Lv.1</span>
+        <span class="lv-badge compact" aria-label="等級"><span class="lv-star" aria-hidden="true">★</span><b data-level>Lv.1</b></span>
         <span class="pill coins"><img src="assets/ui/coin.png" alt=""> <span data-coins>0</span></span>
         <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
-        <button type="button" id="btn-map-shop" class="btn ghost" style="min-height:40px;padding:8px 14px">小舖</button>
+        <button type="button" id="btn-map-shop" class="btn map-shop">小舖</button>
       </div>
       <h2 style="text-align:center;margin:4px 0 4px">微笑村地圖</h2>
       <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。</p>
@@ -217,7 +217,7 @@
         <span></span>
       </div>
       <div class="modal" style="margin:24px auto;text-align:center">
-        <img src="assets/mascot/wish.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/painted/wish.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <p id="daily-status">今天的禮物在這裡。</p>
         <p class="notice">連續來領，能量和星星種子會多一點點。</p>
         <button class="btn wide" id="btn-claim-daily" type="button">領取今日禮物</button>
@@ -226,7 +226,7 @@
 
     <div id="result" class="overlay">
       <div class="modal result-card">
-        <img src="assets/mascot/hero.png" alt="眠花糖" width="160" style="margin:0 auto 8px">
+        <img src="assets/mascot/painted/hero.png" alt="眠花糖" width="160" style="margin:0 auto 8px">
         <h2 id="result-title">這一章，完成了！</h2>
         <p id="result-sub"></p>
         <div id="result-lv" class="lv-badge"></div>
@@ -277,6 +277,7 @@
 
     <div id="settings-sheet" class="sheet-overlay">
       <div class="settings-card" role="dialog" aria-labelledby="settings-heading">
+        <img class="settings-mascot" src="assets/mascot/painted/front.png" alt="眠花糖" width="96">
         <h3 id="settings-heading">設定</h3>
         <form id="name-form" class="name-form">
           <input id="name-edit" type="text" maxlength="12" autocomplete="nickname" placeholder="冒險者名字">
@@ -312,6 +313,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=9"></script>
+  <script type="module" src="js/app.js?v=10"></script>
 </body>
 </html>

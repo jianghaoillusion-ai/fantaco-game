@@ -8,18 +8,18 @@ const FULL = {
   spirit: "assets/chars/spirit.png",
   bulu: "assets/chars/bulu.png",
   hate: "assets/chars/hate.png",
-  mascot: "assets/mascot/three.png"
+  mascot: "assets/mascot/painted/three.png"
 };
 
 const MASCOT_FULL = {
-  happy: "assets/mascot/front.png",
-  sad: "assets/mascot/front.png",
-  surprised: "assets/mascot/jump.png",
-  worried: "assets/mascot/front.png",
-  angry: "assets/mascot/three.png",
-  determined: "assets/mascot/three.png",
-  sleepy: "assets/mascot/sleep.png",
-  default: "assets/mascot/three.png"
+  happy: "assets/mascot/painted/front.png",
+  sad: "assets/mascot/painted/front.png",
+  surprised: "assets/mascot/painted/jump.png",
+  worried: "assets/mascot/painted/front.png",
+  angry: "assets/mascot/painted/three.png",
+  determined: "assets/mascot/painted/three.png",
+  sleepy: "assets/mascot/painted/sleep.png",
+  default: "assets/mascot/painted/three.png"
 };
 
 export function normId(id) {

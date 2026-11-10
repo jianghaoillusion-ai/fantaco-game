@@ -120,7 +120,8 @@ export function createOrdersUi(ctx) {
         <img class="npc" src="${avatar}" alt="${npc.name}">
         <div class="need">
           <img class="${ready ? "have" : "missing"}" src="${def?.img || ""}" alt="${def?.name || ""}">
-        </div>`;
+        </div>
+        <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>`;
       card.addEventListener("click", () => {
         if (ready) clickGive(o.id, card);
         else { sfx.invalid(); toast("還沒做出來喔"); }

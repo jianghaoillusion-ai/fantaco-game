@@ -1,6 +1,6 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
-import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=9";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=9";
+import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=10";
+import { nearbyEmpty, produceFrom } from "./merge.js?v=10";
 
 export const GEN_POPS = 12;
 export const GEN_COOL_MS = 30_000;
@@ -42,6 +42,10 @@ export function createFog(ctx) {
       if (anchor && anchor.r === r && anchor.c === c) {
         const badge = document.createElement("div");
         badge.className = "fog-badge";
+        if (c === 0) badge.classList.add("in-right");
+        else if (c === cols - 1) badge.classList.add("in-left");
+        if (r === 0) badge.classList.add("in-bottom");
+        else if (r === rows - 1) badge.classList.add("in-top");
         badge.innerHTML = `<img src="assets/ui/coin.png" alt="">${CLUMP_COSTS[id] || 0}`;
         slot.appendChild(badge);
       }

@@ -1,6 +1,6 @@
 /** Story scenes: big portraits, matching expressions, typewriter + mouth, filled stage. */
 
-import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=9";
+import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=10";
 
 let queue = [], idx = 0, doneFn = null;
 let typing = false, typed = "", full = "", typeTimer = 0, mouthTimer = 0, talking = false;
@@ -25,10 +25,17 @@ export function startStory(lines, done) {
   render();
 }
 
+function cssBgUrl(raw) {
+  let bg = String(raw || "").trim();
+  if (!bg || bg === "none") bg = "assets/bg/village.webp";
+  const m = bg.match(/^url\(\s*["']?(.+?)["']?\s*\)$/i);
+  const inner = (m ? m[1] : bg).trim();
+  if (/^https?:|^data:|^blob:/i.test(inner)) return 'url("' + inner + '")';
+  try { return 'url("' + new URL(inner, document.baseURI).href + '")'; }
+  catch { return 'url("' + inner + '")'; }
+}
 function applyBg() {
-  let bg = ctxRef?.chapterBg?.() || getComputedStyle(document.documentElement).getPropertyValue("--chapter-bg") || "";
-  bg = String(bg).trim();
-  if (!bg || bg === "none") bg = 'url("assets/bg/village.webp")';
+  let bg = cssBgUrl(ctxRef?.chapterBg?.() || getComputedStyle(document.documentElement).getPropertyValue("--chapter-bg") || "");
   const el = $("#story");
   if (!el) return;
   el.style.setProperty("--story-bg", bg);

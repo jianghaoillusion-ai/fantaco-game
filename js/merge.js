@@ -30,18 +30,33 @@ export function starterBoard(cols, rows) {
     if (r < 0 || c < 0 || r >= rows || c >= cols) return;
     b[idx(cols, r, c)] = cell;
   };
-  const cr = Math.floor(rows / 2), cc = Math.floor(cols / 2);
-  // 2 village generators + 8 varied items across chains/tiers, leaving empties in the open start area.
-  put(cr, cc, { kind: "gen", gen: "star", tier: 1, uid: makeUid() });
-  put(cr - 1, cc, { kind: "gen", gen: "garden", tier: 1, uid: makeUid() });
-  put(cr, cc - 1, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(cr + 1, cc, { kind: "item", chain: "star", tier: 1, uid: makeUid() });
-  put(cr - 2, cc, { kind: "item", chain: "star", tier: 2, uid: makeUid() });
-  put(cr, cc + 2, { kind: "item", chain: "star", tier: 3, uid: makeUid() });
-  put(cr + 1, cc - 2, { kind: "item", chain: "garden", tier: 1, uid: makeUid() });
-  put(cr - 1, cc - 2, { kind: "item", chain: "garden", tier: 2, uid: makeUid() });
-  put(cr + 2, cc, { kind: "item", chain: "garden", tier: 3, uid: makeUid() });
-  put(cr - 1, cc + 2, { kind: "item", chain: "tea", tier: 1, uid: makeUid() });
+  const item = (chain, tier) => ({ kind: "item", chain, tier, uid: makeUid() });
+  const gen = (id, tier) => ({ kind: "gen", gen: id, tier, uid: makeUid() });
+  // Interior 5x7 is open. Fill ~65% with varied village + later-chain items so the board reads full.
+  // Two identical stars sit side-by-side for a first merge.
+  put(4, 3, gen("star", 1));
+  put(3, 3, gen("garden", 1));
+  put(4, 2, item("star", 1));
+  put(5, 2, item("star", 1));
+  put(2, 3, item("star", 2));
+  put(4, 4, item("star", 3));
+  put(6, 4, item("star", 7)); // 微笑氣球
+  put(1, 2, item("garden", 1));
+  put(3, 1, item("garden", 2));
+  put(5, 3, item("garden", 3));
+  put(2, 5, item("garden", 4));
+  put(7, 2, item("garden", 5));
+  put(1, 4, item("tea", 1));
+  put(6, 1, item("tea", 2));
+  put(3, 5, item("candy", 1));
+  put(5, 5, item("candy", 2));
+  put(6, 3, item("candy", 3));
+  put(2, 1, item("magic", 1));
+  put(7, 4, item("magic", 2));
+  put(1, 5, item("magic", 3));
+  put(7, 5, item("forest", 1));
+  put(5, 1, item("star", 4));
+  put(3, 2, item("candy", 4));
   return b;
 }
 

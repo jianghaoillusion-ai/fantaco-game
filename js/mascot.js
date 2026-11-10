@@ -5,17 +5,17 @@
  * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
-  idle: "assets/mascot/three.png",
-  idle2: "assets/mascot/front.png",
-  cheer: "assets/mascot/jump.png",
-  wish: "assets/mascot/wish.png",
-  hero: "assets/mascot/hero.png",
-  think: "assets/mascot/sit.png",
-  sleep: "assets/mascot/sleep.png",
-  side: "assets/mascot/side.png",
-  run: "assets/mascot/run.png",
-  back: "assets/mascot/back.png",
-  face: "assets/mascot/face.png"
+  idle: "assets/mascot/painted/three.png",
+  idle2: "assets/mascot/painted/front.png",
+  cheer: "assets/mascot/painted/jump.png",
+  wish: "assets/mascot/painted/wish.png",
+  hero: "assets/mascot/painted/hero.png",
+  think: "assets/mascot/painted/sit.png",
+  sleep: "assets/mascot/painted/sleep.png",
+  side: "assets/mascot/painted/side.png",
+  run: "assets/mascot/painted/run.png",
+  back: "assets/mascot/painted/back.png",
+  face: "assets/mascot/painted/face.png"
 };
 
 function want3d() {

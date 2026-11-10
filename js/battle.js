@@ -1,4 +1,4 @@
-import { sfx } from "./audio.js?v=9";
+import { sfx } from "./audio.js?v=10";
 
 const W = 1280, H = 720;
 const GROUND = 600;
@@ -16,11 +16,11 @@ function loadImg(src) {
 }
 
 const IM = {
-  jump: loadImg("assets/mascot/jump.png"),
-  run: loadImg("assets/mascot/run.png"),
-  front: loadImg("assets/mascot/front.png"),
-  side: loadImg("assets/mascot/side.png"),
-  wish: loadImg("assets/mascot/wish.png"),
+  jump: loadImg("assets/mascot/painted/jump.png"),
+  run: loadImg("assets/mascot/painted/run.png"),
+  front: loadImg("assets/mascot/painted/front.png"),
+  side: loadImg("assets/mascot/painted/side.png"),
+  wish: loadImg("assets/mascot/painted/wish.png"),
   seed: loadImg("assets/items/star-seed.png"),
   smile: loadImg("assets/fx/smile.png"),
   bag: loadImg("assets/fx/bag.png"),

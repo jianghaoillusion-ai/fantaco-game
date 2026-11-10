@@ -13,12 +13,16 @@ export const CLUMP_COSTS = {
 };
 
 export function clumpOf(r, c, cols, rows) {
-  const cr = (rows - 1) / 2, cc = (cols - 1) / 2;
-  const dr = r - cr, dc = c - cc;
-  const m = Math.abs(dr) + Math.abs(dc);
-  if (m <= 3) return "start";
-  const dir = Math.abs(dr) >= Math.abs(dc) ? (dr < 0 ? "n" : "s") : (dc < 0 ? "w" : "e");
-  return (m <= 4 ? "inner-" : "outer-") + dir;
+  // Interior is the starting open area; fog/crates live only on the outer frame.
+  if (r > 0 && r < rows - 1 && c > 0 && c < cols - 1) return "start";
+  const onTop = r === 0, onBot = r === rows - 1, onLeft = c === 0, onRight = c === cols - 1;
+  if (onTop && !onLeft && !onRight) return "inner-n";
+  if (onBot && !onLeft && !onRight) return "inner-s";
+  if (onLeft && !onTop && !onBot) return (r <= 3 ? "inner-w" : "outer-w");
+  if (onRight && !onTop && !onBot) return (r <= 3 ? "inner-e" : "outer-e");
+  if (onTop) return "outer-n";
+  if (onBot) return "outer-s";
+  return "outer-n";
 }
 
 export function isAllOpen(save) {
