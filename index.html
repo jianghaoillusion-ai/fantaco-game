@@ -62,41 +62,45 @@
 
     <section id="play" class="screen">
       <div class="play-frame">
-      <div class="hud play-hud">
-        <button class="icon-btn" data-back="title" aria-label="回主畫面">←</button>
-        <span class="chip nick"><span data-nick></span>　<span data-level></span></span>
-        <div class="xpbar" title="經驗"><i data-xp></i></div>
-        <span class="chip energy" title="能量會慢慢回來">⚡ <span data-energy>80</span>/<span data-energy-max>80</span>　<span data-energy-in>已滿</span></span>
-        <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
-      </div>
-      <div class="chapter-chip"><span data-chapter>微笑村</span></div>
-      <div id="orders" class="orders" aria-label="訂單"></div>
-      <div class="play-main">
-        <aside class="mascot-col">
-          <div id="mascot-root"></div>
-        </aside>
-        <div id="board" class="board" role="grid" aria-label="合成棋盤"></div>
-      </div>
-      <div id="inventory" class="inventory">
-        <button type="button" id="btn-inv-toggle" class="inv-toggle">背包 <span id="inv-count">0/8</span></button>
-        <div id="inv-cells" class="inv-cells"></div>
-      </div>
+        <div class="hud play-hud">
+          <span class="pill level" data-level>Lv.1</span>
+          <span class="pill energy" title="能量會慢慢回來">⚡ <span data-energy>100</span>/<span data-energy-max>100</span>　<small data-energy-in>已滿</small></span>
+          <span class="pill coins"><img src="assets/ui/coin.svg" alt=""> <span data-coins>0</span></span>
+          <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+        </div>
+        <div id="orders" class="orders" aria-label="訂單"></div>
+        <div class="scene">
+          <div class="scene-bg" aria-hidden="true"></div>
+          <div id="mascot-root" class="mascot-corner"></div>
+          <div id="board" class="board" role="grid" aria-label="合成棋盤"></div>
+        </div>
+        <div class="item-info" id="item-info" hidden>
+          <div class="info-text">
+            <b id="info-name"></b>
+            <span id="info-hint"></span>
+          </div>
+          <button type="button" id="btn-sell" class="sell-btn">出售</button>
+        </div>
+        <div class="toolbar">
+          <button type="button" id="btn-bag" class="tool-btn bag">魔法袋 <span id="inv-count">0/8</span></button>
+          <button type="button" id="btn-go-map" class="tool-btn map">地圖</button>
+          <button type="button" id="btn-go-shop" class="tool-btn shop">小舖</button>
+          <button type="button" class="tool-btn ghost" data-back="title">主畫面</button>
+        </div>
       </div>
     </section>
 
-    <section id="map" class="screen">
+    <section id="map" class="screen pane">
       <div class="hud">
-        <button class="icon-btn" data-back="title" aria-label="返回">←</button>
-        <span class="chip"><span data-nick></span></span>
-        <span class="chip" data-level>Lv.1</span>
-        <div class="xpbar" title="經驗"><i data-xp></i></div>
-        <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+        <button class="icon-btn" data-back="play" aria-label="返回棋盤">←</button>
+        <span class="pill level" data-level>Lv.1</span>
+        <span class="pill coins"><img src="assets/ui/coin.svg" alt=""> <span data-coins>0</span></span>
+        <span class="pill seeds"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
+        <button type="button" id="btn-map-shop" class="btn ghost" style="min-height:40px;padding:8px 14px">小舖</button>
       </div>
-      <h2 style="text-align:center;margin:4px 0 12px">故事地圖</h2>
-      <div class="map-path">
-        <div class="path-line" aria-hidden="true"></div>
-        <div class="nodes" id="nodes"></div>
-      </div>
+      <h2 style="text-align:center;margin:4px 0 4px">微笑村地圖</h2>
+      <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。完全不用花錢。</p>
+      <div class="town-map" id="nodes"></div>
     </section>
 
     <section id="story" class="screen">
@@ -162,7 +166,8 @@
         <li>上面是角色訂單。把他們要的東西拖過去，就能拿到星星種子和經驗。</li>
         <li>能量會慢慢自己回來，每天還有免費禮物。完全不用花錢。</li>
         <li>完成故事訂單，就能打開下一章。平常的訂單會一直出，可以一直玩。</li>
-        <li>棋盤滿了，可以把道具先放進背包。</li>
+        <li>棋盤滿了，點左下角的「魔法袋」把道具先收起來。點格子上的物品，可以看到名稱，也可以賣掉多餘的（第 1 階不能賣）。</li>
+        <li>點「地圖」用金幣和星星種子打開新地區、修復建築。點「小舖」可買道具或回復能量。全部只用遊戲裡的金幣和種子，沒有儲值，也沒有廣告。</li>
       </ol>
     </section>
 
@@ -206,6 +211,46 @@
         <div id="result-lv" class="lv-badge"></div>
         <div id="result-lyrics" class="lyrics result-lyrics"></div>
         <button class="btn wide" id="btn-result-ok" type="button">繼續</button>
+      </div>
+    </div>
+
+
+    <div id="bag" class="overlay">
+      <div class="modal bag-card">
+        <h3>魔法袋</h3>
+        <p class="notice">點一下物品，就可以放回棋盤空格。</p>
+        <div id="inv-cells" class="inv-cells bag-grid"></div>
+        <button class="btn" id="btn-bag-close" type="button">關閉</button>
+      </div>
+    </div>
+
+    <div id="shop" class="overlay">
+      <div class="modal shop-card">
+        <h3 id="shop-title">微笑小舖</h3>
+        <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。完全免費，沒有儲值，也沒有廣告。</p>
+        <div id="shop-list" class="shop-list"></div>
+        <button class="btn" id="btn-shop-close" type="button">關閉</button>
+      </div>
+    </div>
+
+    <div id="discover" class="overlay">
+      <div class="modal discover-card">
+        <img id="discover-img" alt="" width="160" style="margin:0 auto 8px">
+        <h3 id="discover-name">新發現</h3>
+        <p id="discover-sub"></p>
+        <button class="btn green" id="btn-discover-ok" type="button">太好了</button>
+      </div>
+    </div>
+
+    <div id="region-buy" class="overlay">
+      <div class="modal">
+        <h3 id="region-buy-title">打開新地區</h3>
+        <p id="region-buy-sub"></p>
+        <p class="soon-pill" id="region-buy-cost"></p>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:16px">
+          <button class="btn ghost" id="btn-region-cancel" type="button">以後再說</button>
+          <button class="btn green" id="btn-region-ok" type="button">打開</button>
+        </div>
       </div>
     </div>
 

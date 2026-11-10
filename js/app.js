@@ -5,19 +5,23 @@ import { mountMascot } from "./mascot.js";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
-  remapBoard
+  remapBoard, nearbyEmpty
 } from "./merge.js";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js";
+import { regionById } from "./world.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-let GAME, CHAINS, GENS, CHAPTERS, STORY;
+let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
 let SAVE = loadSave();
 let mascot;
 let dragging = null;
 let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
+let selectedUid = null;
+let systems;
 
 let COLS = 7, ROWS = 9;
 const CHAPTER_END = {
@@ -37,17 +41,18 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=5");
+  const res = await fetch(url + "?v=6");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
 
 export async function boot() {
-  [GAME, CHAINS, CHAPTERS, STORY] = await Promise.all([
+  [GAME, CHAINS, CHAPTERS, STORY, MAP] = await Promise.all([
     fetchJSON("data/game.json"),
     fetchJSON("data/chains.json"),
     fetchJSON("data/chapters.json"),
-    fetchJSON("data/story-orders.json")
+    fetchJSON("data/story-orders.json"),
+    fetchJSON("data/map.json")
   ]);
   GENS = CHAINS.generators;
   CHAINS = CHAINS.chains;
@@ -56,10 +61,15 @@ export async function boot() {
   tickEnergy(SAVE);
   COLS = SAVE.boardCols || COLS;
   ROWS = SAVE.boardRows || ROWS;
+  if (!SAVE.unlockedRegions) SAVE.unlockedRegions = ["village"];
+  if (!SAVE.region) SAVE.region = "village";
   if (!SAVE.board) {
     SAVE.board = starterBoard(COLS, ROWS);
     SAVE.boardCols = COLS;
     SAVE.boardRows = ROWS;
+    if (!SAVE.unlockedClumps) SAVE.unlockedClumps = ["start"];
+  } else if (!SAVE.unlockedClumps) {
+    SAVE.unlockedClumps = ["all"];
   }
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
@@ -69,13 +79,14 @@ export async function boot() {
   ensureOrders();
   unlockGenerators();
   persist();
+  systems = attachSystems(systemCtx());
   bind();
   mascot = mountMascot($("#mascot-root"));
   window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); }, 1000);
 }
 
 function persist() { tickEnergy(SAVE); writeSave(SAVE); syncCloud(SAVE); }
@@ -108,10 +119,17 @@ function chapter() { return CHAPTERS.find((c) => c.id === SAVE.chapter) || CHAPT
 
 function applyChapterLook() {
   const ch = chapter();
+  const region = regionById(MAP, SAVE.region) || null;
   const play = $("#play");
-  const bg = new URL(ch.bg, document.baseURI).href;
-  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.72), rgba(251,252,246,.88) 40%, var(--cream)), url("${bg}")`;
+  const bgPath = region?.bg || ch.bg;
+  const bg = new URL(bgPath, document.baseURI).href;
+  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.35), rgba(251,252,246,.55) 60%, var(--cream)), url("${bg}")`;
+  play.style.setProperty("--chapter-bg", `url("${bg}")`);
   play.dataset.chapterId = ch.id;
+  play.dataset.regionId = SAVE.region || ch.id;
+  const sceneBg = $(".scene-bg");
+  if (sceneBg) sceneBg.style.backgroundImage = `url("${bg}")`;
+  $$("[data-chapter]").forEach((el) => { el.textContent = region?.name || ch.title; });
 }
 
 function bind() {
@@ -160,7 +178,7 @@ function bind() {
     if (pendingAfterClear) { const fn = pendingAfterClear; pendingAfterClear = null; fn(); }
     else { playMusic(SAVE.chapter); show("play"); }
   });
-  $("#btn-inv-toggle")?.addEventListener("click", () => $("#inventory").classList.toggle("open"));
+  systems?.bind();
 
   $("#play").addEventListener("pointerdown", onBoardDown);
   window.addEventListener("pointermove", onDragMove);
@@ -176,9 +194,9 @@ function bind() {
   };
   window.addEventListener("resize", onWinResize);
   window.addEventListener("orientationchange", onWinResize);
-  const main = $(".play-main");
-  if (main && window.ResizeObserver) {
-    new ResizeObserver(onWinResize).observe(main);
+  const box = $(".scene") || $(".play-main");
+  if (box && window.ResizeObserver) {
+    new ResizeObserver(onWinResize).observe(box);
   }
 }
 
@@ -190,6 +208,7 @@ function refreshHud() {
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
+  $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins || 0; });
   $$("[data-energy]").forEach((el) => { el.textContent = SAVE.energy; });
   $$("[data-energy-max]").forEach((el) => { el.textContent = ENERGY.max; });
   const wait = nextEnergyIn(SAVE);
@@ -222,15 +241,19 @@ function toast(msg) {
 function pickBoardSize(availW, availH) {
   const gap = availW < 430 ? 4 : 6;
   const pad = availW < 430 ? 6 : 8;
-  const minCell = 36, maxCell = 92;
-  const aspect = availW / Math.max(1, availH);
+  const minCell = 36, maxCell = 72;
+  const vw = (typeof window !== "undefined" && window.innerWidth) || availW;
+  const vh = (typeof window !== "undefined" && window.innerHeight) || availH;
+  const aspect = vw / Math.max(1, vh);
   const preferred = aspect < 0.9
-    ? [[7, 9], [8, 10], [7, 8], [8, 9], [7, 10], [6, 9], [8, 11], [6, 8]]
+    ? [[7, 9], [8, 10], [7, 8], [8, 9], [6, 9], [7, 10], [8, 8], [6, 8]]
     : aspect > 1.2
-      ? [[10, 7], [11, 7], [10, 8], [9, 7], [11, 8], [12, 7], [8, 6], [9, 6]]
-      : [[8, 8], [8, 7], [7, 7], [9, 8], [8, 9], [9, 7], [7, 8]];
+      ? [[10, 7], [11, 7], [9, 7], [10, 8], [8, 6], [11, 8], [12, 7], [9, 6]]
+      : [[8, 8], [8, 7], [7, 7], [9, 7], [9, 8], [8, 9], [7, 8]];
+  const target = aspect < 0.9 ? (vw < 600 ? [7, 9] : [8, 10]) : aspect > 1.2 ? [10, 7] : [8, 8];
+  const idealCell = availW < 500 ? 46 : availW < 900 ? 58 : 64;
   const score = (cols, rows) => {
-    const border = 8; // 3px border + a little slack
+    const border = 8;
     const cell = Math.floor(Math.min(
       (availW - pad * 2 - gap * (cols - 1) - border) / cols,
       (availH - pad * 2 - gap * (rows - 1) - border) / rows
@@ -241,41 +264,30 @@ function pickBoardSize(availW, availH) {
     const usedH = pad * 2 + usedC * rows + gap * (rows - 1) + border;
     if (usedW > availW + 0.5 || usedH > availH + 0.5) return null;
     const fill = (usedW * usedH) / Math.max(1, availW * availH);
-    return { cols, rows, cell: usedC, gap, pad, fill };
+    const cellFit = 1 - Math.min(1, Math.abs(usedC - idealCell) / 36);
+    let quality = cellFit * 0.7 + fill * 0.3;
+    if (cols === target[0] && rows === target[1] && usedC >= 40) quality += 0.2;
+    return { cols, rows, cell: usedC, gap, pad, fill, quality };
   };
   let best = null;
-  const tried = new Set();
   for (const [c, r] of preferred) {
-    tried.add(c + "," + r);
     const s = score(c, r);
-    if (!s) continue;
-    if (!best || s.fill > best.fill + 0.02 || (Math.abs(s.fill - best.fill) <= 0.02 && s.cell > best.cell)) best = s;
+    if (s && (!best || s.quality > best.quality)) best = s;
   }
+  if (best) return best;
   for (let c = 6; c <= 12; c++) {
     for (let r = 5; r <= 12; r++) {
-      if (tried.has(c + "," + r)) continue;
       const s = score(c, r);
-      if (!s) continue;
-      if (!best || s.fill > best.fill + 0.04 || (Math.abs(s.fill - best.fill) <= 0.01 && s.cols * s.rows >= best.cols * best.rows && s.cell >= best.cell - 2)) best = s;
+      if (s && (!best || s.quality > best.quality)) best = s;
     }
   }
   return best || { cols: 7, rows: 9, cell: 40, gap, pad, fill: 0 };
 }
 
 function measureBoardBox() {
-  const main = $(".play-main");
-  const mascot = $(".mascot-col");
-  if (!main) return { w: 360, h: 400 };
-  const gap = parseFloat(getComputedStyle(main).gap) || 8;
-  const row = getComputedStyle(main).flexDirection !== "column";
-  const w = main.clientWidth;
-  const h = main.clientHeight;
-  if (row) {
-    const mw = mascot ? mascot.getBoundingClientRect().width : 0;
-    return { w: Math.max(120, w - mw - gap), h: Math.max(120, h) };
-  }
-  const mh = mascot ? mascot.getBoundingClientRect().height : 0;
-  return { w: Math.max(120, w), h: Math.max(120, h - mh - gap) };
+  const scene = $(".scene") || $(".play-main");
+  if (!scene) return { w: 360, h: 400 };
+  return { w: Math.max(120, scene.clientWidth - 8), h: Math.max(120, scene.clientHeight - 8) };
 }
 
 function applyBoardLayout() {
@@ -335,10 +347,13 @@ function renderBoard() {
       slot.dataset.r = r; slot.dataset.c = c;
       const item = cellAt(r, c);
       if (item) slot.appendChild(makePiece(item));
+      systems?.fog.decorateCell(slot, r, c, item);
       board.appendChild(slot);
     }
   }
   renderInventory();
+  const sel = selectedUid && findCellByUid(selectedUid);
+  systems?.fx.showInfo(sel ? sel.item : null);
 }
 
 function itemRarity(item) {
@@ -380,6 +395,8 @@ function findCellByUid(uid) {
 }
 
 function onBoardDown(e) {
+  const locked = e.target.closest(".cell.locked");
+  if (locked && !e.target.closest(".piece")) { systems?.fog.onLockedTap(locked); return; }
   const piece = e.target.closest(".piece");
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
@@ -419,6 +436,7 @@ function highlightDrop(e) {
     if (od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier) cell.classList.add("hot");
   } else {
     const r = +cell.dataset.r, c = +cell.dataset.c;
+    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) return;
     const dest = cellAt(r, c);
     if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
   }
@@ -490,13 +508,22 @@ function removeFrom(loc) {
 
 function onTap(loc) {
   const item = loc.item;
-  if (item.kind === "gen") { tapGenerator(loc); return; }
-  toast(infoName(item));
+  selectedUid = item.uid;
+  systems?.fx.showInfo(item);
   sfx.tap();
+  if (item.kind === "gen") { tapGenerator(loc); return; }
+  renderBoard();
 }
 
 function tapGenerator(loc) {
   tickEnergy(SAVE);
+  const gen = loc.item;
+  if (gen.coolUntil && gen.coolUntil > Date.now()) {
+    const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
+    sfx.invalid();
+    toast(`產生器還在休息（${s} 秒）`);
+    return;
+  }
   if (SAVE.energy < 1) {
     sfx.energy();
     mascot?.sad();
@@ -504,7 +531,8 @@ function tapGenerator(loc) {
     toast(`能量還在回來的路上（${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}）`);
     return;
   }
-  let empty = firstEmpty(SAVE.board);
+  const origin = loc.where === "board" ? loc.i : -1;
+  let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
   let toInv = false;
   if (empty < 0) {
     if (SAVE.inventory.length >= (GAME.board?.inventory || 8)) {
@@ -514,10 +542,12 @@ function tapGenerator(loc) {
     }
     toInv = true;
   }
-  const made = produceFrom(loc.item, GENS);
+  const made = produceFrom(gen, GENS);
   if (!made) return;
   SAVE.energy -= 1;
   if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
+  gen.pops = (gen.pops || 0) + 1;
+  if (gen.pops >= GEN_POPS) { gen.pops = 0; gen.coolUntil = Date.now() + GEN_COOL_MS; }
   if (toInv) SAVE.inventory.push(made);
   else SAVE.board[empty] = made;
   discover(made);
@@ -525,10 +555,11 @@ function tapGenerator(loc) {
   persist();
   renderBoard();
   refreshHud();
-  mascot?.idle();
+  systems?.fx.popAt(made.uid);
 }
 
 function moveOrMerge(loc, r, c) {
+  if (systems && !systems.fog.canDropAt(r, c)) { sfx.invalid(); toast("這一格還沒揭開"); return; }
   const destI = idx(COLS, r, c);
   const src = loc.item;
   const dest = SAVE.board[destI];
@@ -570,6 +601,7 @@ function onMerged(merged) {
   sfx.merge(tier);
   if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
   mascot?.merge(tier);
+  systems?.fx.popAt(merged.uid);
   discover(merged);
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) shake(6);
@@ -586,7 +618,7 @@ function discover(cell, opts = {}) {
       SAVE.treasures[defNameId(def)] = (SAVE.treasures[defNameId(def)] || 0) + 1;
       if (!opts.silent) {
         SAVE.starSeeds += 1;
-        toast(`新發現：${def.name}　＋1 星星種子`);
+        systems?.fx.showDiscover(cell);
       }
     }
   }
@@ -622,17 +654,7 @@ function floatCombo(n) {
 }
 
 function renderInventory() {
-  const box = $("#inv-cells");
-  box.innerHTML = "";
-  const cap = GAME.board?.inventory || 8;
-  $("#inv-count").textContent = `${SAVE.inventory.length}/${cap}`;
-  for (let i = 0; i < cap; i++) {
-    const slot = document.createElement("div");
-    slot.className = "cell inv-cell";
-    slot.dataset.inv = i;
-    if (SAVE.inventory[i]) slot.appendChild(makePiece(SAVE.inventory[i]));
-    box.appendChild(slot);
-  }
+  if (systems?.shop) systems.shop.renderInventory();
 }
 
 /* ---------- orders ---------- */
@@ -691,7 +713,9 @@ function hasGen(id) {
 
 function grantGen(id, tier = 1) {
   if (hasGen(id)) return false;
-  const empty = firstEmpty(SAVE.board);
+  const empty = systems
+    ? nearbyEmpty(SAVE.board, COLS, ROWS, -1, systems.fog.isOpenIndex)
+    : firstEmpty(SAVE.board);
   const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
   if (empty >= 0) SAVE.board[empty] = cell;
   else if (SAVE.inventory.length < (GAME.board?.inventory || 8)) SAVE.inventory.push(cell);
@@ -710,27 +734,7 @@ function unlockGenerators() {
 }
 
 function renderOrders() {
-  const box = $("#orders");
-  box.innerHTML = "";
-  for (const o of SAVE.orders) {
-    const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/mascot/front.png" };
-    const def = itemDef(CHAINS, o.need.chain, o.need.tier);
-    const card = document.createElement("div");
-    card.className = "order" + (o.flag ? " story" : "");
-    card.dataset.id = o.id;
-    card.innerHTML = `
-      <img class="npc" src="${npc.portrait}" alt="${npc.name}">
-      <div class="body">
-        <b>${npc.name}${o.flag ? " · 故事" : ""}</b>
-        <div class="need">
-          <img src="${def?.img || ""}" alt="">
-          <span>${def?.name || ""}</span>
-        </div>
-        ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
-        <div class="rew">＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
-      </div>`;
-    box.appendChild(card);
-  }
+  if (systems?.orders) systems.orders.renderOrders();
 }
 
 function tryFulfill(loc, orderId) {
@@ -743,6 +747,8 @@ function tryFulfill(loc, orderId) {
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
   SAVE.starSeeds += o.reward.seeds || 0;
+  SAVE.coins = (SAVE.coins || 0) + (o.reward.coins ?? ((o.reward.seeds || 0) + 4));
+  systems?.orders.bumpDaily();
   const before = SAVE.level;
   SAVE.xp += o.reward.xp || 0;
   SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
@@ -877,28 +883,7 @@ function renderBook() {
 }
 
 function renderMap() {
-  const box = $("#nodes");
-  box.innerHTML = "";
-  for (const ch of CHAPTERS) {
-    const locked = !chapterUnlocked(ch.id);
-    const active = SAVE.chapter === ch.id;
-    const btn = document.createElement("button");
-    btn.className = "node" + (locked ? " locked" : "") + (active ? " active" : "");
-    const pct = Math.min(100, Math.round(((SAVE.restore[ch.id] || 0) / (ch.restoreSteps || 5)) * 100));
-    btn.innerHTML = `<img class="thumb" src="${ch.bg}" alt="">
-      <div><div class="num">第 ${ch.number} 章</div><h3>${ch.title}${active ? "　正在這裡" : ""}</h3>
-      <small>${locked ? "先完成前面的故事" : ch.subtitle + "　村莊恢復 " + pct + "%"}</small></div>`;
-    if (!locked) btn.addEventListener("click", () => {
-      SAVE.chapter = ch.id; persist(); sfx.tap(); show("play");
-    });
-    box.appendChild(btn);
-  }
-  const soon = document.createElement("div");
-  soon.className = "node soon";
-  soon.innerHTML = `<img class="thumb" src="assets/mascot/sleep.png" alt="">
-    <div><div class="num">即將到來<span class="soon-mark">每週更新</span></div>
-    <h3>新的小故事製作中</h3><small>故事會一直加。平常的訂單也不會停，可以一直玩下去。</small></div>`;
-  box.appendChild(soon);
+  if (systems?.map) systems.map.renderMap();
 }
 
 function renderDaily() {
@@ -942,6 +927,31 @@ function renderLyrics() {
   $("#lyrics-credit").textContent = `詞｜${L.lyricist}　曲｜${L.composer}`;
   $("#lyrics-src").innerHTML = `來源：<a href="${L.sourceUrl}" target="_blank" rel="noopener">${L.source}</a>`;
   $("#lyrics-lines").innerHTML = L.lines.map((l) => `<p>${l}</p>`).join("");
+}
+
+
+function systemCtx() {
+  return {
+    $, $$,
+    getSave: () => SAVE,
+    getGame: () => GAME,
+    getMap: () => MAP,
+    getCols: () => COLS,
+    getRows: () => ROWS,
+    getSelected: () => selectedUid,
+    setSelected: (u) => { selectedUid = u; },
+    persist, toast, sfx, show, refresh, refreshHud,
+    startStory, applyChapterLook, playMusic,
+    makePiece, infoName, infoImg, findCellByUid, removeFrom,
+    tryFulfill: (loc, id) => tryFulfill(loc, id),
+    grantGen: (id, tier) => grantGen(id, tier),
+    xpLevel: (xp) => xpLevel(xp, GAME.xpCurve || [0, 40, 100]),
+    makeUid, ENERGY, todayKey,
+    itemDef: (chain, tier) => itemDef(CHAINS, chain, tier),
+    maxTier: (chain) => maxTier(CHAINS, chain),
+    get mascot() { return mascot; },
+    showInfo: (item) => systems?.fx.showInfo(item)
+  };
 }
 
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
