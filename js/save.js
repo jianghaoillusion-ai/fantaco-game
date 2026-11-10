@@ -16,11 +16,13 @@ export function emptySave() {
     energy: ENERGY_MAX,
     energyAt: Date.now(),
     board: null,
+    boardCols: 7,
+    boardRows: 9,
     inventory: [],
     orders: [],
     storyDone: [],
     chapter: "village",
-    restore: { village: 0, journey: 0, candy: 0 },
+    restore: { village: 0, journey: 0, candy: 0, bulu: 0, hate: 0, ending: 0 },
     treasures: {},
     discovered: {},
     flags: {},
@@ -47,7 +49,11 @@ function migrate(v1) {
 export function loadSave() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...emptySave(), ...JSON.parse(raw) };
+    if (raw) {
+      const loaded = { ...emptySave(), ...JSON.parse(raw) };
+      loaded.restore = { ...emptySave().restore, ...(loaded.restore || {}) };
+      return loaded;
+    }
     const old = localStorage.getItem(LEGACY);
     if (old) return migrate(JSON.parse(old));
   } catch {}

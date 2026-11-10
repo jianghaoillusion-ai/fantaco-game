@@ -4,7 +4,8 @@ import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSetting
 import { mountMascot } from "./mascot.js";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
-  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx
+  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
+  remapBoard
 } from "./merge.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -18,10 +19,25 @@ let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
 
-const COLS = 7, ROWS = 6;
+let COLS = 7, ROWS = 9;
+const CHAPTER_END = {
+  village: "ch1-end",
+  journey: "ch2-end",
+  candy: "ch3-end",
+  bulu: "ch4-end",
+  hate: "ch5-end",
+  ending: "ch6-end"
+};
+const CHAPTER_NEXT = {
+  village: "journey",
+  journey: "candy",
+  candy: "bulu",
+  bulu: "hate",
+  hate: "ending"
+};
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=2");
+  const res = await fetch(url + "?v=5");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -38,7 +54,13 @@ export async function boot() {
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
   tickEnergy(SAVE);
-  if (!SAVE.board) SAVE.board = starterBoard(COLS, ROWS);
+  COLS = SAVE.boardCols || COLS;
+  ROWS = SAVE.boardRows || ROWS;
+  if (!SAVE.board) {
+    SAVE.board = starterBoard(COLS, ROWS);
+    SAVE.boardCols = COLS;
+    SAVE.boardRows = ROWS;
+  }
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
   setAudioSettings(SAVE.settings);
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
@@ -63,11 +85,14 @@ function show(name) {
   const el = document.getElementById(name);
   if (el) el.classList.add("on");
   if (name === "play") {
-    renderBoard();
-    renderOrders();
     applyChapterLook();
     playMusic(SAVE.chapter);
     mascot?.wake?.();
+    requestAnimationFrame(() => {
+      applyBoardLayout();
+      renderBoard();
+      renderOrders();
+    });
   } else if (name === "title") {
     playMusic("village");
   } else if (name === "book") renderBook();
@@ -141,6 +166,20 @@ function bind() {
   window.addEventListener("pointermove", onDragMove);
   window.addEventListener("pointerup", onDragUp);
   window.addEventListener("pointercancel", onDragUp);
+
+  let resizeT = 0;
+  const onWinResize = () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => {
+      if ($("#play")?.classList.contains("on")) applyBoardLayout();
+    }, 120);
+  };
+  window.addEventListener("resize", onWinResize);
+  window.addEventListener("orientationchange", onWinResize);
+  const main = $(".play-main");
+  if (main && window.ResizeObserver) {
+    new ResizeObserver(onWinResize).observe(main);
+  }
 }
 
 function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } }
@@ -176,6 +215,108 @@ function toast(msg) {
   t.classList.add("on");
   clearTimeout(t._id);
   t._id = setTimeout(() => t.classList.remove("on"), 1800);
+}
+
+
+/* ---------- responsive board ---------- */
+function pickBoardSize(availW, availH) {
+  const gap = availW < 430 ? 4 : 6;
+  const pad = availW < 430 ? 6 : 8;
+  const minCell = 36, maxCell = 92;
+  const aspect = availW / Math.max(1, availH);
+  const preferred = aspect < 0.9
+    ? [[7, 9], [8, 10], [7, 8], [8, 9], [7, 10], [6, 9], [8, 11], [6, 8]]
+    : aspect > 1.2
+      ? [[10, 7], [11, 7], [10, 8], [9, 7], [11, 8], [12, 7], [8, 6], [9, 6]]
+      : [[8, 8], [8, 7], [7, 7], [9, 8], [8, 9], [9, 7], [7, 8]];
+  const score = (cols, rows) => {
+    const border = 8; // 3px border + a little slack
+    const cell = Math.floor(Math.min(
+      (availW - pad * 2 - gap * (cols - 1) - border) / cols,
+      (availH - pad * 2 - gap * (rows - 1) - border) / rows
+    ));
+    if (cell < minCell) return null;
+    const usedC = Math.min(cell, maxCell);
+    const usedW = pad * 2 + usedC * cols + gap * (cols - 1) + border;
+    const usedH = pad * 2 + usedC * rows + gap * (rows - 1) + border;
+    if (usedW > availW + 0.5 || usedH > availH + 0.5) return null;
+    const fill = (usedW * usedH) / Math.max(1, availW * availH);
+    return { cols, rows, cell: usedC, gap, pad, fill };
+  };
+  let best = null;
+  const tried = new Set();
+  for (const [c, r] of preferred) {
+    tried.add(c + "," + r);
+    const s = score(c, r);
+    if (!s) continue;
+    if (!best || s.fill > best.fill + 0.02 || (Math.abs(s.fill - best.fill) <= 0.02 && s.cell > best.cell)) best = s;
+  }
+  for (let c = 6; c <= 12; c++) {
+    for (let r = 5; r <= 12; r++) {
+      if (tried.has(c + "," + r)) continue;
+      const s = score(c, r);
+      if (!s) continue;
+      if (!best || s.fill > best.fill + 0.04 || (Math.abs(s.fill - best.fill) <= 0.01 && s.cols * s.rows >= best.cols * best.rows && s.cell >= best.cell - 2)) best = s;
+    }
+  }
+  return best || { cols: 7, rows: 9, cell: 40, gap, pad, fill: 0 };
+}
+
+function measureBoardBox() {
+  const main = $(".play-main");
+  const mascot = $(".mascot-col");
+  if (!main) return { w: 360, h: 400 };
+  const gap = parseFloat(getComputedStyle(main).gap) || 8;
+  const row = getComputedStyle(main).flexDirection !== "column";
+  const w = main.clientWidth;
+  const h = main.clientHeight;
+  if (row) {
+    const mw = mascot ? mascot.getBoundingClientRect().width : 0;
+    return { w: Math.max(120, w - mw - gap), h: Math.max(120, h) };
+  }
+  const mh = mascot ? mascot.getBoundingClientRect().height : 0;
+  return { w: Math.max(120, w), h: Math.max(120, h - mh - gap) };
+}
+
+function applyBoardLayout() {
+  const box = measureBoardBox();
+  const picked = pickBoardSize(box.w, box.h);
+  const frame = $(".play-frame") || $("#play");
+  if (frame) {
+    const fw = (frame.clientWidth || box.w) - 24;
+    const invCell = Math.max(40, Math.min(64, Math.floor((fw - 6 * 7) / 8)));
+    frame.style.setProperty("--inv-cell", invCell + "px");
+  }
+  const sizeChanged = picked.cols !== COLS || picked.rows !== ROWS || (SAVE.board && SAVE.board.length !== picked.cols * picked.rows);
+  COLS = picked.cols;
+  ROWS = picked.rows;
+  const board = $("#board");
+  if (board) {
+    board.style.setProperty("--cols", String(COLS));
+    board.style.setProperty("--rows", String(ROWS));
+    board.style.setProperty("--cell", picked.cell + "px");
+    board.style.setProperty("--gap", picked.gap + "px");
+    board.style.setProperty("--pad", picked.pad + "px");
+  }
+  if (sizeChanged) {
+    const oldC = SAVE.boardCols || 7;
+    const oldR = SAVE.boardRows || Math.max(1, Math.floor((SAVE.board || []).length / Math.max(1, oldC)));
+    if (SAVE.board && SAVE.board.length) {
+      const { board: next, overflow } = remapBoard(SAVE.board, oldC, oldR, COLS, ROWS);
+      SAVE.board = next;
+      const cap = GAME.board?.inventory || 8;
+      for (const cell of overflow) {
+        if (SAVE.inventory.filter(Boolean).length < cap) SAVE.inventory.push(cell);
+      }
+    } else {
+      SAVE.board = starterBoard(COLS, ROWS);
+    }
+    SAVE.boardCols = COLS;
+    SAVE.boardRows = ROWS;
+    persist();
+    renderBoard();
+  }
+  return picked;
 }
 
 /* ---------- board render & drag ---------- */
@@ -499,11 +640,21 @@ function chapterUnlocked(id) {
   if (id === "village") return true;
   if (id === "journey") return SAVE.storyDone.includes("ch1-end") || SAVE.storyDone.includes("v5");
   if (id === "candy") return SAVE.storyDone.includes("ch2-end") || SAVE.storyDone.includes("j5");
+  if (id === "bulu") return SAVE.storyDone.includes("ch3-end") || SAVE.storyDone.includes("c5");
+  if (id === "hate") return SAVE.storyDone.includes("ch4-end");
+  if (id === "ending") return SAVE.storyDone.includes("ch5-end");
   return false;
 }
 
+function chapterOpenForStory(id, flag) {
+  const end = CHAPTER_END[id];
+  if (!end) return chapterUnlocked(id);
+  if (SAVE.storyDone.includes(end) && flag !== end) return false;
+  return chapterUnlocked(id);
+}
+
 function nextStoryOrder() {
-  return STORY.find((o) => !SAVE.storyDone.includes(o.flag) && !SAVE.storyDone.includes(o.id) && chapterUnlocked(o.chapter));
+  return STORY.find((o) => !SAVE.storyDone.includes(o.flag) && !SAVE.storyDone.includes(o.id) && chapterOpenForStory(o.chapter, o.flag));
 }
 
 function ensureOrders() {
@@ -575,6 +726,7 @@ function renderOrders() {
           <img src="${def?.img || ""}" alt="">
           <span>${def?.name || ""}</span>
         </div>
+        ${o.banter ? `<div class="banter">${o.banter}</div>` : ""}
         <div class="rew">＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
       </div>`;
     box.appendChild(card);
@@ -603,9 +755,8 @@ function tryFulfill(loc, orderId) {
   sfx.order();
   mascot?.order();
   const leveled = SAVE.level > before;
-  const chapterClear = o.flag === "ch1-end" || o.flag === "ch2-end" || o.flag === "ch3-end";
-  if (o.flag === "ch1-end") SAVE.chapter = "journey";
-  if (o.flag === "ch2-end") SAVE.chapter = "candy";
+  const chapterClear = Object.values(CHAPTER_END).includes(o.flag);
+  if (chapterClear && CHAPTER_NEXT[o.chapter]) SAVE.chapter = CHAPTER_NEXT[o.chapter];
   ensureOrders();
   unlockGenerators();
   persist();
@@ -613,25 +764,32 @@ function tryFulfill(loc, orderId) {
   const after = () => {
     if (o.outro) startStory(o.outro, () => {
       if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
-      else { playMusic(SAVE.chapter); applyChapterLook(); }
+      else { playMusic(SAVE.chapter); applyChapterLook(); maybeStoryIntro(); }
     });
     else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+    else maybeStoryIntro();
   };
-  if (o.intro && !SAVE.flags["seen-intro-" + o.id]) {
-    // already shown when accepted; just after
-  }
   after();
 }
 
 let storyQueue = [], storyIdx = 0, storyDoneFn = null;
 let pendingAfterClear = null;
 
-function maybeFirstIntro() {
-  const first = STORY[0];
-  if (first?.intro && !SAVE.flags.seenOpen) {
-    SAVE.flags.seenOpen = true; persist();
-    startStory(first.intro, () => show("play"));
+function maybeFirstIntro() { maybeStoryIntro(); }
+
+function maybeStoryIntro() {
+  const o = (SAVE.orders || []).find((x) => x.intro && !SAVE.flags["seen-intro-" + x.id]);
+  if (!o) return false;
+  if (o.id === "v1" && SAVE.flags.seenOpen && !SAVE.flags["seen-intro-v1"]) {
+    SAVE.flags["seen-intro-v1"] = true;
+    persist();
+    return maybeStoryIntro();
   }
+  SAVE.flags["seen-intro-" + o.id] = true;
+  if (o.id === "v1") SAVE.flags.seenOpen = true;
+  persist();
+  startStory(o.intro, () => show("play"));
+  return true;
 }
 
 function startStory(lines, done) {
@@ -650,7 +808,7 @@ function renderStory() {
   $("#bubble-tx").textContent = line.text || "";
   const hold = $("#portraits");
   hold.innerHTML = "";
-  const map = { mascot: "assets/mascot/wish.png", feifei: "assets/chars/feifei.png", apiao: "assets/chars/apiao.png", sika: "assets/chars/sika.png", jiejie: "assets/chars/jiejie.png", spirit: "assets/chars/spirit.png" };
+  const map = { mascot: "assets/mascot/wish.png", feifei: "assets/chars/feifei.png", apiao: "assets/chars/apiao.png", sika: "assets/chars/sika.png", jiejie: "assets/chars/jiejie.png", spirit: "assets/chars/spirit.png", bulu: "assets/chars/bulu.png", hate: "assets/chars/hate.png" };
   const src = map[line.portrait] || map.mascot;
   const img = new Image(); img.src = src; img.alt = line.speaker || "";
   hold.appendChild(img);
@@ -683,11 +841,11 @@ function showClear({ chapterClear, leveled, o }) {
   if (chapterClear) {
     lyricsBox.style.display = "";
     lyricsBox.innerHTML = (GAME.lyrics.endingLines || []).map((l) => `<p>${l}</p>`).join("");
-    pendingAfterClear = () => { playMusic(SAVE.chapter); applyChapterLook(); show("play"); };
+    pendingAfterClear = () => { playMusic(SAVE.chapter); applyChapterLook(); show("play"); maybeStoryIntro(); };
     playClearTheme().then(() => {});
   } else {
     lyricsBox.style.display = "none";
-    pendingAfterClear = () => { playMusic(SAVE.chapter); show("play"); };
+    pendingAfterClear = () => { playMusic(SAVE.chapter); show("play"); maybeStoryIntro(); };
   }
 }
 
@@ -739,7 +897,7 @@ function renderMap() {
   soon.className = "node soon";
   soon.innerHTML = `<img class="thumb" src="assets/mascot/sleep.png" alt="">
     <div><div class="num">即將到來<span class="soon-mark">每週更新</span></div>
-    <h3>新章節製作中</h3><small>下一回：怕黑的布魯，還有最後一願送給哈特。訂單會一直出，永遠玩得下去。</small></div>`;
+    <h3>新的小故事製作中</h3><small>故事會一直加。平常的訂單也不會停，可以一直玩下去。</small></div>`;
   box.appendChild(soon);
 }
 
