@@ -1,0 +1,80 @@
+/** Selection brackets, merge/spawn pop, fly-to-order, discovery card, coin pops. */
+
+export function createFx(ctx) {
+  const { $, toast, sfx } = ctx;
+
+  function flyTo(fromEl, toEl, done) {
+    if (!fromEl || !toEl) { done?.(); return; }
+    const a = fromEl.getBoundingClientRect();
+    const b = toEl.getBoundingClientRect();
+    const ghost = fromEl.cloneNode(true);
+    ghost.classList.add("fly-ghost");
+    ghost.style.left = a.left + "px";
+    ghost.style.top = a.top + "px";
+    ghost.style.width = a.width + "px";
+    ghost.style.height = a.height + "px";
+    document.body.appendChild(ghost);
+    requestAnimationFrame(() => {
+      const dx = b.left + b.width / 2 - a.left - a.width / 2;
+      const dy = b.top + b.height / 2 - a.top - a.height / 2;
+      ghost.style.transform = `translate(${dx}px, ${dy}px) scale(.35)`;
+      ghost.style.opacity = "0.2";
+    });
+    setTimeout(() => { ghost.remove(); done?.(); }, 480);
+  }
+
+  function popAt(uid) {
+    const el = document.querySelector(`.piece[data-uid="${uid}"]`);
+    if (el) {
+      el.classList.remove("pop-merge");
+      void el.offsetWidth;
+      el.classList.add("pop-merge");
+    }
+  }
+
+  function coinPop(target, text) {
+    const el = document.createElement("div");
+    el.className = "coin-pop";
+    el.textContent = text;
+    const r = (target || $("#play"))?.getBoundingClientRect?.() || { left: innerWidth / 2, top: 120, width: 0 };
+    el.style.left = (r.left + r.width / 2) + "px";
+    el.style.top = (r.top + 8) + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 900);
+  }
+
+  function showDiscover(item) {
+    const name = ctx.infoName(item);
+    const img = ctx.infoImg(item);
+    const box = $("#discover");
+    if (!box) {
+      toast(`新發現：${name}　＋1 星星種子`);
+      return;
+    }
+    $("#discover-img").src = img;
+    $("#discover-img").alt = name;
+    $("#discover-name").textContent = "新發現：" + name;
+    const tier = item.tier ? `第 ${item.tier} 階` : "";
+    $("#discover-sub").textContent = `${tier}　已記進收集冊　＋1 星星種子`.trim();
+    box.classList.add("on");
+  }
+
+  function showInfo(item) {
+    const bar = $("#item-info");
+    if (!bar) return;
+    if (!item) { bar.hidden = true; return; }
+    bar.hidden = false;
+    $("#info-name").textContent = ctx.infoName(item);
+    if (item.kind === "gen") {
+      const cool = item.coolUntil && item.coolUntil > Date.now();
+      $("#info-hint").textContent = cool ? "還在休息，等一下再點。" : "點一下就會產出（花 1 點能量）。";
+      $("#btn-sell").disabled = true;
+    } else {
+      const max = ctx.maxTier?.(item.chain) || 99;
+      $("#info-hint").textContent = item.tier >= max ? "已經是最高一階了。" : "再合一個一樣的，就會升階。";
+      $("#btn-sell").disabled = item.tier <= 1;
+    }
+  }
+
+  return { flyTo, popAt, coinPop, showDiscover, showInfo };
+}
