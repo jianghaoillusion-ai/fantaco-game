@@ -179,13 +179,6 @@
           "img": "assets/tiles/candy-7.webp",
           "rarity": "legendary",
           "origin": "extended"
-        },
-        {
-          "tier": 8,
-          "name": "糖果慶典",
-          "img": "assets/tiles/candy-7.webp",
-          "rarity": "legendary",
-          "origin": "extended"
         }
       ]
     },
@@ -225,13 +218,6 @@
         {
           "tier": 5,
           "name": "森林蘑菇圈",
-          "img": "assets/tiles/forest-5.webp",
-          "rarity": "legendary",
-          "origin": "extended"
-        },
-        {
-          "tier": 6,
-          "name": "發光蘑菇庭園",
           "img": "assets/tiles/forest-5.webp",
           "rarity": "legendary",
           "origin": "extended"
@@ -311,27 +297,6 @@
           "name": "花茶",
           "img": "assets/tiles/tea-2.webp",
           "rarity": "rare",
-          "origin": "extended"
-        },
-        {
-          "tier": 3,
-          "name": "花香茶壺",
-          "img": "assets/items/teapot.png",
-          "rarity": "rare",
-          "origin": "extended"
-        },
-        {
-          "tier": 4,
-          "name": "雙人茶點",
-          "img": "assets/items/cupcake.png",
-          "rarity": "rare",
-          "origin": "extended"
-        },
-        {
-          "tier": 5,
-          "name": "微笑茶會",
-          "img": "assets/tiles/star-5.webp",
-          "rarity": "legendary",
           "origin": "extended"
         }
       ]
@@ -438,7 +403,7 @@
     "garden": {
       "id": "garden",
       "name": "微笑花圃",
-      "unlock": "story:v2",
+      "unlock": "chapter:village:mid",
       "produces": "garden",
       "autoMs": 12000,
       "tiers": [
@@ -481,20 +446,21 @@
               5
             ]
           ],
-          "bonusDrops": [
-            {
-              "chain": "tea",
-              "tier": 1,
-              "chance": 0.08
-            }
-          ]
+          "bonus": {
+            "tea": [
+              [
+                1,
+                1
+              ]
+            ]
+          }
         }
       ]
     },
     "forest": {
       "id": "forest",
       "name": "山洞寶箱",
-      "unlock": "story:ch1-end",
+      "unlock": "chapter:journey",
       "produces": "forest",
       "tiers": [
         {
@@ -542,7 +508,7 @@
     "candy": {
       "id": "candy",
       "name": "西卡的糖果箱",
-      "unlock": "story:ch2-end",
+      "unlock": "chapter:candy",
       "produces": "candy",
       "tiers": [
         {
@@ -590,7 +556,7 @@
     "magic": {
       "id": "magic",
       "name": "魔術道具盒",
-      "unlock": "story:j2",
+      "unlock": "chapter:journey:mid",
       "produces": "magic",
       "tiers": [
         {
@@ -630,28 +596,6 @@
             [
               5,
               10
-            ]
-          ]
-        }
-      ]
-    },
-    "tea": {
-      "id": "tea",
-      "name": "花香茶桌",
-      "unlock": "story:v4",
-      "produces": "tea",
-      "tiers": [
-        {
-          "tier": 1,
-          "img": "assets/items/teapot.png",
-          "table": [
-            [
-              1,
-              80
-            ],
-            [
-              2,
-              20
             ]
           ]
         }

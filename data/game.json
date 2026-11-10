@@ -1,5 +1,5 @@
 {
-  "title": "眠花糖的異想世界",
+  "title": "眠花糖與魔法氣球物語",
   "subtitle": "FANTACO 魔幻藝術節",
   "tagline": "在魔幻森林裡，眠花糖陪你一起實現奇妙夢想",
   "xpCurve": [
@@ -197,15 +197,13 @@
     "max": 100,
     "regenMs": 90000,
     "dailyGiftEnergy": 25,
-    "dailyGiftSeeds": 8,
-    "cost": 1,
-    "cooldownMs": 2000
+    "dailyGiftSeeds": 8
   },
   "board": {
     "cols": 7,
     "rows": 9,
     "inventory": 8,
-    "orders": 3
+    "orders": 4
   },
   "npcs": {
     "jiejie": {

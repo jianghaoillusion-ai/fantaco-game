@@ -10,4 +10,3 @@ assets/audio/tmp/
 *.pem
 *.key
 *token*
-node_modules/

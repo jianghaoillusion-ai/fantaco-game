@@ -1,4 +1,3 @@
-import { openCells } from "./board-loop.js";
 /** Merge-2 board, generators, orders. Data-driven chains. */
 
 export function maxTier(chains, chain) {
@@ -176,38 +175,6 @@ export function produceFrom(genCell, gens) {
   return { kind: "item", chain: next.chain, tier: next.tier, uid: makeUid() };
 }
 
-/** Full boards never spend energy or silently send generated items to inventory. */
-export function generateItem(save, generator, gens, energy, random = Math.random, now = Date.now()) {
-  let spaces = (save.fog ? openCells(save) : save.board.map((_, i) => i)).filter(i => !save.board[i]);
-  if (!spaces.length) return { error: "full" };
-  const cost = energy.cost ?? 1;
-  if (save.energy < cost) return { error: "energy" };
-  const until = save.generatorCooldowns?.[generator.uid] || 0;
-  const cooldown = energy.cooldownMs ?? 2000;
-  if (until > now && until <= now + cooldown) return { error: "cooldown", remainingMs: until - now };
-  const origin = save.board.indexOf(generator), cols = save.boardCols || save.board.length;
-  if (origin >= 0) {
-    const distance = i => Math.max(Math.abs(i % cols - origin % cols), Math.abs(Math.floor(i / cols) - Math.floor(origin / cols)));
-    const nearest = Math.min(...spaces.map(distance));
-    spaces = spaces.filter(i => distance(i) === nearest);
-  }
-  const item = produceFrom(generator, gens);
-  if (!item) return { error: "generator" };
-  const index = spaces[Math.floor(random() * spaces.length)];
-  if (save.energy >= energy.max) save.energyAt = now;
-  save.energy -= cost;
-  if (generator.uid) {
-    save.generatorCooldowns ||= {};
-    save.generatorCooldowns[generator.uid] = now + cooldown;
-  }
-  save.board[index] = item;
-  return { item, index };
-}
-
-export function endlessRegion(completed, balance) {
-  return 1 + Math.floor(completed / balance.ordersPerRegion);
-}
-
 export function firstEmpty(board) {
   return board.findIndex((c) => !c);
 }
@@ -264,7 +231,7 @@ export function keyOf(cell) {
 
 /** Endless / leftover slots: mix of easy, mid, hard orders from unlocked content. */
 export function makeProceduralOrder(ctx) {
-  const { chains, chapter, discovered, npcsByChapter, seq } = ctx;
+  const { chains, chapter, discovered, npcsByChapter, seq, availableChains } = ctx;
   const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
   const unlockedChains = Object.keys(chains).filter((id) => {
     if (availableChains) return availableChains.includes(id);
@@ -276,7 +243,7 @@ export function makeProceduralOrder(ctx) {
   });
   if (!unlockedChains.length) return null;
   const chain = unlockedChains[Math.floor(Math.random() * unlockedChains.length)];
-  const cap = region > 0 ? (balance.startTier ?? 2) + Math.floor((region - 1) / (balance.regionsPerTier ?? 2)) : Math.max(2, discoveredMax(discovered, chain));
+  const cap = Math.max(2, discoveredMax(discovered, chain));
   const maxT = maxTier(chains, chain);
   // 4 slots style: vary difficulty by seq % 4
   const slot = (seq || 0) % 4;
@@ -287,16 +254,14 @@ export function makeProceduralOrder(ctx) {
   tier = Math.max(2, Math.min(maxT, tier));
   const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
-  const seeds = (balance.seedBase ?? 3) + tier * (balance.seedsPerTier ?? 2) + (slot === 3 ? (balance.hardSeeds ?? 6) : 0);
-  const xp = (balance.xpBase ?? 15) + tier * (balance.xpPerTier ?? 10) + (slot === 3 ? (balance.hardXp ?? 20) : 0);
-  const energy = slot === 3 ? (balance.hardEnergy ?? 6) : (slot === 0 ? 0 : (balance.energy ?? 3));
-  const coins = (balance.coinBase ?? 5) + tier * (balance.coinsPerTier ?? 5);
+  const seeds = 3 + tier * 2 + (slot === 3 ? 6 : 0);
+  const xp = 15 + tier * 10 + (slot === 3 ? 20 : 0);
+  const energy = slot === 3 ? 6 : (slot === 0 ? 0 : 3);
   return {
     id: "p-" + makeUid(),
     npc,
     need: { chain, tier },
-    reward: { seeds, xp, energy, coins },
-    region,
+    reward: { seeds, xp, energy, coins: seeds + 4, ...(slot === 3 ? {materials: 1} : {}) },
     chapter,
     procedural: true
   };
@@ -326,103 +291,42 @@ export function fillOrderSlots(save, _slots, opts) {
   reserveOrderItems(save);
 }
 
-function listProceduralCandidates(opts) {
-  const { chains, chapter, discovered, npcsByChapter } = opts;
-  const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
-  const unlocked = Object.keys(chains).filter((id) => {
-    const ch = chains[id].chapter;
-    const okChapter = order.indexOf(ch) <= order.indexOf(chapter || "village");
-    if (!okChapter) return false;
-    if (id === "star" || id === "garden") return true;
-    return discoveredMax(discovered, id) >= 1;
-  });
-  const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
-  const out = [];
-  for (const chain of unlocked) {
-    const maxT = maxTier(chains, chain);
-    const starter = chain === "star" || chain === "garden";
-    const cap = Math.max(starter ? 3 : 2, discoveredMax(discovered, chain));
-    const top = Math.min(maxT, cap);
-    for (let tier = 2; tier <= top; tier++) {
-      const seeds = 3 + tier * 2;
-      const xp = 15 + tier * 10;
-      for (const npc of npcs) {
-        out.push({
-          npc,
-          need: { chain, tier },
-          reward: { seeds, xp, energy: tier >= 4 ? 6 : 3, coins: seeds + 4 },
-          chapter,
-          procedural: true
-        });
-      }
-    }
-  }
-}
-
-/** Fill slots with a guaranteed easy / mid / hard mix. One procedural order grants materials. */
-function difficultyOf(c, opts) {
-  const tier = c.need?.tier || 2;
-  if (tier <= 2) return "easy";
-  if (tier >= 4) return "hard";
-  return "mid";
-}
-
-export function fillOrderSlots(save, slots, opts) {
-  save.orders = (save.orders || []).filter((o) => o && o.need);
-  const story = typeof opts.nextStory === "function" ? opts.nextStory() : opts.nextStory;
-  if (story && !save.orders.some((o) => o.id === story.id)) {
-    save.orders.unshift({ ...story });
-  }
-  const needKey = (o) => `${o.need.chain}:${o.need.tier}`;
-  const all = listProceduralCandidates(opts);
-  const plan = slots >= 4 ? ["easy", "mid", "mid", "hard"] : ["easy", "mid", "hard"];
-  const usedPlan = save.orders.map((o) => o.procedural ? difficultyOf(o, opts) : "story");
-  const needed = [];
-  const counts = { easy: 0, mid: 0, hard: 0 };
-  for (const d of usedPlan) if (counts[d] != null) counts[d]++;
-  for (const d of plan) {
-    if (counts[d] > 0) counts[d]--;
-    else needed.push(d);
-  }
-  const take = (pool, allowRepeatNeed, allowRepeatNpc) => {
-    for (const c of pool) {
-      if (save.orders.length >= slots) return true;
-      const npcs = new Set(save.orders.map((o) => o.npc));
-      const needs = new Set(save.orders.map(needKey));
-      if (!allowRepeatNpc && npcs.has(c.npc)) continue;
-      if (!allowRepeatNeed && needs.has(needKey(c))) continue;
-      save.orders.push({ ...c, id: "p-" + makeUid() });
-      return true;
-    }
-    return false;
-  };
-  for (const d of needed) {
-    if (save.orders.length >= slots) break;
-    const pool = shuffle(all.filter((c) => difficultyOf(c, opts) === d));
-    if (take(pool, false, false)) continue;
-    if (take(pool, true, false)) continue;
-    if (take(shuffle(all), false, false)) continue;
-    take(shuffle(all), true, true);
-  }
-  if (save.orders.length && !save.orders.some((o) => o.reward?.materials)) {
-    const proc = save.orders.filter((o) => o.procedural);
-    const hard = proc.filter((o) => difficultyOf(o, opts) === "hard");
-    const target = hard[0] || proc[proc.length - 1];
-    if (target) target.reward = { ...(target.reward || {}), materials: 1 };
-  }
-  save.orders = save.orders.slice(0, slots);
-}
-
-/** Bind at most one matching board/bag item to each order so two cards cannot claim the same uid. */
-export function reserveItems(orders, board, inv) {
+/** Keep valid reservations, then allocate each remaining UID only once. */
+export function reserveOrderItems(save) {
+  const items = (save.board || []).concat(save.inventory || []).filter(x => x?.kind === 'item' && x.uid);
   const used = new Set();
-  for (const o of orders || []) {
-    const hit = [...(board || []), ...(inv || [])].find((c) =>
-      c && c.kind === "item" && c.chain === o.need.chain && c.tier === o.need.tier && !used.has(c.uid)
-    );
-    o.reservedUid = hit?.uid || null;
-    if (hit) used.add(hit.uid);
+  const matches = (item, o) => item.chain === o.need.chain && item.tier === o.need.tier;
+  for (const o of save.orders || []) {
+    const item = items.find(x => x.uid === o.reservedUid && matches(x, o) && !used.has(x.uid));
+    o.reservedUid = item?.uid || null;
+    if (item) used.add(item.uid);
   }
+  for (const o of save.orders || []) {
+    if (o.reservedUid) continue;
+    const item = items.find(x => matches(x, o) && !used.has(x.uid));
+    if (item) { o.reservedUid = item.uid; used.add(item.uid); }
+  }
+}
+
+/** A due automatic producer waits when full; never charges energy or catches up in a burst. */
+export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.now()) {
+  const made = []; let blocked = false, changed = false;
+  for (let i = 0; i < save.board.length; i++) {
+    const gen = save.board[i], interval = gens[gen?.gen]?.autoMs;
+    if (gen?.kind !== 'gen' || !interval || !isOpen(i)) continue;
+    if (!Number.isFinite(gen.autoAt)) { gen.autoAt = now + interval; changed = true; continue; }
+    if (gen.autoAt > now) continue;
+    const empty = nearbyEmpty(save.board, cols, rows, i, isOpen);
+    if (empty < 0) { blocked = true; continue; }
+    const item = produceFrom(gen, gens);
+    if (!item) continue;
+    save.board[empty] = item; gen.autoAt = now + interval; made.push(item); changed = true;
+  }
+  return {made, blocked, changed};
+}
+
+export function reserveItems(orders, board, inventory) {
+  reserveOrderItems({orders, board, inventory});
 }
 
 export const NPCS_BY_CHAPTER = {

@@ -59,16 +59,7 @@
           "name": "花店",
           "desc": "把花圃重新打開，花朵才會回來。",
           "costs": [
-            {
-              "coins": 30,
-              "items": [
-                {
-                  "chain": "star",
-                  "tier": 2,
-                  "count": 1
-                }
-              ]
-            }
+            30
           ],
           "unlocks": [
             "garden"
@@ -228,16 +219,7 @@
           "name": "瞭望樹屋",
           "desc": "修好樹屋，就能看到更遠的路。",
           "costs": [
-            {
-              "coins": 50,
-              "items": [
-                {
-                  "chain": "star",
-                  "tier": 2,
-                  "count": 1
-                }
-              ]
-            }
+            50
           ],
           "unlocks": [
             "forest"
@@ -384,16 +366,7 @@
           "name": "夜燈小路",
           "desc": "給怕黑的布魯一盞不會熄的燈。",
           "costs": [
-            {
-              "coins": 90,
-              "items": [
-                {
-                  "chain": "star",
-                  "tier": 2,
-                  "count": 1
-                }
-              ]
-            }
+            90
           ],
           "unlocks": [
             null
@@ -491,16 +464,7 @@
           "name": "許願噴泉",
           "desc": "讓氣球從廣場中央升上去。",
           "costs": [
-            {
-              "coins": 120,
-              "items": [
-                {
-                  "chain": "star",
-                  "tier": 2,
-                  "count": 1
-                }
-              ]
-            }
+            120
           ],
           "unlocks": [
             null
