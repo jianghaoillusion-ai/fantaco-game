@@ -49,7 +49,7 @@ export async function boot() {
   persist();
   bind();
   mascot = mountMascot($("#mascot-root"));
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
@@ -199,11 +199,17 @@ function renderBoard() {
   renderInventory();
 }
 
+function itemRarity(item) {
+  if (item.kind === "gen") return item.tier >= 3 ? "legendary" : item.tier >= 2 ? "rare" : "common";
+  return itemDef(CHAINS, item.chain, item.tier)?.rarity || "common";
+}
 function makePiece(item) {
   const el = document.createElement("button");
   el.type = "button";
-  el.className = "piece" + (item.kind === "gen" ? " gen" : "");
+  const rarity = itemRarity(item);
+  el.className = "piece" + (item.kind === "gen" ? " gen" : "") + " r-" + rarity;
   el.dataset.uid = item.uid;
+  el.dataset.rarity = rarity;
   const img = infoImg(item);
   const name = infoName(item);
   el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;

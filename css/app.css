@@ -122,6 +122,11 @@ a{color:var(--ink)}
 .piece.lifted{opacity:.35}
 .piece.gen{animation:twinkle 2.6s ease-in-out infinite}
 .piece img{filter:drop-shadow(0 3px 3px rgba(59,68,104,.22))}
+.piece.r-rare{filter:drop-shadow(0 0 6px rgba(255,196,80,.55))}
+.piece.r-epic{filter:drop-shadow(0 0 8px rgba(196,150,255,.7))}
+.piece.r-legendary{filter:drop-shadow(0 0 10px rgba(255,220,70,.85));animation:legend-glow 2.4s ease-in-out infinite}
+@keyframes legend-glow{0%,100%{filter:drop-shadow(0 0 8px rgba(255,220,70,.7))}50%{filter:drop-shadow(0 0 14px rgba(255,236,120,.95))}}
+
 .cell:has(.piece){box-shadow:inset 0 0 0 1px rgba(255,255,255,.45)}
 .piece.ghost, button.ghost, .ghost{
   /* drag ghost is a .piece.ghost on body */

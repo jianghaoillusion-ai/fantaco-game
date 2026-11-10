@@ -121,7 +121,7 @@ async function boot3d(canvas, img, getAnim, onReady) {
   const camera = new THREE.PerspectiveCamera(36, 1, 0.1, 40);
   camera.position.set(1.7, 1.35, 4.8);
   camera.lookAt(0, 1.0, 0);
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, preserveDrawingBuffer: true });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   const fit = () => {
     const w = canvas.clientWidth || 360, h = canvas.clientHeight || 360;
