@@ -18,7 +18,6 @@ let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
 let SAVE = loadSave();
 let mascot;
 let dragging = null;
-let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
 let selectedUid = null;
@@ -542,18 +541,12 @@ function moveOrMerge(loc, r, c) {
 }
 
 function onMerged(merged) {
-  const now = Date.now();
-  if (now - combo.at < 2200) combo.n += 1; else combo.n = 1;
-  combo.at = now;
-  SAVE.comboBest = Math.max(SAVE.comboBest || 0, combo.n);
   const tier = merged.tier || 1;
   sfx.merge(tier);
-  if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
   mascot?.merge(tier);
   systems?.fx.popAt(merged.uid);
   discover(merged);
   if (tier >= 5) shake(10);
-  else if (combo.n >= 3) shake(6);
   // first-discover gift
 }
 
@@ -592,14 +585,6 @@ function shake(n) {
   play.classList.add("shake");
   play.style.setProperty("--shake", n + "px");
   setTimeout(() => play.classList.remove("shake"), 400);
-}
-
-function floatCombo(n) {
-  const el = document.createElement("div");
-  el.className = "combo-float";
-  el.textContent = n >= 4 ? `超讚連擊 ×${n}` : `連擊 ×${n}`;
-  $("#play").appendChild(el);
-  setTimeout(() => el.remove(), 1200);
 }
 
 function renderInventory() {
@@ -841,7 +826,7 @@ function renderMap() {
 function renderDaily() {
   const today = todayKey();
   const claimed = SAVE.daily?.day === today && SAVE.daily.claimed;
-  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的免費禮物在這裡，完全不用花錢。";
+  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的禮物在這裡。";
   $("#btn-claim-daily").disabled = claimed;
 }
 

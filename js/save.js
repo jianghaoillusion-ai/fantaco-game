@@ -48,7 +48,6 @@ export function emptySave() {
     flags: {},
     settings: { music: true, sfx: true },
     daily: { day: "", streak: 0, claimed: false, challenge: 0, challengeClaimed: false },
-    comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
   };
@@ -71,12 +70,14 @@ export function normalizeSave(raw) {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
   if ((raw.schemaVersion ?? raw.version ?? 1) > 4) throw new Error("存檔版本較新，請更新遊戲後再開啟");
   const s = { ...base, ...raw, version: 4, schemaVersion: 4 };
+  // Discard the retired field while preserving the rest of older saves.
+  delete s.comboBest;
   for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures", "map", "fog", "magicBag", "challenge", "generatorCooldowns", "buildings"]) {
     s[key] = { ...base[key], ...(raw[key] && typeof raw[key] === "object" && !Array.isArray(raw[key]) ? raw[key] : {}) };
   }
   for (const key of ["inventory", "orders", "storyDone"]) s[key] = Array.isArray(raw[key]) ? raw[key] : [];
   s.board = Array.isArray(raw.board) ? raw.board : null;
-  for (const key of ["coins", "xp", "starSeeds", "energy", "ordersDone", "orderSeq", "comboBest"]) {
+  for (const key of ["coins", "xp", "starSeeds", "energy", "ordersDone", "orderSeq"]) {
     if (!Number.isFinite(s[key]) || s[key] < 0) s[key] = base[key];
   }
   if (!Number.isFinite(s.endless.completed) || s.endless.completed < 0) s.endless.completed = 0;

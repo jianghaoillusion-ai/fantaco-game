@@ -104,3 +104,19 @@ test('全裝置固定7×9，版面縮放不搬動物品',async()=>{
   assert.equal(JSON.stringify(s.board),before);assert.equal(s.board.length,63);
  }
 });
+
+
+test('快速連續合成只領首次發現獎勵，重複物品不重領', async () => {
+ const {api} = await harness(); const s = api.save();
+ s.discovered = {}; const coins = s.coins, xp = s.xp, seeds = s.starSeeds;
+ for (let n = 0; n < 5; n++) {
+  const a = {kind:'item', chain:'star', tier:1, uid:'left-'+n};
+  s.board[29] = a;
+  s.board[30] = {kind:'item', chain:'star', tier:1, uid:'right-'+n};
+  api.moveOrMerge({where:'board', i:29, item:a}, 4, 2);
+  assert.equal(s.board[29], null); assert.equal(s.board[30].tier, 2);
+  assert.equal(s.coins, coins); assert.equal(s.xp, xp); assert.equal(s.starSeeds, seeds+1);
+ }
+ const stored = JSON.parse(localStorage.getItem('fantaco.mianhuatang.save.v2'));
+ assert.equal('comboBest' in stored, false);
+});

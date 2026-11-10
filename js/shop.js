@@ -82,12 +82,10 @@ export function createShop(ctx) {
   function renderShop() {
     const save = ctx.getSave();
     const map = ctx.getMap();
-    const shop = map?.shop || { title: "微笑小舖", notice: "", items: [] };
+    const shop = map?.shop || { title: "微笑小舖", items: [] };
     const title = $("#shop-title");
-    const notice = $("#shop-notice");
     const list = $("#shop-list");
     if (title) title.textContent = shop.title;
-    if (notice) notice.textContent = shop.notice;
     if (!list) return;
     list.innerHTML = "";
     for (const item of shop.items || []) {

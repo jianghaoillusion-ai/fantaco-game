@@ -63,3 +63,20 @@ test('時鐘倒退不鎖住體力，長時間離線只回到上限', () => {
  save.tickEnergy(s,500000+game.energy.regenMs);assert.equal(s.energy,1);
  save.tickEnergy(s,10**12);assert.equal(s.energy,game.energy.max);
 });
+
+
+test('舊版額外欄位不再寫回，資源與盤面進度保留', () => {
+ storage.clear();
+ const old = {...save.emptySave(), comboBest: 9, coins: 123, xp: 45, starSeeds: 7,
+  board: Array(63).fill(null), buildings: {stage: 1}, storyDone: ['smile-1']};
+ old.board[30] = {kind: 'item', chain: 'star', tier: 2, uid: 'legacy-star'};
+ storage.set('fantaco.mianhuatang.save.v2', JSON.stringify(old));
+ const loaded = save.loadSave();
+ save.writeSave(loaded);
+ const stored = JSON.parse(storage.get('fantaco.mianhuatang.save.v2'));
+ assert.equal('comboBest' in stored, false);
+ assert.equal(stored.coins, 123); assert.equal(stored.xp, 45); assert.equal(stored.starSeeds, 7);
+ assert.deepEqual(stored.board, old.board); assert.deepEqual(stored.buildings, {stage: 1});
+ assert.deepEqual(stored.storyDone, ['smile-1']);
+ assert.deepEqual(save.loadSave(), loaded);
+});

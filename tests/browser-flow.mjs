@@ -13,9 +13,14 @@ try {
   page.on('pageerror',e=>errors.push(e.message));
   await page.goto(process.env.TEST_URL || 'http://127.0.0.1:18765');
   await page.waitForFunction(()=>window.__GAME);
-  await page.fill('#nick','測試');await page.locator('#nick-form button').click();await page.click('#btn-play');
+  await page.fill('#nick','測試');await page.locator('#nick-form button').click();
+  assert.match(await page.title(), /眠花糖的異想世界/);
+  assert.equal(await page.locator('#title h1').innerText(), '眠花糖的異想世界');
+  await page.waitForTimeout(600);
+  if(out)await page.screenshot({path:`${out}/v5-${device}-home.png`});
+  await page.click('#btn-play');
   const dismiss=async()=>{for(let n=0;n<8 && await page.locator('#story.on').count();n++)await page.click('#btn-story-skip');};
-  const shot=async(name)=>{await page.waitForTimeout(400);if(out)await page.screenshot({path:`${out}/v4-${device}-${name}.png`});};
+  const shot=async(name)=>{await page.waitForTimeout(400);if(out)await page.screenshot({path:`${out}/v5-${device}-${name}.png`});};
   await dismiss();await page.waitForTimeout(400);
   assert.equal(await page.locator('#board .cell').count(),63);
   assert.equal(await page.locator('#board .cell:not(.locked)').count(),13);

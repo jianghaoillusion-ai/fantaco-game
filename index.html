@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>眠花糖與魔法氣球物語｜FANTACO 魔幻藝術節</title>
-  <meta name="description" content="FANTACO 官方免費親子合成遊戲。把兩個一樣的寶物合在一起，幫飛飛實現願望。">
+  <title>眠花糖的異想世界｜FANTACO 魔幻藝術節</title>
+  <meta name="description" content="眠花糖的異想世界，FANTACO 官方親子遊戲。把兩個一樣的寶物合在一起，幫飛飛實現願望。">
   <meta name="theme-color" content="#3b4468">
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
@@ -38,7 +38,7 @@
         <span style="right:24%;top:6%;background:#fff;animation-delay:1.6s"></span>
       </div>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
-      <h1>眠花糖與魔法氣球物語</h1>
+      <h1>眠花糖的異想世界</h1>
       <p class="tag">把兩個一樣的寶物合在一起，幫飛飛實現願望</p>
       <img class="hero" src="assets/mascot/hero.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
       <div class="actions">
@@ -57,7 +57,7 @@
           <button class="btn ghost" id="btn-settings">設定</button>
         </div>
       </div>
-      <p class="notice">完全免費　沒有內購　能量會自己回來　冒險者：<span data-nick>小朋友</span>　<span data-level>Lv.1</span></p>
+      <p class="notice">冒險者：<span data-nick>小朋友</span>　<span data-level>Lv.1</span></p>
     </section>
 
     <section id="play" class="screen">
@@ -99,7 +99,7 @@
         <button type="button" id="btn-map-shop" class="btn ghost" style="min-height:40px;padding:8px 14px">小舖</button>
       </div>
       <h2 style="text-align:center;margin:4px 0 4px">微笑村地圖</h2>
-      <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。完全不用花錢。</p>
+      <p class="lede" style="text-align:center">交訂單賺金幣和星星種子，打開新的地區，修復小建築。</p>
       <div class="town-map" id="nodes"></div>
     </section>
 
@@ -124,7 +124,7 @@
         <h2>收集冊</h2>
         <span></span>
       </div>
-      <p class="lede">第一次合成到的寶物會記在這裡。稀有度只跟遊戲進度有關，沒有轉蛋，也不用花錢。</p>
+      <p class="lede">第一次合成到的寶物會記在這裡。</p>
       <div id="rates" class="rates"></div>
       <div id="grid" class="book-grid"></div>
     </section>
@@ -164,10 +164,10 @@
         <li>點一下「產生器」（帶閃電的寶箱或窩），會花 1 點能量，跳出道具。</li>
         <li>把兩個一樣的道具拖在一起，就會合成更高一級。</li>
         <li>上面是角色訂單。湊齊他們要的東西，點綠色的「交給他」，就能拿到金幣、星星種子和經驗。</li>
-        <li>能量會慢慢自己回來，每天還有免費禮物。完全不用花錢。</li>
+        <li>能量會慢慢自己回來，每天還有禮物。</li>
         <li>完成故事訂單，就能打開下一章。平常的訂單會一直出，可以一直玩。</li>
         <li>棋盤滿了，點左下角的「魔法袋」把道具先收起來。點格子上的物品，可以看到名稱，也可以賣掉多餘的（第 1 階不能賣）。</li>
-        <li>點「地圖」用金幣和星星種子打開新地區、修復建築。點「小舖」可買道具或回復能量。全部只用遊戲裡的金幣和種子，沒有儲值，也沒有廣告。</li>
+        <li>點「地圖」用金幣和星星種子打開新地區、修復建築。點「小舖」可買道具或回復能量。</li>
       </ol>
     </section>
 
@@ -197,7 +197,7 @@
       </div>
       <div class="modal" style="margin:24px auto;text-align:center">
         <img src="assets/mascot/wish.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
-        <p id="daily-status">今天的免費禮物在這裡，完全不用花錢。</p>
+        <p id="daily-status">今天的禮物在這裡。</p>
         <p class="notice">連續來領，能量和星星種子會多一點點。</p>
         <button class="btn wide" id="btn-claim-daily" type="button">領取今日禮物</button>
       </div>
@@ -227,7 +227,6 @@
     <div id="shop" class="overlay">
       <div class="modal shop-card">
         <h3 id="shop-title">微笑小舖</h3>
-        <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。完全免費，沒有儲值，也沒有廣告。</p>
         <div id="shop-list" class="shop-list"></div>
         <button class="btn" id="btn-shop-close" type="button">關閉</button>
       </div>

@@ -100,5 +100,4 @@ export const sfx = {
   energy() { beep(240, 0.18, "square", 0.03); },
   level() { beep(392, 0.12, "sine", 0.05); beep(523, 0.12, "sine", 0.05, 0.1); beep(659, 0.12, "sine", 0.05, 0.2); beep(784, 0.28, "sine", 0.06, 0.32); },
   daily() { beep(700, 0.1, "sine", 0.05); beep(900, 0.14, "sine", 0.05, 0.08); },
-  combo(n) { beep(500 + n * 80, 0.1, "triangle", 0.055); }
 };
