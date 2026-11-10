@@ -13,13 +13,13 @@
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/app.css?v=14">
-  <link rel="stylesheet" href="css/home.css?v=14">
-  <link rel="stylesheet" href="css/story.css?v=14">
-  <link rel="stylesheet" href="css/bag.css?v=14">
-  <link rel="stylesheet" href="css/orders.css?v=14">
-  <link rel="stylesheet" href="css/settings.css?v=14">
-  <link rel="stylesheet" href="css/quality.css?v=14">
+  <link rel="stylesheet" href="css/app.css?v=15">
+  <link rel="stylesheet" href="css/home.css?v=15">
+  <link rel="stylesheet" href="css/story.css?v=15">
+  <link rel="stylesheet" href="css/bag.css?v=15">
+  <link rel="stylesheet" href="css/orders.css?v=15">
+  <link rel="stylesheet" href="css/settings.css?v=15">
+  <link rel="stylesheet" href="css/quality.css?v=15">
 </head>
 <body>
   <div id="app">
@@ -272,6 +272,7 @@
         <div class="shop-hero" aria-hidden="true"><img src="assets/ui/shop-header.webp" alt=""></div>
         <h3 id="shop-title">微笑小舖</h3>
         <p class="notice" id="shop-notice">只用遊戲裡的金幣和星星種子。</p>
+        <p class="shop-restock" id="shop-restock"></p>
         <div id="shop-list" class="shop-list"></div>
         <button class="btn ghost ad-entry" id="btn-shop-ad" type="button" data-open-ad>
           <img src="assets/icons/tv.png" alt="" width="28" height="28">看影片領獎勵
@@ -335,7 +336,7 @@
         <img src="assets/icons/energy.png" alt="" width="72" style="margin:0 auto 8px">
         <h3>能量用完了</h3>
         <p>看一支〈飛向藍藍天〉，就能領一點能量、鑽石或金幣。不用花錢。</p>
-        <p>今天還剩 <b data-ad-left>5</b>/5 次</p>
+        <p>今天還剩 <b data-ad-left>5</b>/5 次。<span class="reset-left">08:00 重置，還要 <span data-ad-reset>—</span></span></p>
         <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap">
           <button class="btn green" id="btn-ad-from-energy" type="button" data-open-ad>看影片</button>
           <button class="btn ghost" id="btn-energy-later" type="button">以後再說</button>
@@ -346,7 +347,7 @@
     <div id="ad-sheet" class="overlay">
       <div class="modal ad-card">
         <h3>看影片領獎勵</h3>
-        <p>今天還剩 <b data-ad-left>5</b>/5 次。要看到最後才會得到獎勵。</p>
+        <p>今天還剩 <b data-ad-left>5</b>/5 次。<span class="reset-left">08:00 重置，還要 <span data-ad-reset>—</span></span>。要看到最後才會得到獎勵。</p>
         <div class="ad-frame"><div id="ad-player"></div></div>
         <p id="ad-prize" class="notice">看完可以領：能量、鑽石或金幣</p>
         <button class="btn ghost" id="btn-ad-close" type="button">關閉</button>
@@ -363,6 +364,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=14"></script>
+  <script type="module" src="js/app.js?v=15"></script>
 </body>
 </html>

@@ -1299,3 +1299,215 @@
   width:auto !important; max-width:100%; overflow:visible; z-index:4;
 }
 .play-hud .pill.mats{display:none !important}
+
+
+/* ========== v5.7: cartoon backdrops, knee-crop story, fog clouds, toast, no item plates ========== */
+
+/* Items sit on the plain checker — no inner tile, no scale-up plate */
+.cell,
+.cell.odd,
+.cell.even,
+.cell:has(.piece){
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+.cell.odd{ background-color:#e6aa62 !important; }
+.cell.even{ background-color:#de9e5a !important; }
+.cell.wanted,
+.cell.odd.wanted,
+.cell.even.wanted,
+.cell.wanted:has(.piece){
+  background-color:#98c95a !important;
+  background-image:none !important;
+}
+.piece{
+  inset: 8% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.piece img{
+  transform: none !important;
+  background: none !important;
+  border-radius: 0 !important;
+  filter: drop-shadow(0 2px 2px rgba(40,24,8,.28)) !important;
+}
+
+/* Light fog / cloud cover on locked edge cells */
+.cell.locked .crate-art,
+.cell.locked .fog-cloud{
+  inset: -18% !important;
+  width: 136% !important;
+  height: 136% !important;
+  left: -18%;
+  top: -18%;
+  object-fit: contain !important;
+  opacity: .94;
+  filter: drop-shadow(0 1px 2px rgba(80,120,160,.25)) !important;
+  pointer-events: none;
+}
+.cell.locked{
+  overflow: visible !important;
+  background-image: none !important;
+}
+
+/* Toast sits above the selected-item strip and the play toolbar */
+.toast{
+  bottom: calc(210px + var(--safe-b)) !important;
+  top: auto !important;
+  z-index: 120 !important;
+  max-width: min(86vw, 340px);
+}
+#story.screen.on ~ #toast,
+#story.screen.on #toast,
+#bag.overlay.on ~ #toast,
+#shop.overlay.on ~ #toast,
+#result.overlay.on ~ #toast,
+#ad-sheet.overlay.on ~ #toast,
+#energy-prompt.overlay.on ~ #toast{
+  /* overlays open: keep toast visible but not at the very bottom */
+  bottom: calc(24px + var(--safe-b)) !important;
+}
+
+/* Story: speaker ~ half the screen area, cropped at the knees above the bubble */
+#story .portraits, #portraits, #story #portraits{
+  overflow: hidden !important;
+  bottom: 132px !important;
+}
+.story-actor.speak,
+.story-actor.speak.enter{
+  height: 100% !important;
+  max-height: none !important;
+  width: 100% !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  top: auto !important;
+  transform: translateX(-50%) !important;
+  overflow: hidden !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+}
+.story-actor.speak img,
+.story-actor.speak.enter img{
+  height: 125% !important;
+  max-height: none !important;
+  width: auto !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: top center !important;
+  transform: none !important;
+}
+.story-actor.speak.enter{ animation: none !important; }
+.story-actor.dim{
+  height: 100% !important;
+  max-height: none !important;
+  width: 62% !important;
+  opacity: .82 !important;
+  filter: brightness(.78) saturate(.9) !important;
+  overflow: hidden !important;
+  align-items: flex-start !important;
+  z-index: 1 !important;
+  bottom: 0 !important;
+  top: auto !important;
+}
+.story-actor.dim img{
+  height: 108% !important;
+  max-height: none !important;
+  max-width: none !important;
+  width: auto !important;
+  object-fit: contain !important;
+  object-position: top center !important;
+}
+.story-actor.dim[data-side="left"],
+#portraits .story-actor.dim:first-child{
+  left: 0 !important;
+  transform: translateX(-22%) !important;
+}
+.story-actor.dim[data-side="right"],
+.story-actor.dim:last-child{
+  left: 100% !important;
+  transform: translateX(-78%) !important;
+}
+#story .bubble{ z-index: 5; }
+
+/* Clear reward labels must not wrap mid-word */
+#result .result-rewards .rew-piece b,
+#result .result-rewards .rew-piece.item b{
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  max-width: none !important;
+  line-height: 1.2;
+  padding: 2px 8px !important;
+}
+
+/* Cartoon backdrops: a little more of the sky on the title */
+#title{
+  background-position: center 18% !important;
+}
+#play, #play .scene-bg{
+  background-size: cover !important;
+  background-position: center 30% !important;
+  filter: none !important;
+}
+#story{
+  background-color: #bfe7ff !important;
+}
+
+
+/* v5.7 daily reset — 08:00 Asia/Taipei countdowns */
+#shop-restock{
+  display:block;
+  margin:-4px 16px 10px;
+  text-align:center;
+  font-family:var(--sans), "jf open huninn", Huninn, sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:#7a4a22;
+  letter-spacing:.02em;
+}
+.home-ico .home-count{
+  font-size:11px !important;
+  font-family:var(--sans), "jf open huninn", Huninn, sans-serif;
+  font-weight:700;
+  color:#7a4a22;
+  text-align:center;
+  white-space:nowrap;
+  max-width:72px;
+}
+#daily-status{
+  font-family:var(--sans), "jf open huninn", Huninn, sans-serif;
+}
+#energy-prompt [data-ad-reset],
+#ad-sheet [data-ad-reset]{
+  font-weight:800;
+}
+
+#shop-restock{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  margin:-2px 16px 8px !important;
+  text-align:center;
+  font-family:var(--sans), "jf open huninn", Huninn, sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:#7a4a22;
+  line-height:1.3;
+}
+.reset-left, [data-ad-reset]{
+  white-space:nowrap;
+}
+#energy-prompt p, #ad-sheet p, #daily-status{
+  word-break:keep-all;
+  line-height:1.55;
+}
+#btn-claim-daily:disabled,
+#daily .btn:disabled{
+  opacity:.45 !important;
+  filter:grayscale(.15);
+  pointer-events:none;
+  box-shadow:none !important;
+}

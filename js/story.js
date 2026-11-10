@@ -1,6 +1,6 @@
 /** Story scenes: big portraits, matching expressions, typewriter + mouth, filled stage. */
 
-import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=14";
+import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=15";
 
 let queue = [], idx = 0, doneFn = null;
 let typing = false, typed = "", full = "", typeTimer = 0, mouthTimer = 0, talking = false;
@@ -39,7 +39,7 @@ function applyBg() {
   const el = $("#story");
   if (!el) return;
   el.style.setProperty("--story-bg", bg);
-  const wash = "linear-gradient(180deg,rgba(8,12,16,.04),rgba(8,12,16,.10) 62%,rgba(8,12,16,.42))";
+  const wash = "linear-gradient(180deg,rgba(255,252,246,.0),rgba(255,252,246,.04) 58%,rgba(40,28,16,.16))";
   el.style.backgroundImage = wash + ", " + bg;
   el.style.backgroundSize = "cover";
   el.style.backgroundPosition = "center";

@@ -1,6 +1,6 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
-import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=14";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=14";
+import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=15";
+import { nearbyEmpty, produceFrom } from "./merge.js?v=15";
 
 export const GEN_POPS = 12;
 export const GEN_COOL_MS = 30_000;
@@ -23,8 +23,9 @@ export function createFog(ctx) {
       const id = clumpOf(r, c, cols, rows);
       slot.dataset.clump = id;
       const crate = document.createElement("img");
-      crate.className = "crate-art";
-      crate.src = "assets/tiles/crate.png";
+      crate.className = "crate-art fog-cloud";
+      const clouds = ["assets/tiles/fog-cloud.png", "assets/tiles/fog-cloud-b.png"];
+      crate.src = clouds[(r * 7 + c) % clouds.length];
       crate.alt = "";
       crate.draggable = false;
       slot.appendChild(crate);
@@ -103,7 +104,7 @@ export function createFog(ctx) {
     if (!hits.length) return false;
     const pick = hits[Math.floor(Math.random() * hits.length)];
     unlockOneCell(save, pick.r, pick.c);
-    toast("旁邊的木箱打開了！");
+    toast("旁邊的雲霧散開了！");
     return true;
   }
 

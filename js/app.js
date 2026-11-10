@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=14";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js?v=14";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=14";
-import { mountMascot } from "./mascot.js?v=14";
-import { mountHome } from "./home.js?v=14";
-import { bindStory, startStory } from "./story.js?v=14";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=14";
-import { bagCap, migrateBagSlots } from "./bag.js?v=14";
-import { reserveItems } from "./merge.js?v=14";
-import { avatarSrc } from "./portraits.js?v=14";
+import { Auth } from "./auth.js?v=15";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=15";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=15";
+import { mountMascot } from "./mascot.js?v=15";
+import { mountHome } from "./home.js?v=15";
+import { bindStory, startStory } from "./story.js?v=15";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=15";
+import { bagCap, migrateBagSlots } from "./bag.js?v=15";
+import { reserveItems } from "./merge.js?v=15";
+import { avatarSrc } from "./portraits.js?v=15";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=14";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=14";
-import { regionById } from "./world.js?v=14";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=14";
-import { bindTip } from "./tip.js?v=14";
+} from "./merge.js?v=15";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=15";
+import { regionById } from "./world.js?v=15";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=15";
+import { bindTip } from "./tip.js?v=15";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=14");
+  const res = await fetch(url + "?v=15");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -97,7 +97,7 @@ export async function boot() {
   settingsUi = createSettingsUi({ $, persist, getSave: () => SAVE, show });
   settingsUi.bind();
   bindStory({ $, sfx, show, chapterBg: () => getComputedStyle($("#play") || document.documentElement).getPropertyValue("--chapter-bg") });
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, todayKey, formatDailyResetLeft, ensureDaily, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
@@ -204,10 +204,11 @@ function bind() {
   }
 }
 
-function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } }
+function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } if ($("#title")?.classList.contains("on")) home?.refresh?.(); if ($("#daily")?.classList.contains("on")) renderDaily(); }
 
 function refreshHud() {
   tickEnergy(SAVE);
+  ensureDaily(SAVE);
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
@@ -388,7 +389,6 @@ function isWantedItem(item) {
   if (!item || item.kind !== "item") return false;
   return (SAVE.orders || []).some((o) =>
     o.need?.chain === item.chain && o.need?.tier === item.tier
-    && (!o.reservedUid || o.reservedUid === item.uid)
   );
 }
 
@@ -949,8 +949,14 @@ function renderMap() {
 function renderDaily() {
   const today = todayKey();
   const claimed = SAVE.daily?.day === today && SAVE.daily.claimed;
-  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的禮物在這裡。";
-  $("#btn-claim-daily").disabled = claimed;
+  const status = $("#daily-status");
+  if (status) {
+    status.innerHTML = claimed
+      ? `今天已經領過囉，08:00 再來。<br>還要 <span class="reset-left">${formatDailyResetLeft()}</span>。`
+      : "今天的禮物在這裡。";
+  }
+  const claimBtn = $("#btn-claim-daily");
+  if (claimBtn) claimBtn.disabled = claimed;
 }
 
 function claimDaily() {
@@ -969,7 +975,7 @@ function claimDaily() {
   const seeds = (GAME.energy?.dailyGiftSeeds || 8) + bonus;
   SAVE.energy = Math.min(ENERGY.max, SAVE.energy + energy);
   SAVE.starSeeds += seeds;
-  SAVE.daily = { day: today, streak: st, claimed: true };
+  SAVE.daily = { ...(SAVE.daily || {}), day: today, streak: st, claimed: true };
   persist(); sfx.daily(); mascot?.wish();
   toast(`領到 ${energy} 能量、${seeds} 顆星星種子（連續 ${st} 天）`);
   renderDaily(); refreshHud();

@@ -21,6 +21,7 @@ export function emptySave() {
     materials: 0,
     boosters: { wand: 0, clear: 0 },
     ads: { day: "", count: 0 },
+    shopDaily: { day: "", bought: {} },
     board: null,
     boardCols: 7,
     boardRows: 9,
@@ -39,7 +40,7 @@ export function emptySave() {
     discovered: {},
     flags: {},
     settings: { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 },
-    daily: { day: "", streak: 0, claimed: false, challenge: 0, challengeClaimed: false },
+    daily: { day: "", streak: 0, claimed: false, challengeDay: "", challenge: 0, challengeClaimed: false },
     comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
@@ -65,6 +66,8 @@ export function loadSave() {
       const loaded = { ...emptySave(), ...JSON.parse(raw) };
       loaded.restore = { ...emptySave().restore, ...(loaded.restore || {}) };
       loaded.daily = { ...emptySave().daily, ...(loaded.daily || {}) };
+      loaded.ads = { ...emptySave().ads, ...(loaded.ads || {}) };
+      loaded.shopDaily = { ...emptySave().shopDaily, ...(loaded.shopDaily || {}) };
       if (loaded.coins == null) loaded.coins = 0;
       if (!loaded.buildings) loaded.buildings = {};
       if (!loaded.unlockedRegions) loaded.unlockedRegions = ["village"];
@@ -73,6 +76,7 @@ export function loadSave() {
       if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
       migrateV3(loaded);
       migrateEconomy(loaded);
+      ensureDaily(loaded);
       return loaded;
     }
     const old = localStorage.getItem(LEGACY);
@@ -121,6 +125,7 @@ function migrateEconomy(s) {
   if (s.boosters.wand == null) s.boosters.wand = 0;
   if (s.boosters.clear == null) s.boosters.clear = 0;
   if (!s.ads) s.ads = { day: "", count: 0 };
+  if (!s.shopDaily) s.shopDaily = { day: "", bought: {} };
   s.version = Math.max(s.version || 0, 4);
   return s;
 }
@@ -158,6 +163,90 @@ export function nextEnergyIn(save) {
   return Math.max(0, REGEN_MS - (Date.now() - (save.energyAt || Date.now())));
 }
 
-export function todayKey() {
-  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Taipei", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+/** Daily systems reset at 08:00 Asia/Taipei, not midnight. Always computed in Taipei time. */
+export const DAILY_RESET_HOUR = 8;
+export const DAILY_TZ = "Asia/Taipei";
+
+function pad2(n) { return String(n).padStart(2, "0"); }
+
+function taipeiParts(now = new Date()) {
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    timeZone: DAILY_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23"
+  });
+  const bag = {};
+  for (const p of fmt.formatToParts(now)) {
+    if (p.type !== "literal") bag[p.type] = p.value;
+  }
+  return {
+    year: Number(bag.year),
+    month: Number(bag.month),
+    day: Number(bag.day),
+    hour: Number(bag.hour),
+    minute: Number(bag.minute),
+    second: Number(bag.second)
+  };
+}
+
+function addCalendarDays(y, m, d, delta) {
+  const dt = new Date(Date.UTC(y, m - 1, d + delta));
+  return { year: dt.getUTCFullYear(), month: dt.getUTCMonth() + 1, day: dt.getUTCDate() };
+}
+
+function ymd(y, m, d) { return `${y}-${pad2(m)}-${pad2(d)}`; }
+
+/** Game-day key: the Taipei calendar date of the 08:00 start of the current period. */
+export function todayKey(now = new Date()) {
+  const p = taipeiParts(now);
+  if (p.hour < DAILY_RESET_HOUR) {
+    const prev = addCalendarDays(p.year, p.month, p.day, -1);
+    return ymd(prev.year, prev.month, prev.day);
+  }
+  return ymd(p.year, p.month, p.day);
+}
+
+/** Instant of the next 08:00 Asia/Taipei. Taipei is UTC+8 year-round, so 08:00 = 00:00 UTC that date. */
+export function nextDailyReset(now = new Date()) {
+  const p = taipeiParts(now);
+  let y, m, d;
+  if (p.hour < DAILY_RESET_HOUR) {
+    y = p.year; m = p.month; d = p.day;
+  } else {
+    const n = addCalendarDays(p.year, p.month, p.day, 1);
+    y = n.year; m = n.month; d = n.day;
+  }
+  return new Date(Date.UTC(y, m - 1, d, DAILY_RESET_HOUR - 8, 0, 0));
+}
+
+export function dailyResetLeftMs(now = new Date()) {
+  return Math.max(0, nextDailyReset(now).getTime() - now.getTime());
+}
+
+export function formatDailyResetLeft(now = new Date()) {
+  const s = Math.max(0, Math.floor(dailyResetLeftMs(now) / 1000));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (h <= 0) return `${m}\u00a0分`;
+  return `${h}\u00a0小時\u00a0${m}\u00a0分`;
+}
+
+/** Roll ads, daily challenge, and shop restock onto the current 08:00 game day. */
+export function ensureDaily(save, now = new Date()) {
+  if (!save) return todayKey(now);
+  const day = todayKey(now);
+  if (!save.daily) save.daily = { day: "", streak: 0, claimed: false, challengeDay: "", challenge: 0, challengeClaimed: false };
+  if (save.daily.challengeDay !== day) {
+    save.daily.challengeDay = day;
+    save.daily.challenge = 0;
+    save.daily.challengeClaimed = false;
+  }
+  if (!save.ads || save.ads.day !== day) save.ads = { day, count: 0 };
+  if (!save.shopDaily || save.shopDaily.day !== day) save.shopDaily = { day, bought: {} };
+  return day;
 }

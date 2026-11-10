@@ -1,5 +1,5 @@
 /** Rewarded "ad": official 〈飛向藍藍天〉 MV via the YouTube IFrame Player API. Never real money. */
-import { todayKey } from "./save.js?v=14";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=15";
 
 export const AD_DAILY = 5;
 export const AD_VIDEO_ID = "XPvIihQWrcA";
@@ -13,11 +13,10 @@ const PRIZES = [
 ];
 
 export function adsState(save) {
-  const day = todayKey();
-  if (!save.ads || save.ads.day !== day) save.ads = { day, count: 0 };
-  const used = Math.max(0, save.ads.count || 0);
+  ensureDaily(save);
+  const used = Math.max(0, save.ads?.count || 0);
   const left = Math.max(0, AD_DAILY - used);
-  return { day, used, left, max: AD_DAILY };
+  return { day: todayKey(), used, left, max: AD_DAILY, until: formatDailyResetLeft() };
 }
 
 function loadApi() {
@@ -56,6 +55,7 @@ export function createAds(ctx) {
     const st = adsState(ctx.getSave());
     document.querySelectorAll("[data-ad-left]").forEach((el) => { el.textContent = st.left; });
     document.querySelectorAll("[data-ad-max]").forEach((el) => { el.textContent = st.max; });
+    document.querySelectorAll("[data-ad-reset]").forEach((el) => { el.textContent = st.until; });
     document.querySelectorAll(".ad-entry").forEach((el) => {
       el.classList.toggle("empty", st.left <= 0);
       const badge = el.querySelector(".ad-badge");
@@ -126,7 +126,7 @@ export function createAds(ctx) {
     const st = adsState(save);
     if (st.left <= 0) {
       sfx.invalid();
-      toast("今天的影片看完了，明天再來。");
+      toast(`今天的影片看完了，08:00 再來。還要 ${formatDailyResetLeft()}。`);
       return;
     }
     awarded = false;
@@ -172,7 +172,7 @@ export function createAds(ctx) {
     const st = adsState(ctx.getSave());
     syncLabels();
     if (st.left <= 0) {
-      toast("能量還在慢慢回來。今天的影片看完了，明天再來。");
+      toast(`能量還在慢慢回來。今天的影片看完了，08:00 再來（還要 ${formatDailyResetLeft()}）。`);
       return;
     }
     $("#energy-prompt")?.classList.add("on");

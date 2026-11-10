@@ -1,6 +1,6 @@
 /** Title / home screen: icon dock, daily clock state, floating balloons. */
 
-import { todayKey } from "./save.js?v=14";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=15";
 
 const ICONS = [
   { id: "btn-map", icon: "assets/icons/map.png", label: "故事地圖", tip: "打開世界地圖，修復小建築" },
@@ -12,16 +12,6 @@ const ICONS = [
   { id: "btn-settings", icon: "assets/icons/gear.png", label: "設定", tip: "音樂、音效與名字" }
 ];
 
-function midnightLeft() {
-  const now = new Date();
-  const tz = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
-  const end = new Date(tz);
-  end.setHours(24, 0, 0, 0);
-  const s = Math.max(0, Math.floor((end - tz) / 1000));
-  const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
-  if (h <= 0) return `${m} 分`;
-  return `${h} 小時 ${m} 分`;
-}
 
 export function mountHome(ctx) {
   const { $ } = ctx;
@@ -33,6 +23,7 @@ export function mountHome(ctx) {
 
   function refresh() {
     const save = ctx.getSave?.() || {};
+    if (save) ensureDaily(save);
     const dailyBtn = $("#btn-daily");
     if (!dailyBtn) return;
     const ready = dailyReady(save);
@@ -42,9 +33,9 @@ export function mountHome(ctx) {
     if (badge) badge.hidden = !ready;
     if (count) {
       count.hidden = ready;
-      count.textContent = ready ? "" : midnightLeft();
+      count.textContent = ready ? "" : formatDailyResetLeft();
     }
-    dailyBtn.title = ready ? "今天的禮物可以領了" : `明天再來　還要 ${midnightLeft()}`;
+    dailyBtn.title = ready ? "今天的禮物可以領了" : `08:00 再來　還要 ${formatDailyResetLeft()}`;
     dailyBtn.setAttribute("aria-label", dailyBtn.title);
   }
 

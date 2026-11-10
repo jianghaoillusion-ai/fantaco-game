@@ -1,3 +1,4 @@
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=15";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
@@ -34,39 +35,20 @@ export function createOrdersUi(ctx) {
 
   function dailyState() {
     const save = ctx.getSave();
-    const today = todayKey();
-    if (save.daily?.day && save.daily.day !== today) {
-      save.daily.challenge = 0;
-      save.daily.challengeClaimed = false;
-    }
+    ensureDaily(save);
     return {
       done: save.daily?.challenge || 0,
       goal: 3,
       claimed: !!save.daily?.challengeClaimed,
-      left: midnightLabel()
+      left: formatDailyResetLeft()
     };
-  }
-
-  function midnightLabel() {
-    const now = new Date();
-    const tz = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Taipei" }));
-    const end = new Date(tz);
-    end.setHours(24, 0, 0, 0);
-    const s = Math.max(0, Math.floor((end - tz) / 1000));
-    const h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60);
-    if (h <= 0) return `${m} 分`;
-    return `${h} 小時 ${m} 分`;
   }
 
   function bumpDaily() {
     const save = ctx.getSave();
     const today = todayKey();
-    if (!save.daily) save.daily = { day: today, streak: 0, claimed: false, challenge: 0, challengeClaimed: false };
-    if (save.daily.day !== today) {
-      save.daily.day = today;
-      save.daily.challenge = 0;
-      save.daily.challengeClaimed = false;
-    }
+    if (!save.daily) save.daily = { day: "", streak: 0, claimed: false, challengeDay: today, challenge: 0, challengeClaimed: false };
+    ensureDaily(save);
     save.daily.challenge = (save.daily.challenge || 0) + 1;
   }
 

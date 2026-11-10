@@ -1,7 +1,8 @@
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
-import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=14";
-import { bagCap } from "./bag.js?v=14";
-import { bindTip, hideTip } from "./tip.js?v=14";
+import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=15";
+import { bagCap } from "./bag.js?v=15";
+import { ensureDaily, formatDailyResetLeft } from "./save.js?v=15";
+import { bindTip, hideTip } from "./tip.js?v=15";
 
 const DIAMOND_ITEMS = [
   { id: "boost-energy", name: "能量加持", desc: "立刻回復 30 點能量。", energy: 30, cost: { diamonds: 5 } },
@@ -65,12 +66,15 @@ export function createShop(ctx) {
     const shop = map?.shop || { title: "微笑小舖", notice: "", items: [] };
     const title = $("#shop-title");
     const notice = $("#shop-notice");
+    const restock = $("#shop-restock");
     const list = $("#shop-list");
+    ensureDaily(save);
     if (title) {
       title.textContent = shop.title;
       title.title = shop.notice || "只用遊戲裡的金幣和星星種子";
     }
     if (notice) notice.textContent = "";
+    if (restock) restock.textContent = `每日 08:00 補貨　還有 ${formatDailyResetLeft()}`;
     if (!list) return;
     list.innerHTML = "";
     const energy = [];
@@ -132,6 +136,9 @@ export function createShop(ctx) {
       save.inventory.push(cell);
       sfx.generate(); toast(`放進魔法袋：${ctx.infoName(cell)}`);
     }
+    save.shopDaily = save.shopDaily || { day: "", bought: {} };
+    const id = item.id || item.name;
+    if (id) save.shopDaily.bought[id] = (save.shopDaily.bought[id] || 0) + 1;
     persist();
     refreshHud();
     renderShop();
