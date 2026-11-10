@@ -152,5 +152,5 @@ export function createShop(ctx) {
     $("#btn-sell")?.addEventListener("click", sellSelected);
   }
 
-  return { expandBag, openBag, closeBag, openShop, closeShop, renderShop, renderInventory, sellSelected, buy, bind };
+  return { openBag, closeBag, openShop, closeShop, renderShop, renderInventory, sellSelected, buy, bind };
 }

@@ -1,6 +1,6 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
 import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=25";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=25";
+import { tickAutoGenerators } from "./merge.js?v=25";
 
 export const GEN_POPS = 18;
 export const GEN_COOL_MS = 6_000;
@@ -56,7 +56,7 @@ export function createFog(ctx) {
       crate.alt = "";
       crate.draggable = false;
       slot.appendChild(crate);
-      const cells = clumpCells(id, cols, rows).filter(cell => !isOpenIndex(cell.i));
+      const cells = clumpCells(id, cols, rows);
       const anchor = cells[Math.floor(cells.length / 2)] || cells[0];
       if (anchor && anchor.r === r && anchor.c === c) {
         const badge = document.createElement("div");
@@ -83,8 +83,8 @@ export function createFog(ctx) {
   function decorateGen(piece, item) {
     if (!piece) return;
     const slot = piece.closest(".cell") || piece.parentElement;
-    const autoMs = ctx.getGenerators?.()[item.gen]?.autoMs;
-    const left = (autoMs ? item.autoAt || Date.now() + autoMs : item.coolUntil || 0) - Date.now();
+    const autoMs = ctx.getGens?.()[item.gen]?.autoMs;
+    const left = (autoMs ? item.autoAt ?? Date.now() + autoMs : item.coolUntil || 0) - Date.now();
     let timer = slot?.querySelector?.(".gen-timer");
     if (left > 0) {
       piece.classList.add("cooling");
@@ -155,38 +155,15 @@ export function createFog(ctx) {
     return true;
   }
 
+  let autoBlocked = false;
   function tickAutoGens() {
-    const save = ctx.getSave();
-    const gens = ctx.getGens?.() || ctx.getGame?.()?.generators || {};
-    const cols = ctx.getCols(), rows = ctx.getRows();
-    const now = Date.now();
-    let changed = false;
-    (save.board || []).forEach((cell, i) => {
-      if (!cell || cell.kind !== "gen") return;
-      const def = gens[cell.gen];
-      const ms = autoGenMs(save, def, cell);
-      if (!ms) return;
-      if (!cell.coolUntil) cell.coolUntil = now + ms;
-      if (now < cell.coolUntil) return;
-      const empty = nearbyEmpty(save.board, cols, rows, i, isOpenIndex);
-      if (empty < 0) {
-        cell.coolUntil = now + 3000;
-        toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
-        return;
-      }
-      const made = produceFrom(cell, gens);
-      if (!made) return;
-      save.board[empty] = made;
-      cell.coolUntil = now + ms;
-      changed = true;
-      const fromEl = document.querySelector(`.piece[data-uid="${cell.uid}"]`);
-      const toEl = document.querySelector(`.cell[data-r="${Math.floor(empty / cols)}"][data-c="${empty % cols}"]`);
-      ctx.fx?.spawnArc?.(fromEl, toEl, () => ctx.fx?.popAt?.(made.uid));
-    });
-    if (changed) {
-      ctx.persist?.();
-      ctx.refresh?.();
-    }
+    if (ctx.canAutoGenerate && !ctx.canAutoGenerate()) return;
+    const result = tickAutoGenerators(ctx.getSave(), ctx.getGens(), ctx.getCols(), ctx.getRows(), isOpenIndex);
+    if (result.blocked && !autoBlocked) toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
+    autoBlocked = result.blocked;
+    for (const item of result.made) ctx.discover?.(item, {silent:true});
+    if (result.changed) ctx.persist?.();
+    if (result.made.length) { ctx.refresh?.(); result.made.forEach(item => ctx.fx?.popAt?.(item.uid)); }
   }
 
   function tickCool() {

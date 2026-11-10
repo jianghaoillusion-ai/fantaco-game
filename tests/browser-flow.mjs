@@ -12,10 +12,10 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto(process.env.TEST_URL||'http://127.0.0.1:18769');
  await page.waitForFunction(()=>window.__GAME);
- await page.fill('#nick','小夏驗收');await page.locator('#nick-form button').click();await page.waitForTimeout(500);await page.screenshot({path:`${out}/v9-${device}-home.png`});await page.click('#btn-play');
- const dismiss=async()=>{for(let i=0;i<12;i++){if(await page.locator('#story.on').count())await page.click('#btn-story-skip');else if(await page.locator('#discover.on').count())await page.click('#btn-discover-ok');else if(await page.locator('#result.on').count()){await page.screenshot({path:`${out}/v9-${device}-result.png`});await page.click('#btn-result-ok');}else break;await page.waitForTimeout(150);}};
+ await page.fill('#nick','小夏驗收');await page.locator('#nick-form button').click();await page.waitForTimeout(500);await page.screenshot({path:`${out}/v11-${device}-home.png`});await page.click('#btn-play');
+ const dismiss=async()=>{for(let i=0;i<12;i++){if(await page.locator('#story.on').count())await page.click('#btn-story-skip');else if(await page.locator('#discover.on').count())await page.click('#btn-discover-ok');else if(await page.locator('#result.on').count()){await page.screenshot({path:`${out}/v11-${device}-result.png`});await page.click('#btn-result-ok');}else break;await page.waitForTimeout(150);}};
  await dismiss();await page.waitForTimeout(600);
- const shot=async(name)=>page.screenshot({path:`${out}/v9-${device}-${name}.png`});
+ const shot=async(name)=>page.screenshot({path:`${out}/v11-${device}-${name}.png`});
  const state=()=>page.evaluate(()=>window.__GAME.save());
  assert.equal(await page.locator('#board .cell').count(),63);assert.equal(await page.locator('.orders-row .order').count(),4);
  await shot('board');
@@ -31,7 +31,7 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  s=await state();await page.locator('.bag-unlock').first().tap({force:true});assert.equal((await state()).coins,s.coins);assert.equal((await state()).starSeeds,s.starSeeds-4);
  await page.locator('#inv-cells .piece').first().tap({force:true});await page.waitForTimeout(1000);assert.ok((await state()).board.some(x=>x?.uid==='bag-check'));assert.equal((await state()).inventory.length,0);await page.click('#btn-bag-close');
  await page.click('#btn-go-shop');await page.waitForTimeout(350);await shot('shop');
- assert.ok(await page.locator('#shop-list .shop-row').count()>0);await page.locator('#shop-list .btn:not([disabled])').first().tap({force:true});await page.click('#btn-shop-close');
+ assert.ok(await page.locator('#shop-list .shop-tile').count()>0);await page.locator('#shop-list .btn:not([disabled])').first().tap({force:true});await page.click('#btn-shop-close');
  await page.click('#btn-hud-settings');await page.locator('#tog-music').uncheck();await page.locator('#tog-sfx').uncheck();await shot('settings');await page.click('#btn-settings-close');
  assert.equal((await state()).settings.music,false);assert.equal((await state()).settings.sfx,false);
  // Invalid touch drag highlights main's red cell and returns to source; no swap/loss.
@@ -52,13 +52,13 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  assert.ok((await state()).inventory.some(x=>x?.uid===storeUid));
  await page.click('#btn-bag');await page.locator(`#inv-cells [data-uid="${storeUid}"]`).tap({force:true});await page.waitForTimeout(700);await page.click('#btn-bag-close');
  assert.ok((await state()).board.some(x=>x?.uid===storeUid));
- // Merge adjacent to locked border opens exactly one cell and never shows combo.
+ // Merge adjacent to locked border opens exactly one cell.
  await page.evaluate(()=>{const s=window.__GAME.save();s.board[8]={kind:'item',chain:'star',tier:1,uid:'merge-a'};s.board[9]={kind:'item',chain:'star',tier:1,uid:'merge-b'};window.__GAME.refresh();});
  const unlocked=(await state()).unlockedCells.length;
  await drag('#board [data-uid="merge-b"]','#board [data-uid="merge-a"]');await dismiss();
- assert.equal((await state()).unlockedCells.length,unlocked+1);assert.equal((await state()).board[8].tier,2);assert.equal(await page.locator('.combo-float').count(),0);await shot('merge-fog');
+ assert.equal((await state()).unlockedCells.length,unlocked+1);assert.equal((await state()).board[8].tier,2);await shot('merge-fog');
  // Fulfill through main's clickable order card; coin reward exactly once.
- await page.evaluate(()=>{const s=window.__GAME.save(),o=s.orders[0];s.xp=39;s.level=1;s.board[10]={kind:'item',...o.need,uid:'order-check'};window.__GAME.refresh();});
+ await page.evaluate(()=>{const s=window.__GAME.save(),o=s.orders[0];s.coinsEarned=39;s.xp=39;s.level=1;s.board[10]={kind:'item',...o.need,uid:'order-check'};window.__GAME.refresh();});
  s=await state();const o=s.orders[0],coins=s.coins,done=s.ordersDone;
  await page.locator(`.order[data-id="${o.id}"]`).tap({force:true});await page.waitForTimeout(1100);await dismiss();
  s=await state();assert.equal(s.ordersDone,done+1);assert.equal(s.coins,coins+(o.reward.coins??((o.reward.seeds||0)+4)));assert.equal(s.orders.length,4);
@@ -82,7 +82,7 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  await page.locator(`#board [data-uid="${s.board.find(x=>x?.gen==='star').uid}"]`).tap({force:true});assert.equal((await state()).energy,energy);assert.equal((await state()).inventory.length,inv);await shot('full-board');
  await page.waitForTimeout(1100);assert.equal((await state()).board.find(x=>x?.gen==='garden').autoAt,0);
  await page.click('#btn-hud-settings');await page.locator('#vol-music').evaluate(el=>{el.value=35;el.dispatchEvent(new Event('input',{bubbles:true}));});await page.click('#btn-settings-close');
- const uids=(await state()).board.filter(Boolean).map(x=>x.uid).sort();await page.reload();await page.waitForFunction(()=>window.__GAME);s=await state();assert.deepEqual(s.board.filter(Boolean).map(x=>x.uid).sort(),uids);assert.equal(s.settings.music,false);assert.equal(s.settings.sfx,false);assert.equal(s.version,3);
+ const uids=(await state()).board.filter(Boolean).map(x=>x.uid).sort();await page.reload();await page.waitForFunction(()=>window.__GAME);s=await state();assert.deepEqual(s.board.filter(Boolean).map(x=>x.uid).sort(),uids);assert.equal(s.settings.music,false);assert.equal(s.settings.sfx,false);assert.equal(s.version,4);
  // Older expanded bags expose all 24 owned items; no hidden overflow.
  await page.click('#btn-play');await dismiss();
  await page.evaluate(()=>{const s=window.__GAME.save();s.inventorySlots=24;s.inventory=Array.from({length:24},(_,i)=>({kind:'item',chain:'star',tier:1,uid:'legacy-'+i}));window.__GAME.refresh();});

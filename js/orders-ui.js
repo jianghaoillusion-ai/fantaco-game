@@ -10,6 +10,7 @@ export function createOrdersUi(ctx) {
     const save = ctx.getSave();
     const need = orderOrNeed.need || orderOrNeed;
     const uid = reservedUid || orderOrNeed.reservedUid;
+    if (orderOrNeed.need && !uid) return null;
     const match = (c) => {
       if (!c || c.kind !== "item" || c.chain !== need.chain || c.tier !== need.tier) return false;
       if (uid) return c.uid === uid;
@@ -22,6 +23,7 @@ export function createOrdersUi(ctx) {
     const save = ctx.getSave();
     const need = orderOrNeed.need || orderOrNeed;
     const uid = reservedUid || orderOrNeed.reservedUid;
+    if (orderOrNeed.need && !uid) return null;
     const match = (c) => {
       if (!c || c.kind !== "item" || c.chain !== need.chain || c.tier !== need.tier) return false;
       if (uid) return c.uid === uid;

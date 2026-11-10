@@ -33,12 +33,20 @@ test('袋內產生器不自動產出',()=>{const s=autoState();s.inventory=[s.bo
 test('迷霧格內產生器不產出',()=>{const s=autoState();s.board[31].autoAt=0;assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>false,100).made.length,0);});
 for(const [r,c] of [[1,1],[1,3],[7,5],[4,1]])test(`邊緣 ${r},${c} 合成只揭一格四鄰`,()=>{const s=save.emptySave();const f=createFog({getSave:()=>s,getCols:()=>7,getRows:()=>9,toast:()=>{}});assert.equal(f.revealAdjacent(r,c),true);assert.equal(s.unlockedCells.length,1);const [rr,cc]=s.unlockedCells[0].split(',').map(Number);assert.equal(Math.abs(rr-r)+Math.abs(cc-c),1);assert.equal(isCellOpen(s,rr,cc,7,9),true);});
 test('中間合成不隔空揭霧',()=>{const s=save.emptySave();const f=createFog({getSave:()=>s,getCols:()=>7,getRows:()=>9,toast:()=>{}});assert.equal(f.revealAdjacent(4,3),false);});
-for(const version of [1,2,3,4])test(`v${version} 存檔遷移保留道具設定與建築`,()=>{const raw={version,board:[item('saved')],inventory:[item('bag')],coins:77,buildings:{stage:2},settings:{music:false,sfx:false,musicVol:.3},unlockedCells:['0,1']};const s=save.normalizeSave(raw);assert.equal(s.version,3);assert.equal(s.board[0].uid,'saved');assert.equal(s.inventory[0].uid,'bag');assert.equal(s.coins,77);assert.equal(s.buildings.stage,2);assert.equal(s.settings.music,false);assert.equal(s.settings.musicVol,.3);assert.ok(s.unlockedCells.includes('0,1'));});
+for(const version of [1,2,3,4])test(`v${version} 存檔遷移保留道具設定與建築`,()=>{const raw={version,board:[item('saved')],inventory:[item('bag')],coins:77,buildings:{stage:2},settings:{music:false,sfx:false,musicVol:.3},unlockedCells:['0,1']};const s=save.normalizeSave(raw);assert.equal(s.version,4);assert.equal(s.board[0].uid,'saved');assert.equal(s.inventory[0].uid,'bag');assert.equal(s.coins,77);assert.equal(s.buildings.stage,2);assert.equal(s.settings.music,false);assert.equal(s.settings.musicVol,.3);assert.ok(s.unlockedCells.includes('0,1'));});
 test('未來格式拒絕覆蓋',()=>assert.throws(()=>save.normalizeSave({schemaVersion:99}),/存檔版本/));
 test('損毀 v3 回復 v2 並保留原備份',()=>{const old=JSON.stringify({...save.emptySave(),coins:81});const m=new Map([['fantaco.mianhuatang.save.v3','broken'],['fantaco.mianhuatang.save.v2',old]]);globalThis.localStorage={getItem:k=>m.get(k)||null,setItem:(k,v)=>m.set(k,v)};const s=save.loadSave();assert.equal(s.coins,81);save.writeSave(s);assert.equal(m.get('fantaco.mianhuatang.save.v2'),old);assert.equal(JSON.parse(m.get('fantaco.mianhuatang.save.v3')).coins,81);});
 test('v3 優先於舊備份',()=>{globalThis.localStorage={getItem:k=>JSON.stringify({...save.emptySave(),coins:k.endsWith('v3')?99:1})};assert.equal(save.loadSave().coins,99);});
 test('舊魔法袋容量不得縮小',()=>{const s=save.normalizeSave({version:3,magicBag:{capacity:24},inventory:[]});assert.equal(bagCap(s),24);});
 test('新帳號魔法袋維持 main 的六格',()=>assert.equal(bagCap(save.emptySave()),6));
+test('rebase 保留 main 金幣經驗、鑽石、補給與當日進度',()=>{
+ const day=save.todayKey();
+ const s=save.normalizeSave({version:4,coins:17,coinsEarned:123,xp:99,diamonds:9,boosters:{wand:2,clear:1},daily:{challengeDay:day,challenge:2},ads:{day,count:3},shopDaily:{day,bought:{energy:1}}});
+ assert.equal(s.xp,123);assert.equal(s.coins,17);assert.equal(s.diamonds,9);assert.deepEqual(s.boosters,{wand:2,clear:1});assert.equal(s.daily.challenge,2);assert.equal(s.ads.count,3);assert.equal(s.shopDaily.bought.energy,1);
+});
+test('舊版經驗轉入 main 累計金幣，不歸零',()=>{
+ const s=save.normalizeSave({version:3,xp:81,coins:7});assert.equal(s.coinsEarned,81);assert.equal(s.xp,81);assert.equal(s.coins,7);assert.equal(s.version,4);
+});
 function bag(s,extra={}) {return createBag({getSave:()=>s,$:()=>null,persist:()=>{},refreshHud:()=>{},toast:()=>{},sfx:{invalid:()=>{},daily:()=>{},drop:()=>{}},...extra});}
 test('魔法袋擴充只扣星星種子',()=>{const s=save.emptySave();s.coins=100;s.starSeeds=10;bag(s).buySlot(7);assert.equal(s.inventorySlots,7);assert.equal(s.starSeeds,6);assert.equal(s.coins,100);});
 test('種子不足不扣金幣補足',()=>{const s=save.emptySave();s.coins=100;s.starSeeds=3;bag(s).buySlot(7);assert.equal(s.inventorySlots,6);assert.equal(s.starSeeds,3);assert.equal(s.coins,100);});
