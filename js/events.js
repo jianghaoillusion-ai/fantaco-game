@@ -195,10 +195,92 @@ export function syncEvents(save, now = new Date(), curve) {
   return ev;
 }
 
+/** Instant the event ends: 08:00 Asia/Taipei on endKey (00:00 UTC that date). */
+export function eventEndAt(endKey) {
+  const parts = String(endKey || "").split("-").map(Number);
+  const y = parts[0], m = parts[1], d = parts[2];
+  if (!y || !m || !d) return new Date(NaN);
+  return new Date(Date.UTC(y, m - 1, d, 0, 0, 0));
+}
+
+export function formatEventLeft(endKey, now = new Date(), compact = false) {
+  const end = eventEndAt(endKey);
+  const ms = Math.max(0, end.getTime() - now.getTime());
+  const s = Math.floor(ms / 1000);
+  const days = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  if (compact) {
+    if (days >= 1) return `${days}\u00a0天`;
+    if (h <= 0) return `${m}\u00a0分`;
+    return `${h}\u00a0小時`;
+  }
+  if (days >= 1) return `${days}\u00a0天\u00a0${h}\u00a0小時`;
+  if (h <= 0) return `${m}\u00a0分`;
+  return `${h}\u00a0小時\u00a0${m}\u00a0分`;
+}
+
+function bumpEvent(save, ev, kind, pred) {
+  const def = ev[kind];
+  const st = save.events?.[kind];
+  if (!def || !st || st.claimed) return;
+  if (!pred(def)) return;
+  st.progress = Math.min(def.need.count, (st.progress || 0) + 1);
+}
+
+export function noteOrder(save, order, now = new Date(), curve) {
+  const ev = syncEvents(save, now, curve);
+  const chain = order?.need?.chain || order?.chain || null;
+  for (const kind of ["short", "long"]) {
+    bumpEvent(save, ev, kind, (def) => {
+      if (def.need.type !== "orders") return false;
+      if (def.need.chain && def.need.chain !== chain) return false;
+      return true;
+    });
+  }
+  return ev;
+}
+
+export function noteMerge(save, cell, now = new Date(), curve) {
+  const ev = syncEvents(save, now, curve);
+  for (const kind of ["short", "long"]) {
+    bumpEvent(save, ev, kind, (def) => {
+      if (def.need.type !== "merge") return false;
+      if (def.need.chain && def.need.chain !== cell?.chain) return false;
+      if (def.need.tier != null && (cell?.tier || 1) < def.need.tier) return false;
+      return true;
+    });
+  }
+  return ev;
+}
+
+export function tryClaim(save, kind, now = new Date(), curve) {
+  const ev = syncEvents(save, now, curve);
+  const def = ev[kind];
+  const st = save.events?.[kind];
+  if (!def || !st || st.claimed) return null;
+  if ((st.progress || 0) < def.need.count) return null;
+  st.claimed = true;
+  return { ...def.reward, name: def.name, kind: def.kind };
+}
+
 export function createEvents(ctx) {
+  function curve() { return ctx.getGame?.()?.xpCurve; }
   function current() {
     const save = ctx.getSave?.() || {};
-    return syncEvents(save, new Date(), ctx.getGame?.()?.xpCurve);
+    return syncEvents(save, new Date(), curve());
   }
-  return { current, sync: () => current(), eventsAt, rewardsFor, xpToNext, scaleNeedCount };
+  return {
+    current,
+    sync: () => current(),
+    noteOrder: (order) => noteOrder(ctx.getSave(), order, new Date(), curve()),
+    noteMerge: (cell) => noteMerge(ctx.getSave(), cell, new Date(), curve()),
+    tryClaim: (kind) => tryClaim(ctx.getSave(), kind, new Date(), curve()),
+    formatEventLeft,
+    eventEndAt,
+    eventsAt,
+    rewardsFor,
+    xpToNext,
+    scaleNeedCount
+  };
 }

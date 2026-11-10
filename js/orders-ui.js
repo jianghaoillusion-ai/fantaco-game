@@ -1,4 +1,4 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=16";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=17";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {
@@ -74,6 +74,8 @@ export function createOrdersUi(ctx) {
     box.innerHTML = "";
 
     const st = dailyState();
+    const head = document.createElement("div");
+    head.className = "orders-head";
     const daily = document.createElement("div");
     daily.className = "daily-bar" + (st.done >= st.goal && !st.claimed ? " ready" : "") + (st.claimed ? " claimed" : "");
     daily.innerHTML = `<b>今日挑戰</b>
@@ -82,7 +84,8 @@ export function createOrdersUi(ctx) {
       <span class="banter">${st.claimed ? "今天完成囉" : "剩 " + st.left}</span>
       ${st.done >= st.goal && !st.claimed ? '<button type="button" class="give">領取</button>' : ""}`;
     daily.querySelector(".give")?.addEventListener("click", (e) => { e.stopPropagation(); claimDailyChallenge(); });
-    box.appendChild(daily);
+    head.appendChild(daily);
+    box.appendChild(head);
 
     const row = document.createElement("div");
     row.className = "orders-row";
@@ -106,7 +109,7 @@ export function createOrdersUi(ctx) {
           <img class="${ready ? "have" : "missing"}" src="${def?.img || ""}" alt="${def?.name || ""}">
         </div>
         <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/ui/diamond.png" alt="">${gems}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>
-        ${ready ? '<button type="button" class="give">交付</button>' : ""}`;
+        ${ready ? '<button type="button" class="give">交付</button>' : '<span class="give-slot" aria-hidden="true"></span>'}`;
       card.addEventListener("click", () => {
         if (ready) clickGive(o.id, card);
         else { sfx.invalid(); toast("還沒做出來喔"); }
@@ -125,6 +128,7 @@ export function createOrdersUi(ctx) {
       if (!(save.orders || []).some((x) => x.id === id)) seenReady.delete(id);
     }
     box.appendChild(row);
+    ctx.eventsUi?.render?.();
   }
 
   function clickGive(orderId, card) {

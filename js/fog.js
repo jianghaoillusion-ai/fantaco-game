@@ -1,6 +1,6 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
-import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=16";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=16";
+import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=17";
+import { nearbyEmpty, produceFrom } from "./merge.js?v=17";
 
 export const GEN_POPS = 12;
 export const GEN_COOL_MS = 30_000;

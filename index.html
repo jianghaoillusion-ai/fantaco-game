@@ -13,13 +13,13 @@
   <link rel="icon" type="image/png" href="assets/ui/favicon.png">
   <link rel="apple-touch-icon" href="assets/ui/icon-192.png">
   <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/app.css?v=16">
-  <link rel="stylesheet" href="css/home.css?v=16">
-  <link rel="stylesheet" href="css/story.css?v=16">
-  <link rel="stylesheet" href="css/bag.css?v=16">
-  <link rel="stylesheet" href="css/orders.css?v=16">
-  <link rel="stylesheet" href="css/settings.css?v=16">
-  <link rel="stylesheet" href="css/quality.css?v=16">
+  <link rel="stylesheet" href="css/app.css?v=17">
+  <link rel="stylesheet" href="css/home.css?v=17">
+  <link rel="stylesheet" href="css/story.css?v=17">
+  <link rel="stylesheet" href="css/bag.css?v=17">
+  <link rel="stylesheet" href="css/orders.css?v=17">
+  <link rel="stylesheet" href="css/settings.css?v=17">
+  <link rel="stylesheet" href="css/quality.css?v=17">
 </head>
 <body>
   <div id="app">
@@ -352,6 +352,15 @@
       </div>
     </div>
 
+    <div id="event-sheet" class="overlay" role="dialog" aria-modal="true" aria-labelledby="event-heading" aria-hidden="true">
+      <div class="modal event-card">
+        <div class="event-hero" aria-hidden="true"></div>
+        <h2 id="event-heading">活動</h2>
+        <button type="button" class="event-close" id="btn-event-close" aria-label="關閉">關閉</button>
+        <div id="event-panels"></div>
+      </div>
+    </div>
+
     <div id="toast" class="toast" role="status"></div>
   </div>
   <script type="importmap">
@@ -362,6 +371,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=16"></script>
+  <script type="module" src="js/app.js?v=17"></script>
 </body>
 </html>

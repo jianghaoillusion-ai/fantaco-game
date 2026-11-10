@@ -1,13 +1,14 @@
 /** Wires map, shop, fog, orders UI and fx so app.js only needs a thin hook. */
-import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=16";
-import { createFx } from "./fx.js?v=16";
-import { createShop } from "./shop.js?v=16";
-import { createBag } from "./bag.js?v=16";
-import { createOrdersUi } from "./orders-ui.js?v=16";
-import { createMap } from "./map.js?v=16";
-import { createAds } from "./ads.js?v=16";
-import { nearbyEmpty } from "./merge.js?v=16";
+import { createFog, GEN_POPS, GEN_COOL_MS } from "./fog.js?v=17";
+import { createFx } from "./fx.js?v=17";
+import { createShop } from "./shop.js?v=17";
+import { createBag } from "./bag.js?v=17";
+import { createOrdersUi } from "./orders-ui.js?v=17";
+import { createMap } from "./map.js?v=17";
+import { createAds } from "./ads.js?v=17";
+import { nearbyEmpty } from "./merge.js?v=17";
 import { createEvents } from "./events.js";
+import { createEventsUi } from "./events-ui.js?v=17";
 
 export { GEN_POPS, GEN_COOL_MS };
 
@@ -24,6 +25,8 @@ export function attachSystems(ctx) {
   ctx.ads = ads;
   const events = createEvents(ctx);
   ctx.events = events;
+  const eventsUi = createEventsUi(ctx);
+  ctx.eventsUi = eventsUi;
 
   ctx.emptyOpenCell = () => nearbyEmpty(ctx.getSave().board, ctx.getCols(), ctx.getRows(), -1, fog.isOpenIndex);
 
@@ -32,7 +35,8 @@ export function attachSystems(ctx) {
     shop.bind();
     map.bind();
     ads.bind();
+    eventsUi.bind();
   }
 
-  return { fx, fog, shop, bag, orders, map, ads, events, bind, GEN_POPS, GEN_COOL_MS };
+  return { fx, fog, shop, bag, orders, map, ads, events, eventsUi, bind, GEN_POPS, GEN_COOL_MS };
 }

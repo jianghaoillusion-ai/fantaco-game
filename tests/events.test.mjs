@@ -5,7 +5,8 @@ import {
   SHORT_COIN_FRAC, LONG_COIN_FRAC, NEED_PER_LEVEL,
   SHORT_CATALOG, LONG_CATALOG,
   gameDayIndex, xpToNext, scaleCoins, scaleNeedCount, scaleNeedTier,
-  rewardsFor, eventsAt, syncEvents
+  rewardsFor, eventsAt, syncEvents,
+  noteOrder, noteMerge, tryClaim, formatEventLeft, eventEndAt
 } from "../js/events.js";
 import { todayKey, nextDailyReset } from "../js/save.js";
 
@@ -116,5 +117,54 @@ assert.equal(save.events.short.progress, 2, "same short day keeps progress");
 syncEvents(save, atTaipei("2026-03-16T08:00:00"), curve);
 assert.equal(save.events.short.progress, 0, "new short day resets progress");
 assert.equal(save.events.short.startKey, "2026-03-16");
+
+
+// Progress + claim
+const mid15 = atTaipei("2026-03-14T10:00:00"); // day index 72, short = 今日微笑 (orders)
+const save2 = { level: 5, events: {} };
+syncEvents(save2, mid15, curve);
+const evMid = eventsAt(mid15, 5, curve);
+assert.equal(evMid.short.id, "smile-orders");
+assert.equal(evMid.short.need.type, "orders");
+noteOrder(save2, { need: { chain: "star" } }, mid15, curve);
+assert.equal(save2.events.short.progress, 1);
+noteOrder(save2, { need: { chain: "candy" } }, mid15, curve);
+assert.equal(save2.events.short.progress, 2);
+assert.equal(tryClaim(save2, "short", mid15, curve), null, "cannot claim early");
+while (save2.events.short.progress < evMid.short.need.count) {
+  noteOrder(save2, { need: { chain: "star" } }, mid15, curve);
+}
+const claimed = tryClaim(save2, "short", mid15, curve);
+assert.ok(claimed && claimed.coins === evMid.short.reward.coins);
+assert.equal(tryClaim(save2, "short", mid15, curve), null, "claim once");
+
+// Candy-gated long event only counts candy orders
+const candyNow = atTaipei("2026-01-04T10:00:00"); // day 3 of epoch: first long is 3d stage, then 5d candy starts day 3
+// day index 3 = 2026-01-04 is first day of 西卡的糖果週 (start 3, dur 5)
+const save3 = { level: 5, events: {} };
+const evC = syncEvents(save3, candyNow, curve);
+assert.equal(evC.long.id, "sika-candy-week");
+noteOrder(save3, { need: { chain: "star" } }, candyNow, curve);
+assert.equal(save3.events.long.progress, 0, "non-candy order ignored");
+noteOrder(save3, { need: { chain: "candy" } }, candyNow, curve);
+assert.equal(save3.events.long.progress, 1);
+
+// Merge task
+const gardenDay = atTaipei("2026-01-02T10:00:00"); // day 1: 花圃小幫手 is SHORT_CATALOG[1]
+const save4 = { level: 1, events: {} };
+const evG = syncEvents(save4, gardenDay, curve);
+assert.equal(evG.short.id, "garden-help");
+noteMerge(save4, { chain: "star", tier: 4 }, gardenDay, curve);
+assert.equal(save4.events.short.progress, 0);
+noteMerge(save4, { chain: "garden", tier: 1 }, gardenDay, curve);
+assert.equal(save4.events.short.progress, 1);
+
+// Countdown: endKey is 08:00 Taipei on that date
+const end = eventEndAt("2026-03-16");
+assert.equal(end.toISOString(), "2026-03-16T00:00:00.000Z");
+const left = formatEventLeft("2026-03-16", atTaipei("2026-03-15T10:00:00"));
+assert.ok(left.includes("時") || left.includes("分"));
+const compact = formatEventLeft("2026-03-18", atTaipei("2026-03-15T10:00:00"), true);
+assert.ok(compact.includes("天"));
 
 console.log("events tests ok");

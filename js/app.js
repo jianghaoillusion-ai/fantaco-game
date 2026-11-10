@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=16";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=16";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=16";
-import { mountMascot } from "./mascot.js?v=16";
-import { mountHome } from "./home.js?v=16";
-import { bindStory, startStory } from "./story.js?v=16";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=16";
-import { bagCap, migrateBagSlots } from "./bag.js?v=16";
-import { reserveItems } from "./merge.js?v=16";
-import { avatarSrc } from "./portraits.js?v=16";
+import { Auth } from "./auth.js?v=17";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=17";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=17";
+import { mountMascot } from "./mascot.js?v=17";
+import { mountHome } from "./home.js?v=17";
+import { bindStory, startStory } from "./story.js?v=17";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=17";
+import { bagCap, migrateBagSlots } from "./bag.js?v=17";
+import { reserveItems } from "./merge.js?v=17";
+import { avatarSrc } from "./portraits.js?v=17";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=16";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=16";
-import { regionById } from "./world.js?v=16";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=16";
-import { bindTip } from "./tip.js?v=16";
+} from "./merge.js?v=17";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=17";
+import { regionById } from "./world.js?v=17";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=17";
+import { bindTip } from "./tip.js?v=17";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=16");
+  const res = await fetch(url + "?v=17");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -97,11 +97,12 @@ export async function boot() {
   settingsUi = createSettingsUi({ $, persist, getSave: () => SAVE, show });
   settingsUi.bind();
   bindStory({ $, sfx, show, chapterBg: () => getComputedStyle($("#play") || document.documentElement).getPropertyValue("--chapter-bg") });
-  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, todayKey, formatDailyResetLeft, ensureDaily, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show, refresh, startStory, todayKey, formatDailyResetLeft, ensureDaily, grantCoins, selectUid: (uid) => { const loc = findCellByUid(uid); if (loc) onTap(loc); } };
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); if ($("#toast")?.classList.contains("on")) placeToast(); }, 1000);
+  if (!placeToast._resize) { placeToast._resize = () => { if ($("#toast")?.classList.contains("on")) placeToast(); }; addEventListener("resize", placeToast._resize); }
 }
 
 function persist() { tickEnergy(SAVE); writeSave(SAVE); syncCloud(SAVE); }
@@ -210,6 +211,7 @@ function refreshHud() {
   tickEnergy(SAVE);
   ensureDaily(SAVE);
   systems?.events?.sync?.();
+  systems?.eventsUi?.render?.();
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
@@ -299,12 +301,42 @@ function grantCoins(n, fromEl, then) {
   return leveled;
 }
 
+function placeToast() {
+  const t = $("#toast");
+  if (!t) return;
+  const playOn = $("#play")?.classList.contains("on");
+  const blocked = document.querySelector("#bag.overlay.on, #shop.overlay.on, #settings-sheet.on, #story.screen.on, #result.overlay.on, #event-sheet.overlay.on, #ad-sheet.overlay.on, #energy-prompt.overlay.on");
+  t.classList.toggle("play-toast", !!(playOn && !blocked));
+  if (playOn && !blocked) {
+    const orders = $("#orders");
+    const board = $("#board");
+    const o = orders?.getBoundingClientRect();
+    const b = board?.getBoundingClientRect();
+    const th = Math.max(t.offsetHeight || 0, 26);
+    let top = 0;
+    if (o && b) {
+      const gap = b.top - o.bottom;
+      // --toast-top is the TOP edge of the pill (not the centre).
+      // Stay fully above the board; a little overlap with empty orders padding is fine.
+      if (gap >= th + 8) top = o.bottom + (gap - th) / 2;
+      else top = b.top - th - 4;
+    } else if (o) {
+      top = o.bottom + 4;
+    }
+    if (top) t.style.setProperty("--toast-top", Math.round(top) + "px");
+    else t.style.removeProperty("--toast-top");
+  } else {
+    t.style.removeProperty("--toast-top");
+  }
+}
+
 function toast(msg) {
   const t = $("#toast");
   t.textContent = msg;
+  placeToast();
   t.classList.add("on");
   clearTimeout(t._id);
-  t._id = setTimeout(() => t.classList.remove("on"), 1800);
+  t._id = setTimeout(() => t.classList.remove("on"), 2000);
 }
 
 
@@ -681,6 +713,7 @@ function onMerged(merged) {
     systems?.fog.revealAdjacent?.(Math.floor(at.i / cols), at.i % cols);
   }
   try { navigator.vibrate?.(12); } catch {}
+  systems?.events?.noteMerge?.(merged);
   discover(merged);
   if (tier >= 5) shake(10);
   else if (combo.n >= 3) {}
@@ -826,6 +859,7 @@ function tryFulfill(loc, orderId) {
   const gems = o.reward.diamonds ?? (o.flag ? 2 : 1);
   if (gems) SAVE.diamonds = (SAVE.diamonds || 0) + gems;
   systems?.orders.bumpDaily();
+  systems?.events?.noteOrder?.(o);
   if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
   if (o.flag) SAVE.storyDone.push(o.flag);
   if (o.restore) {
