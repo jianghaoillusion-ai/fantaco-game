@@ -194,16 +194,16 @@
     }
   ],
   "energy": {
-    "max": 80,
+    "max": 100,
     "regenMs": 90000,
     "dailyGiftEnergy": 25,
     "dailyGiftSeeds": 8
   },
   "board": {
     "cols": 7,
-    "rows": 6,
+    "rows": 9,
     "inventory": 8,
-    "orders": 4
+    "orders": 3
   },
   "npcs": {
     "jiejie": {
@@ -238,5 +238,119 @@
       "name": "哈特",
       "portrait": "assets/chars/hate.png"
     }
-  }
+  },
+  "buildings": [
+    {
+      "id": "stage",
+      "name": "微笑舞台",
+      "desc": "村子最重要的小舞台。修好以後，大家更想笑。",
+      "costs": [
+        20,
+        40,
+        70
+      ],
+      "unlocks": [
+        null,
+        "garden",
+        null
+      ],
+      "xp": [
+        20,
+        30,
+        40
+      ],
+      "chapter": "village"
+    },
+    {
+      "id": "florist",
+      "name": "花店",
+      "desc": "把花圃重新打開，花朵才會回來。",
+      "costs": [
+        30
+      ],
+      "unlocks": [
+        "garden"
+      ],
+      "xp": [
+        25
+      ],
+      "chapter": "village",
+      "need": "stage:1"
+    },
+    {
+      "id": "path",
+      "name": "山洞小路",
+      "desc": "修好這條路，才能繼續往前走。",
+      "costs": [
+        45
+      ],
+      "unlocks": [
+        "forest"
+      ],
+      "xp": [
+        30
+      ],
+      "chapter": "journey"
+    },
+    {
+      "id": "balloon",
+      "name": "氣球攤",
+      "desc": "氣球精靈會經過這裡。",
+      "costs": [
+        60
+      ],
+      "unlocks": [
+        "magic"
+      ],
+      "xp": [
+        40
+      ],
+      "chapter": "journey"
+    },
+    {
+      "id": "candy-stall",
+      "name": "糖果攤",
+      "desc": "給西卡一個漂亮的攤位。",
+      "costs": [
+        80
+      ],
+      "unlocks": [
+        "candy"
+      ],
+      "xp": [
+        50
+      ],
+      "chapter": "candy"
+    },
+    {
+      "id": "lamp",
+      "name": "夜燈小路",
+      "desc": "給怕黑的布魯一盞不會熄的燈。",
+      "costs": [
+        90
+      ],
+      "unlocks": [
+        null
+      ],
+      "xp": [
+        50
+      ],
+      "chapter": "bulu"
+    },
+    {
+      "id": "show",
+      "name": "魔術小台",
+      "desc": "哈特可以在這裡練習變出兔子。",
+      "costs": [
+        100
+      ],
+      "unlocks": [
+        null
+      ],
+      "xp": [
+        60
+      ],
+      "chapter": "hate"
+    }
+  ]
 }

@@ -119,6 +119,33 @@ export function firstEmpty(board) {
   return board.findIndex((c) => !c);
 }
 
+/** Prefer a random empty unlocked cell in rings around an origin; then any unlocked empty. */
+export function nearbyEmpty(board, cols, rows, origin, isOpen) {
+  const open = typeof isOpen === "function" ? isOpen : () => true;
+  const empties = (cells) => cells.filter((i) => i >= 0 && i < board.length && !board[i] && open(i));
+  if (origin == null || origin < 0) {
+    const all = empties([...board.keys()]);
+    return all.length ? all[Math.floor(Math.random() * all.length)] : -1;
+  }
+  const r0 = Math.floor(origin / cols), c0 = origin % cols;
+  const maxR = Math.max(cols, rows);
+  for (let ring = 1; ring <= maxR; ring++) {
+    const cells = [];
+    for (let dr = -ring; dr <= ring; dr++) {
+      for (let dc = -ring; dc <= ring; dc++) {
+        if (Math.max(Math.abs(dr), Math.abs(dc)) !== ring) continue;
+        const r = r0 + dr, c = c0 + dc;
+        if (r < 0 || c < 0 || r >= rows || c >= cols) continue;
+        cells.push(r * cols + c);
+      }
+    }
+    const opts = empties(cells);
+    if (opts.length) return opts[Math.floor(Math.random() * opts.length)];
+  }
+  const all = empties([...board.keys()]);
+  return all.length ? all[Math.floor(Math.random() * all.length)] : -1;
+}
+
 export function playerMaxTier(board, inv, chain) {
   let m = 0;
   for (const c of board.concat(inv)) {
@@ -164,7 +191,7 @@ export function makeProceduralOrder(ctx) {
   else if (slot === 3) tier = Math.min(maxT, Math.max(2, cap + (cap >= maxT ? 0 : 1))); // stretch
   else tier = Math.min(maxT, Math.max(2, cap));
   tier = Math.max(2, Math.min(maxT, tier));
-  const npcs = npcsByChapter[chapter] || ["feifei", "apiao", "mian"];
+  const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
   const seeds = 3 + tier * 2 + (slot === 3 ? 6 : 0);
   const xp = 15 + tier * 10 + (slot === 3 ? 20 : 0);
@@ -180,12 +207,12 @@ export function makeProceduralOrder(ctx) {
 }
 
 export const NPCS_BY_CHAPTER = {
-  village: ["jiejie", "feifei", "apiao", "mian"],
-  journey: ["feifei", "apiao", "spirit", "mian"],
+  village: ["jiejie", "feifei", "apiao"],
+  journey: ["feifei", "apiao", "spirit"],
   candy: ["sika", "feifei", "apiao", "spirit"],
   bulu: ["bulu", "feifei", "apiao", "spirit"],
   hate: ["hate", "feifei", "apiao", "spirit"],
-  ending: ["feifei", "apiao", "jiejie", "sika", "bulu", "hate", "spirit", "mian"]
+  ending: ["feifei", "apiao", "jiejie", "sika", "bulu", "hate", "spirit"]
 };
 
 export function xpLevel(xp, curve) {

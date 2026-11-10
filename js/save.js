@@ -1,7 +1,7 @@
 const KEY = "fantaco.mianhuatang.save.v2";
 const LEGACY = "fantaco.mianhuatang.save.v1";
 
-const ENERGY_MAX = 80;
+const ENERGY_MAX = 100;
 const REGEN_MS = 90_000;
 
 export const ENERGY = { max: ENERGY_MAX, regenMs: REGEN_MS };
@@ -15,6 +15,7 @@ export function emptySave() {
     starSeeds: 0,
     energy: ENERGY_MAX,
     energyAt: Date.now(),
+    coins: 0,
     board: null,
     boardCols: 7,
     boardRows: 9,
@@ -23,11 +24,15 @@ export function emptySave() {
     storyDone: [],
     chapter: "village",
     restore: { village: 0, journey: 0, candy: 0, bulu: 0, hate: 0, ending: 0 },
+    buildings: {},
+    unlockedClumps: null,
+    unlockedRegions: ["village"],
+    region: "village",
     treasures: {},
     discovered: {},
     flags: {},
     settings: { music: true, sfx: true },
-    daily: { day: "", streak: 0, claimed: false },
+    daily: { day: "", streak: 0, claimed: false, challenge: 0, challengeClaimed: false },
     comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
@@ -52,6 +57,13 @@ export function loadSave() {
     if (raw) {
       const loaded = { ...emptySave(), ...JSON.parse(raw) };
       loaded.restore = { ...emptySave().restore, ...(loaded.restore || {}) };
+      loaded.daily = { ...emptySave().daily, ...(loaded.daily || {}) };
+      if (loaded.coins == null) loaded.coins = 0;
+      if (!loaded.buildings) loaded.buildings = {};
+      if (!loaded.unlockedRegions) loaded.unlockedRegions = ["village"];
+      if (!loaded.region) loaded.region = loaded.chapter || "village";
+      // Existing boards already filled a full rectangle — keep them fully open.
+      if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
       return loaded;
     }
     const old = localStorage.getItem(LEGACY);
