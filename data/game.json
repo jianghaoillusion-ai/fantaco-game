@@ -197,7 +197,8 @@
     "max": 80,
     "regenMs": 90000,
     "dailyGiftEnergy": 25,
-    "dailyGiftSeeds": 8
+    "dailyGiftSeeds": 8,
+    "cost": 1
   },
   "board": {
     "cols": 7,
@@ -238,5 +239,21 @@
       "name": "哈特",
       "portrait": "assets/chars/hate.png"
     }
+  },
+  "orders": {
+    "startTier": 2,
+    "regionsPerTier": 2,
+    "ordersPerRegion": 5,
+    "seedBase": 3,
+    "seedsPerTier": 2,
+    "hardSeeds": 6,
+    "xpBase": 15,
+    "xpPerTier": 10,
+    "hardXp": 20,
+    "energy": 3,
+    "hardEnergy": 6,
+    "coinBase": 5,
+    "coinsPerTier": 5,
+    "sellCoinsPerTier": 1
   }
 }

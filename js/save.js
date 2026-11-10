@@ -6,14 +6,22 @@ const REGEN_MS = 90_000;
 
 export const ENERGY = { max: ENERGY_MAX, regenMs: REGEN_MS };
 
+export function configureEnergy(config = {}) {
+  ENERGY.max = Number.isFinite(config.max) && config.max > 0 ? config.max : ENERGY_MAX;
+  ENERGY.regenMs = Number.isFinite(config.regenMs) && config.regenMs > 0 ? config.regenMs : REGEN_MS;
+}
+
 export function emptySave() {
   return {
     version: 2,
     profile: null,
+    coins: 0,
+    endless: { completed: 0 },
+    orderSeq: 0,
     xp: 0,
     level: 1,
     starSeeds: 0,
-    energy: ENERGY_MAX,
+    energy: ENERGY.max,
     energyAt: Date.now(),
     board: null,
     inventory: [],
@@ -44,10 +52,27 @@ function migrate(v1) {
   return s;
 }
 
+export function normalizeSave(raw) {
+  const base = emptySave();
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return base;
+  const s = { ...base, ...raw };
+  for (const key of ["settings", "restore", "daily", "endless", "flags", "discovered", "treasures"]) {
+    s[key] = { ...base[key], ...(raw[key] && typeof raw[key] === "object" && !Array.isArray(raw[key]) ? raw[key] : {}) };
+  }
+  for (const key of ["inventory", "orders", "storyDone"]) s[key] = Array.isArray(raw[key]) ? raw[key] : [];
+  s.board = Array.isArray(raw.board) ? raw.board : null;
+  for (const key of ["coins", "xp", "starSeeds", "energy", "ordersDone", "orderSeq", "comboBest"]) {
+    if (!Number.isFinite(s[key]) || s[key] < 0) s[key] = base[key];
+  }
+  if (!Number.isFinite(s.endless.completed) || s.endless.completed < 0) s.endless.completed = 0;
+  if (!Number.isFinite(s.energyAt) || s.energyAt < 0) s.energyAt = Date.now();
+  return s;
+}
+
 export function loadSave() {
   try {
     const raw = localStorage.getItem(KEY);
-    if (raw) return { ...emptySave(), ...JSON.parse(raw) };
+    if (raw) return normalizeSave(JSON.parse(raw));
     const old = localStorage.getItem(LEGACY);
     if (old) return migrate(JSON.parse(old));
   } catch {}
@@ -66,25 +91,23 @@ export async function syncCloud(_data) {
   return { ok: true, mode: "local" };
 }
 
-export function tickEnergy(save) {
-  const max = ENERGY_MAX;
-  const now = Date.now();
-  if (save.energy >= max) {
-    save.energyAt = now;
-    return save;
-  }
-  const gained = Math.floor((now - (save.energyAt || now)) / REGEN_MS);
+export function tickEnergy(save, now = Date.now()) {
+  const max = ENERGY.max;
+  save.energy = Math.min(max, Math.max(0, Number(save.energy) || 0));
+  if (!Number.isFinite(save.energyAt) || save.energyAt > now) save.energyAt = now;
+  if (save.energy >= max) { save.energyAt = now; return save; }
+  const gained = Math.floor((now - save.energyAt) / ENERGY.regenMs);
   if (gained > 0) {
-    save.energy = Math.min(max, (save.energy || 0) + gained);
-    save.energyAt = (save.energyAt || now) + gained * REGEN_MS;
+    save.energy = Math.min(max, save.energy + gained);
+    save.energyAt += gained * ENERGY.regenMs;
     if (save.energy >= max) save.energyAt = now;
   }
   return save;
 }
 
-export function nextEnergyIn(save) {
-  if (save.energy >= ENERGY_MAX) return 0;
-  return Math.max(0, REGEN_MS - (Date.now() - (save.energyAt || Date.now())));
+export function nextEnergyIn(save, now = Date.now()) {
+  if (save.energy >= ENERGY.max) return 0;
+  return Math.max(0, Math.min(ENERGY.regenMs, ENERGY.regenMs - (now - (save.energyAt ?? now))));
 }
 
 export function todayKey() {

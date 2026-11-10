@@ -1,10 +1,10 @@
 import { Auth } from "./auth.js";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY, configureEnergy } from "./save.js";
 import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js";
 import { mountMascot } from "./mascot.js";
 import {
-  starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
-  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx
+  starterBoard, canMerge, mergeCells, firstEmpty, keyOf,
+  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx, generateItem, endlessRegion
 } from "./merge.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -14,11 +14,12 @@ let GAME, CHAINS, GENS, CHAPTERS, STORY;
 let SAVE = loadSave();
 let mascot;
 let dragging = null;
+let selectedUid = null;
 let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
 
-const COLS = 7, ROWS = 6;
+let COLS = 7, ROWS = 6;
 
 async function fetchJSON(url) {
   const res = await fetch(url + "?v=2");
@@ -37,6 +38,8 @@ export async function boot() {
   CHAINS = CHAINS.chains;
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
+  configureEnergy(GAME.energy);
+  COLS = GAME.board?.cols || 7; ROWS = GAME.board?.rows || 6;
   tickEnergy(SAVE);
   if (!SAVE.board) SAVE.board = starterBoard(COLS, ROWS);
   if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
@@ -44,8 +47,8 @@ export async function boot() {
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
     if (cell) discover(cell, { silent: true });
   }
-  ensureOrders();
   unlockGenerators();
+  ensureOrders();
   persist();
   bind();
   mascot = mountMascot($("#mascot-root"));
@@ -56,7 +59,13 @@ export async function boot() {
   energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); }, 1000);
 }
 
-function persist() { tickEnergy(SAVE); writeSave(SAVE); syncCloud(SAVE); }
+function persist() {
+  tickEnergy(SAVE);
+  // Retry unlocked generators after merges/orders free a cell on a previously full board.
+  if (GENS && SAVE.board) unlockGenerators();
+  try { writeSave(SAVE); syncCloud(SAVE); }
+  catch { toast("無法儲存進度，請確認瀏覽器允許儲存並保留此分頁"); }
+}
 
 function show(name) {
   $$(".screen,.overlay").forEach((el) => el.classList.remove("on"));
@@ -77,6 +86,7 @@ function show(name) {
   else if (name === "map") renderMap();
   else if (name === "daily") renderDaily();
   refreshHud();
+  if (name === "play" && !$("#result").classList.contains("on")) maybeFirstIntro();
 }
 
 function chapter() { return CHAPTERS.find((c) => c.id === SAVE.chapter) || CHAPTERS[0]; }
@@ -129,6 +139,7 @@ function bind() {
     SAVE.settings.sfx = e.target.checked; setAudioSettings(SAVE.settings); persist();
   });
 
+  $("#btn-sell")?.addEventListener("click", sellSelected);
   $("#btn-claim-daily")?.addEventListener("click", claimDaily);
   $("#btn-result-ok")?.addEventListener("click", () => {
     $("#result").classList.remove("on");
@@ -150,6 +161,7 @@ function refreshHud() {
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
+  $$("[data-coins]").forEach((el) => { el.textContent = SAVE.coins; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
   $$("[data-energy]").forEach((el) => { el.textContent = SAVE.energy; });
   $$("[data-energy-max]").forEach((el) => { el.textContent = ENERGY.max; });
@@ -167,7 +179,7 @@ function refreshHud() {
   const pct = Math.max(0, Math.min(1, (SAVE.xp - lo) / Math.max(1, hi - lo)));
   $$("[data-xp]").forEach((el) => { el.style.width = (pct * 100) + "%"; });
   const ch = chapter();
-  $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = ch.title; });
+  $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = mainComplete() ? `探索區域 ${currentRegion()}` : ch.title; });
 }
 
 function toast(msg) {
@@ -198,6 +210,7 @@ function renderBoard() {
     }
   }
   renderInventory();
+  refreshSelection();
 }
 
 function itemRarity(item) {
@@ -239,6 +252,7 @@ function findCellByUid(uid) {
 }
 
 function onBoardDown(e) {
+  if (dragging || e.isPrimary === false) return;
   const piece = e.target.closest(".piece");
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
@@ -248,7 +262,7 @@ function onBoardDown(e) {
 }
 
 function onDragMove(e) {
-  if (!dragging) return;
+  if (!dragging || e.pointerId !== dragging.pointerId) return;
   const dx = e.clientX - dragging.start.x, dy = e.clientY - dragging.start.y;
   if (!dragging.moved && Math.hypot(dx, dy) < 10) return;
   if (!dragging.moved) {
@@ -284,11 +298,12 @@ function highlightDrop(e) {
 }
 
 function onDragUp(e) {
-  if (!dragging) return;
+  if (!dragging || e.pointerId !== dragging.pointerId) return;
   const d = dragging; dragging = null;
   $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
   d.piece.classList.remove("lifted");
   d.ghost?.remove();
+  if (e.type === "pointercancel") return;
   if (!d.moved) { onTap(d.loc); return; }
   const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
   if (!el) { sfx.drop(); return; }
@@ -349,40 +364,54 @@ function removeFrom(loc) {
 
 function onTap(loc) {
   const item = loc.item;
+  selectedUid = item.kind === "item" ? item.uid : null;
+  refreshSelection();
   if (item.kind === "gen") { tapGenerator(loc); return; }
   toast(infoName(item));
   sfx.tap();
 }
 
+function refreshSelection() {
+  const item = findCellByUid(selectedUid)?.item;
+  const button = $("#btn-sell");
+  button.hidden = !item || item.kind !== "item";
+  if (!button.hidden) button.textContent = `出售 ${infoName(item)}　＋${item.tier * GAME.orders.sellCoinsPerTier} 金幣`;
+}
+
+function sellSelected() {
+  const loc = findCellByUid(selectedUid);
+  if (!loc || loc.item.kind !== "item") return;
+  SAVE.coins += loc.item.tier * GAME.orders.sellCoinsPerTier;
+  removeFrom(loc);
+  selectedUid = null;
+  persist(); renderBoard(); refreshHud();
+}
+
 function tapGenerator(loc) {
   tickEnergy(SAVE);
-  if (SAVE.energy < 1) {
-    sfx.energy();
-    mascot?.sad();
-    const s = Math.ceil(nextEnergyIn(SAVE) / 1000);
-    toast(`能量還在回來的路上（${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}）`);
+  const origin = loc.where === "board" ? document.querySelector(`#board .cell:nth-child(${loc.i + 1})`)?.getBoundingClientRect() : null;
+  const result = generateItem(SAVE, loc.item, GENS, { ...GAME.energy, ...ENERGY });
+  if (result.error) {
+    if (result.error === "energy") {
+      sfx.energy(); mascot?.sad();
+      toast(`體力用完了，${Math.ceil(nextEnergyIn(SAVE) / 1000)} 秒後恢復 1 點`);
+    } else { sfx.invalid(); toast("棋盤滿了，先合成、交訂單或移到背包吧"); }
     return;
   }
-  let empty = firstEmpty(SAVE.board);
-  let toInv = false;
-  if (empty < 0) {
-    if (SAVE.inventory.length >= (GAME.board?.inventory || 8)) {
-      toast("棋盤和背包都滿了，先合一些吧");
-      sfx.invalid();
-      return;
-    }
-    toInv = true;
-  }
-  const made = produceFrom(loc.item, GENS);
-  if (!made) return;
-  SAVE.energy -= 1;
-  if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
-  if (toInv) SAVE.inventory.push(made);
-  else SAVE.board[empty] = made;
+  const made = result.item;
   discover(made);
   sfx.generate();
   persist();
   renderBoard();
+  const target = document.querySelector(`#board .cell:nth-child(${result.index + 1}) .piece`);
+  if (origin && target?.animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const end = target.getBoundingClientRect();
+    target.animate([
+      { transform: `translate(${origin.x - end.x}px, ${origin.y - end.y}px) scale(.4)`, opacity: .4 },
+      { transform: "translate(0, -12px) scale(1.08)", offset: .75 },
+      { transform: "translate(0, 0) scale(1)", opacity: 1 }
+    ], { duration: 360, easing: "ease-out" });
+  }
   refreshHud();
   mascot?.idle();
 }
@@ -495,19 +524,30 @@ function renderInventory() {
 }
 
 /* ---------- orders ---------- */
+function storyCompleted(order) {
+  return SAVE.storyDone.includes(order.flag || order.id) || SAVE.storyDone.includes(order.id);
+}
+function mainComplete() { return STORY.every(storyCompleted); }
+function currentRegion() { return endlessRegion(SAVE.endless.completed, GAME.orders); }
+function hasStoryFlag(flag) {
+  return SAVE.storyDone.includes(flag) || STORY.some(o => o.flag === flag && storyCompleted(o));
+}
 function chapterUnlocked(id) {
-  if (id === "village") return true;
-  if (id === "journey") return SAVE.storyDone.includes("ch1-end") || SAVE.storyDone.includes("v5");
-  if (id === "candy") return SAVE.storyDone.includes("ch2-end") || SAVE.storyDone.includes("j5");
-  return false;
+  const ch = CHAPTERS.find(c => c.id === id);
+  return ch?.unlock === "start" || (ch?.unlock?.startsWith("story:") && hasStoryFlag(ch.unlock.slice(6)));
+}
+function availableChains() {
+  return [...new Set(Object.values(GENS).filter(g => hasGen(g.id)).map(g => g.produces))];
 }
 
 function nextStoryOrder() {
-  return STORY.find((o) => !SAVE.storyDone.includes(o.flag) && !SAVE.storyDone.includes(o.id) && chapterUnlocked(o.chapter));
+  return STORY.find((o) => !storyCompleted(o) && chapterUnlocked(o.chapter));
 }
 
 function ensureOrders() {
-  SAVE.orders = (SAVE.orders || []).filter((o) => o && o.need);
+  const available = availableChains();
+  SAVE.orders = (SAVE.orders || []).filter(o => o?.procedural && o.need && o.reward &&
+    itemDef(CHAINS, o.need.chain, o.need.tier) && available.includes(o.need.chain));
   const slots = GAME.board?.orders || 4;
   // keep current story order first if any
   const story = nextStoryOrder();
@@ -523,7 +563,10 @@ function ensureOrders() {
       chapter: SAVE.chapter,
       discovered: SAVE.discovered,
       npcsByChapter: NPCS_BY_CHAPTER,
-      seq: SAVE.ordersDone || 0
+      seq: SAVE.orderSeq++,
+      availableChains: available,
+      region: mainComplete() ? currentRegion() : 0,
+      balance: GAME.orders
     });
     if (!o) break;
     // avoid duplicate needs
@@ -550,12 +593,9 @@ function grantGen(id, tier = 1) {
 }
 
 function unlockGenerators() {
-  const done = (f) => SAVE.storyDone.includes(f);
-  grantGen("star");
-  if (done("v2") || done("v3") || (SAVE.restore.village || 0) >= 2) grantGen("garden");
-  if (chapterUnlocked("journey")) grantGen("forest");
-  if (done("j2") || done("j3") || SAVE.chapter === "candy") grantGen("magic");
-  if (chapterUnlocked("candy")) grantGen("candy");
+  for (const gen of Object.values(GENS)) {
+    if (gen.unlock === "start" || (gen.unlock.startsWith("story:") && hasStoryFlag(gen.unlock.slice(6)))) grantGen(gen.id);
+  }
 }
 
 function renderOrders() {
@@ -575,7 +615,7 @@ function renderOrders() {
           <img src="${def?.img || ""}" alt="">
           <span>${def?.name || ""}</span>
         </div>
-        <div class="rew">＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
+        <div class="rew">＋${o.reward.coins || 0} 金幣　＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
       </div>`;
     box.appendChild(card);
   }
@@ -587,13 +627,17 @@ function tryFulfill(loc, orderId) {
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
+  const wasEndless = mainComplete();
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
+  SAVE.coins += o.reward.coins || 0;
+  if (wasEndless && o.procedural) SAVE.endless.completed += 1;
   SAVE.starSeeds += o.reward.seeds || 0;
   const before = SAVE.level;
   SAVE.xp += o.reward.xp || 0;
   SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
+  tickEnergy(SAVE);
   if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
   if (o.flag) SAVE.storyDone.push(o.flag);
   if (o.restore) {
@@ -603,19 +647,20 @@ function tryFulfill(loc, orderId) {
   sfx.order();
   mascot?.order();
   const leveled = SAVE.level > before;
-  const chapterClear = o.flag === "ch1-end" || o.flag === "ch2-end" || o.flag === "ch3-end";
-  if (o.flag === "ch1-end") SAVE.chapter = "journey";
-  if (o.flag === "ch2-end") SAVE.chapter = "candy";
-  ensureOrders();
+  const chapterClear = !!o.flag && !STORY.some(x => x.chapter === o.chapter && !storyCompleted(x));
+  const nextChapter = CHAPTERS.find(c => c.unlock === `story:${o.flag}`);
+  if (nextChapter) SAVE.chapter = nextChapter.id;
   unlockGenerators();
+  ensureOrders();
   persist();
   renderBoard(); renderOrders(); refreshHud();
   const after = () => {
     if (o.outro) startStory(o.outro, () => {
       if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
-      else { playMusic(SAVE.chapter); applyChapterLook(); }
+      else { playMusic(SAVE.chapter); applyChapterLook(); maybeFirstIntro(); }
     });
     else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+    else maybeFirstIntro();
   };
   if (o.intro && !SAVE.flags["seen-intro-" + o.id]) {
     // already shown when accepted; just after
@@ -627,10 +672,12 @@ let storyQueue = [], storyIdx = 0, storyDoneFn = null;
 let pendingAfterClear = null;
 
 function maybeFirstIntro() {
-  const first = STORY[0];
-  if (first?.intro && !SAVE.flags.seenOpen) {
-    SAVE.flags.seenOpen = true; persist();
-    startStory(first.intro, () => show("play"));
+  if (storyDoneFn) return;
+  const order = nextStoryOrder();
+  if (order?.intro && !SAVE.flags["seen-intro-" + order.id]) {
+    SAVE.flags["seen-intro-" + order.id] = true;
+    persist();
+    startStory(order.intro, () => show("play"));
   }
 }
 
@@ -665,7 +712,7 @@ function nextStory() {
   storyIdx += 1;
   if (storyIdx >= storyQueue.length) {
     const fn = storyDoneFn; storyDoneFn = null;
-    show("play"); fn?.();
+    if (fn) fn(); else show("play");
   } else renderStory();
 }
 
@@ -735,12 +782,14 @@ function renderMap() {
     });
     box.appendChild(btn);
   }
-  const soon = document.createElement("div");
-  soon.className = "node soon";
-  soon.innerHTML = `<img class="thumb" src="assets/mascot/sleep.png" alt="">
-    <div><div class="num">即將到來<span class="soon-mark">每週更新</span></div>
-    <h3>新章節製作中</h3><small>下一回：怕黑的布魯，還有最後一願送給哈特。訂單會一直出，永遠玩得下去。</small></div>`;
-  box.appendChild(soon);
+  if (mainComplete()) {
+    const node = document.createElement("button");
+    node.className = "node";
+    const progress = SAVE.endless.completed % GAME.orders.ordersPerRegion;
+    node.innerHTML = `<img class="thumb" src="assets/mascot/front.png" alt=""><div><h3>探索區域 ${currentRegion()}</h3><small>已完成 ${progress}／${GAME.orders.ordersPerRegion} 張訂單</small></div>`;
+    node.addEventListener("click", () => show("play"));
+    box.appendChild(node);
+  }
 }
 
 function renderDaily() {

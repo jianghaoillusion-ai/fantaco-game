@@ -65,6 +65,7 @@
         <button class="icon-btn" data-back="title" aria-label="回主畫面">←</button>
         <span class="chip nick"><span data-nick></span>　<span data-level></span></span>
         <div class="xpbar" title="經驗"><i data-xp></i></div>
+        <span class="chip" title="金幣">🪙 <span data-coins>0</span></span>
         <span class="chip energy" title="能量會慢慢回來">⚡ <span data-energy>80</span>/<span data-energy-max>80</span>　<span data-energy-in>已滿</span></span>
         <span class="chip"><img src="assets/items/star-seed.png" alt=""> <span data-seeds>0</span></span>
       </div>
@@ -78,6 +79,7 @@
       </div>
       <div id="inventory" class="inventory">
         <button type="button" id="btn-inv-toggle" class="inv-toggle">背包 <span id="inv-count">0/8</span></button>
+        <button type="button" id="btn-sell" class="inv-toggle" hidden>出售</button>
         <div id="inv-cells" class="inv-cells"></div>
       </div>
     </section>
