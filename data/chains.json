@@ -1,0 +1,570 @@
+{
+  "chains": {
+    "star": {
+      "id": "star",
+      "name": "星星願望",
+      "chapter": "village",
+      "items": [
+        {
+          "tier": 1,
+          "name": "星點",
+          "img": "assets/tiles/star-1.webp",
+          "rarity": "common",
+          "origin": "extended"
+        },
+        {
+          "tier": 2,
+          "name": "小星星貼紙",
+          "img": "assets/tiles/star-2.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "閃亮星",
+          "img": "assets/tiles/star-3.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "許願雙星",
+          "img": "assets/tiles/star-4.webp",
+          "rarity": "rare",
+          "origin": "extended"
+        },
+        {
+          "tier": 5,
+          "name": "星星茶壺",
+          "img": "assets/tiles/star-5.webp",
+          "rarity": "legendary",
+          "origin": "official"
+        },
+        {
+          "tier": 6,
+          "name": "神祕魔法袋",
+          "img": "assets/tiles/star-6.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 7,
+          "name": "微笑氣球",
+          "img": "assets/tiles/star-7.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 8,
+          "name": "漫天願望",
+          "img": "assets/tiles/star-8.webp",
+          "rarity": "legendary",
+          "origin": "extended"
+        }
+      ]
+    },
+    "garden": {
+      "id": "garden",
+      "name": "微笑花園",
+      "chapter": "village",
+      "items": [
+        {
+          "tier": 1,
+          "name": "嫩芽",
+          "img": "assets/tiles/garden-1.webp",
+          "rarity": "common",
+          "origin": "extended"
+        },
+        {
+          "tier": 2,
+          "name": "小樹叢",
+          "img": "assets/tiles/garden-2.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "黃花貼紙",
+          "img": "assets/tiles/garden-3.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "藍花貼紙",
+          "img": "assets/tiles/garden-4.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 5,
+          "name": "白玫瑰",
+          "img": "assets/tiles/garden-5.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 6,
+          "name": "藍玫瑰",
+          "img": "assets/tiles/garden-6.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 7,
+          "name": "花園花束",
+          "img": "assets/tiles/garden-7.webp",
+          "rarity": "epic",
+          "origin": "extended"
+        },
+        {
+          "tier": 8,
+          "name": "微笑花園",
+          "img": "assets/tiles/garden-8.webp",
+          "rarity": "legendary",
+          "origin": "extended"
+        }
+      ]
+    },
+    "candy": {
+      "id": "candy",
+      "name": "西卡的糖果",
+      "chapter": "candy",
+      "items": [
+        {
+          "tier": 1,
+          "name": "糖粒",
+          "img": "assets/tiles/candy-1.webp",
+          "rarity": "common",
+          "origin": "extended"
+        },
+        {
+          "tier": 2,
+          "name": "紅蘿蔔",
+          "img": "assets/tiles/candy-2.webp",
+          "rarity": "common",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "微笑杯子蛋糕",
+          "img": "assets/tiles/candy-3.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "西卡的糖果盒",
+          "img": "assets/tiles/candy-4.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 5,
+          "name": "雙層蛋糕",
+          "img": "assets/tiles/candy-5.webp",
+          "rarity": "rare",
+          "origin": "extended"
+        },
+        {
+          "tier": 6,
+          "name": "糖果塔",
+          "img": "assets/tiles/candy-6.webp",
+          "rarity": "epic",
+          "origin": "extended"
+        },
+        {
+          "tier": 7,
+          "name": "甜蜜糖果攤",
+          "img": "assets/tiles/candy-7.webp",
+          "rarity": "legendary",
+          "origin": "extended"
+        }
+      ]
+    },
+    "forest": {
+      "id": "forest",
+      "name": "山洞蘑菇",
+      "chapter": "journey",
+      "items": [
+        {
+          "tier": 1,
+          "name": "小蘑菇",
+          "img": "assets/tiles/forest-1.webp",
+          "rarity": "common",
+          "origin": "extended"
+        },
+        {
+          "tier": 2,
+          "name": "紅蘑菇",
+          "img": "assets/tiles/forest-2.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "藍蘑菇",
+          "img": "assets/tiles/forest-3.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "蘑菇叢",
+          "img": "assets/tiles/forest-4.webp",
+          "rarity": "epic",
+          "origin": "extended"
+        },
+        {
+          "tier": 5,
+          "name": "森林蘑菇圈",
+          "img": "assets/tiles/forest-5.webp",
+          "rarity": "legendary",
+          "origin": "extended"
+        }
+      ]
+    },
+    "magic": {
+      "id": "magic",
+      "name": "氣球魔術",
+      "chapter": "journey",
+      "items": [
+        {
+          "tier": 1,
+          "name": "梅花撲克牌",
+          "img": "assets/tiles/magic-1.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 2,
+          "name": "黑桃撲克牌",
+          "img": "assets/tiles/magic-2.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 3,
+          "name": "愛心撲克牌",
+          "img": "assets/tiles/magic-3.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 4,
+          "name": "藍藍天藥水",
+          "img": "assets/tiles/magic-4.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 5,
+          "name": "勇氣藥水",
+          "img": "assets/tiles/magic-5.webp",
+          "rarity": "epic",
+          "origin": "official"
+        },
+        {
+          "tier": 6,
+          "name": "紫緞帶禮帽",
+          "img": "assets/tiles/magic-6.webp",
+          "rarity": "legendary",
+          "origin": "official"
+        },
+        {
+          "tier": 7,
+          "name": "魔術高帽",
+          "img": "assets/tiles/magic-7.webp",
+          "rarity": "legendary",
+          "origin": "official"
+        }
+      ]
+    },
+    "tea": {
+      "id": "tea",
+      "name": "下午茶",
+      "chapter": "village",
+      "items": [
+        {
+          "tier": 1,
+          "name": "下午茶杯子",
+          "img": "assets/tiles/tea-1.webp",
+          "rarity": "rare",
+          "origin": "official"
+        },
+        {
+          "tier": 2,
+          "name": "花茶",
+          "img": "assets/tiles/tea-2.webp",
+          "rarity": "rare",
+          "origin": "extended"
+        }
+      ]
+    }
+  },
+  "generators": {
+    "star": {
+      "id": "star",
+      "name": "眠花糖的星星窩",
+      "unlock": "start",
+      "produces": "star",
+      "tiers": [
+        {
+          "tier": 1,
+          "img": "assets/tiles/gen-star-1.webp",
+          "table": [
+            [
+              1,
+              70
+            ],
+            [
+              2,
+              25
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        {
+          "tier": 2,
+          "img": "assets/tiles/gen-star-2.webp",
+          "table": [
+            [
+              1,
+              45
+            ],
+            [
+              2,
+              40
+            ],
+            [
+              3,
+              15
+            ]
+          ]
+        },
+        {
+          "tier": 3,
+          "img": "assets/tiles/gen-star-3.webp",
+          "table": [
+            [
+              2,
+              50
+            ],
+            [
+              3,
+              35
+            ],
+            [
+              4,
+              15
+            ]
+          ]
+        }
+      ]
+    },
+    "garden": {
+      "id": "garden",
+      "name": "微笑花圃",
+      "unlock": "chapter:village:mid",
+      "produces": "garden",
+      "autoMs": 45000,
+      "tiers": [
+        {
+          "tier": 1,
+          "img": "assets/tiles/gen-garden-1.webp",
+          "table": [
+            [
+              1,
+              70
+            ],
+            [
+              2,
+              25
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        {
+          "tier": 2,
+          "img": "assets/tiles/gen-garden-2.webp",
+          "table": [
+            [
+              1,
+              40
+            ],
+            [
+              2,
+              40
+            ],
+            [
+              3,
+              15
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "bonus": {
+            "tea": [
+              [
+                1,
+                1
+              ]
+            ]
+          }
+        }
+      ]
+    },
+    "forest": {
+      "id": "forest",
+      "name": "山洞寶箱",
+      "unlock": "chapter:journey",
+      "produces": "forest",
+      "tiers": [
+        {
+          "tier": 1,
+          "img": "assets/tiles/gen-forest-1.webp",
+          "table": [
+            [
+              1,
+              70
+            ],
+            [
+              2,
+              25
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        {
+          "tier": 2,
+          "img": "assets/tiles/gen-forest-2.webp",
+          "table": [
+            [
+              1,
+              40
+            ],
+            [
+              2,
+              40
+            ],
+            [
+              3,
+              15
+            ],
+            [
+              4,
+              5
+            ]
+          ]
+        }
+      ]
+    },
+    "candy": {
+      "id": "candy",
+      "name": "西卡的糖果箱",
+      "unlock": "chapter:candy",
+      "produces": "candy",
+      "tiers": [
+        {
+          "tier": 1,
+          "img": "assets/tiles/gen-candy-1.webp",
+          "table": [
+            [
+              1,
+              70
+            ],
+            [
+              2,
+              25
+            ],
+            [
+              3,
+              5
+            ]
+          ]
+        },
+        {
+          "tier": 2,
+          "img": "assets/tiles/gen-candy-2.webp",
+          "table": [
+            [
+              1,
+              40
+            ],
+            [
+              2,
+              35
+            ],
+            [
+              3,
+              18
+            ],
+            [
+              4,
+              7
+            ]
+          ]
+        }
+      ]
+    },
+    "magic": {
+      "id": "magic",
+      "name": "魔術道具盒",
+      "unlock": "chapter:journey:mid",
+      "produces": "magic",
+      "tiers": [
+        {
+          "tier": 1,
+          "img": "assets/tiles/gen-magic-1.webp",
+          "table": [
+            [
+              1,
+              60
+            ],
+            [
+              2,
+              30
+            ],
+            [
+              3,
+              10
+            ]
+          ]
+        },
+        {
+          "tier": 2,
+          "img": "assets/tiles/gen-magic-2.webp",
+          "table": [
+            [
+              2,
+              40
+            ],
+            [
+              3,
+              30
+            ],
+            [
+              4,
+              20
+            ],
+            [
+              5,
+              10
+            ]
+          ]
+        }
+      ]
+    }
+  }
+}

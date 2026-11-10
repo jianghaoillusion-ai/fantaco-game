@@ -2,12 +2,43 @@
   "title": "眠花糖與魔法氣球物語",
   "subtitle": "FANTACO 魔幻藝術節",
   "tagline": "在魔幻森林裡，眠花糖陪你一起實現奇妙夢想",
-  "xpCurve": [0, 40, 100, 180, 280, 400, 540, 700, 880, 1100],
+  "xpCurve": [
+    0,
+    40,
+    100,
+    180,
+    280,
+    400,
+    540,
+    700,
+    880,
+    1100
+  ],
   "dropRates": [
-    { "rarity": "common", "label": "普通", "rate": 0.70, "color": "#8dc073" },
-    { "rarity": "rare", "label": "稀有", "rate": 0.22, "color": "#5b7fd6" },
-    { "rarity": "epic", "label": "史詩", "rate": 0.07, "color": "#9b59c6" },
-    { "rarity": "legendary", "label": "傳說", "rate": 0.01, "color": "#e0a106" }
+    {
+      "rarity": "common",
+      "label": "普通",
+      "rate": 0.7,
+      "color": "#8dc073"
+    },
+    {
+      "rarity": "rare",
+      "label": "稀有",
+      "rate": 0.22,
+      "color": "#5b7fd6"
+    },
+    {
+      "rarity": "epic",
+      "label": "史詩",
+      "rate": 0.07,
+      "color": "#9b59c6"
+    },
+    {
+      "rarity": "legendary",
+      "label": "傳說",
+      "rate": 0.01,
+      "color": "#e0a106"
+    }
   ],
   "starSeedName": "星星種子",
   "lyrics": {
@@ -41,25 +72,163 @@
     ]
   },
   "items": [
-    { "id": "star-white", "name": "小星星貼紙", "rarity": "common", "img": "assets/items/star-white.png" },
-    { "id": "flower-yellow", "name": "黃花貼紙", "rarity": "common", "img": "assets/items/flower-yellow.png" },
-    { "id": "flower-blue", "name": "藍花貼紙", "rarity": "common", "img": "assets/items/flower-blue.png" },
-    { "id": "bush", "name": "微笑村小樹叢", "rarity": "common", "img": "assets/items/bush.png" },
-    { "id": "carrot", "name": "眠花糖的紅蘿蔔", "rarity": "common", "img": "assets/items/carrot.png" },
-    { "id": "teacup", "name": "下午茶杯子", "rarity": "rare", "img": "assets/items/teacup.png" },
-    { "id": "rose-blue", "name": "藍玫瑰", "rarity": "rare", "img": "assets/items/rose-blue.png" },
-    { "id": "rose-white", "name": "白玫瑰", "rarity": "rare", "img": "assets/items/rose-white.png" },
-    { "id": "mushroom-red", "name": "紅蘑菇", "rarity": "rare", "img": "assets/items/mushroom-red.png" },
-    { "id": "mushroom-blue", "name": "藍蘑菇", "rarity": "rare", "img": "assets/items/mushroom-blue.png" },
-    { "id": "cupcake", "name": "微笑杯子蛋糕", "rarity": "rare", "img": "assets/items/cupcake.png" },
-    { "id": "candy", "name": "西卡的糖果盒", "rarity": "rare", "img": "assets/items/candy.png" },
-    { "id": "potion-blue", "name": "藍藍天藥水", "rarity": "epic", "img": "assets/items/potion-blue.png" },
-    { "id": "potion-red", "name": "勇氣藥水", "rarity": "epic", "img": "assets/items/potion-red.png" },
-    { "id": "card-heart", "name": "愛心撲克牌", "rarity": "epic", "img": "assets/items/card-heart.png" },
-    { "id": "card-spade", "name": "黑桃撲克牌", "rarity": "epic", "img": "assets/items/card-spade.png" },
-    { "id": "card-club", "name": "梅花撲克牌", "rarity": "epic", "img": "assets/items/card-club.png" },
-    { "id": "teapot", "name": "星星茶壺", "rarity": "legendary", "img": "assets/items/teapot.png" },
-    { "id": "hat", "name": "魔術高帽", "rarity": "legendary", "img": "assets/items/hat.png" },
-    { "id": "hat-purple", "name": "紫緞帶禮帽", "rarity": "legendary", "img": "assets/items/hat-purple.png" }
-  ]
+    {
+      "id": "star-white",
+      "name": "小星星貼紙",
+      "rarity": "common",
+      "img": "assets/items/star-white.png"
+    },
+    {
+      "id": "flower-yellow",
+      "name": "黃花貼紙",
+      "rarity": "common",
+      "img": "assets/items/flower-yellow.png"
+    },
+    {
+      "id": "flower-blue",
+      "name": "藍花貼紙",
+      "rarity": "common",
+      "img": "assets/items/flower-blue.png"
+    },
+    {
+      "id": "bush",
+      "name": "微笑村小樹叢",
+      "rarity": "common",
+      "img": "assets/items/bush.png"
+    },
+    {
+      "id": "carrot",
+      "name": "眠花糖的紅蘿蔔",
+      "rarity": "common",
+      "img": "assets/items/carrot.png"
+    },
+    {
+      "id": "teacup",
+      "name": "下午茶杯子",
+      "rarity": "rare",
+      "img": "assets/items/teacup.png"
+    },
+    {
+      "id": "rose-blue",
+      "name": "藍玫瑰",
+      "rarity": "rare",
+      "img": "assets/items/rose-blue.png"
+    },
+    {
+      "id": "rose-white",
+      "name": "白玫瑰",
+      "rarity": "rare",
+      "img": "assets/items/rose-white.png"
+    },
+    {
+      "id": "mushroom-red",
+      "name": "紅蘑菇",
+      "rarity": "rare",
+      "img": "assets/items/mushroom-red.png"
+    },
+    {
+      "id": "mushroom-blue",
+      "name": "藍蘑菇",
+      "rarity": "rare",
+      "img": "assets/items/mushroom-blue.png"
+    },
+    {
+      "id": "cupcake",
+      "name": "微笑杯子蛋糕",
+      "rarity": "rare",
+      "img": "assets/items/cupcake.png"
+    },
+    {
+      "id": "candy",
+      "name": "西卡的糖果盒",
+      "rarity": "rare",
+      "img": "assets/items/candy.png"
+    },
+    {
+      "id": "potion-blue",
+      "name": "藍藍天藥水",
+      "rarity": "epic",
+      "img": "assets/items/potion-blue.png"
+    },
+    {
+      "id": "potion-red",
+      "name": "勇氣藥水",
+      "rarity": "epic",
+      "img": "assets/items/potion-red.png"
+    },
+    {
+      "id": "card-heart",
+      "name": "愛心撲克牌",
+      "rarity": "epic",
+      "img": "assets/items/card-heart.png"
+    },
+    {
+      "id": "card-spade",
+      "name": "黑桃撲克牌",
+      "rarity": "epic",
+      "img": "assets/items/card-spade.png"
+    },
+    {
+      "id": "card-club",
+      "name": "梅花撲克牌",
+      "rarity": "epic",
+      "img": "assets/items/card-club.png"
+    },
+    {
+      "id": "teapot",
+      "name": "星星茶壺",
+      "rarity": "legendary",
+      "img": "assets/items/teapot.png"
+    },
+    {
+      "id": "hat",
+      "name": "魔術高帽",
+      "rarity": "legendary",
+      "img": "assets/items/hat.png"
+    },
+    {
+      "id": "hat-purple",
+      "name": "紫緞帶禮帽",
+      "rarity": "legendary",
+      "img": "assets/items/hat-purple.png"
+    }
+  ],
+  "energy": {
+    "max": 80,
+    "regenMs": 90000,
+    "dailyGiftEnergy": 25,
+    "dailyGiftSeeds": 8
+  },
+  "board": {
+    "cols": 7,
+    "rows": 6,
+    "inventory": 8,
+    "orders": 4
+  },
+  "npcs": {
+    "jiejie": {
+      "name": "微笑姐姐",
+      "portrait": "assets/chars/jiejie.png"
+    },
+    "feifei": {
+      "name": "飛飛",
+      "portrait": "assets/chars/feifei.png"
+    },
+    "apiao": {
+      "name": "阿飄",
+      "portrait": "assets/chars/apiao.png"
+    },
+    "spirit": {
+      "name": "氣球精靈",
+      "portrait": "assets/chars/spirit.png"
+    },
+    "sika": {
+      "name": "西卡",
+      "portrait": "assets/chars/sika.png"
+    },
+    "mian": {
+      "name": "眠花糖",
+      "portrait": "assets/mascot/front.png"
+    }
+  }
 }

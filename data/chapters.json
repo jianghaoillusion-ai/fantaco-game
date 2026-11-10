@@ -1,0 +1,51 @@
+{
+  "chapters": [
+    {
+      "id": "village",
+      "number": 1,
+      "title": "微笑村",
+      "subtitle": "微笑大賽",
+      "bg": "assets/bg/village.webp",
+      "music": "village",
+      "unlock": "start",
+      "generators": [
+        "star",
+        "garden"
+      ],
+      "restoreSteps": 5
+    },
+    {
+      "id": "journey",
+      "number": 2,
+      "title": "神祕魔法袋",
+      "subtitle": "山洞小路",
+      "bg": "assets/bg/journey.webp",
+      "music": "journey",
+      "unlock": "story:ch1-end",
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic"
+      ],
+      "restoreSteps": 5
+    },
+    {
+      "id": "candy",
+      "number": 3,
+      "title": "第一願：西卡",
+      "subtitle": "糖果小路",
+      "bg": "assets/bg/candy.webp",
+      "music": "candy",
+      "unlock": "story:ch2-end",
+      "generators": [
+        "star",
+        "garden",
+        "forest",
+        "magic",
+        "candy"
+      ],
+      "restoreSteps": 5
+    }
+  ]
+}

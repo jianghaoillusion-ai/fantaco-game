@@ -1,0 +1,440 @@
+{
+  "orders": [
+    {
+      "id": "v1",
+      "npc": "jiejie",
+      "need": {
+        "chain": "star",
+        "tier": 2
+      },
+      "reward": {
+        "seeds": 4,
+        "xp": 20,
+        "energy": 0
+      },
+      "chapter": "village",
+      "flag": "v1",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "歡迎來到微笑村！今天是一年一度的微笑大賽。"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（跳一跳。把兩個一樣的道具疊在一起，就會變成更好的東西喔。）"
+        },
+        {
+          "speaker": "微笑姐姐",
+          "portrait": "jiejie",
+          "text": "先幫我合成一顆「小星星貼紙」好嗎？交給我就行。"
+        }
+      ]
+    },
+    {
+      "id": "v2",
+      "npc": "feifei",
+      "need": {
+        "chain": "star",
+        "tier": 3
+      },
+      "reward": {
+        "seeds": 5,
+        "xp": 30,
+        "energy": 5
+      },
+      "chapter": "village",
+      "flag": "v2",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我……我也想參加微笑大賽。可是好緊張……"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "沒關係啦！我和眠花糖都會幫你加油！"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "如果有一顆閃亮星，我好像就比較有勇氣了。"
+        }
+      ]
+    },
+    {
+      "id": "v3",
+      "npc": "feifei",
+      "need": {
+        "chain": "garden",
+        "tier": 3
+      },
+      "reward": {
+        "seeds": 5,
+        "xp": 30,
+        "energy": 0
+      },
+      "chapter": "village",
+      "flag": "v3",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "微笑村的花好香。可以幫我摘一朵黃花嗎？"
+        }
+      ]
+    },
+    {
+      "id": "v4",
+      "npc": "apiao",
+      "need": {
+        "chain": "garden",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 6,
+        "xp": 40,
+        "energy": 5
+      },
+      "chapter": "village",
+      "flag": "v4",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "嘿，我也要一朵藍花！拿來跟飛飛配成對。"
+        }
+      ]
+    },
+    {
+      "id": "v5",
+      "npc": "feifei",
+      "need": {
+        "chain": "star",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 10,
+        "xp": 60,
+        "energy": 8
+      },
+      "chapter": "village",
+      "flag": "ch1-end",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我想找真正的快樂。也許，我的舞台不在這裡……"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（指向遠方，又指指星星茶壺。）"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "謝謝你，眠花糖。有這把星星茶壺，我好像可以笑出來了。"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "那我們離開微笑村，到外面的世界冒險囉！"
+        },
+        {
+          "speaker": "眠花糖",
+          "portrait": "mascot",
+          "text": "（點頭。山洞小路，已經打開了。）"
+        }
+      ]
+    },
+    {
+      "id": "j1",
+      "npc": "apiao",
+      "need": {
+        "chain": "forest",
+        "tier": 2
+      },
+      "reward": {
+        "seeds": 6,
+        "xp": 40,
+        "energy": 0
+      },
+      "chapter": "journey",
+      "flag": "j1",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "我們離開微笑村啦！前面有小山、小溪，還有山洞。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "咦？洞穴裡有紅蘑菇耶。"
+        }
+      ]
+    },
+    {
+      "id": "j2",
+      "npc": "feifei",
+      "need": {
+        "chain": "forest",
+        "tier": 3
+      },
+      "reward": {
+        "seeds": 7,
+        "xp": 50,
+        "energy": 5
+      },
+      "chapter": "journey",
+      "flag": "j2",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "再採一朵藍蘑菇，也許就能照亮山洞。"
+        }
+      ]
+    },
+    {
+      "id": "j3",
+      "npc": "spirit",
+      "need": {
+        "chain": "magic",
+        "tier": 3
+      },
+      "reward": {
+        "seeds": 8,
+        "xp": 55,
+        "energy": 5
+      },
+      "chapter": "journey",
+      "flag": "j3",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "哈哈哈哈——是誰打開了神祕的魔法袋啊？"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "是詐騙嗎？……你真的是氣球精靈？先拿出愛心撲克牌來證明一下！"
+        }
+      ]
+    },
+    {
+      "id": "j4",
+      "npc": "spirit",
+      "need": {
+        "chain": "magic",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 8,
+        "xp": 60,
+        "energy": 5
+      },
+      "chapter": "journey",
+      "flag": "j4",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "袋裡有三顆魔法氣球。戳破一顆，就能實現一個願望。機會只有三次！先用藍藍天藥水暖暖身手。"
+        }
+      ]
+    },
+    {
+      "id": "j5",
+      "npc": "feifei",
+      "need": {
+        "chain": "star",
+        "tier": 6
+      },
+      "reward": {
+        "seeds": 12,
+        "xp": 80,
+        "energy": 10
+      },
+      "chapter": "journey",
+      "flag": "ch2-end",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "阿飄說可以許跑車、大餐或機器人……但我想先把魔法袋留下來，繼續走。"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "想好了再把氣球拿出來。我會再出現的。哈哈哈哈！"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "前面有人在賣糖果，我們去看看吧。"
+        }
+      ]
+    },
+    {
+      "id": "c1",
+      "npc": "sika",
+      "need": {
+        "chain": "candy",
+        "tier": 3
+      },
+      "reward": {
+        "seeds": 8,
+        "xp": 50,
+        "energy": 5
+      },
+      "chapter": "candy",
+      "flag": "c1",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "糖果……好吃的糖果……有沒有人要買……"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我想買一盒。哇，好好吃！先幫西卡做一個杯子蛋糕，讓他重拾力氣。"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "npc": "sika",
+      "need": {
+        "chain": "candy",
+        "tier": 4
+      },
+      "reward": {
+        "seeds": 10,
+        "xp": 60,
+        "energy": 5
+      },
+      "chapter": "candy",
+      "flag": "c2",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "如果有一個漂亮的糖果盒，客人也許會停下來。"
+        }
+      ]
+    },
+    {
+      "id": "c3",
+      "npc": "apiao",
+      "need": {
+        "chain": "candy",
+        "tier": 5
+      },
+      "reward": {
+        "seeds": 10,
+        "xp": 70,
+        "energy": 5
+      },
+      "chapter": "candy",
+      "flag": "c3",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "再來一個雙層蛋糕！我負責試吃，飛飛負責加油。"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "npc": "feifei",
+      "need": {
+        "chain": "candy",
+        "tier": 6
+      },
+      "reward": {
+        "seeds": 14,
+        "xp": 90,
+        "energy": 8
+      },
+      "chapter": "candy",
+      "flag": "c4",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "我想把第一個願望送給西卡。先讓糖果塔立起來，洩氣就會散掉。"
+        }
+      ]
+    },
+    {
+      "id": "c5",
+      "npc": "sika",
+      "need": {
+        "chain": "candy",
+        "tier": 7
+      },
+      "reward": {
+        "seeds": 18,
+        "xp": 120,
+        "energy": 15
+      },
+      "chapter": "candy",
+      "flag": "ch3-end",
+      "restore": 1,
+      "intro": [
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "氣球精靈，我的願望是：幫助西卡，讓他可以用有創意的方法，把好吃的糖果賣出去。"
+        }
+      ],
+      "outro": [
+        {
+          "speaker": "氣球精靈",
+          "portrait": "spirit",
+          "text": "願望，實現了！"
+        },
+        {
+          "speaker": "西卡",
+          "portrait": "sika",
+          "text": "謝謝你，飛飛！大家，來買糖果囉────"
+        },
+        {
+          "speaker": "阿飄",
+          "portrait": "apiao",
+          "text": "飛飛，你笑囉！這一顆氣球，用得很值得。"
+        },
+        {
+          "speaker": "飛飛",
+          "portrait": "feifei",
+          "text": "還有兩顆願望。我們繼續走吧。前面，也許還有需要幫忙的人。每週都會有新的故事。"
+        }
+      ]
+    }
+  ]
+}

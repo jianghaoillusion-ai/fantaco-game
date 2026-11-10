@@ -1,59 +1,91 @@
 import { Auth } from "./auth.js";
-import { loadSave, writeSave, emptySave, syncCloud } from "./save.js";
-import { unlockAudio, sfx, setMuted, isMuted } from "./audio.js";
-import { createBattle } from "./battle.js";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ENERGY } from "./save.js";
+import { unlockAudio, playMusic, stopMusic, playClearTheme, sfx, setAudioSettings, getAudioSettings } from "./audio.js";
+import { mountMascot } from "./mascot.js";
+import {
+  starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
+  itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx
+} from "./merge.js";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
-const PORTRAITS = {
-  mascot: "assets/mascot/wish.png",
-  feifei: "assets/chars/feifei.png",
-  apiao: "assets/chars/apiao.png",
-  sika: "assets/chars/sika.png",
-  jiejie: "assets/chars/jiejie.png",
-  spirit: "assets/chars/spirit.png"
-};
+let GAME, CHAINS, GENS, CHAPTERS, STORY;
+let SAVE = loadSave();
+let mascot;
+let dragging = null;
+let combo = { n: 0, at: 0 };
+let pendingStory = null;
+let energyTimer;
 
-let GAME = {}, SAVE = loadSave(), stages = [], battle;
-let storyQueue = [], storyIdx = 0, storyDone = null;
-let pendingRewards = null;
+const COLS = 7, ROWS = 6;
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=" + Date.now());
+  const res = await fetch(url + "?v=2");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
 
 export async function boot() {
-  GAME = await fetchJSON("data/game.json");
-  const cat = await fetchJSON("data/stages/index.json");
-  stages = [];
-  for (const id of cat.stages) {
-    stages.push(await fetchJSON(`data/stages/${id}.json`));
+  [GAME, CHAINS, CHAPTERS, STORY] = await Promise.all([
+    fetchJSON("data/game.json"),
+    fetchJSON("data/chains.json"),
+    fetchJSON("data/chapters.json"),
+    fetchJSON("data/story-orders.json")
+  ]);
+  GENS = CHAINS.generators;
+  CHAINS = CHAINS.chains;
+  CHAPTERS = CHAPTERS.chapters;
+  STORY = STORY.orders;
+  tickEnergy(SAVE);
+  if (!SAVE.board) SAVE.board = starterBoard(COLS, ROWS);
+  if (!SAVE.settings) SAVE.settings = { music: true, sfx: true };
+  setAudioSettings(SAVE.settings);
+  for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
+    if (cell) discover(cell, { silent: true });
   }
-  window.__GAME = {
-    save: () => SAVE, stages, game: GAME,
-    open: show, win: () => battle?.winNow(),
-    give: (n) => { SAVE.starSeeds += n; persist(); refreshHud(); }
-  };
+  ensureOrders();
+  unlockGenerators();
+  persist();
   bind();
+  mascot = mountMascot($("#mascot-root"));
+  window.__GAME = { save: () => SAVE, giveEnergy, completeTopOrder, show };
   if (!SAVE.profile) show("profile");
-  else show("title");
-  refreshHud();
+  else { show("title"); }
+  refresh();
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); }, 1000);
 }
 
-function persist() { writeSave(SAVE); syncCloud(SAVE); }
+function persist() { tickEnergy(SAVE); writeSave(SAVE); syncCloud(SAVE); }
 
 function show(name) {
   $$(".screen,.overlay").forEach((el) => el.classList.remove("on"));
   const el = document.getElementById(name);
   if (el) el.classList.add("on");
-  if (name === "map") renderMap();
-  if (name === "book") renderBook();
-  if (name === "redeem") renderRedeem();
-  if (name === "lyrics") renderLyrics();
+  if (name === "play") {
+    renderBoard();
+    renderOrders();
+    applyChapterLook();
+    playMusic(SAVE.chapter);
+  } else if (name === "title") {
+    playMusic("village");
+  } else if (name === "book") renderBook();
+  else if (name === "redeem") $("#redeem-count").textContent = SAVE.starSeeds;
+  else if (name === "lyrics") renderLyrics();
+  else if (name === "settings") renderSettings();
+  else if (name === "map") renderMap();
+  else if (name === "daily") renderDaily();
   refreshHud();
+}
+
+function chapter() { return CHAPTERS.find((c) => c.id === SAVE.chapter) || CHAPTERS[0]; }
+
+function applyChapterLook() {
+  const ch = chapter();
+  const play = $("#play");
+  const bg = new URL(ch.bg, document.baseURI).href;
+  play.style.backgroundImage = `linear-gradient(180deg, rgba(251,252,246,.72), rgba(251,252,246,.88) 40%, var(--cream)), url("${bg}")`;
+  play.dataset.chapterId = ch.id;
 }
 
 function bind() {
@@ -64,131 +96,542 @@ function bind() {
     try {
       const profile = await Auth.signInLocal($("#nick").value);
       SAVE.profile = profile;
-      persist();
-      sfx.tap();
-      show("title");
-    } catch (err) { alert(err.message); }
+      persist(); sfx.tap(); show("title");
+    } catch (err) { toast(err.message); }
   });
 
-  $("#btn-start")?.addEventListener("click", () => { sfx.tap(); show("map"); });
+  $("#btn-play")?.addEventListener("click", () => { sfx.tap(); show("play"); maybeFirstIntro(); });
   $("#btn-book")?.addEventListener("click", () => { sfx.tap(); show("book"); });
   $("#btn-redeem")?.addEventListener("click", () => { sfx.tap(); show("redeem"); });
   $("#btn-lyrics")?.addEventListener("click", () => { sfx.tap(); show("lyrics"); });
   $("#btn-howto")?.addEventListener("click", () => { sfx.tap(); show("howto"); });
+  $("#btn-settings")?.addEventListener("click", () => { sfx.tap(); show("settings"); });
+  $("#btn-map")?.addEventListener("click", () => { sfx.tap(); show("map"); });
+  $("#btn-daily")?.addEventListener("click", () => { sfx.tap(); show("daily"); });
   $$("[data-back]").forEach((b) => b.addEventListener("click", () => { sfx.tap(); show(b.dataset.back); }));
 
   $("#btn-story-next")?.addEventListener("click", nextStory);
   $("#btn-story-skip")?.addEventListener("click", () => { storyIdx = storyQueue.length; nextStory(); });
 
-  $("#btn-mute")?.addEventListener("click", () => {
-    setMuted(!isMuted());
-    $("#btn-mute").textContent = isMuted() ? "聲音關" : "聲音開";
+  $("#name-form")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const n = $("#name-edit").value.trim().slice(0, 12);
+    if (!n) return toast("請輸入名稱");
+    SAVE.profile = { ...(SAVE.profile || {}), nickname: n };
+    persist(); refreshHud(); toast("名稱已更新"); sfx.tap();
+  });
+  $("#tog-music")?.addEventListener("change", (e) => {
+    SAVE.settings.music = e.target.checked; setAudioSettings(SAVE.settings); persist();
+    if (e.target.checked) playMusic(SAVE.chapter); else stopMusic();
+  });
+  $("#tog-sfx")?.addEventListener("change", (e) => {
+    SAVE.settings.sfx = e.target.checked; setAudioSettings(SAVE.settings); persist();
   });
 
-  // pads
-  const hold = (id, key) => {
-    const el = $(id);
-    if (!el) return;
-    const on = (v) => (e) => { e.preventDefault(); if (battle) battle.input[key] = v; };
-    el.addEventListener("pointerdown", on(true));
-    el.addEventListener("pointerup", on(false));
-    el.addEventListener("pointerleave", on(false));
-  };
-  hold("#pad-left", "left");
-  hold("#pad-right", "right");
-  hold("#pad-jump", "jump");
-  hold("#pad-star", "fire");
+  $("#btn-claim-daily")?.addEventListener("click", claimDaily);
+  $("#btn-result-ok")?.addEventListener("click", () => {
+    $("#result").classList.remove("on");
+    if (pendingAfterClear) { const fn = pendingAfterClear; pendingAfterClear = null; fn(); }
+    else { playMusic(SAVE.chapter); show("play"); }
+  });
+  $("#btn-inv-toggle")?.addEventListener("click", () => $("#inventory").classList.toggle("open"));
 
-  window.addEventListener("keydown", (e) => {
-    if (!battle || !$("#battle").classList.contains("on")) {
-      if (e.key === "Enter" && $("#story").classList.contains("on")) nextStory();
-      return;
-    }
-    if (["ArrowLeft", "a", "A"].includes(e.key)) battle.input.left = true;
-    if (["ArrowRight", "d", "D"].includes(e.key)) battle.input.right = true;
-    if (["ArrowUp", "w", "W", " "].includes(e.key)) { battle.input.jump = true; if (e.key === " ") e.preventDefault(); }
-    if (["j", "J", "z", "Z", "Enter", "k", "K"].includes(e.key)) battle.input.fire = true;
-  });
-  window.addEventListener("keyup", (e) => {
-    if (!battle) return;
-    if (["ArrowLeft", "a", "A"].includes(e.key)) battle.input.left = false;
-    if (["ArrowRight", "d", "D"].includes(e.key)) battle.input.right = false;
-    if (["ArrowUp", "w", "W", " "].includes(e.key)) battle.input.jump = false;
-    if (["j", "J", "z", "Z", "Enter", "k", "K"].includes(e.key)) battle.input.fire = false;
-  });
-
-  $("#btn-retry")?.addEventListener("click", () => {
-    $("#fail").classList.remove("on");
-    const st = stages.find((s) => s.id === $("#battle").dataset.stage);
-    startBattle(st);
-  });
-  $("#btn-fail-map")?.addEventListener("click", () => { battle?.stop(); show("map"); });
-  $("#btn-result-ok")?.addEventListener("click", afterResult);
-
-  $("#btn-pause")?.addEventListener("click", () => {
-    battle?.stop();
-    if (confirm("要先回地圖嗎？現在離開不會存過關。")) show("map");
-    else {
-      const st = stages.find((s) => s.id === $("#battle").dataset.stage);
-      startBattle(st);
-    }
-  });
+  $("#play").addEventListener("pointerdown", onBoardDown);
+  window.addEventListener("pointermove", onDragMove);
+  window.addEventListener("pointerup", onDragUp);
+  window.addEventListener("pointercancel", onDragUp);
 }
 
+function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } }
+
 function refreshHud() {
+  tickEnergy(SAVE);
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
   $$("[data-seeds]").forEach((el) => { el.textContent = SAVE.starSeeds; });
+  $$("[data-energy]").forEach((el) => { el.textContent = SAVE.energy; });
+  $$("[data-energy-max]").forEach((el) => { el.textContent = ENERGY.max; });
+  const wait = nextEnergyIn(SAVE);
+  $$("[data-energy-in]").forEach((el) => {
+    if (SAVE.energy >= ENERGY.max) el.textContent = "已滿";
+    else {
+      const s = Math.ceil(wait / 1000);
+      el.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+    }
+  });
   const curve = GAME.xpCurve || [0, 40, 100];
-  const lo = curve[SAVE.level - 1] ?? 0;
+  const lo = curve[Math.min(SAVE.level, curve.length) - 1] ?? 0;
   const hi = curve[SAVE.level] ?? (lo + 100);
   const pct = Math.max(0, Math.min(1, (SAVE.xp - lo) / Math.max(1, hi - lo)));
   $$("[data-xp]").forEach((el) => { el.style.width = (pct * 100) + "%"; });
+  const ch = chapter();
+  $$(".chapter-chip [data-chapter]").forEach((el) => { el.textContent = ch.title; });
 }
 
-function isUnlocked(st) {
-  const u = st.unlock || { type: "start" };
-  if (u.type === "start") return true;
-  if (u.type === "stageCleared") return !!SAVE.stagesCleared[u.stageId];
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("on");
+  clearTimeout(t._id);
+  t._id = setTimeout(() => t.classList.remove("on"), 1800);
+}
+
+/* ---------- board render & drag ---------- */
+function cellAt(r, c) { return SAVE.board[idx(COLS, r, c)]; }
+
+function renderBoard() {
+  const board = $("#board");
+  if (!board) return;
+  board.style.setProperty("--cols", COLS);
+  board.style.setProperty("--rows", ROWS);
+  board.innerHTML = "";
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const slot = document.createElement("div");
+      slot.className = "cell";
+      slot.dataset.r = r; slot.dataset.c = c;
+      const item = cellAt(r, c);
+      if (item) slot.appendChild(makePiece(item));
+      board.appendChild(slot);
+    }
+  }
+  renderInventory();
+}
+
+function makePiece(item) {
+  const el = document.createElement("button");
+  el.type = "button";
+  el.className = "piece" + (item.kind === "gen" ? " gen" : "");
+  el.dataset.uid = item.uid;
+  const img = infoImg(item);
+  const name = infoName(item);
+  el.innerHTML = `<img src="${img}" alt="${name}" draggable="false"><span class="sr">${name}</span>`;
+  el.title = name;
+  return el;
+}
+
+function infoImg(item) {
+  if (item.kind === "gen") return genDef(GENS, item.gen, item.tier)?.img || "";
+  return itemDef(CHAINS, item.chain, item.tier)?.img || "";
+}
+function infoName(item) {
+  if (item.kind === "gen") {
+    const g = GENS[item.gen];
+    return `${g?.name || ""} Lv.${item.tier}`;
+  }
+  return itemDef(CHAINS, item.chain, item.tier)?.name || "";
+}
+
+function findCellByUid(uid) {
+  const i = SAVE.board.findIndex((c) => c && c.uid === uid);
+  if (i >= 0) return { where: "board", i, item: SAVE.board[i] };
+  const j = SAVE.inventory.findIndex((c) => c && c.uid === uid);
+  if (j >= 0) return { where: "inv", i: j, item: SAVE.inventory[j] };
+  return null;
+}
+
+function onBoardDown(e) {
+  const piece = e.target.closest(".piece");
+  if (!piece) return;
+  const loc = findCellByUid(piece.dataset.uid);
+  if (!loc) return;
+  const start = { x: e.clientX, y: e.clientY, t: Date.now() };
+  dragging = { loc, piece, start, moved: false, ghost: null, pointerId: e.pointerId };
+}
+
+function onDragMove(e) {
+  if (!dragging) return;
+  const dx = e.clientX - dragging.start.x, dy = e.clientY - dragging.start.y;
+  if (!dragging.moved && Math.hypot(dx, dy) < 10) return;
+  if (!dragging.moved) {
+    dragging.moved = true;
+    const ghost = dragging.piece.cloneNode(true);
+    ghost.classList.add("ghost");
+    document.body.appendChild(ghost);
+    dragging.ghost = ghost;
+    dragging.piece.classList.add("lifted");
+    sfx.pickup();
+    try { dragging.piece.setPointerCapture?.(dragging.pointerId); } catch {}
+  }
+  if (dragging.ghost) {
+    dragging.ghost.style.left = e.clientX + "px";
+    dragging.ghost.style.top = e.clientY + "px";
+  }
+  highlightDrop(e);
+}
+
+function highlightDrop(e) {
+  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
+  const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
+  if (!cell || !dragging) return;
+  const item = dragging.loc.item;
+  if (cell.classList.contains("order")) {
+    const od = SAVE.orders.find((o) => o.id === cell.dataset.id);
+    if (od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier) cell.classList.add("hot");
+  } else {
+    const r = +cell.dataset.r, c = +cell.dataset.c;
+    const dest = cellAt(r, c);
+    if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
+  }
+}
+
+function onDragUp(e) {
+  if (!dragging) return;
+  const d = dragging; dragging = null;
+  $$(".cell.hot,.order.hot").forEach((el) => el.classList.remove("hot"));
+  d.piece.classList.remove("lifted");
+  d.ghost?.remove();
+  if (!d.moved) { onTap(d.loc); return; }
+  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
+  if (!el) { sfx.drop(); return; }
+  if (el.classList.contains("order")) {
+    tryFulfill(d.loc, el.dataset.id);
+    return;
+  }
+  if (el.classList.contains("inv-cell") || el.dataset.inv !== undefined) {
+    moveToInventory(d.loc, el.dataset.inv === undefined ? -1 : +el.dataset.inv);
+    return;
+  }
+  const r = +el.dataset.r, c = +el.dataset.c;
+  moveOrMerge(d.loc, r, c);
+}
+
+function moveToInventory(loc, slot) {
+  const cap = GAME.board?.inventory || 8;
+  const src = loc.item;
+  if (loc.where === "inv") {
+    if (slot < 0 || slot === loc.i) return;
+    const dest = SAVE.inventory[slot];
+    if (!dest) {
+      removeFrom(loc);
+      // may have shifted
+      while (SAVE.inventory.length < slot) SAVE.inventory.push(null);
+      // after remove, indices shift if loc.i < slot
+      const at = loc.i < slot ? slot - 1 : slot;
+      SAVE.inventory.splice(at, 0, src);
+      SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+    } else if (canMerge(src, dest, CHAINS, GENS)) {
+      const merged = mergeCells(src, dest, CHAINS, GENS);
+      SAVE.inventory[slot] = merged;
+      removeFrom(loc);
+      onMerged(merged);
+    } else {
+      // swap
+      SAVE.inventory[loc.i] = dest;
+      SAVE.inventory[slot] = src;
+    }
+    sfx.drop(); persist(); renderBoard();
+    return;
+  }
+  if (SAVE.inventory.filter(Boolean).length >= cap && (slot < 0 || SAVE.inventory[slot])) {
+    sfx.invalid(); toast("背包滿了"); return;
+  }
+  removeFrom(loc);
+  SAVE.inventory = SAVE.inventory.filter(Boolean);
+  if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
+  else SAVE.inventory.push(src);
+  SAVE.inventory = SAVE.inventory.filter(Boolean).slice(0, cap);
+  sfx.drop(); persist(); renderBoard();
+}
+
+function removeFrom(loc) {
+  if (loc.where === "board") SAVE.board[loc.i] = null;
+  else SAVE.inventory.splice(loc.i, 1);
+}
+
+function onTap(loc) {
+  const item = loc.item;
+  if (item.kind === "gen") { tapGenerator(loc); return; }
+  toast(infoName(item));
+  sfx.tap();
+}
+
+function tapGenerator(loc) {
+  tickEnergy(SAVE);
+  if (SAVE.energy < 1) {
+    sfx.energy();
+    mascot?.sad();
+    const s = Math.ceil(nextEnergyIn(SAVE) / 1000);
+    toast(`能量還在回來的路上（${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}）`);
+    return;
+  }
+  let empty = firstEmpty(SAVE.board);
+  let toInv = false;
+  if (empty < 0) {
+    if (SAVE.inventory.length >= (GAME.board?.inventory || 8)) {
+      toast("棋盤和背包都滿了，先合一些吧");
+      sfx.invalid();
+      return;
+    }
+    toInv = true;
+  }
+  const made = produceFrom(loc.item, GENS);
+  if (!made) return;
+  SAVE.energy -= 1;
+  if (SAVE.energy === ENERGY.max - 1) SAVE.energyAt = Date.now();
+  if (toInv) SAVE.inventory.push(made);
+  else SAVE.board[empty] = made;
+  discover(made);
+  sfx.generate();
+  persist();
+  renderBoard();
+  refreshHud();
+  mascot?.idle();
+}
+
+function moveOrMerge(loc, r, c) {
+  const destI = idx(COLS, r, c);
+  const src = loc.item;
+  const dest = SAVE.board[destI];
+  // same cell
+  if (loc.where === "board" && loc.i === destI) return;
+  if (!dest) {
+    removeFrom(loc);
+    SAVE.board[destI] = src;
+    sfx.drop();
+    persist(); renderBoard();
+    return;
+  }
+  if (canMerge(src, dest, CHAINS, GENS)) {
+    const merged = mergeCells(src, dest, CHAINS, GENS);
+    removeFrom(loc);
+    SAVE.board[destI] = merged;
+    onMerged(merged);
+    persist(); renderBoard();
+    return;
+  }
+  // swap
+  if (loc.where === "board") {
+    SAVE.board[loc.i] = dest;
+    SAVE.board[destI] = src;
+    sfx.drop();
+    persist(); renderBoard();
+    return;
+  }
+  sfx.invalid();
+  toast("這裡放不下，找相同的合在一起吧");
+}
+
+function onMerged(merged) {
+  const now = Date.now();
+  if (now - combo.at < 2200) combo.n += 1; else combo.n = 1;
+  combo.at = now;
+  SAVE.comboBest = Math.max(SAVE.comboBest || 0, combo.n);
+  const tier = merged.tier || 1;
+  sfx.merge(tier);
+  if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
+  mascot?.merge(tier);
+  discover(merged);
+  if (tier >= 5) shake(10);
+  else if (combo.n >= 3) shake(6);
+  // first-discover gift
+}
+
+function discover(cell, opts = {}) {
+  const k = keyOf(cell);
+  if (!k || SAVE.discovered[k]) return;
+  SAVE.discovered[k] = Date.now();
+  if (cell.kind === "item") {
+    const def = itemDef(CHAINS, cell.chain, cell.tier);
+    if (def) {
+      SAVE.treasures[defNameId(def)] = (SAVE.treasures[defNameId(def)] || 0) + 1;
+      if (!opts.silent) {
+        SAVE.starSeeds += 1;
+        toast(`新發現：${def.name}　＋1 星星種子`);
+      }
+    }
+  }
+}
+
+function defNameId(def) {
+  // map back to collection item ids when possible
+  const map = {
+    "小星星貼紙": "star-white", "黃花貼紙": "flower-yellow", "藍花貼紙": "flower-blue",
+    "小樹叢": "bush", "紅蘿蔔": "carrot", "微笑杯子蛋糕": "cupcake", "西卡的糖果盒": "candy",
+    "紅蘑菇": "mushroom-red", "藍蘑菇": "mushroom-blue", "梅花撲克牌": "card-club",
+    "黑桃撲克牌": "card-spade", "愛心撲克牌": "card-heart", "藍藍天藥水": "potion-blue",
+    "勇氣藥水": "potion-red", "紫緞帶禮帽": "hat-purple", "魔術高帽": "hat",
+    "下午茶杯子": "teacup", "星星茶壺": "teapot", "神祕魔法袋": "bag", "白玫瑰": "rose-white",
+    "藍玫瑰": "rose-blue"
+  };
+  return map[def.name] || def.name;
+}
+
+function shake(n) {
+  const play = $("#play");
+  play.classList.add("shake");
+  play.style.setProperty("--shake", n + "px");
+  setTimeout(() => play.classList.remove("shake"), 400);
+}
+
+function floatCombo(n) {
+  const el = document.createElement("div");
+  el.className = "combo-float";
+  el.textContent = n >= 4 ? `超讚連擊 ×${n}` : `連擊 ×${n}`;
+  $("#play").appendChild(el);
+  setTimeout(() => el.remove(), 1200);
+}
+
+function renderInventory() {
+  const box = $("#inv-cells");
+  box.innerHTML = "";
+  const cap = GAME.board?.inventory || 8;
+  $("#inv-count").textContent = `${SAVE.inventory.length}/${cap}`;
+  for (let i = 0; i < cap; i++) {
+    const slot = document.createElement("div");
+    slot.className = "cell inv-cell";
+    slot.dataset.inv = i;
+    if (SAVE.inventory[i]) slot.appendChild(makePiece(SAVE.inventory[i]));
+    box.appendChild(slot);
+  }
+}
+
+/* ---------- orders ---------- */
+function chapterUnlocked(id) {
+  if (id === "village") return true;
+  if (id === "journey") return SAVE.storyDone.includes("ch1-end") || SAVE.storyDone.includes("v5");
+  if (id === "candy") return SAVE.storyDone.includes("ch2-end") || SAVE.storyDone.includes("j5");
   return false;
 }
 
-function renderMap() {
-  const box = $("#nodes");
-  box.innerHTML = "";
-  const thumbs = ["assets/mascot/front.png", "assets/fx/bag.png", "assets/items/cupcake.png"];
-  stages.forEach((st, i) => {
-    const locked = !isUnlocked(st);
-    const cleared = !!SAVE.stagesCleared[st.id];
-    const btn = document.createElement("button");
-    btn.className = "node" + (locked ? " locked" : "");
-    btn.innerHTML = `
-      <img class="thumb" src="${thumbs[i] || "assets/mascot/front.png"}" alt="">
-      <div>
-        <div class="num">第 ${st.number} 關　${st.mapLabel || ""}</div>
-        <h3>${st.title}${cleared ? "　✓" : ""}</h3>
-        <small>${locked ? "先完成前面的關卡" : st.subtitle}</small>
-      </div>`;
-    if (!locked) btn.addEventListener("click", () => { sfx.tap(); openStage(st); });
-    box.appendChild(btn);
-  });
-  const soon = document.createElement("div");
-  soon.className = "node soon";
-  soon.innerHTML = `
-    <img class="thumb" src="assets/mascot/sleep.png" alt="">
-    <div>
-      <div class="num">即將到來<span class="soon-mark">每週更新</span></div>
-      <h3>新關卡製作中</h3>
-      <small>下一回：怕黑的布魯，還有最後一願送給哈特。</small>
-    </div>`;
-  box.appendChild(soon);
+function nextStoryOrder() {
+  return STORY.find((o) => !SAVE.storyDone.includes(o.flag) && !SAVE.storyDone.includes(o.id) && chapterUnlocked(o.chapter));
 }
 
-function openStage(st) {
-  storyQueue = st.intro || [];
+function ensureOrders() {
+  SAVE.orders = (SAVE.orders || []).filter((o) => o && o.need);
+  const slots = GAME.board?.orders || 4;
+  // keep current story order first if any
+  const story = nextStoryOrder();
+  const hasStory = SAVE.orders.some((o) => !o.procedural && story && o.id === story.id);
+  if (story && !hasStory && !SAVE.orders.some((o) => o.id === story.id)) {
+    SAVE.orders.unshift({ ...story });
+  }
+  // fill procedural
+  let guard = 0;
+  while (SAVE.orders.length < slots && guard++ < 8) {
+    const o = makeProceduralOrder({
+      chains: CHAINS,
+      chapter: SAVE.chapter,
+      discovered: SAVE.discovered,
+      npcsByChapter: NPCS_BY_CHAPTER,
+      seq: SAVE.ordersDone || 0
+    });
+    if (!o) break;
+    // avoid duplicate needs
+    if (SAVE.orders.some((x) => x.need.chain === o.need.chain && x.need.tier === o.need.tier)) continue;
+    SAVE.orders.push(o);
+  }
+  SAVE.orders = SAVE.orders.slice(0, slots);
+}
+
+function hasGen(id) {
+  return SAVE.board.some((c) => c && c.kind === "gen" && c.gen === id)
+    || SAVE.inventory.some((c) => c && c.kind === "gen" && c.gen === id);
+}
+
+function grantGen(id, tier = 1) {
+  if (hasGen(id)) return false;
+  const empty = firstEmpty(SAVE.board);
+  const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
+  if (empty >= 0) SAVE.board[empty] = cell;
+  else if (SAVE.inventory.length < (GAME.board?.inventory || 8)) SAVE.inventory.push(cell);
+  else return false;
+  toast(`新的產生器：${GENS[id]?.name || id}`);
+  return true;
+}
+
+function unlockGenerators() {
+  const done = (f) => SAVE.storyDone.includes(f);
+  grantGen("star");
+  if (done("v2") || done("v3") || (SAVE.restore.village || 0) >= 2) grantGen("garden");
+  if (chapterUnlocked("journey")) grantGen("forest");
+  if (done("j2") || done("j3") || SAVE.chapter === "candy") grantGen("magic");
+  if (chapterUnlocked("candy")) grantGen("candy");
+}
+
+function renderOrders() {
+  const box = $("#orders");
+  box.innerHTML = "";
+  for (const o of SAVE.orders) {
+    const npc = GAME.npcs[o.npc] || { name: o.npc, portrait: "assets/mascot/front.png" };
+    const def = itemDef(CHAINS, o.need.chain, o.need.tier);
+    const card = document.createElement("div");
+    card.className = "order" + (o.flag ? " story" : "");
+    card.dataset.id = o.id;
+    card.innerHTML = `
+      <img class="npc" src="${npc.portrait}" alt="${npc.name}">
+      <div class="body">
+        <b>${npc.name}${o.flag ? " · 故事" : ""}</b>
+        <div class="need">
+          <img src="${def?.img || ""}" alt="">
+          <span>${def?.name || ""}</span>
+        </div>
+        <div class="rew">＋${o.reward.seeds} 種子　＋${o.reward.xp} 經驗${o.reward.energy ? "　＋" + o.reward.energy + " 能量" : ""}</div>
+      </div>`;
+    box.appendChild(card);
+  }
+}
+
+function tryFulfill(loc, orderId) {
+  const o = SAVE.orders.find((x) => x.id === orderId);
+  const item = loc.item;
+  if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
+    sfx.invalid(); toast("這不是訂單要的東西"); return;
+  }
+  removeFrom(loc);
+  SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
+  SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
+  SAVE.starSeeds += o.reward.seeds || 0;
+  const before = SAVE.level;
+  SAVE.xp += o.reward.xp || 0;
+  SAVE.level = xpLevel(SAVE.xp, GAME.xpCurve || [0, 40, 100]);
+  if (o.reward.energy) SAVE.energy = Math.min(ENERGY.max, SAVE.energy + o.reward.energy);
+  if (o.flag) SAVE.storyDone.push(o.flag);
+  if (o.restore) {
+    const ch = o.chapter || SAVE.chapter;
+    SAVE.restore[ch] = (SAVE.restore[ch] || 0) + o.restore;
+  }
+  sfx.order();
+  mascot?.order();
+  const leveled = SAVE.level > before;
+  const chapterClear = o.flag === "ch1-end" || o.flag === "ch2-end" || o.flag === "ch3-end";
+  if (o.flag === "ch1-end") SAVE.chapter = "journey";
+  if (o.flag === "ch2-end") SAVE.chapter = "candy";
+  ensureOrders();
+  unlockGenerators();
+  persist();
+  renderBoard(); renderOrders(); refreshHud();
+  const after = () => {
+    if (o.outro) startStory(o.outro, () => {
+      if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+      else { playMusic(SAVE.chapter); applyChapterLook(); }
+    });
+    else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
+  };
+  if (o.intro && !SAVE.flags["seen-intro-" + o.id]) {
+    // already shown when accepted; just after
+  }
+  after();
+}
+
+let storyQueue = [], storyIdx = 0, storyDoneFn = null;
+let pendingAfterClear = null;
+
+function maybeFirstIntro() {
+  const first = STORY[0];
+  if (first?.intro && !SAVE.flags.seenOpen) {
+    SAVE.flags.seenOpen = true; persist();
+    startStory(first.intro, () => show("play"));
+  }
+}
+
+function startStory(lines, done) {
+  storyQueue = lines || [];
   storyIdx = 0;
-  storyDone = () => startBattle(st);
+  storyDoneFn = done;
+  if (!storyQueue.length) { done?.(); return; }
   show("story");
   renderStory();
 }
@@ -200,17 +643,12 @@ function renderStory() {
   $("#bubble-tx").textContent = line.text || "";
   const hold = $("#portraits");
   hold.innerHTML = "";
-  const src = PORTRAITS[line.portrait] || PORTRAITS.mascot;
-  const img = new Image();
-  img.src = src;
-  img.alt = line.speaker || "";
+  const map = { mascot: "assets/mascot/wish.png", feifei: "assets/chars/feifei.png", apiao: "assets/chars/apiao.png", sika: "assets/chars/sika.png", jiejie: "assets/chars/jiejie.png", spirit: "assets/chars/spirit.png" };
+  const src = map[line.portrait] || map.mascot;
+  const img = new Image(); img.src = src; img.alt = line.speaker || "";
   hold.appendChild(img);
-  // companion mascot if not speaking as mascot
   if (line.portrait && line.portrait !== "mascot") {
-    const m = new Image();
-    m.src = "assets/mascot/front.png";
-    m.alt = "眠花糖";
-    m.className = "dim";
+    const m = new Image(); m.src = "assets/mascot/front.png"; m.alt = "眠花糖"; m.className = "dim";
     hold.appendChild(m);
   }
 }
@@ -219,150 +657,34 @@ function nextStory() {
   sfx.tap();
   storyIdx += 1;
   if (storyIdx >= storyQueue.length) {
-    const fn = storyDone; storyDone = null;
-    fn?.();
+    const fn = storyDoneFn; storyDoneFn = null;
+    show("play"); fn?.();
   } else renderStory();
 }
 
-function startBattle(st) {
-  show("battle");
-  $("#battle").dataset.stage = st.id;
-  $("#obj").textContent = st.battle.objective || st.subtitle;
-  const cv = $("#game");
-  if (!battle) {
-    battle = createBattle(cv, {
-      onHp(hp, max) { renderHearts(hp, max); },
-      onSeed() {},
-      onEnd(res) { onBattleEnd(st, res); }
-    });
-  }
-  renderHearts(st.battle.playerHp, st.battle.playerHp);
-  battle.start(st);
-  battle.resize();
-  requestAnimationFrame(() => battle.resize());
-}
-
-function renderHearts(hp, max) {
-  const el = $("#hearts");
-  el.innerHTML = "";
-  for (let i = 0; i < max; i++) {
-    const iel = document.createElement("i");
-    iel.textContent = "✦";
-    if (i < hp) iel.className = "on";
-    el.appendChild(iel);
-  }
-}
-
-function rollTreasure() {
-  const rates = GAME.dropRates;
-  const r = Math.random();
-  let acc = 0, rarity = "common";
-  for (const d of rates) {
-    acc += d.rate;
-    if (r <= acc) { rarity = d.rarity; break; }
-  }
-  const pool = GAME.items.filter((it) => it.rarity === rarity);
-  if (!pool.length) return null;
-  return pool[Math.floor(Math.random() * pool.length)];
-}
-
-function addXp(n) {
-  const before = SAVE.level;
-  SAVE.xp += n;
-  const curve = GAME.xpCurve || [0, 40, 100];
-  let lv = 1;
-  for (let i = 1; i < curve.length; i++) {
-    if (SAVE.xp >= curve[i]) lv = i + 1;
-  }
-  // if beyond last
-  if (SAVE.xp >= curve[curve.length - 1]) {
-    const extra = Math.floor((SAVE.xp - curve[curve.length - 1]) / 200);
-    lv = curve.length + extra;
-  }
-  SAVE.level = Math.max(SAVE.level, lv);
-  return SAVE.level > before;
-}
-
-function onBattleEnd(st, res) {
-  if (!res.win) {
-    $("#fail").classList.add("on");
-    return;
-  }
-  const first = !SAVE.stagesCleared[st.id];
-  SAVE.stagesCleared[st.id] = { at: Date.now(), first };
-  const rw = st.battle.rewards || { xp: 40, starSeeds: [3, 5] };
-  const seeds = (rw.starSeeds[0] + Math.floor(Math.random() * (rw.starSeeds[1] - rw.starSeeds[0] + 1))) + (res.seedsGot || 0);
-  const xp = rw.xp + (first ? 10 : 0);
-  const leveled = addXp(xp);
-  SAVE.starSeeds += seeds;
-  // 1-2 treasures
-  const drops = [];
-  const n = first ? 2 : 1;
-  for (let i = 0; i < n; i++) {
-    const it = rollTreasure();
-    if (it) {
-      SAVE.treasures[it.id] = (SAVE.treasures[it.id] || 0) + 1;
-      drops.push(it);
-    }
-  }
-  persist();
-  pendingRewards = { st, seeds, xp, leveled, drops, first };
-  renderResult();
-}
-
-function renderResult() {
-  const r = pendingRewards;
+function showClear({ chapterClear, leveled, o }) {
   const box = $("#result");
   box.classList.add("on");
-  $("#result-title").textContent = r.first ? "過關了！" : "再一次完成！";
-  $("#result-sub").textContent = `${r.st.title}　＋${r.xp} 經驗　＋${r.seeds} 顆星星種子`;
+  $("#result-title").textContent = chapterClear ? "這一章，完成了！" : (leveled ? "升級了！" : "訂單完成！");
+  $("#result-sub").textContent = chapterClear
+    ? `${chapter().title}　跟著歌詞，一起飛向藍藍天`
+    : `現在是 Lv.${SAVE.level}　星星種子 ${SAVE.starSeeds}`;
   const lv = $("#result-lv");
-  if (r.leveled) {
-    lv.style.display = "";
-    lv.textContent = `升級了！現在是 Lv.${SAVE.level}`;
-    sfx.level();
-  } else lv.style.display = "none";
-  const g = $("#result-drops");
-  g.innerHTML = "";
-  // seeds
-  const seed = document.createElement("div");
-  seed.className = "drop";
-  seed.innerHTML = `<img src="assets/items/star-seed.png" alt=""><b>星星種子 ×${r.seeds}</b><div class="r">收集</div>`;
-  g.appendChild(seed);
-  const rateMap = Object.fromEntries((GAME.dropRates || []).map((d) => [d.rarity, d]));
-  for (const it of r.drops) {
-    const d = document.createElement("div");
-    d.className = "drop";
-    const meta = rateMap[it.rarity] || {};
-    d.innerHTML = `<img src="${it.img}" alt=""><b>${it.name}</b><div class="r" style="color:${meta.color || ""}">${meta.label || it.rarity}　${Math.round((meta.rate || 0) * 100)}%</div>`;
-    g.appendChild(d);
+  if (leveled) { lv.style.display = ""; lv.textContent = `冒險者 ${SAVE.profile?.nickname || ""}　Lv.${SAVE.level}`; sfx.level(); }
+  else lv.style.display = "none";
+  const lyricsBox = $("#result-lyrics");
+  if (chapterClear) {
+    lyricsBox.style.display = "";
+    lyricsBox.innerHTML = (GAME.lyrics.endingLines || []).map((l) => `<p>${l}</p>`).join("");
+    pendingAfterClear = () => { playMusic(SAVE.chapter); applyChapterLook(); show("play"); };
+    playClearTheme().then(() => {});
+  } else {
+    lyricsBox.style.display = "none";
+    pendingAfterClear = () => { playMusic(SAVE.chapter); show("play"); };
   }
 }
 
-function afterResult() {
-  $("#result").classList.remove("on");
-  const r = pendingRewards;
-  pendingRewards = null;
-  const st = r?.st;
-  if (st?.outro?.length) {
-    storyQueue = st.outro;
-    storyIdx = 0;
-    storyDone = () => {
-      if (st.endingNote) showEnding();
-      else show("map");
-    };
-    show("story");
-    renderStory();
-  } else if (st?.endingNote) showEnding();
-  else show("map");
-}
-
-function showEnding() {
-  show("lyrics");
-  const note = $("#ending-note");
-  if (note) note.style.display = "";
-}
-
+/* ---------- collection / map / daily / settings ---------- */
 function renderBook() {
   const rates = $("#rates");
   rates.innerHTML = (GAME.dropRates || []).map((d) =>
@@ -370,19 +692,83 @@ function renderBook() {
   ).join("");
   const g = $("#grid");
   g.innerHTML = "";
-  for (const it of GAME.items) {
-    const have = SAVE.treasures[it.id] || 0;
-    const meta = (GAME.dropRates || []).find((d) => d.rarity === it.rarity);
-    const el = document.createElement("div");
-    el.className = "card" + (have ? "" : " locked");
-    el.innerHTML = `<img src="${it.img}" alt=""><div class="name">${have ? it.name : "？？？"}</div>
-      <div class="r" style="color:${meta?.color || ""};font-size:11px;font-weight:700">${meta?.label || ""}　${have ? "×" + have : ""}</div>`;
-    g.appendChild(el);
+  for (const chain of Object.values(CHAINS)) {
+    const h = document.createElement("h3");
+    h.className = "chain-title";
+    h.textContent = chain.name;
+    g.appendChild(h);
+    const row = document.createElement("div");
+    row.className = "chain-row";
+    for (const it of chain.items) {
+      const have = SAVE.discovered[`${chain.id}:${it.tier}`];
+      const el = document.createElement("div");
+      el.className = "card" + (have ? "" : " locked");
+      el.innerHTML = `<img src="${it.img}" alt=""><div class="name">${have ? it.name : "？？？"}</div>
+        <div class="r" style="font-size:12px;font-weight:700">${have ? "Lv." + it.tier : ""}　${it.rarity === "common" ? "普通" : it.rarity === "rare" ? "稀有" : it.rarity === "epic" ? "史詩" : "傳說"}</div>`;
+      row.appendChild(el);
+    }
+    g.appendChild(row);
   }
 }
 
-function renderRedeem() {
-  $("#redeem-count").textContent = SAVE.starSeeds;
+function renderMap() {
+  const box = $("#nodes");
+  box.innerHTML = "";
+  for (const ch of CHAPTERS) {
+    const locked = !chapterUnlocked(ch.id);
+    const active = SAVE.chapter === ch.id;
+    const btn = document.createElement("button");
+    btn.className = "node" + (locked ? " locked" : "") + (active ? " active" : "");
+    const pct = Math.min(100, Math.round(((SAVE.restore[ch.id] || 0) / (ch.restoreSteps || 5)) * 100));
+    btn.innerHTML = `<img class="thumb" src="${ch.bg}" alt="">
+      <div><div class="num">第 ${ch.number} 章</div><h3>${ch.title}${active ? "　正在這裡" : ""}</h3>
+      <small>${locked ? "先完成前面的故事" : ch.subtitle + "　村莊恢復 " + pct + "%"}</small></div>`;
+    if (!locked) btn.addEventListener("click", () => {
+      SAVE.chapter = ch.id; persist(); sfx.tap(); show("play");
+    });
+    box.appendChild(btn);
+  }
+  const soon = document.createElement("div");
+  soon.className = "node soon";
+  soon.innerHTML = `<img class="thumb" src="assets/mascot/sleep.png" alt="">
+    <div><div class="num">即將到來<span class="soon-mark">每週更新</span></div>
+    <h3>新章節製作中</h3><small>下一回：怕黑的布魯，還有最後一願送給哈特。訂單會一直出，永遠玩得下去。</small></div>`;
+  box.appendChild(soon);
+}
+
+function renderDaily() {
+  const today = todayKey();
+  const claimed = SAVE.daily?.day === today && SAVE.daily.claimed;
+  $("#daily-status").textContent = claimed ? "今天已經領過囉，明天再來。" : "今天的免費禮物在這裡，完全不用花錢。";
+  $("#btn-claim-daily").disabled = claimed;
+}
+
+function claimDaily() {
+  const today = todayKey();
+  if (SAVE.daily?.day === today && SAVE.daily.claimed) return;
+  // simple streak: if last day was yesterday +1 else reset to 1
+  let st = 1;
+  if (SAVE.daily?.day) {
+    const prev = SAVE.daily.day;
+    const d0 = new Date(today + "T00:00:00+08:00");
+    const d1 = new Date(prev + "T00:00:00+08:00");
+    if ((d0 - d1) === 86400000) st = (SAVE.daily.streak || 0) + 1;
+  }
+  const bonus = Math.min(5, st);
+  const energy = (GAME.energy?.dailyGiftEnergy || 25) + bonus;
+  const seeds = (GAME.energy?.dailyGiftSeeds || 8) + bonus;
+  SAVE.energy = Math.min(ENERGY.max, SAVE.energy + energy);
+  SAVE.starSeeds += seeds;
+  SAVE.daily = { day: today, streak: st, claimed: true };
+  persist(); sfx.daily(); mascot?.wish();
+  toast(`領到 ${energy} 能量、${seeds} 顆星星種子（連續 ${st} 天）`);
+  renderDaily(); refreshHud();
+}
+
+function renderSettings() {
+  $("#name-edit").value = SAVE.profile?.nickname || "";
+  $("#tog-music").checked = SAVE.settings?.music !== false;
+  $("#tog-sfx").checked = SAVE.settings?.sfx !== false;
 }
 
 function renderLyrics() {
@@ -391,11 +777,10 @@ function renderLyrics() {
   $("#lyrics-credit").textContent = `詞｜${L.lyricist}　曲｜${L.composer}`;
   $("#lyrics-src").innerHTML = `來源：<a href="${L.sourceUrl}" target="_blank" rel="noopener">${L.source}</a>`;
   $("#lyrics-lines").innerHTML = L.lines.map((l) => `<p>${l}</p>`).join("");
-  const note = $("#ending-note");
-  if (note && !pendingRewards) {
-    // keep visible if coming from stage 3 path — afterResult sets display
-  }
 }
+
+function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
+function completeTopOrder() { /* debug */ }
 
 boot().catch((err) => {
   console.error(err);
