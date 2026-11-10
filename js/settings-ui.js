@@ -1,6 +1,6 @@
 /** Settings sheet: music / SFX toggles + volume sliders, persist immediately. */
 
-import { setAudioSettings, playMusic, stopMusic, getAudioSettings, sfx } from "./audio.js?v=15";
+import { setAudioSettings, playMusic, stopMusic, getAudioSettings, sfx } from "./audio.js?v=16";
 
 export const DEFAULT_SETTINGS = { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 };
 
@@ -59,6 +59,7 @@ export function createSettingsUi(ctx) {
     });
     $("#btn-hud-settings")?.addEventListener("click", () => { sfx.tap(); open(); });
     $("#btn-settings-close")?.addEventListener("click", () => { sfx.tap(); close(); });
+    $("#btn-howto")?.addEventListener("click", () => { sfx.tap(); close(); ctx.show?.("howto"); });
     $("#settings-sheet")?.addEventListener("click", (e) => {
       if (e.target.id === "settings-sheet") close();
     });

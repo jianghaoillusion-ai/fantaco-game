@@ -1,6 +1,6 @@
 /** Title / home screen: icon dock, daily clock state, floating balloons. */
 
-import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=15";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=16";
 
 const ICONS = [
   { id: "btn-map", icon: "assets/icons/map.png", label: "故事地圖", tip: "打開世界地圖，修復小建築" },
@@ -8,7 +8,6 @@ const ICONS = [
   { id: "btn-daily", icon: "assets/icons/clock.png", label: "每日禮物", tip: "每天都可以來領一份禮物" },
   { id: "btn-redeem", icon: "assets/icons/gift.png", label: "兌換禮品", tip: "用星星種子換禮物" },
   { id: "btn-lyrics", icon: "assets/icons/song.png", label: "飛向藍藍天", tip: "聽聽主題曲" },
-  { id: "btn-howto", icon: "assets/icons/howto.png", label: "怎麼玩", tip: "合成與交給他的玩法" },
   { id: "btn-settings", icon: "assets/icons/gear.png", label: "設定", tip: "音樂、音效與名字" }
 ];
 

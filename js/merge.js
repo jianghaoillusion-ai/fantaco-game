@@ -64,7 +64,10 @@ export function starterBoard(cols, rows) {
   put(2, 4, item("magic", 4));
   put(7, 3, item("magic", 5));
   put(7, 5, item("forest", 1));
-  // five interiors left open so the board can still accept a merge (~86% full)
+  put(6, 2, item("forest", 2));
+  put(6, 5, item("candy", 7));
+  put(7, 1, item("garden", 7));
+  // two interiors left open beside the generators so new drops still have a seat
   return b;
 }
 

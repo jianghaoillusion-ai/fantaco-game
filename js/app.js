@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=15";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=15";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=15";
-import { mountMascot } from "./mascot.js?v=15";
-import { mountHome } from "./home.js?v=15";
-import { bindStory, startStory } from "./story.js?v=15";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=15";
-import { bagCap, migrateBagSlots } from "./bag.js?v=15";
-import { reserveItems } from "./merge.js?v=15";
-import { avatarSrc } from "./portraits.js?v=15";
+import { Auth } from "./auth.js?v=16";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=16";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=16";
+import { mountMascot } from "./mascot.js?v=16";
+import { mountHome } from "./home.js?v=16";
+import { bindStory, startStory } from "./story.js?v=16";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=16";
+import { bagCap, migrateBagSlots } from "./bag.js?v=16";
+import { reserveItems } from "./merge.js?v=16";
+import { avatarSrc } from "./portraits.js?v=16";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=15";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=15";
-import { regionById } from "./world.js?v=15";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=15";
-import { bindTip } from "./tip.js?v=15";
+} from "./merge.js?v=16";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=16";
+import { regionById } from "./world.js?v=16";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=16";
+import { bindTip } from "./tip.js?v=16";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=15");
+  const res = await fetch(url + "?v=16");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -209,6 +209,7 @@ function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { r
 function refreshHud() {
   tickEnergy(SAVE);
   ensureDaily(SAVE);
+  systems?.events?.sync?.();
   const name = SAVE.profile?.nickname || "小朋友";
   $$("[data-nick]").forEach((el) => { el.textContent = name; });
   $$("[data-level]").forEach((el) => { el.textContent = "Lv." + SAVE.level; });
@@ -671,7 +672,7 @@ function onMerged(merged) {
   SAVE.comboBest = Math.max(SAVE.comboBest || 0, combo.n);
   const tier = merged.tier || 1;
   sfx.merge(tier);
-  if (combo.n >= 2) { sfx.combo(combo.n); floatCombo(combo.n); }
+  if (combo.n >= 2) { /* combo pop-up retired */ }
   mascot?.merge(tier);
   systems?.fx.revealMerge?.(merged.uid) || systems?.fx.popAt(merged.uid);
   const at = findCellByUid(merged.uid);
@@ -682,7 +683,7 @@ function onMerged(merged) {
   try { navigator.vibrate?.(12); } catch {}
   discover(merged);
   if (tier >= 5) shake(10);
-  else if (combo.n >= 3) shake(6);
+  else if (combo.n >= 3) {}
   // first-discover gift
 }
 

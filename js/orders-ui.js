@@ -1,4 +1,4 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=15";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=16";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {

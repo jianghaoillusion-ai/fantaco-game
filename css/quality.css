@@ -1511,3 +1511,205 @@
   pointer-events:none;
   box-shadow:none !important;
 }
+
+
+/* ========== v5.8: story crop, home grid, order-area toast ========== */
+
+/* Home: painted jump mascot, even 3×2 dock, less leftover grass */
+#title .hero{
+  width: min(280px, 58vw) !important;
+  max-height: 34vh;
+  object-fit: contain;
+  filter: drop-shadow(0 14px 16px rgba(20,16,10,.32));
+}
+#title .home-dock{
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 10px 12px !important;
+  width: min(360px, 92%) !important;
+  margin: 10px auto 0 !important;
+}
+#title .home-dock .home-ico:last-child:nth-child(7){ grid-column: auto !important; }
+#title .actions{
+  margin-top: auto;
+  padding: 8px 12px calc(10px + var(--safe-b)) !important;
+}
+#btn-howto.btn.ghost{
+  width: 100%;
+  margin: 8px 0 0;
+  font-weight: 800;
+}
+
+/* Toast: compact banner over the order area, not the board centre */
+#play.screen.on ~ #toast,
+body:has(#play.screen.on) #toast{
+  top: calc(var(--safe-t) + 52px) !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) translateY(-6px) !important;
+  max-width: min(94vw, 420px) !important;
+  padding: 5px 14px !important;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  white-space: nowrap !important;
+  border-radius: 999px !important;
+  z-index: 80 !important;
+}
+#play.screen.on ~ #toast.on,
+body:has(#play.screen.on) #toast.on{
+  transform: translateX(-50%) translateY(0) !important;
+}
+#bag.overlay.on ~ #toast,
+#shop.overlay.on ~ #toast,
+#result.overlay.on ~ #toast,
+#ad-sheet.overlay.on ~ #toast,
+#energy-prompt.overlay.on ~ #toast{
+  top: auto !important;
+  bottom: calc(24px + var(--safe-b)) !important;
+}
+#story.screen.on ~ #toast,
+body:has(#story.screen.on) #toast,
+body:has(#shop.overlay.on) #toast,
+body:has(#bag.overlay.on) #toast,
+body:has(#settings-sheet.on) #toast,
+body:has(#result.overlay.on) #toast{ opacity: 0 !important; pointer-events: none !important; }
+
+.combo-float{ display: none !important; }
+
+/* Story: head fully on screen under the skip button; fade into the bubble; dim partner at 70% */
+#story .story-skip,
+#story #btn-story-skip{
+  z-index: 12 !important;
+  background: rgba(255,255,255,.94) !important;
+  color: #3b4468 !important;
+  box-shadow: 0 2px 8px rgba(20,16,10,.16);
+}
+#story .story-stage{ position: relative; height: 100%; }
+#story .portraits,
+#portraits,
+#story #portraits{
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 118px !important;
+  overflow: hidden !important;
+  z-index: 2 !important;
+  pointer-events: none;
+  background: transparent !important;
+}
+#story .bubble,
+#story-bubble{
+  z-index: 8 !important;
+  position: relative;
+}
+.story-actor,
+.story-actor.speak,
+.story-actor.speak.enter,
+.story-actor.dim{
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+}
+.story-actor.speak,
+.story-actor.speak.enter{
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  top: calc(56px + var(--safe-t)) !important;
+  bottom: 0 !important;
+  width: min(74%, 560px) !important;
+  height: auto !important;
+  max-height: none !important;
+  transform: translateX(-50%) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  z-index: 3 !important;
+}
+.story-actor.speak img,
+.story-actor.speak.enter img{
+  height: 128% !important;
+  width: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  object-position: top center !important;
+  transform: none !important;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0,0,0,.55) 88%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0,0,0,.55) 88%, transparent 100%);
+}
+.story-actor.speak.enter{ animation: none !important; }
+.story-actor.dim{
+  position: absolute !important;
+  top: calc(96px + var(--safe-t)) !important;
+  bottom: 6% !important;
+  width: 36% !important;
+  max-width: 240px !important;
+  height: auto !important;
+  max-height: 70% !important;
+  opacity: .7 !important;
+  filter: brightness(.78) saturate(.88) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  z-index: 1 !important;
+}
+.story-actor.dim img{
+  height: 100% !important;
+  width: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  object-fit: contain !important;
+  object-position: top center !important;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0,0,0,.45) 90%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 74%, rgba(0,0,0,.45) 90%, transparent 100%);
+}
+.story-actor.dim[data-side="left"]{
+  left: 2% !important;
+  right: auto !important;
+  transform: none !important;
+  justify-content: flex-start !important;
+}
+.story-actor.dim[data-side="right"]{
+  left: auto !important;
+  right: 2% !important;
+  transform: none !important;
+  justify-content: flex-end !important;
+}
+.story-actor.mascot.speak,
+.story-actor.mascot.speak.enter{
+  width: min(70%, 480px) !important;
+  top: calc(64px + var(--safe-t)) !important;
+  bottom: 8% !important;
+  align-items: center !important;
+}
+.story-actor.mascot.speak img,
+.story-actor.mascot.speak.enter img{
+  height: 70% !important;
+  width: auto !important;
+  max-width: 90% !important;
+  max-height: 70% !important;
+  object-fit: contain !important;
+  object-position: center center !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+@media (max-height: 700px){
+  .story-actor.speak, .story-actor.speak.enter{ top: calc(48px + var(--safe-t)) !important; }
+  .story-actor.dim{ top: calc(80px + var(--safe-t)) !important; width: 34% !important; }
+  #story .portraits, #portraits{ bottom: 108px !important; }
+}
+@media (min-width: 700px){
+  .story-actor.speak, .story-actor.speak.enter{ width: min(58%, 620px) !important; }
+  .story-actor.dim{ width: 28% !important; max-width: 280px !important; }
+}
+
+#story .bubble p, #bubble-tx{
+  overflow: visible !important;
+  word-break: keep-all;
+  white-space: pre-wrap;
+}

@@ -1,6 +1,6 @@
 /** Story scenes: big portraits, matching expressions, typewriter + mouth, filled stage. */
 
-import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=15";
+import { avatarSrc, portraitSrc, bindImgFallback, normId } from "./portraits.js?v=16";
 
 let queue = [], idx = 0, doneFn = null;
 let typing = false, typed = "", full = "", typeTimer = 0, mouthTimer = 0, talking = false;
@@ -83,20 +83,11 @@ function render() {
       fig.appendChild(img);
       hold.appendChild(fig);
       if (isSpeaker) {
-        fig.style.left = "50%";
-        fig.style.transform = "translateX(-50%)";
         if (prevSpeaker !== speaker && !reduced()) fig.classList.add("enter");
       } else {
         const others = cast.filter((x) => x !== speaker);
         const side = others.indexOf(id) % 2 === 0 ? "right" : "left";
         fig.dataset.side = side;
-        if (side === "left") {
-          fig.style.left = "14%";
-          fig.style.transform = "translateX(-50%)";
-        } else {
-          fig.style.left = "86%";
-          fig.style.transform = "translateX(-50%)";
-        }
       }
     }
   }

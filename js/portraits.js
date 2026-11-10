@@ -8,7 +8,7 @@ const FULL = {
   spirit: "assets/chars/spirit.png",
   bulu: "assets/chars/bulu.png",
   hate: "assets/chars/hate.png",
-  mascot: "assets/mascot/painted/three.png"
+  mascot: "assets/mascot/painted/jump.png"
 };
 
 const MASCOT_FULL = {
@@ -19,7 +19,7 @@ const MASCOT_FULL = {
   angry: "assets/mascot/painted/three.png",
   determined: "assets/mascot/painted/three.png",
   sleepy: "assets/mascot/painted/sleep.png",
-  default: "assets/mascot/painted/three.png"
+  default: "assets/mascot/painted/jump.png"
 };
 
 export function normId(id) {
