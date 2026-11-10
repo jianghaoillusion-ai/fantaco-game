@@ -1,5 +1,5 @@
 /** Expandable magic bag. Slot unlocks cost only 星星種子. Never real money. */
-import { bindTip, hideTip } from "./tip.js?v=24";
+import { bindTip, hideTip } from "./tip.js?v=25";
 
 export const BAG_START = 6;
 export const BAG_MAX = 20;

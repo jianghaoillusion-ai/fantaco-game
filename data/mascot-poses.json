@@ -1,7 +1,7 @@
 {
   "version": 1,
   "style": "official-sticker",
-  "note": "官方線稿貼紙是預設。painted 已按官方貼紙取色（白身 #FFFFFF、線條 #47536F、星星 #F4E969、無腮紅），僅作缺動作後備。小頌可在 sticker 或 frames 補上新動作。",
+  "note": "只用官方線稿貼紙。painted（含曾複製進 sticker/ 的 hero、run、three）已移出遊戲目錄，不再當作後備。",
   "defaultSet": "sticker",
   "slots": [
     "idle",
@@ -26,23 +26,6 @@
     "peek"
   ],
   "sets": {
-    "painted": {
-      "idle": "assets/mascot/painted/three.png",
-      "idle2": "assets/mascot/painted/front.png",
-      "cheer": "assets/mascot/painted/jump.png",
-      "jump": "assets/mascot/painted/jump.png",
-      "happy": "assets/mascot/painted/front.png",
-      "wish": "assets/mascot/painted/wish.png",
-      "hero": "assets/mascot/painted/hero.png",
-      "sit": "assets/mascot/painted/sit.png",
-      "sad": "assets/mascot/painted/sleep.png",
-      "sleep": "assets/mascot/painted/sleep.png",
-      "side": "assets/mascot/painted/side.png",
-      "run": "assets/mascot/painted/run.png",
-      "back": "assets/mascot/painted/back.png",
-      "front": "assets/mascot/painted/front.png",
-      "face": "assets/mascot/painted/face.png"
-    },
     "sticker": {
       "idle": "assets/mascot/sticker/front.png",
       "idle2": "assets/mascot/sticker/front.png",
@@ -61,10 +44,9 @@
       "back": "assets/mascot/sticker/back.png",
       "peek": "assets/mascot/sticker/peek.png",
       "face": "assets/mascot/sticker/face.png",
-      "hero": "assets/mascot/sticker/hero.png",
+      "hero": "assets/mascot/sticker/hold-star.png",
       "wish": "assets/mascot/sticker/hold-star.png",
-      "run": "assets/mascot/sticker/run.png",
-      "three": "assets/mascot/sticker/three.png"
+      "run": "assets/mascot/sticker/side.png"
     },
     "frames": {
       "_comment": "給之後的短動畫影格（blink-01、wave-01…）。小頌推上來後在這裡列路徑即可。"

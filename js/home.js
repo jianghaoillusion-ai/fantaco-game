@@ -1,6 +1,6 @@
 /** Title / home screen: icon dock, daily clock state, floating balloons. */
 
-import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=24";
+import { todayKey, formatDailyResetLeft, ensureDaily } from "./save.js?v=25";
 
 const ICONS = [
   { id: "btn-map", icon: "assets/icons/map.png", label: "故事地圖", tip: "打開世界地圖，修復小建築" },

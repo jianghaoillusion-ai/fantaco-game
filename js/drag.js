@@ -1,4 +1,4 @@
-import { hideTip } from "./tip.js?v=24";
+import { hideTip } from "./tip.js?v=25";
 /** Travel Town-style board drag: the item follows the finger in real time. */
 const THRESHOLD = 8;
 

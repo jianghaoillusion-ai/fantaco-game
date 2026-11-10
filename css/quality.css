@@ -3116,3 +3116,64 @@ body.is-dragging .piece.origin-ghost{ opacity: .32; filter: grayscale(.1); }
 @media (min-width: 700px) and (min-height: 900px){
   #story .portraits, #portraits, #story #portraits{ --ground: 148px; }
 }
+
+/* ========== v5.13: no overlap, full-colour partners, mascot height cap ========== */
+#story #portraits .story-actor.dim,
+#story #portraits .story-actor.dim:first-child,
+#story #portraits .story-actor.dim:last-child,
+#story #portraits .story-actor.dim:nth-of-type(1),
+#portraits .story-actor.dim:first-child,
+.story-actor.dim:last-child,
+.story-actor.dim{
+  opacity: 1 !important;
+  /* Real full-colour art, slightly dimmed — never a grey fill or silhouette. */
+  filter: brightness(0.85) drop-shadow(0 12px 14px rgba(59,68,104,.16)) !important;
+  z-index: 2 !important;
+}
+/* Official sticker 眠花糖 is a white fill: brightness() turns it into a grey ghost. */
+#story #portraits .story-actor.dim.mascot,
+#story #portraits .story-actor.mascot.dim,
+#story #portraits .story-actor.dim.mascot:first-child,
+#story #portraits .story-actor.dim.mascot:last-child,
+.story-actor.dim.mascot{
+  filter: drop-shadow(0 12px 14px rgba(59,68,104,.16)) !important;
+  opacity: 1 !important;
+}
+#story #portraits .story-actor.dim.mascot img,
+#story #portraits .story-actor.mascot.dim img{
+  filter: none !important;
+  opacity: 1 !important;
+  -webkit-filter: none !important;
+}
+#story #portraits .story-actor.speak.enter,
+#story #portraits .story-actor.mascot.speak.enter{
+  /* Keep layout transforms under JS control so partners don't collide. */
+  animation: none !important;
+}
+
+/* Portraits must span the full story screen, not the 640px dialogue stage,
+   so partners can sit on the left and right edges on iPad. */
+#story #portraits,
+#story .portraits{
+  position: absolute !important;
+  left: 50% !important;
+  right: auto !important;
+  width: 100vw !important;
+  max-width: none !important;
+  margin: 0 !important;
+  transform: translateX(-50%) !important;
+}
+
+/* JS owns story actor left/transform. Kill leftover 50%/38%/62% rules. */
+#story #portraits .story-actor.speak,
+#story #portraits .story-actor.speak.enter,
+#story #portraits .story-actor.mascot.speak,
+#story #portraits .story-actor.mascot.speak.enter,
+#story #portraits.has-left:not(.has-right) .story-actor.speak,
+#story #portraits.has-left:not(.has-right) .story-actor.speak.enter,
+#story #portraits.has-right:not(.has-left) .story-actor.speak,
+#story #portraits.has-right:not(.has-left) .story-actor.speak.enter,
+#story #portraits.has-left.has-right .story-actor.speak,
+#story #portraits.has-left.has-right .story-actor.speak.enter{
+  transform: none !important;
+}

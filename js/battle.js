@@ -1,4 +1,4 @@
-import { sfx } from "./audio.js?v=24";
+import { sfx } from "./audio.js?v=25";
 
 const W = 1280, H = 720;
 const GROUND = 600;
@@ -17,7 +17,7 @@ function loadImg(src) {
 
 const IM = {
   jump: loadImg("assets/mascot/sticker/jump.png"),
-  run: loadImg("assets/mascot/sticker/run.png"),
+  run: loadImg("assets/mascot/sticker/side.png"),
   front: loadImg("assets/mascot/sticker/front.png"),
   side: loadImg("assets/mascot/sticker/side.png"),
   wish: loadImg("assets/mascot/sticker/hold-star.png"),

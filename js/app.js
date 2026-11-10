@@ -1,22 +1,22 @@
-import { Auth } from "./auth.js?v=24";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=24";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=24";
-import { mountMascot } from "./mascot.js?v=24";
-import { mountHome } from "./home.js?v=24";
-import { bindStory, startStory } from "./story.js?v=24";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=24";
-import { bagCap, migrateBagSlots } from "./bag.js?v=24";
-import { reserveItems } from "./merge.js?v=24";
-import { avatarSrc } from "./portraits.js?v=24";
+import { Auth } from "./auth.js?v=25";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
+import { mountMascot } from "./mascot.js?v=25";
+import { mountHome } from "./home.js?v=25";
+import { bindStory, startStory } from "./story.js?v=25";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=25";
+import { bagCap, migrateBagSlots } from "./bag.js?v=25";
+import { reserveItems } from "./merge.js?v=25";
+import { avatarSrc } from "./portraits.js?v=25";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=24";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=24";
-import { regionById } from "./world.js?v=24";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=24";
-import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=24";
+} from "./merge.js?v=25";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=25";
+import { regionById } from "./world.js?v=25";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
+import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=24");
+  const res = await fetch(url + "?v=25");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }

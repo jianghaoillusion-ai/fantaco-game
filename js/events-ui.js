@@ -1,6 +1,6 @@
 /** Travel Town-style side-event button + panel. Uses js/events.js; no real money. */
 import { formatEventLeft } from "./events.js";
-import { bindTip } from "./tip.js?v=24";
+import { bindTip } from "./tip.js?v=25";
 
 function needLabel(need, progress) {
   const p = progress || 0;

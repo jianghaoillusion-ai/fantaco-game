@@ -1,8 +1,8 @@
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
-import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=24";
-import { bagCap } from "./bag.js?v=24";
-import { ensureDaily, formatDailyResetLeft } from "./save.js?v=24";
-import { bindTip, hideTip } from "./tip.js?v=24";
+import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=25";
+import { bagCap } from "./bag.js?v=25";
+import { ensureDaily, formatDailyResetLeft } from "./save.js?v=25";
+import { bindTip, hideTip } from "./tip.js?v=25";
 
 const DIAMOND_ITEMS = [
   { id: "boost-energy", name: "能量加持", desc: "立刻回復 30 點能量。", energy: 30, cost: { diamonds: 5 } },
