@@ -104,7 +104,7 @@ export async function boot() {
   if (!SAVE.profile) show("profile");
   else { show("title"); }
   refresh();
-  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); if ($("#toast")?.classList.contains("on")) placeToast(); }, 1000);
+  energyTimer = setInterval(() => { tickEnergy(SAVE); refreshHud(); systems?.fog.tickCool?.(); tickAutomatic(); if ($("#toast")?.classList.contains("on")) placeToast(); }, 1000);
   if (!placeToast._resize) { placeToast._resize = () => { if ($("#toast")?.classList.contains("on")) placeToast(); }; addEventListener("resize", placeToast._resize); }
 }
 
@@ -472,6 +472,7 @@ function onBoardDown(e) {
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
   if (!loc) return;
+  if (dragging || (e.button != null && e.button !== 0)) return;
   const start = { x: e.clientX, y: e.clientY, t: Date.now() };
   dragging = { loc, piece, start, moved: false, ghost: null, pointerId: e.pointerId };
 }
@@ -517,8 +518,30 @@ function highlightDrop(e) {
     if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
     else if (dragging.loc.where !== "board") cell.classList.add("bad");
   }
+  if (cell.dataset.inv !== undefined) return !SAVE.inventory[+cell.dataset.inv];
+  const r = +cell.dataset.r, c = +cell.dataset.c;
+  if (!Number.isInteger(r) || !Number.isInteger(c) || !systems.fog.canDropAt(r,c)) return false;
+  const dest = cellAt(r,c);
+  return !dest || dest === loc.item || canMerge(loc.item, dest, CHAINS, GENS);
 }
-
+function clearDrop() {
+  $$('.cell.hot,.order.hot,.cell.invalid-drop,.order.invalid-drop').forEach(el => el.classList.remove('hot','invalid-drop'));
+}
+function highlightDrop(e) {
+  clearDrop();
+  const cell = document.elementFromPoint(e.clientX,e.clientY)?.closest?.('.cell, .order');
+  if (cell && dragging) cell.classList.add(validDrop(cell, dragging.loc) ? 'hot' : 'invalid-drop');
+}
+function returnDrag(d) {
+  if (!d.ghost) return;
+  const rect = d.piece.getBoundingClientRect();
+  const ghost = d.ghost;
+  const animation = ghost.animate([
+    {left:ghost.style.left, top:ghost.style.top, transform:'scale(1.1)'},
+    {left:`${rect.x + rect.width/2}px`, top:`${rect.y + rect.height/2}px`, transform:'scale(1)'}
+  ], {duration:matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240, easing:'cubic-bezier(.2,.8,.3,1.15)'});
+  animation.onfinish = () => { ghost.remove(); d.piece.classList.remove('lifted'); };
+}
 function onDragUp(e) {
   if (!dragging || e.pointerId !== dragging.pointerId) return;
   const d = dragging; dragging = null;
@@ -570,7 +593,7 @@ function moveToInventory(loc, slot) {
       SAVE.inventory[loc.i] = dest;
       SAVE.inventory[slot] = src;
     }
-    sfx.drop(); persist(); renderBoard();
+    sfx.drop(); persist(); renderBoard(); renderOrders();
     return;
   }
   if (SAVE.inventory.filter(Boolean).length >= cap && (slot < 0 || SAVE.inventory[slot])) {
@@ -581,7 +604,7 @@ function moveToInventory(loc, slot) {
   if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
   else SAVE.inventory.push(src);
   SAVE.inventory = SAVE.inventory.filter(Boolean);
-  sfx.drop(); persist(); renderBoard();
+  sfx.drop(); persist(); renderBoard(); renderOrders();
 }
 
 function removeFrom(loc) {
@@ -639,6 +662,7 @@ function sellSelected() {
 function tapGenerator(loc) {
   tickEnergy(SAVE);
   const gen = loc.item;
+  if (GENS[gen.gen]?.autoMs) { toast("會自動產出，記得留空格喔"); return; }
   if (gen.coolUntil && gen.coolUntil > Date.now()) {
     const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
     sfx.invalid();
@@ -688,8 +712,7 @@ function tapGenerator(loc) {
     else { gen.coolUntil = 0; gen.coolStarted = 0; }
   }
   systems?.orders?.bumpTask?.("gens");
-  if (toInv) SAVE.inventory.push(made);
-  else SAVE.board[empty] = made;
+  SAVE.board[empty] = made;
   discover(made);
   sfx.generate();
   persist();
@@ -735,6 +758,7 @@ function moveOrMerge(loc, r, c) {
     const merged = mergeCells(src, dest, CHAINS, GENS);
     removeFrom(loc);
     SAVE.board[destI] = merged;
+    revealMergeEdge(SAVE, destI, COLS, ROWS);
     onMerged(merged);
     persist(); renderBoard();
     return;
@@ -885,7 +909,7 @@ function renderOrders() {
 function tryFulfill(loc, orderId) {
   const o = SAVE.orders.find((x) => x.id === orderId);
   const item = loc.item;
-  if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
+  if (!o || o.reservedUid !== item.uid || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
   if (o.reservedUid && item.uid !== o.reservedUid) {
@@ -1123,6 +1147,17 @@ function systemCtx() {
 
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
 function completeTopOrder() { /* debug */ }
+
+let autoBlocked = false;
+function tickAutomatic() {
+  if (!systems || dragging || !$('#play').classList.contains('on') || $$('.overlay.on').length) return;
+  const result = tickAutoGenerators(SAVE, GENS, COLS, ROWS, systems.fog.isOpenIndex);
+  if (result.blocked && !autoBlocked) toast('棋盤滿了，自動產生器正在等空位');
+  autoBlocked = result.blocked;
+  for (const item of result.made) discover(item, {silent:true});
+  if (result.changed) persist();
+  if (result.made.length) { renderBoard(); renderOrders(); result.made.forEach(item => systems.fx.popAt(item.uid)); }
+}
 
 boot().catch((err) => {
   console.error(err);

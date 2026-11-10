@@ -78,7 +78,7 @@ test('新遊戲→所有新版故事與地圖修復→12張無限訂單→重讀
  }
  assert.equal(s.endless.completed,12);
  assert.equal(merge.endlessRegion(s.endless.completed,json('data/game.json').orders),3);
- const stored=JSON.parse(memory.get('fantaco.mianhuatang.save.v2'));
+ const stored=JSON.parse(memory.get('fantaco.mianhuatang.save.v3'));
  assert.deepEqual(stored.endless,{completed:12});assert.equal(stored.coins,s.coins);
  const loaded=save.loadSave();assert.deepEqual(loaded.board,stored.board);assert.deepEqual(loaded.orders,stored.orders);
 });

@@ -282,8 +282,8 @@ export function makeProceduralOrder(ctx) {
   const slot = (seq || 0) % 4;
   let tier;
   if (slot === 0) tier = Math.min(maxT, Math.max(2, Math.min(cap, 2))); // easy
-  else if (slot === 3) tier = Math.min(maxT, Math.max(2, cap + (cap >= maxT ? 0 : 1))); // stretch
-  else tier = Math.min(maxT, Math.max(2, cap));
+  else if (slot === 3) tier = Math.min(maxT, Math.max(4, cap + (cap >= maxT ? 0 : 1))); // stretch
+  else tier = Math.min(maxT, Math.max(3, cap));
   tier = Math.max(2, Math.min(maxT, tier));
   const npcs = (npcsByChapter[chapter] || ["feifei", "apiao", "jiejie"]).filter((id) => id !== "mian");
   const npc = npcs[Math.floor(Math.random() * npcs.length)];
@@ -303,13 +303,27 @@ export function makeProceduralOrder(ctx) {
 }
 
 
-function shuffle(list) {
-  const a = list.slice();
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+/** Four stable slots: replacing an order retains its difficulty, including story orders. */
+export function fillOrderSlots(save, _slots, opts) {
+  const difficulties = ['easy', 'medium', 'medium', 'hard'];
+  const old = (save.orders || []).filter(o => o?.need);
+  const story = typeof opts.nextStory === 'function' ? opts.nextStory() : opts.nextStory;
+  const used = new Set(), usedNpcs = new Set();
+  const storySlot = story ? (story.need.tier <= 2 ? 0 : story.need.tier === 3 ? 1 : 3) : -1;
+  const npcs = [...new Set([...(opts.npcsByChapter[opts.chapter] || []), 'spirit'])];
+  save.orders = difficulties.map((difficulty, slot) => {
+    let order = old.find(o => o.slot === slot && o.difficulty === difficulty && !used.has(o.id));
+    if (story && slot === storySlot) order = old.find(o => o.id === story.id) || {...story};
+    if (!order || (order.flag && order.id !== story?.id)) {
+      order = makeProceduralOrder({...opts, seq: slot});
+    }
+    if (!order) return null;
+    used.add(order.id);
+    const npc = order.flag ? order.npc : npcs.find(n => !usedNpcs.has(n) && (slot > storySlot || n !== story?.npc)) || order.npc;
+    usedNpcs.add(npc);
+    return {...order, npc, slot, difficulty};
+  }).filter(Boolean);
+  reserveOrderItems(save);
 }
 
 function listProceduralCandidates(opts) {
@@ -343,7 +357,6 @@ function listProceduralCandidates(opts) {
       }
     }
   }
-  return out;
 }
 
 /** Fill slots with a guaranteed easy / mid / hard mix. One procedural order grants materials. */

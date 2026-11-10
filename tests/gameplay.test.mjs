@@ -87,7 +87,7 @@ test('舊版額外欄位不再寫回，資源與盤面進度保留', () => {
  storage.set('fantaco.mianhuatang.save.v2', JSON.stringify(old));
  const loaded = save.loadSave();
  save.writeSave(loaded);
- const stored = JSON.parse(storage.get('fantaco.mianhuatang.save.v2'));
+ const stored = JSON.parse(storage.get('fantaco.mianhuatang.save.v3'));
  assert.equal('comboBest' in stored, false);
  assert.equal(stored.coins, 123); assert.equal(stored.xp, 45); assert.equal(stored.starSeeds, 7);
  assert.deepEqual(stored.board, old.board); assert.deepEqual(stored.buildings, {stage: 1});
