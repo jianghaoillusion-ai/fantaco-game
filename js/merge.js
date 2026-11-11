@@ -1,3 +1,4 @@
+import { bagCap } from "./bag.js?v=25";
 /** Merge-2 board, generators, orders. Data-driven chains. */
 
 export function maxTier(chains, chain) {
@@ -308,7 +309,7 @@ export function reserveOrderItems(save) {
   }
 }
 
-/** A due automatic producer waits when full; never charges energy or catches up in a burst. */
+/** A due automatic producer uses the bag when the board is full; never charges energy or catches up in a burst. */
 export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.now(), intervalFor = (_save, def) => def?.autoMs) {
   const made = []; let blocked = false, changed = false;
   for (let i = 0; i < save.board.length; i++) {
@@ -317,10 +318,12 @@ export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.no
     if (!Number.isFinite(gen.autoAt)) { gen.autoAt = now + interval; changed = true; continue; }
     if (gen.autoAt > now) continue;
     const empty = nearbyEmpty(save.board, cols, rows, i, isOpen);
-    if (empty < 0) { blocked = true; continue; }
+    if (empty < 0 && (save.inventory || []).filter(Boolean).length >= bagCap(save)) { blocked = true; continue; }
     const item = produceFrom(gen, gens);
     if (!item) continue;
-    save.board[empty] = item; gen.autoAt = now + interval; made.push(item); changed = true;
+    if (empty < 0) (save.inventory ||= []).push(item);
+    else save.board[empty] = item;
+    gen.autoAt = now + interval; made.push(item); changed = true;
   }
   return {made, blocked, changed};
 }

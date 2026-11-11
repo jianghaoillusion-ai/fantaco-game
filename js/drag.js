@@ -91,7 +91,7 @@ export function createBoardDrag(ctx) {
     if (!dest) return true;
     if (ctx.canMerge?.(item, dest)) return true;
     if (dest.uid === item.uid) return true;
-    return false;
+    return ctx.findCellByUid?.(item.uid)?.where === "board";
   }
 
   function springBack(d, then) {

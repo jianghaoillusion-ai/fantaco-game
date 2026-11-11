@@ -157,6 +157,7 @@ export function createOrdersUi(ctx) {
     if (!box) return;
     const save = ctx.getSave();
     const GAME = ctx.getGame();
+    const scrollLeft = box.querySelector(".orders-row")?.scrollLeft || 0;
     box.innerHTML = "";
 
     const st = dailyState();
@@ -217,6 +218,7 @@ export function createOrdersUi(ctx) {
       if (!(save.orders || []).some((x) => x.id === id)) seenReady.delete(id);
     }
     box.appendChild(row);
+    row.scrollLeft = scrollLeft;
     ctx.eventsUi?.render?.();
   }
 

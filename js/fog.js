@@ -159,9 +159,9 @@ export function createFog(ctx) {
   function tickAutoGens() {
     if (ctx.canAutoGenerate && !ctx.canAutoGenerate()) return;
     const result = tickAutoGenerators(ctx.getSave(), ctx.getGens(), ctx.getCols(), ctx.getRows(), isOpenIndex, Date.now(), autoGenMs);
-    if (result.blocked && !autoBlocked) toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
+    if (result.blocked && !autoBlocked) toast("棋盤和魔法袋都滿了");
     autoBlocked = result.blocked;
-    for (const item of result.made) ctx.discover?.(item, {silent:true});
+    for (const item of result.made) ctx.discover?.(item);
     if (result.changed) ctx.persist?.();
     if (result.made.length) { ctx.refresh?.(); result.made.forEach(item => ctx.fx?.popAt?.(item.uid)); }
   }

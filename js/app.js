@@ -30,6 +30,7 @@ let energyTimer;
 let selectedUid = null;
 let wandArmed = false;
 let systems;
+let orderAnimations = 0;
 let home, settingsUi;
 
 let COLS = 7, ROWS = 9;
@@ -614,7 +615,7 @@ function onTap(loc) {
 function tapGenerator(loc) {
   tickEnergy(SAVE);
   const gen = loc.item;
-  if (GENS[gen.gen]?.autoMs) { toast("會自動產出，記得留空格喔"); return; }
+  if (GENS[gen.gen]?.autoMs) { toast("會自動產出"); return; }
   if (gen.coolUntil && gen.coolUntil > Date.now()) {
     const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
     sfx.invalid();
@@ -631,8 +632,8 @@ function tapGenerator(loc) {
   }
   const origin = loc.where === "board" ? loc.i : -1;
   let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
-  if (empty < 0) {
-    toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
+  if (empty < 0 && SAVE.inventory.filter(Boolean).length >= bagCap(SAVE)) {
+    toast("棋盤和魔法袋都滿了");
     sfx.invalid(); return;
   }
   const chargeMax = gen.chargeMax || GENS[gen.gen]?.chargeMax;
@@ -659,14 +660,15 @@ function tapGenerator(loc) {
     else { gen.coolUntil = 0; gen.coolStarted = 0; }
   }
   systems?.orders?.bumpTask?.("gens");
-  SAVE.board[empty] = made;
+  if (empty < 0) SAVE.inventory.push(made);
+  else SAVE.board[empty] = made;
   discover(made);
   sfx.generate();
   persist();
   const fromEl = document.querySelector(`.piece[data-uid="${gen.uid}"]`);
   renderBoard(); renderOrders();
   refreshHud();
-  const toEl = document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
+  const toEl = empty < 0 ? $("#btn-bag") : document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
   if (systems?.fx.spawnArc && fromEl && toEl) systems.fx.spawnArc(fromEl, toEl, () => systems.fx.popAt(made.uid));
   else systems?.fx.popAt(made.uid);
 }
@@ -835,6 +837,8 @@ function unlockGenerators() {
 }
 
 function renderOrders() {
+  // Auto output and board actions must not remove cards mid-completion.
+  if (orderAnimations) return;
   reserveItems(SAVE.orders || [], SAVE.board, SAVE.inventory);
   if (systems?.orders) systems.orders.renderOrders();
 }
@@ -851,6 +855,7 @@ function tryFulfill(loc, orderId) {
   if (item.uid !== o.reservedUid) {
     sfx.invalid(); toast("這件是另一張訂單要的"); return;
   }
+  orderAnimations += 1;
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
@@ -882,6 +887,7 @@ function tryFulfill(loc, orderId) {
   fromCard?.classList.add("task-glow");
   const after = (leveled) => {
     const finish = () => {
+      orderAnimations -= 1;
       renderBoard(); renderOrders(); refreshHud();
       if (o.outro) startStory(o.outro, () => {
         if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
@@ -1082,7 +1088,12 @@ function systemCtx() {
 }
 
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
-function completeTopOrder() { /* debug */ }
+function completeTopOrder() {
+  const order = SAVE.orders?.[0];
+  if (!order) return;
+  const card = document.querySelector(`.order[data-id="${order.id}"]`);
+  systems?.orders.clickGive(order.id, card);
+}
 
 boot().catch((err) => {
   console.error(err);
