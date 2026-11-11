@@ -53,3 +53,15 @@ def restore_originals():
     (OUT/'transforms.json').write_text(json.dumps({'status':'僅回復原設定與對齊腳底；比例調整待約束決定','jiejie':{'commit':MAIN,'path':'assets/chars/jiejie.png','scale':1,'translate':[0,0]},'spirit':{'commit':MAIN,'path':'assets/chars/spirit.png','scale':1,'translate':[0,3]},'hate':{'commit':BASE,'path':'assets/chars/hate.png','scale':1,'translate':[0,0],'edit':'右側髮緣 alpha 反鋸齒，見 hate-diff.json'}},ensure_ascii=False,indent=2)+'\n')
 
 if __name__=='__main__':restore_originals()
+
+# 第2輪重現：來源還原後再清背景；不做尚未決定的比例改造。
+if __name__=='__main__':
+    from clean_background import clean
+    result={k:clean(k) for k in ['jiejie','spirit']}
+    (OUT/'background-cleanup.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    transforms=json.loads((OUT/'transforms.json').read_text())
+    transforms['status']='第2輪：只清背景、重新對齊腳底；比例限制待使用者決定，未完成'
+    for k,dy in [('jiejie',2),('spirit',5)]:
+        transforms[k]['translate']=[0,dy]
+        transforms[k]['edit']='清除青色背景與碎點；分區縮放未執行'
+    (OUT/'transforms.json').write_text(json.dumps(transforms,ensure_ascii=False,indent=2)+'\n')

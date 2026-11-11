@@ -21,7 +21,8 @@ def edge(a,roi=None):
  if roi is not None:band &= roi
  total=int(band.sum());mid=int(((alpha>0)&(alpha<255)&band).sum())
  n,l,stats,_=cv2.connectedComponentsWithStats(solid,8)
- return dict(boundary_pixels=total,intermediate_alpha_pixels=mid,intermediate_ratio_percent=round(mid/total*100,2),alpha_levels=int(len(np.unique(alpha))),small_components_under_8px=int(sum(stats[1:,4]<8)))
+ hard=(alpha==255)&(cv2.dilate((alpha==0).astype('uint8'),np.ones((3,3),np.uint8))>0)&band
+ return dict(hard_edge_pixels=int(hard.sum()),hard_edge_ratio_percent=round(100*hard.sum()/total,2),boundary_pixels=total,intermediate_alpha_pixels=mid,intermediate_ratio_percent=round(mid/total*100,2),alpha_levels=int(len(np.unique(alpha))),small_components_under_8px=int(sum(stats[1:,4]<8)))
 def main():
  imgs={k:Image.open(ROOT/f'assets/chars/{k}.png').convert('RGBA') for k in IDS}
  specs=json.loads((OUT/'landmarks.json').read_text());rows={}
@@ -52,10 +53,12 @@ def main():
   if k=='spirit':
    assert not np.any(original[717:,:,3]), '下移不得裁到原圖內容'
    ref=np.zeros_like(original);ref[3:]=original[:-3]
+  if k!='hate':
+   shifted=np.zeros_like(ref);shifted[2:]=ref[:-2];ref=shifted
   validation[k]=dict(size=list(imgs[k].size),mode=imgs[k].mode,sole_y=rows[k]['sole_y'],edge=edge(a),webp_matches_png=bool(np.array_equal(a,np.array(Image.open(ROOT/f'assets/chars/{k}.webp').convert('RGBA')))),source_aligned_changed_pixels=int(np.any(a!=ref,axis=2).sum()))
   assert imgs[k].size==(540,720) and validation[k]['webp_matches_png']
   assert rows[k]['sole_y']==685
-  if k!='hate':assert validation[k]['source_aligned_changed_pixels']==0
+  # 第2輪清理背景會改動像素，不能再斷言與原圖完全相同。
   box={'jiejie':(195,65,235,185),'spirit':(195,165,240,255),'hate':(330,50,380,170)}[k]
   crop=checker(imgs[k].crop(box));crop.resize((crop.width*6,crop.height*6),Image.Resampling.NEAREST).save(OUT/f'edge-detail-{k}.png')
  roi=np.zeros((720,540),bool);roi[45:171,322:380]=True
@@ -66,9 +69,10 @@ def main():
  validation['hate']['hair_edge_after']=edge(np.array(imgs['hate']),roi)
  diff=np.any(np.array(imgs['hate'])!=np.array(source(BASE,'hate')),axis=2)
  validation['hate']['outside_roi_changed']=int((diff&~roi).sum());assert validation['hate']['outside_roi_changed']==0
- validation['status']='部分完成：哈特局部修邊，姐姐／精靈回復指定原設定；比例未修改且未通過全部≤5%'
+ validation['unchanged_from_r1']={k: all(np.array_equal(np.array(Image.open(ROOT/f'assets/chars/{k}.{ext}').convert('RGBA')),np.array(Image.open(__import__('io').BytesIO(__import__('subprocess').check_output(['git','show',f'4ae74fc:assets/chars/{k}.{ext}']))).convert('RGBA'))) for ext in ['png','webp']) for k in ['feifei','apiao','sika','bulu','hate']}
+ validation['status']='第2輪：姐姐／精靈清理青色背景；比例仍未通過全部≤5%；哈特不變'
  validation['alpha_definition']='alpha≥128 輪廓的3×3膨脹減侵蝕帶；其中 1..254 像素 / 全帶像素。非全圖半透明比例；比例非零不能證明無背景殘色或所有邊緣無鋸齒。'
- validation['visual_caveat']='姐姐／精靈原圖外緣帶青色描邊／暈邊；保留原圖，尚未清理，不宣稱全部邊緣通過。'
+ validation['visual_caveat']='已清除外圈與指定封閉空隙青色背景；衣服與飾品原有青藍色保留。比例未通過，邊緣須配合放大圖審查。'
  (OUT/'validation.json').write_text(json.dumps(validation,ensure_ascii=False,indent=2)+'\n')
  (OUT/'measurements.json').write_text(json.dumps(dict(rows=rows,deltas=deltas),ensure_ascii=False,indent=2)+'\n')
  table='本次是原設定還原基準，不是比例調整完成版。頭身比＝不含配件頭高／不含配件總高。\n\n|項目|布魯|姐姐（差距）|哈特（差距）|精靈（差距）|\n|---|---:|---:|---:|---:|\n'
@@ -94,7 +98,7 @@ def main():
   feasibility+=f'|{NAMES[IDS.index(k)]}|{hr[0]:.4f}–{hr[1]:.4f}|{ar[0]:.4f}–{ar[1]:.4f}|{fr[0]:.4f}–{fr[1]:.4f}|{wr[0]:.4f}–{wr[1]:.4f}|{hair[0]:.4f}–{hair[1]:.4f}|'+('有' if overlap else '無')+'|\n'
  feasibility+='\n這是目前可見像素遮罩下的幾何檢查；沒有假設配件算頭，也沒有用改頭型湊數字。姐姐長髮另計入髮量，裙子遮蔽不補估。姐姐的兩個允許區間只差約0.006，少量標註誤差可能改變是否相交，不能僅憑這一項宣稱數學上絕對無解；可見長髮量與臉寬仍另有限制。要同時達標，需要放寬原頭形／等比縮放／部分比例門檻之一。精靈修正白色冠底遮罩後，頭高與面積兩項已有交集；臉寬可與該交集相容；必要項目髮量的區間則不相交，不能沿用舊的兩項無交集結論。頭高區間只是必要條件，交集非空也不代表整個人可行。姐姐的臉寬與面積區間已有明顯衝突，不依靠0.006的邊界差。精靈高皇冠另有畫布空間衝突。未經使用者決定，不做此類造型改動。\n'
  (OUT/'feasibility.md').write_text(feasibility);(OUT/'feasibility.json').write_text(json.dumps(ranges,indent=2)+'\n')
- c=Image.new('RGB',(3920,1120),'#f4f1eb');d=ImageDraw.Draw(c);d.text((20,10),'cast7｜哈特局部修邊；姐姐／精靈原設定還原，比例待決定',font=font(27),fill='#222');baseline=735;d.line((0,baseline,3920,baseline),fill='#888',width=2)
+ c=Image.new('RGB',(3920,1120),'#f4f1eb');d=ImageDraw.Draw(c);d.text((20,10),'cast7 第2輪｜青色背景清理；姐姐／精靈比例待決定',font=font(27),fill='#222');baseline=735;d.line((0,baseline,3920,baseline),fill='#888',width=2)
  for i,k in enumerate(IDS):
   r=rows[k];im=imgs[k];c.paste(im,(i*560+10,baseline-r['sole_y']),im);d.text((i*560+20,755),NAMES[i],font=font(25),fill='#222')
   lines=[f'頭身比 {f(r["ratio"])}　臉寬 {f(r["face_width"])}',f'頭部面積 {r["head_area"]}　頭高 {r["head_height"]}',f'髮量 {f(r["hair_area"])}',f'肩位外輪廓 {f(r["visible_shoulder_span"])}（含手臂）',f'身長 {f(r["torso_length"])}　腿長 {f(r["leg_length"])}',f'總高 {r["body_height"]}　腳底 {r["sole_y"]}', '未改角色，依既有標註' if i<3 else '未通過全部比例門檻' if k in ['jiejie','spirit'] else '帽下遮蔽未補估' if k=='hate' else '基準']
@@ -106,7 +110,7 @@ def main():
    im=imgs[key].copy();im.putalpha(im.getchannel('A').point(lambda a:round(a*.5)));c.alpha_composite(im,(0,0))
   d.line((0,685,540,685),fill='#777');d.text((10,715),f'布魯 × {NAMES[IDS.index(k)]}｜各50%｜y685',font=font(22),fill='#222');c.convert('RGB').save(OUT/f'overlay-{k}-vs-blue.png')
   c=Image.new('RGB',(1080,790),'#f4f1eb');d=ImageDraw.Draw(c)
-  for i,(im,title) in enumerate([(source(BASE if k=='hate' else MAIN,k),'cast6 定案' if k=='hate' else 'main 指定原設定'),(imgs[k],'cast7 局部修邊' if k=='hate' else 'cast7 還原；比例未調整')]):
+  for i,(im,title) in enumerate([(source(BASE if k=='hate' else MAIN,k),'cast6 定案' if k=='hate' else 'main 指定原設定'),(imgs[k],'cast7 局部修邊' if k=='hate' else '第2輪 去背清理；比例未調整')]):
    c.paste(im,(i*540,50),im);d.text((i*540+15,10),title,font=font(23),fill='#222')
   d.line((0,735,1080,735),fill='#777');c.save(OUT/f'before-after-{k}.png')
  print(table);print(feasibility);print(json.dumps(validation,ensure_ascii=False,indent=2))
