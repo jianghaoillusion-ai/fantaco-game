@@ -41,7 +41,6 @@ export function emptySave() {
     flags: {},
     settings: { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 },
     daily: { day: "", streak: 0, claimed: false, challengeDay: "", challenge: 0, challengeClaimed: false },
-    comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
   };
@@ -74,6 +73,7 @@ export function loadSave() {
       if (!loaded.region) loaded.region = loaded.chapter || "village";
       // Existing boards already filled a full rectangle — keep them fully open.
       if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
+      delete loaded.comboBest;
       migrateV3(loaded);
       migrateEconomy(loaded);
       ensureDaily(loaded);

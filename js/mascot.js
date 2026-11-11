@@ -24,7 +24,7 @@ const POSES = {
 };
 
 /** Load data/mascot-poses.json so later official sticker frames can drop in without a code change. */
-fetch("data/mascot-poses.json?v=25").then((r) => r.json()).then((man) => {
+fetch("data/mascot-poses.json?v=26").then((r) => r.json()).then((man) => {
   const setName = man.defaultSet || "sticker";
   const set = (man.sets && man.sets[setName]) || {};
   for (const [k, v] of Object.entries(set)) {

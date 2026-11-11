@@ -148,16 +148,6 @@ export function createFx(ctx) {
     }
   }
 
-  function celebrateRestore(name, anchor) {
-    const layer = document.createElement("div");
-    layer.className = "restore-fx";
-    layer.innerHTML = `<div class="restore-burst" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
-      <b>修好了！</b><span>${name}</span>`;
-    document.body.appendChild(layer);
-    coinPop(anchor || $("#map") || document.body, "修好了");
-    setTimeout(() => layer.remove(), 1800);
-  }
-
   function flyCoins(fromEl, toEl, done) {
     const a = (fromEl instanceof Element ? fromEl.getBoundingClientRect() : null)
       || { left: innerWidth * 0.5, top: innerHeight * 0.45, width: 0, height: 0 };
@@ -362,6 +352,6 @@ export function createFx(ctx) {
     }
   }
 
-  return { flyTo, flyCoins: flyCoinsWrap, flyRewards, flyKind, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, celebrateRestore, pulseHud, completeTask };
+  return { flyTo, flyCoins: flyCoinsWrap, flyRewards, flyKind, popAt, revealMerge, spawnArc, bounceCell, coinPop, showDiscover, showInfo, pulseHud, completeTask };
 
 }

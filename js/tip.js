@@ -171,6 +171,7 @@ export function hideTip() {
 }
 
 export function showTip(anchor, title, body, opts = {}) {
+  if (anchor instanceof Element && anchor.closest("#map")) return;   // no popovers on the map
   const el = ensure();
   clearTimeout(hideTimer);
   const t = title || "";
