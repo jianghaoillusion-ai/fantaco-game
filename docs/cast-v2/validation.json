@@ -6,7 +6,8 @@
     ],
     "mode": "RGBA",
     "sole_y": 685,
-    "sha256": "2cdc1d4e16f17b6caea87240fd8f96b886f321653db09c32b24faedef5d159b4"
+    "top_opaque_y": 5,
+    "sha256": "241fcf4013f91409f68e77228723b85e44676bd35f69dd43946c119e74357301"
   },
   "hate": {
     "size": [
@@ -15,7 +16,8 @@
     ],
     "mode": "RGBA",
     "sole_y": 685,
-    "sha256": "fa45070e394d75883ce3ca2020af35dc31746c7e390a84ca5bed9abf5ba4892a"
+    "top_opaque_y": 22,
+    "sha256": "46a0bbde44e1df54b3ee289d69f0dee560eb38c5f7ea69c8fdde54913442404c"
   },
   "spirit": {
     "size": [
@@ -24,9 +26,13 @@
     ],
     "mode": "RGBA",
     "sole_y": 685,
-    "sha256": "e579295bb777a98b8e6e1bf5ffecc79a0eb02c85caa76863efb56c0214cb21d7"
+    "top_opaque_y": 15,
+    "sha256": "7a8dc4420f6fb2864ff07ab2f009eb7c3102d964cc3ef929fb6902a9abd0cee4",
+    "body_alpha_mirror_iou": 0.9821
   },
-  "copies": 8,
   "reference_assets_unchanged": true,
-  "expr_avatars_js_unchanged": true
+  "expr_avatars_js_unchanged": true,
+  "comparison_copies_identical": true,
+  "review_png_count": 28,
+  "rebuild_image_hashes_identical": true
 }
