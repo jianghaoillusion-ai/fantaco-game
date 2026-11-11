@@ -11,10 +11,10 @@
     "jiejie": {
       "w": 540,
       "h": 720,
-      "headTop": 29,
-      "chin": 214,
-      "head": 186,
-      "feet": 687
+      "headTop": 35,
+      "chin": 256,
+      "head": 222,
+      "feet": 690
     },
     "feifei": {
       "w": 540,
@@ -51,18 +51,18 @@
     "hate": {
       "w": 540,
       "h": 720,
-      "headTop": 114,
-      "chin": 262,
-      "head": 149,
-      "feet": 686
+      "headTop": 86,
+      "chin": 294,
+      "head": 209,
+      "feet": 700
     },
     "spirit": {
       "w": 540,
       "h": 720,
-      "headTop": 114,
-      "chin": 268,
-      "head": 155,
-      "feet": 686
+      "headTop": 82,
+      "chin": 293,
+      "head": 212,
+      "feet": 700
     },
     "mascot": {
       "w": 248,

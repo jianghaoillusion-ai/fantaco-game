@@ -24,17 +24,17 @@ const MASCOT_FULL = {
 
 /**
  * Head-height metrics in source pixels.
- * head = crown / hair (fitted cap or bow included; tall hats excluded) to chin.
+ * head = crown / hair (fitted cap included; tall hats and 微笑姐姐's bow excluded) to chin.
  * 眠花糖 uses the skull crown between the ear bases, not the ear tips.
  */
 export const CAST_METRICS = {
-  jiejie: { w: 540, h: 720, headTop: 29, chin: 214, head: 186, feet: 687, bboxTop: 29, contentL: 99, contentR: 440, faceL: 210, faceR: 350 },
+  jiejie: { w: 540, h: 720, headTop: 35, chin: 256, head: 222, feet: 690, bboxTop: 5, contentL: 80, contentR: 459, faceL: 197, faceR: 353 },
   feifei: { w: 540, h: 720, headTop: 30, chin: 262, head: 233, feet: 686, bboxTop: 30, contentL: 113, contentR: 426, faceL: 200, faceR: 350 },
   apiao:  { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 687, bboxTop: 29, contentL: 128, contentR: 412, faceL: 185, faceR: 355 },
   sika:   { w: 540, h: 720, headTop: 29, chin: 252, head: 224, feet: 687, bboxTop: 29, contentL: 152, contentR: 388, faceL: 180, faceR: 365 },
   bulu:   { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 687, bboxTop: 29, contentL: 146, contentR: 393, faceL: 180, faceR: 350 },
-  hate:   { w: 540, h: 720, headTop: 114, chin: 262, head: 149, feet: 686, bboxTop: 30, contentL: 116, contentR: 424, faceL: 205, faceR: 370 },
-  spirit: { w: 540, h: 720, headTop: 114, chin: 268, head: 155, feet: 686, bboxTop: 30, contentL: 141, contentR: 398, faceL: 200, faceR: 340 },
+  hate:   { w: 540, h: 720, headTop: 86, chin: 294, head: 209, feet: 700, bboxTop: 4, contentL: 109, contentR: 430, faceL: 219, faceR: 393 },
+  spirit: { w: 540, h: 720, headTop: 82, chin: 293, head: 212, feet: 700, bboxTop: 4, contentL: 117, contentR: 422, faceL: 208, faceR: 362 },
   mascot: { w: 248, h: 441, headTop: 106, chin: 210, head: 105, feet: 429, bboxTop: 12, contentL: 12, contentR: 236, faceL: 36, faceR: 212 }
 };
 
@@ -76,8 +76,8 @@ export const REF_RATIO = 224 / 657;
 
 function bodySpan(id, m) {
   const n = normId(id);
-  // Tall hats are excluded from height so the hat may poke above a shared crown line.
-  if (n === "hate" || n === "spirit") return Math.max(1, m.feet - m.headTop);
+  // Tall hats (and 微笑姐姐's bow) are excluded from height so they may poke above a shared crown line.
+  if (n === "hate" || n === "spirit" || n === "jiejie") return Math.max(1, m.feet - m.headTop);
   const top = m.bboxTop != null ? m.bboxTop : 0;
   return Math.max(1, m.feet - top);
 }
