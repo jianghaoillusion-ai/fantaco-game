@@ -128,3 +128,17 @@ for name,box in [('jiejie-neck-4x',(0,225,540,285)),('jiejie-fingers-4x',(180,11
 with (O/'measurements.md').open('a') as f:
  f.write('\n臉寬定位（最寬列）：姐姐 y'+str(rows['jiejie']['face_width_row'])+'、x'+str(rows['jiejie']['face_width_x'])+'；精靈 y'+str(rows['spirit']['face_width_row'])+'、x'+str(rows['spirit']['face_width_x'])+'。見 landmarks 圖。\n')
  f.write('\n扣除耳朵區域及5px邊界的含髮頭寬暫測：姐姐 '+str(rows['jiejie']['head_width_no_ears'])+' px，精靈 '+str(rows['spirit']['head_width_no_ears'])+' px；布魯基準 204 px。耳緣標記仍有誤差，不用這項宣稱通過。\n')
+
+for name,box in [('jiejie-right-fringe-4x',(350,175,405,240)),('jiejie-left-cheek-4x',(185,175,225,225)),('jiejie-right-neck-4x',(320,215,380,270))]:
+ z=imgs['jiejie'].crop(box);c=Image.new('RGB',(z.width*8,z.height*4),'white')
+ for j,color in enumerate(['white','#302d38']):c.paste(bg(z,color).resize((z.width*4,z.height*4),Image.Resampling.NEAREST),(j*z.width*4,0))
+ c.save(O/(name+'.png'))
+# Original cheek at the same isotropic face scale versus final cheek.
+original=src('jiejie','f346cdf');scale=1.85;dx=267-scale*267;dy=248-scale*187
+original=original.convert('RGBa').transform((540,720),Image.Transform.AFFINE,(1/scale,0,-dx/scale,0,1/scale,-dy/scale),Image.Resampling.BICUBIC).convert('RGBA')
+box=(195,178,225,225);c=Image.new('RGB',(240,218),'white')
+for i,(im,title) in enumerate([(original,'original'),(imgs['jiejie'],'cast8')]):
+ z=bg(im.crop(box)).resize((120,188),Image.Resampling.NEAREST);c.paste(z,(i*120,30));ImageDraw.Draw(c).text((i*120+4,4),title,fill='black',font=font(18))
+c.save(O/'jiejie-cheek-source-4x.png')
+# Cheek endpoints at the widest face row, separate from the pointed ears.
+z=Image.open(O/'landmarks-spirit.png').crop((185,212,365,255));z.resize((720,172),Image.Resampling.NEAREST).save(O/'spirit-face-width-4x.png')

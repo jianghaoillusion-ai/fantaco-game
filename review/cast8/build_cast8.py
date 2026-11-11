@@ -89,6 +89,7 @@ a=np.array(jiejie);b=np.array(body_source);jm=np.array(join)
 brown=(a[:,:,0]>a[:,:,2]*1.2)&(a[:,:,1]>a[:,:,2])&(a[:,:,1]<125)&(b[:,:,1]<125)
 jm[~brown]=0
 jiejie=Image.composite(body_source,jiejie,Image.fromarray(jm))
+a=np.array(jiejie);a[233:237,346:350,:3]=np.array(body_source)[233:237,346:350,:3];jiejie=Image.fromarray(a)
 def finish(im):
  a=np.array(im);solid=(a[:,:,3]>=128).astype('uint8')
  band=cv2.dilate(solid,np.ones((3,3),np.uint8))!=cv2.erode(solid,np.ones((3,3),np.uint8))
@@ -96,6 +97,8 @@ def finish(im):
  core=a[:,:,3]>=128
  _,idx=cv2.distanceTransformWithLabels((~core).astype('uint8'),cv2.DIST_L2,5,labelType=cv2.DIST_LABEL_PIXEL)
  fringe=(a[:,:,3]>0)&~core;a[:,:,:3][fringe]=a[:,:,:3][core][idx[fringe]-1]
+ # Reject attached, low-alpha ghost silhouettes farther than the antialias transition.
+ distance=cv2.distanceTransform((~core).astype('uint8'),cv2.DIST_L2,5);a[:,:,3][distance>1.5]=0
  n,l,ss,_=cv2.connectedComponentsWithStats((a[:,:,3]>0).astype('uint8'),8);a[l!=1+np.argmax(ss[1:,4])]=0
  sole=np.where(a[:,:,3]>=128)[0].max();dy=685-int(sole)
  if dy:

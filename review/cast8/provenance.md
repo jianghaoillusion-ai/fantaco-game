@@ -5,9 +5,9 @@
 
 哈特指定 `5b125dc:assets/chars/hate.png`，本輪 PNG/WebP 都完全不寫入。布魯使用本分支未修改的 `assets/chars/bulu.png`。
 
-精靈：原圖身體／舉手等比 0.91；頭髮與耳朵等比 1.575；原臉獨立等比 1.55；皇冠等比 1（沒有縮放），相對 f346cdf 上移 29 px。袖口補回原黑線後，以 4 倍解析度描回 1.75 px 深色線再縮回。最終腳底 y685，皇冠頂 y11，沒有裁到畫布上緣。放大頭髮後會遮住部分皇冠白底座，未宣稱所有原可見帽子像素都仍可見。
+精靈：原圖身體／舉手等比 0.925；頭髮與耳朵等比 1.585；原臉獨立等比 1.60；皇冠等比 1（沒有縮放），相對 f346cdf 上移 35 px，原帽圖層最後疊回頭髮上方。袖口補回原黑線後，以 4 倍解析度描回 1.75 px 深色線再縮回，最後清除不連通的低 alpha 殘點。腳底 y685，皇冠頂 y5，沒有裁到畫布上緣。
 
-姐姐：先用本機等比圖層試排（原臉 1.8 倍、頭髮與身體分開），再用 Codex 內建 image_gen 修正衣服與髮尾拼接。生成結果有重繪髮絲、衣服與鞋帶細節，**不是整張只做像素縮放**。將生成圖等比 0.489 放回 540×720，留下 `source/jiejie-seam-repair.png` 作為可重現的修補素材。頭髮圖層再等比 0.91，原設定臉以 1.8 倍覆回；脖子、髮尾接合帶用局部混合，衣服留在身體圖層，腳底對齊 y685。
+姐姐：先用本機等比圖層試排，再用 Codex 內建 image_gen 修正衣服與髮尾拼接。生成結果有重繪髮絲、衣服與鞋帶細節，**不是整張只做像素縮放**。將生成圖等比 0.489 放回 540×720，留下 `source/jiejie-seam-repair.png` 作為可重現素材。頭髮圖層再等比 0.85，原設定臉以 1.85 倍覆回；髮尾接合帶 y190～260 用局部混合，衣服及舉手保留在身體圖層，避免手指被一起縮放。右側臉外髮尾補回完整髮絲紋理，腳底對齊 y685。
 
 上述所有幾何縮放的 x/y 倍率相同；沒有非等比拉伸。局部接縫混合與內建生圖修補會改變像素，不宣稱只縮放。
 
@@ -26,6 +26,7 @@ Use case: precise-object-edit. Edit image 1, a rough resized composite of the ex
 ```
 PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/cast8/build_cast8.py
 PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/cast8/inspect_cast8.py
+PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/cast8/audit_cast8.py
 ```
 
 第二支程式會驗證哈特零像素差、其他四人未變、PNG/WebP 解碼一致、尺寸與腳底、硬邊與碎點，並重新輸出全部指定審查圖及暫測表。
