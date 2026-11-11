@@ -1,12 +1,12 @@
 # 眠花糖素材（待我的王審核）
 
-本次第三輪以官方正面貼紙為底，用本機 Python／Pillow 重做 `poses/sad.png`、`hold-hat.png`、`hold-rose.png`、`blink.png`，以及 `anim/happy.mp4`、`happy.webm`。沒有使用即夢、生成 API、充值積分，也沒有新裝工具。其他素材保留前輪版本；遊戲尚未引用本資料夾素材。
+本次第四輪以官方正面貼紙為底，用本機 Python／Pillow 重做 `poses/sad.png`、`hold-hat.png`、`hold-rose.png`、`blink.png`，以及 `anim/happy.mp4`、`happy.webm`、`happy.gif`。沒有使用即夢、生成 API、充值積分，也沒有新裝工具。其他素材保留前輪版本；遊戲尚未引用本資料夾素材。
 
 四張新圖都是 720×720 透明 PNG、正面不露星星。難過保留垂耳、八字眉與難過嘴型，下半身與短手取自官方；高帽依官方平塗高帽重繪，玫瑰取自官方玫瑰。身體 #FFFFFF、外框 #47536F；星星官方色 #F4E969，本次正面不使用。道具有自己的配色，紅帽帶／玫瑰不是腮紅。
 
-開心動畫為 720×720、24 fps、5 秒、120 幀、首尾逐像素相同。官方短手維持原長度，閉嘴笑、輕微搖擺與彈跳。MP4 用 RGB 無損 H.264，淡藍底；WebM 用 VP9 lossless 模式（4:2:0）及透明 alpha；先校正轉色偏差，色碼以解碼後取樣為準，抗鋸齒邊緣仍有混色，實測見 `redraw-validation.json`。MP4 使用 High 4:4:4 Predictive profile，播放端需支援，已通過本機 Chrome 播放與跳轉檢查，Safari／手機尚未驗收。兩檔皆刻意無音軌。
+開心動畫為 720×720、24 fps、約 5 秒、120 幀，MP4／WebM 解碼後首尾逐像素相同。官方短手維持原長度，閉嘴笑、輕微搖擺與彈跳。MP4 改為 H.264 yuv420p（淡藍底，手機相容格式）；WebM 改 VP9 有損透明，211,057 bytes，低於 1.5 MB。GIF 由修好的原始幀重新輸出，480×480、120 幀、5 秒、透明且無限循環，442,437 bytes。GIF 以 40／50 毫秒交錯表示 24 fps；只保留官方白色／藍灰色及透明色。兩支影片刻意無音軌，音訊工具也確認沒有音軌。iPhone／Safari 尚未實機驗收。
 
-`style-compare.png` 上排官方、下排新素材；`playback-validation.json` 記錄 Chrome 播放結果；`redraw-validation.json` 記錄逐圖色碼、線寬、影片首尾、透明度與無音軌驗證。
+第四輪修正：五官使用 10.8 原圖單位（輸出約 14px），鼻線連接嘴巴；遮罩內縮補回左臉框；花莖縮短避免穿出手掌；對照圖清除帽子旁殘線，眨眼上格使用官方眨眼貼紙。`redraw-validation.json` 已重新產出，加入臉部獨立線寬與格式／容量／GIF 檢查。PNG 精確使用官方主色；影片抽樣主色相同，但有損編碼與抗鋸齒邊緣可能有細微色差。`playback-validation.json` 是第三輪歷史播放紀錄，不代表第四輪實機驗收。官方眨眼參考貼紙為頭像，與下方全身單眼眨眼姿勢不同。
 
 重製：使用現有 `/Volumes/外接資料碟/AI工具/fantaco-jimeng-venv/bin/python`（Pillow、numpy、scipy） 跑 `tools/redraw-mascot-assets.py`，再以同一個已安裝 scikit-image 的環境跑 `tools/check-mascot-assets.py`。ffmpeg／ffprobe 預設 `~/media-tools/bin/`。暫存只寫外接碟，腳本結束自動清除。原素材可由 Git 前一版還原，官方貼紙未修改。
 
