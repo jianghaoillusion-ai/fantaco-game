@@ -69,6 +69,8 @@ def measure(key,im,s):
     if 'long_hair' in s:
         t=s['long_hair']; x0,y0,x1,y1=t['box']
         region=np.zeros_like(head);region[y0:y1,x0:x1]=True
+        if 'visible_regions' in t:region &= polys(t['visible_regions'])
+        region &= ~polys(t.get('exclude',[]))
         # Tail color sampling is separate, as in the reviewer's method.
         color=np.zeros_like(head)
         for point in t.get('samples',[t['sample']]):color |= np.linalg.norm(labs-lab(sample(a,point))[0],axis=2)<=DELTA_E
@@ -198,9 +200,10 @@ def make():
         table+='|'+label+'|'+fmt(REFERENCE[f])+'|'+fmt(blue[f])+'|'+'|'.join(cells)+'|\n'
     (OUT/'measurements.md').write_text(table)
     table+='\n核心欄位沿用小頌cast5；新增耳朵與扣耳面積依小頌最新審查改對照同程式布魯重算887／32078，耳朵不作關卡。\n'
+    table+='\n髮量補充對照本次布魯16412：'+ '、'.join(f'{r["name"]} {(r["hair_area"]/blue["hair_area"]-1)*100:+.2f}%' for r in rows if r['id'] in ['jiejie','hate','spirit'])+'。主表仍依使用者指定的16260基準，兩種基準均揭露。精靈髮頂判讀範圍y44–48，頭高207–211。\n'
     table+='\n姐姐下巴以下可見長髮 '+str(next(r['long_hair_area'] for r in rows if r['id']=='jiejie'))+' px²，已加進髮量。\n'
     table+='\n肩寬主表在固定 y280 量可見外輪廓，布魯包含上臂。抬手側不驗收。下巴+34 的參考寬（左／右／合計）：'+ '、'.join(f'{r["name"]} '+('不可量' if r['shoulder_chin34_left'] is None else str(r['shoulder_chin34_left']))+'/'+str(r['shoulder_chin34_right'])+'/'+('不可量' if r['shoulder_chin34_left'] is None else str(r['shoulder_chin34_left']+r['shoulder_chin34_right'])) for r in rows if r['id'] in specs)+'。\n'
-    table+='\n臉採最大膚色連通塊並補洞；人工耳朵區域先扣除。哈特頭髮受遮蔽、姐姐腿根受裙子遮蔽，不能以表內數字宣稱全項通過。基準胯下也是衣襬下估計。所有差距固定對照小頌 cast5 數字，本次布魯重算值另列，不用微調門檻消除落差。\n'
+    table+='\n臉採最大膚色連通塊並補洞；人工耳朵區域先扣除。哈特頭髮受遮蔽、姐姐腿根受裙子遮蔽，不能以表內數字宣稱全項通過。基準胯下也是衣襬下估計。主表核心差距固定對照小頌 cast5 數字；補充耳朵欄使用本次重算值，髮量雙基準另列，不用微調門檻消除落差。\n'
     (OUT/'measurements.md').write_text(table)
     (OUT/'measurements.json').write_text(json.dumps(dict(alpha=ALPHA,delta_e=DELTA_E,batch=batch,asset_sha1=hashes,reviewer_reference=REFERENCE,rows=rows,deltas=deltas),ensure_ascii=False,indent=2)+'\n')
     (ROOT/'docs/cast-v2/measurements.md').write_text(table)
