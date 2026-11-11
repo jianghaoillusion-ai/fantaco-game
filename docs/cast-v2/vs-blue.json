@@ -1,0 +1,41 @@
+{
+  "jiejie": {
+    "head_height": -5.0,
+    "ratio": -5.0,
+    "face_width": 0.0,
+    "hair_width": -4.9,
+    "head_area": -5.14,
+    "hair_area": 24.12,
+    "shoulder_width": -4.0,
+    "torso_length": 6.94,
+    "leg_length": null,
+    "body_height": 0.0,
+    "waist_to_sole": 0.34
+  },
+  "hate": {
+    "head_height": -0.45,
+    "ratio": -0.91,
+    "face_width": -1.42,
+    "hair_width": 0.0,
+    "head_area": -4.36,
+    "hair_area": -5.46,
+    "shoulder_width": 0.8,
+    "torso_length": 3.47,
+    "leg_length": -3.8,
+    "body_height": 0.46,
+    "waist_to_sole": -0.34
+  },
+  "spirit": {
+    "head_height": -0.91,
+    "ratio": -1.81,
+    "face_width": -5.67,
+    "hair_width": -0.49,
+    "head_area": 5.28,
+    "hair_area": 36.65,
+    "shoulder_width": -2.4,
+    "torso_length": -1.39,
+    "leg_length": -0.42,
+    "body_height": 0.91,
+    "waist_to_sole": 3.42
+  }
+}
