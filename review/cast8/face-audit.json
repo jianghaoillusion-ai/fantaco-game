@@ -1,0 +1,18 @@
+{
+  "jiejie": {
+    "original": "f346cdf:assets/chars/jiejie.png",
+    "scale": 1.8,
+    "core_pixels": 11987,
+    "changed_rgb_pixels": 0,
+    "max_rgb_error": 0,
+    "note": "只保證覆回區往內縮2px的原臉像素；不代表外圈臉形/耳朵/髮型完全相同。"
+  },
+  "spirit": {
+    "original": "f346cdf:assets/chars/spirit.png",
+    "scale": 1.55,
+    "core_pixels": 10295,
+    "changed_rgb_pixels": 0,
+    "max_rgb_error": 0,
+    "note": "只保證覆回區往內縮2px的原臉像素；不代表外圈臉形/耳朵/髮型完全相同。"
+  }
+}

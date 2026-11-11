@@ -1,0 +1,20 @@
+{
+  "source": "f346cdf:assets/chars/spirit.png",
+  "scale_x": 1,
+  "scale_y": 1,
+  "translate": [
+    0,
+    -29
+  ],
+  "upper_crown_roi_source": [
+    150,
+    40,
+    350,
+    125
+  ],
+  "opaque_roi_pixels": 5940,
+  "rgb_changed_pixels": 191,
+  "top_y": 11,
+  "bottom_y": 685,
+  "note": "只驗上方冠體；下方白底座被放大頭髮遮住一部分，不冒稱全帽像素原封不動。"
+}
