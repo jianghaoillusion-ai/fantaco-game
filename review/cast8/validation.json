@@ -8,9 +8,10 @@
     "sole": 685,
     "webp_equal": true,
     "hard_edge_pixels": 0,
-    "edge_mid_alpha_percent": 99.93021632937892,
+    "edge_mid_alpha_percent": 99.96475563909775,
     "small_components_under8": 0,
-    "sha256": "257fa8f78fa2f7a9289941fe78bbc157a82685ee4b6161c3ecd35ebaeb1efd2e"
+    "alpha_positive_components": 1,
+    "sha256": "9fb765a7c75f23c6e6008874d3b8d837a511eece0b65b349155c4b5a1cea7ec1"
   },
   "hate": {
     "size": [
@@ -23,6 +24,7 @@
     "hard_edge_pixels": 39,
     "edge_mid_alpha_percent": 66.97590902289392,
     "small_components_under8": 0,
+    "alpha_positive_components": 4,
     "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d"
   },
   "spirit": {
@@ -34,9 +36,10 @@
     "sole": 685,
     "webp_equal": true,
     "hard_edge_pixels": 0,
-    "edge_mid_alpha_percent": 99.31932871728671,
+    "edge_mid_alpha_percent": 99.38773107264807,
     "small_components_under8": 0,
-    "sha256": "ada3fe3fdbaa79900d2c7604a1a153dfbe97c692941199b8e3e6351d1eec4bb6"
+    "alpha_positive_components": 1,
+    "sha256": "d0c95c9da542e3baffa6ac1b0266bb37c37e2a08e9b56037a28929121428e63b"
   },
   "hate_pixels_changed_vs_5b125dc": 0,
   "unchanged_files": {

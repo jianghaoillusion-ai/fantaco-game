@@ -4,7 +4,7 @@
   "scale_y": 1,
   "translate": [
     0,
-    -29
+    -35
   ],
   "upper_crown_roi_source": [
     150,
@@ -14,7 +14,8 @@
   ],
   "opaque_roi_pixels": 5940,
   "rgb_changed_pixels": 191,
-  "top_y": 11,
+  "top_y": 5,
   "bottom_y": 685,
-  "note": "只驗上方冠體；下方白底座被放大頭髮遮住一部分，不冒稱全帽像素原封不動。"
+  "layer_order": "皇冠原尺寸圖層最後覆於頭髮上方",
+  "note": "最外圈經 alpha 平滑與去背，未宣稱帽子逐像素不變。"
 }

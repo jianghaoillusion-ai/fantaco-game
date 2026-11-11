@@ -41,38 +41,54 @@ body=layer(im,rect((0,283,539,719)))
 # raised hand is above the neck cut, retain original hand and arm together
 hand=layer(im,poly([(110,245),(193,245),(205,290),(223,325),(212,386),(133,391)]))
 out=Image.new('RGBA',(540,720))
-put(out,body,.91,(270,685),(270,685));put(out,hand,.91,(270,685),(270,685))
+put(out,body,.925,(270,685),(270,685));put(out,hand,.925,(270,685),(270,685))
 # original crown, never scaled
 hatmask=rect((0,0,539,176));hm=np.array(hatmask);hm[145:177][blue[145:177]]=0
-put(out,layer(im,Image.fromarray(hm)),1,(270,161),(270,132))
-put(out,head,1.575,(270,282),(270,319))
-put(out,layer(im,facemask.filter(ImageFilter.GaussianBlur(.45))),1.55,(270,282),(270,319))
+put(out,head,1.585,(270,282),(270,313))
+put(out,layer(im,facemask.filter(ImageFilter.GaussianBlur(.45))),1.60,(270,282),(270,313))
+# Restore the original front-facing crown/base layer after the enlarged hair.
+hat=trans(layer(im,Image.fromarray(hm)),1,(270,161),(270,126))
+out.alpha_composite(hat)
+hat.getchannel('A').save(R/'review/cast8/mask-spirit-crown.png')
 spirit=out
 
 
 jiejie=Image.open(R/'review/cast8/source/jiejie-seam-repair.png').convert('RGBA')
-# Hair/head layer is uniformly reduced 9%, anchored at the hair top; face stays independent.
-small=trans(jiejie,.91,(270,40),(270,40))
+# Hair/head layer is uniformly reduced 15%, anchored at the hair top; face stays independent.
+small=trans(jiejie,.85,(270,40),(270,40))
 a=np.array(jiejie).astype(float);b=np.array(small).astype(float)
-y=np.indices(a.shape[:2])[0];w=np.clip((258-y)/28,0,1)[:,:,None]
+y=np.indices(a.shape[:2])[0];w=np.clip((260-y)/70,0,1)[:,:,None]
 head_zone=poly([(190,0),(420,0),(420,260),(196,260),(196,170),(190,120)])
-w*=np.array(head_zone)[:,:,None]/255
+w*=np.array(head_zone.filter(ImageFilter.GaussianBlur(2)))[:,:,None]/255
 # Clothing must stay on its body layer: do not drag pink shoulder pixels upward with the hair.
 pink=((b[:,:,0]>b[:,:,1]*1.08)&(b[:,:,2]>b[:,:,1]*1.03))|((a[:,:,0]>a[:,:,1]*1.08)&(a[:,:,2]>a[:,:,1]*1.03))
 w[(y>190)&pink]=0
+# The raised hand crosses the head bounding box. Keep both original and shifted skin
+# pixels out of the hair layer, preventing an extra fingertip beside the cheek.
+x=np.indices(a.shape[:2])[1]
+hand_skin=np.zeros((720,540),bool)
+for z in (a,b):
+ hsv=cv2.cvtColor(z[:,:,:3].astype('uint8'),cv2.COLOR_RGB2HSV)
+ hand_skin|=(hsv[:,:,0]<30)&(hsv[:,:,1]<190)&(hsv[:,:,2]>150)&(z[:,:,3]>10)
+hand_skin=cv2.dilate(hand_skin.astype('uint8'),np.ones((9,9),np.uint8))>0
+w[hand_skin&(x<215)&(y>65)&(y<200)]=0
 # Premultiplied crossfade solely at the neck/hair joining strip.
 for z in (a,b):z[:,:,:3]*=z[:,:,3:4]/255
 c=a*(1-w)+b*w
 c[:,:,:3]=np.divide(c[:,:,:3]*255,c[:,:,3:4],out=np.zeros_like(c[:,:,:3]),where=c[:,:,3:4]>0)
 jiejie=Image.fromarray(np.clip(c,0,255).astype('uint8'))
-# Use the intact generated hair/shoulder join as a local texture repair under the original face.
-repair=Image.new('L',(540,720));rd=ImageDraw.Draw(repair)
-rd.rectangle((194,232,226,274),fill=255);rd.rectangle((334,232,379,274),fill=255)
-repair=repair.filter(ImageFilter.GaussianBlur(3))
-jiejie=Image.composite(Image.open(R/'review/cast8/source/jiejie-seam-repair.png').convert('RGBA'),jiejie,repair)
 original=source('jiejie')
 fm=poly([(228,127),(242,121),(256,118),(269,117),(282,112),(298,117),(308,132),(309,155),(302,170),(285,183),(266,188),(248,183),(235,172),(229,154)])
-put(jiejie,layer(original,fm.filter(ImageFilter.GaussianBlur(.7))),1.80,(267,187),(267,247))
+put(jiejie,layer(original,fm.filter(ImageFilter.GaussianBlur(.7))),1.85,(267,187),(267,247))
+# The face cutout carries a few brown hair pixels at its perimeter. Restore the intact
+# hair texture only outside the cheek, after compositing the face, to avoid a rectangular seam.
+join=Image.new('L',(540,720));jd=ImageDraw.Draw(join);jd.ellipse((334,218,371,259),fill=255)
+join=join.filter(ImageFilter.GaussianBlur(2))
+body_source=Image.open(R/'review/cast8/source/jiejie-seam-repair.png').convert('RGBA')
+a=np.array(jiejie);b=np.array(body_source);jm=np.array(join)
+brown=(a[:,:,0]>a[:,:,2]*1.2)&(a[:,:,1]>a[:,:,2])&(a[:,:,1]<125)&(b[:,:,1]<125)
+jm[~brown]=0
+jiejie=Image.composite(body_source,jiejie,Image.fromarray(jm))
 def finish(im):
  a=np.array(im);solid=(a[:,:,3]>=128).astype('uint8')
  band=cv2.dilate(solid,np.ones((3,3),np.uint8))!=cv2.erode(solid,np.ones((3,3),np.uint8))
@@ -93,9 +109,11 @@ assert str(T).startswith('/Volumes/外接資料碟/')
 spirit=finish(spirit)
 # Restore a continuous 1.75px dark contour along the original raised cuff.
 line=Image.new('RGBA',(2160,2880));d=ImageDraw.Draw(line)
-pts=[(168,356),(167,360),(166,364),(164,368),(163,372),(163,376),(162,380),(162,384),(162,388),(164,392),(165,395),(165,398),(170,402)]
+pts=[(166,351),(165,355),(164,359),(162,363),(161,367),(161,371),(160,375),(160,379),(160,383),(162,387),(163,390),(163,393),(168,397)]
 d.line([(x*4,y*4) for x,y in pts],fill=(29,49,60,245),width=7,joint='curve')
 spirit.alpha_composite(line.resize((540,720),Image.Resampling.LANCZOS))
+# Remove any detached sub-128-alpha islands left by supersampled line drawing.
+a=np.array(spirit);n,l,ss,_=cv2.connectedComponentsWithStats((a[:,:,3]>0).astype('uint8'),8);a[l!=1+np.argmax(ss[1:,4])]=0;spirit=Image.fromarray(a)
 for key,im in [('jiejie',finish(jiejie)),('spirit',spirit)]:
  im.save(R/f'assets/chars/{key}.png')
  im.save(R/f'assets/chars/{key}.webp',lossless=True,exact=True,method=6)
