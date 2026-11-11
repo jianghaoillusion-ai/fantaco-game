@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import * as merge from '../js/merge.js';
 import * as save from '../js/save.js';
-import {createFog} from '../js/fog.js';
+import {autoGenMs,createFog} from '../js/fog.js';
 import {isCellOpen} from '../js/world.js';
 import {createBag,bagCap} from '../js/bag.js';
 globalThis.document={querySelector:()=>null};
@@ -25,7 +25,7 @@ test('同物品不能讓兩張訂單同時就緒',()=>{const orders=[{need:{chai
 test('移入袋子不把預留轉讓給另一張單',()=>{const orders=[{need:{chain:'star',tier:2},reservedUid:'one'},{need:{chain:'star',tier:2},reservedUid:'two'}];merge.reserveItems(orders,[item('two')],[item('one')]);assert.deepEqual(orders.map(o=>o.reservedUid),['one','two']);});
 test('消耗後才補配，保留其他有效預留',()=>{const orders=[{need:{chain:'star',tier:2},reservedUid:'gone'},{need:{chain:'star',tier:2},reservedUid:'two'}];merge.reserveItems(orders,[item('two'),item('new')],[]);assert.deepEqual(orders.map(o=>o.reservedUid),['new','two']);});
 const autoState=()=>{const s=save.emptySave();s.board=Array(63).fill(null);s.board[31]={kind:'gen',gen:'garden',tier:1,uid:'g'};return s;};
-test('自動產出初始化計時',()=>{const s=autoState();assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,0).made.length,0);assert.equal(s.board[31].autoAt,45000);});
+test('自動產出初始化計時',()=>{const s=autoState();assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,0).made.length,0);assert.equal(s.board[31].autoAt,data.generators.garden.autoMs);});
 test('時間未到不產出',()=>{const s=autoState();s.board[31].autoAt=45000;assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,44999).made.length,0);});
 test('到期只產一件且不耗體力',()=>{const s=autoState();s.board[31].autoAt=0;assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,900000).made.length,1);assert.equal(s.energy,100);});
 test('滿盤保留到期計時，騰位立即補一件',()=>{const s=autoState();s.board[31].autoAt=0;s.board=s.board.map((x,i)=>x||item('x'+i));assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,100).blocked,true);assert.equal(s.board[31].autoAt,0);s.board[30]=null;assert.equal(merge.tickAutoGenerators(s,data.generators,7,9,()=>true,101).made.length,1);});
@@ -53,3 +53,8 @@ test('種子不足不扣金幣補足',()=>{const s=save.emptySave();s.coins=100;
 test('袋子取物使用棋盤 index 並保留 UID',()=>{const s=save.emptySave();s.board=Array(63).fill(null);s.inventory=[item('bag')];bag(s,{emptyOpenCell:()=>31,getCols:()=>7,refresh:()=>{}}).placeFromBag(0);assert.equal(s.board[31]?.uid,'bag');assert.equal(s.inventory.length,0);});
 test('滿盤從袋取物不得遺失',()=>{const s=save.emptySave();s.board=Array.from({length:63},(_,i)=>item('x'+i));s.inventory=[item('bag')];bag(s,{emptyOpenCell:()=>-1,getCols:()=>7,refresh:()=>{}}).placeFromBag(0);assert.equal(s.inventory[0]?.uid,'bag');assert.equal(s.board.filter(Boolean).length,63);});
 test('取物動畫結束時重新找 UID 與空位，連點不覆蓋',()=>{const s=save.emptySave();s.board=Array(63).fill(null);s.inventory=[item('a'),item('b')];const callbacks=[];const b=bag(s,{emptyOpenCell:()=>s.board.findIndex(x=>!x),getCols:()=>7,refresh:()=>{},fx:{flyTo:(_a,_b,done)=>callbacks.push(done)}});b.placeFromBag(0);b.placeFromBag(0);callbacks.forEach(fn=>fn());assert.equal(s.board[0]?.uid,'a');assert.equal(s.inventory[0]?.uid,'b');});
+
+test("舊連擊資料讀取後丟棄，重新存檔也不保留",()=>{const s=save.normalizeSave({...save.emptySave(),comboBest:99});assert.equal("comboBest" in s,false);let written;globalThis.localStorage={setItem:(_k,v)=>written=JSON.parse(v)};save.writeSave(s);assert.equal("comboBest" in written,false);});
+
+test('自動產出沿用 main 早期八秒與後期十二秒',()=>{for(const [level,ms] of [[1,8000],[9,12000]]){const s=autoState();s.level=level;merge.tickAutoGenerators(s,data.generators,7,9,()=>true,100,autoGenMs);assert.equal(s.board[31].autoAt,100+ms);}});
+test('存檔保留 main 活動及今日合成產出進度',()=>{const s=save.normalizeSave({...save.emptySave(),events:{long:{points:17}},daily:{challengeDay:save.todayKey(),taskMerges:3,taskGens:4}});assert.equal(s.events.long.points,17);assert.equal(s.daily.taskMerges,3);assert.equal(s.daily.taskGens,4);});

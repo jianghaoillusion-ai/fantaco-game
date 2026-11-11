@@ -12,21 +12,25 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  page.on('pageerror',e=>errors.push(e.message));
  await page.goto(process.env.TEST_URL||'http://127.0.0.1:18769');
  await page.waitForFunction(()=>window.__GAME);
- await page.fill('#nick','小夏驗收');await page.locator('#nick-form button').click();await page.waitForTimeout(500);await page.screenshot({path:`${out}/v11-${device}-home.png`});await page.click('#btn-play');
- const dismiss=async()=>{for(let i=0;i<12;i++){if(await page.locator('#story.on').count())await page.click('#btn-story-skip');else if(await page.locator('#discover.on').count())await page.click('#btn-discover-ok');else if(await page.locator('#result.on').count()){await page.screenshot({path:`${out}/v11-${device}-result.png`});await page.click('#btn-result-ok');}else break;await page.waitForTimeout(150);}};
+ await page.fill('#nick','小夏驗收');await page.locator('#nick-form button').click();await page.waitForTimeout(500);await page.screenshot({path:`${out}/v12-${device}-home.png`});await page.click('#btn-play');await page.waitForTimeout(1500);if(await page.locator('#story.on').count())await page.screenshot({path:`${out}/v12-${device}-story.png`});
+ const dismiss=async()=>{for(let i=0;i<12;i++){if(await page.locator('#story.on').count())await page.click('#btn-story-skip');else if(await page.locator('#discover.on').count())await page.click('#btn-discover-ok');else if(await page.locator('#result.on').count()){await page.screenshot({path:`${out}/v12-${device}-result.png`});await page.click('#btn-result-ok');}else break;await page.waitForTimeout(150);}};
  await dismiss();await page.waitForTimeout(600);
- const shot=async(name)=>page.screenshot({path:`${out}/v11-${device}-${name}.png`});
+ const shot=async(name)=>page.screenshot({path:`${out}/v12-${device}-${name}.png`});
  const state=()=>page.evaluate(()=>window.__GAME.save());
  assert.equal(await page.locator('#board .cell').count(),63);assert.equal(await page.locator('.orders-row .order').count(),4);
  await shot('board');
+ await page.locator('.daily-card').tap();await page.waitForTimeout(400);await shot('challenge');await page.click('#btn-challenge-close');
+ await page.locator('#btn-events').tap();await page.waitForTimeout(400);await shot('events');await page.click('#btn-event-close');
  const rect=await page.locator('#board').boundingBox();assert.ok(rect.x>=0 && rect.x+rect.width<=width+1 && rect.y+rect.height<=height);
+ // Main starts with a populated board; free one item cell for the generation scenario.
+ await page.evaluate(()=>{const s=__GAME.save();const i=s.board.findIndex(x=>x?.kind==='item');s.board[i]=null;__GAME.refresh();});
  // Actual generator tap charges one energy; automatic generator tap charges none.
  let s=await state(),energy=s.energy,count=s.board.filter(Boolean).length;
  await page.locator(`#board [data-uid="${s.board.find(x=>x?.gen==='star').uid}"]`).tap({force:true});await dismiss();
  s=await state();assert.equal(s.energy,energy-1);assert.equal(s.board.filter(Boolean).length,count+1);
  await page.locator(`#board [data-uid="${s.board.find(x=>x?.gen==='garden').uid}"]`).tap({force:true});assert.equal((await state()).energy,s.energy);
  // Controlled fixtures shorten waiting; every transaction below runs through real UI events.
- await page.evaluate(()=>{const s=window.__GAME.save();s.coins=500;s.starSeeds=100;s.inventory=[{kind:'item',chain:'star',tier:2,uid:'bag-check'}];window.__GAME.refresh();});
+ await page.evaluate(()=>{const s=window.__GAME.save();s.board[s.board.findIndex(x=>x?.kind==='item')]=null;s.board.find(x=>x?.gen==='garden').autoAt=Date.now()+60000;s.coins=500;s.starSeeds=100;s.inventory=[{kind:'item',chain:'star',tier:2,uid:'bag-check'}];window.__GAME.refresh();});
  await page.click('#btn-bag');await page.waitForTimeout(500);await shot('bag');
  s=await state();await page.locator('.bag-unlock').first().tap({force:true});assert.equal((await state()).coins,s.coins);assert.equal((await state()).starSeeds,s.starSeeds-4);
  await page.locator('#inv-cells .piece').first().tap({force:true});await page.waitForTimeout(1000);assert.ok((await state()).board.some(x=>x?.uid==='bag-check'));assert.equal((await state()).inventory.length,0);await page.click('#btn-bag-close');
@@ -40,12 +44,12 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
   const cdp=await context.newCDPSession(page);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:a.x+a.width/2,y:a.y+a.height/2}]});
   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:b.x+b.width/2,y:b.y+b.height/2}]});
-  if(invalid){assert.ok(await page.locator('#board .cell.bad').count());await shot('red-return');}
+  if(invalid){assert.ok(await page.locator('#board .cell.merge-bad').count());await shot('red-return');}
   await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await cdp.detach();await page.waitForTimeout(600);
  };
  const before=JSON.stringify((await state()).board);
  s=await state();await drag(`#board [data-uid="${s.board.find(x=>x?.gen==='star').uid}"]`,'#board .cell[data-r="0"][data-c="0"]',true);
- assert.equal(JSON.stringify((await state()).board),before);assert.equal(await page.locator('.piece.ghost').count(),0);
+ assert.equal(JSON.stringify((await state()).board),before);assert.equal(await page.locator('#drag-float.on').count(),0);
  // Bottom bag button accepts a real board drag; stored UID stays reserved and retrievable.
  const storeUid=(await state()).board.find(x=>x?.kind==='item').uid;
  await drag(`#board [data-uid="${storeUid}"]`,'#btn-bag');
@@ -53,7 +57,7 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  await page.click('#btn-bag');await page.locator(`#inv-cells [data-uid="${storeUid}"]`).tap({force:true});await page.waitForTimeout(700);await page.click('#btn-bag-close');
  assert.ok((await state()).board.some(x=>x?.uid===storeUid));
  // Merge adjacent to locked border opens exactly one cell.
- await page.evaluate(()=>{const s=window.__GAME.save();s.board[8]={kind:'item',chain:'star',tier:1,uid:'merge-a'};s.board[9]={kind:'item',chain:'star',tier:1,uid:'merge-b'};window.__GAME.refresh();});
+ await page.evaluate(()=>{const s=window.__GAME.save();s.board.find(x=>x?.gen==='garden').autoAt=Date.now()+60000;s.board[8]={kind:'item',chain:'star',tier:1,uid:'merge-a'};s.board[9]={kind:'item',chain:'star',tier:1,uid:'merge-b'};window.__GAME.refresh();});
  const unlocked=(await state()).unlockedCells.length;
  await drag('#board [data-uid="merge-b"]','#board [data-uid="merge-a"]');await dismiss();
  assert.equal((await state()).unlockedCells.length,unlocked+1);assert.equal((await state()).board[8].tier,2);await shot('merge-fog');
@@ -75,10 +79,12 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  await raceCdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await raceCdp.detach();await page.waitForTimeout(300);
  assert.equal((await state()).board.some(x=>x?.uid===raceUid),false,'consumed order item must not resurrect');await dismiss();
  // Due automatic producer makes one item; fully occupied board neither charges nor routes to bag.
- await page.evaluate(()=>{const s=window.__GAME.save();s.board.find(x=>x?.gen==='garden').autoAt=0;window.__GAME.refresh();});
- count=(await state()).board.filter(Boolean).length;energy=(await state()).energy;await page.waitForTimeout(1200);assert.equal((await state()).board.filter(Boolean).length,count+1);assert.equal((await state()).energy,energy);
+ await page.waitForTimeout(1200);await dismiss();
+ s=await state();count=s.board.filter(Boolean).length;energy=s.energy;
+ await page.evaluate(()=>{const s=window.__GAME.save();s.board.find(x=>x?.gen==='garden').autoAt=0;});
+ await page.waitForFunction(n=>__GAME.save().board.filter(Boolean).length===n,count+1,{timeout:5000});assert.equal((await state()).energy,energy);
  await page.evaluate(()=>{const s=window.__GAME.save();for(const cell of document.querySelectorAll('#board .cell:not(.locked)')){const i=+cell.dataset.r*7+(+cell.dataset.c);if(!s.board[i])s.board[i]={kind:'item',chain:'star',tier:1,uid:'full-'+i};}s.board.find(x=>x?.gen==='garden').autoAt=0;window.__GAME.refresh();});
- s=await state();energy=s.energy;const inv=s.inventory.length;
+ await dismiss();s=await state();energy=s.energy;const inv=s.inventory.length;
  await page.locator(`#board [data-uid="${s.board.find(x=>x?.gen==='star').uid}"]`).tap({force:true});assert.equal((await state()).energy,energy);assert.equal((await state()).inventory.length,inv);await shot('full-board');
  await page.waitForTimeout(1100);assert.equal((await state()).board.find(x=>x?.gen==='garden').autoAt,0);
  await page.click('#btn-hud-settings');await page.locator('#vol-music').evaluate(el=>{el.value=35;el.dispatchEvent(new Event('input',{bubbles:true}));});await page.click('#btn-settings-close');
@@ -88,7 +94,7 @@ for(const [device,width,height] of [['iphone',393,852],['ipad',820,1180]]) {
  await page.evaluate(()=>{const s=window.__GAME.save();s.inventorySlots=24;s.inventory=Array.from({length:24},(_,i)=>({kind:'item',chain:'star',tier:1,uid:'legacy-'+i}));window.__GAME.refresh();});
  await page.click('#btn-bag');assert.equal(await page.locator('#inv-cells .piece').count(),24);await page.click('#btn-bag-close');
  await page.click('#btn-go-map');await page.waitForTimeout(500);await shot('map');
- assert.deepEqual(errors,[]);console.log(JSON.stringify({device,viewport:[width,height],board:rect,checks:'generation / bag-store-return / shop / settings / touch red-return / merge-fog / order / order-drag-race / auto / full-board / reload / legacy24 / map',errors}));
+ assert.deepEqual(errors,[]);console.log(JSON.stringify({device,viewport:[width,height],board:rect,checks:'generation / bag-store-return / shop / settings / touch red-return / merge-fog / order / order-drag-race / auto / full-board / reload / legacy24 / map / challenge / events',errors}));
  await context.close();
 }
 } finally {await browser.close();}

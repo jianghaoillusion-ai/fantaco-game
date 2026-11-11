@@ -100,7 +100,7 @@ export function createFog(ctx) {
         const ms = Math.max(1, (item.coolUntil || 0) - (item.coolStarted || (item.coolUntil - (genCoolMs(ctx.getSave?.(), item) || left))));
         const total = Math.max(left, (item.coolUntil || 0) - (item.coolStarted || Date.now() - 1));
         const start = item.coolStarted || (item.coolUntil - total);
-        const dur = Math.max(1, item.coolUntil - start);
+        const dur = autoMs ? autoGenMs(ctx.getSave(), ctx.getGens()[item.gen], item) : Math.max(1, item.coolUntil - start);
         const pct = Math.max(0, Math.min(1, left / dur));
         const ang = Math.round(pct * 360);
         timer.innerHTML = `<span class="gen-ring" style="--pct:${ang}deg"></span><span class="gen-pill">${Math.ceil(left / 1000)}秒</span>`;
@@ -158,7 +158,7 @@ export function createFog(ctx) {
   let autoBlocked = false;
   function tickAutoGens() {
     if (ctx.canAutoGenerate && !ctx.canAutoGenerate()) return;
-    const result = tickAutoGenerators(ctx.getSave(), ctx.getGens(), ctx.getCols(), ctx.getRows(), isOpenIndex);
+    const result = tickAutoGenerators(ctx.getSave(), ctx.getGens(), ctx.getCols(), ctx.getRows(), isOpenIndex, Date.now(), autoGenMs);
     if (result.blocked && !autoBlocked) toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
     autoBlocked = result.blocked;
     for (const item of result.made) ctx.discover?.(item, {silent:true});

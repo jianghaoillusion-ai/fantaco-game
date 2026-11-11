@@ -1,3 +1,4 @@
+import { bagCap } from "./bag.js?v=25";
 import { hideTip } from "./tip.js?v=25";
 /** Travel Town-style board drag: the item follows the finger in real time. */
 const THRESHOLD = 8;
@@ -60,13 +61,13 @@ export function createBoardDrag(ctx) {
   }
 
   function clearHot() {
-    document.querySelectorAll(".cell.merge-hot, .cell.merge-bad, .order.merge-hot, .order.merge-bad, .cell.hot, .cell.bad, .order.hot, .order.bad")
+    document.querySelectorAll(".cell.merge-hot, .cell.merge-bad, .order.merge-hot, .order.merge-bad, .cell.hot, .cell.bad, .order.hot, .order.bad, #btn-bag.merge-hot, #btn-bag.merge-bad")
       .forEach((el) => el.classList.remove("merge-hot", "merge-bad", "hot", "bad"));
   }
 
   function hoverAt(x, y) {
     const prev = drag.hot;
-    const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell");
+    const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell, #btn-bag");
     if (prev === el) return;
     clearHot();
     drag.hot = el || null;
@@ -80,22 +81,22 @@ export function createBoardDrag(ctx) {
     if (el.classList.contains("order")) {
       const od = (ctx.getSave().orders || []).find((o) => o.id === el.dataset.id);
       return !!(od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier
-        && (!od.reservedUid || od.reservedUid === item.uid));
+        && od.reservedUid === item.uid);
     }
-    if (el.classList.contains("inv-cell") || el.dataset.inv !== undefined) return true;
+    if (el.id === "btn-bag" || el.classList.contains("inv-cell") || el.dataset.inv !== undefined) return !el.classList.contains("locked") && ctx.getSave().inventory.filter(Boolean).length < bagCap(ctx.getSave());
     if (el.classList.contains("locked")) return false;
     const r = +el.dataset.r, c = +el.dataset.c;
     if (Number.isNaN(r) || (ctx.fog && !ctx.fog.canDropAt(r, c))) return false;
     const dest = ctx.getSave().board[ctx.getCols() * r + c];
     if (!dest) return true;
     if (ctx.canMerge?.(item, dest)) return true;
-    if (drag.loc.where === "board") return true; // swap
+    if (dest.uid === item.uid) return true;
     return false;
   }
 
-  function springBack(then) {
-    const fl = drag.float;
-    const origin = drag.originRect;
+  function springBack(d, then) {
+    const fl = d.float;
+    const origin = d.originRect;
     if (!fl || !origin) { then?.(); return; }
     const x = origin.left;
     const y = origin.top;
@@ -115,6 +116,9 @@ export function createBoardDrag(ctx) {
     clearHot();
     d.piece.classList.remove("origin-ghost");
     const fl = d.float;
+    const current = ctx.findCellByUid?.(d.loc.item.uid);
+    if (!current || e.type === "pointercancel") { springBack(d); return; }
+    d.loc = current;
     if (!d.moved) {
       if (fl) fl.classList.remove("on");
       ctx.onTap?.(d.loc);
@@ -122,7 +126,7 @@ export function createBoardDrag(ctx) {
     }
     const x = e.clientX, y = e.clientY;
     if (fl) fl.style.pointerEvents = "none";
-    const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell");
+    const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell, #btn-bag");
     const valid = el && dropOk(el, d.loc.item);
     const settle = (fn) => {
       if (fl) fl.classList.remove("on", "spring");
@@ -130,14 +134,14 @@ export function createBoardDrag(ctx) {
     };
     if (!el || !valid) {
       ctx.sfx?.invalid?.();
-      springBack(() => settle());
+      springBack(d, () => settle());
       return;
     }
     if (el.classList.contains("order")) {
       settle(() => ctx.tryFulfill?.(d.loc, el.dataset.id));
       return;
     }
-    if (el.classList.contains("inv-cell") || el.dataset.inv !== undefined) {
+    if (el.id === "btn-bag" || el.classList.contains("inv-cell") || el.dataset.inv !== undefined) {
       settle(() => ctx.moveToInventory?.(d.loc, el.dataset.inv === undefined ? -1 : +el.dataset.inv));
       return;
     }
@@ -152,7 +156,7 @@ export function createBoardDrag(ctx) {
     const piece = e.target.closest("#play .piece, #board .piece, .inv-cell .piece");
     if (!piece) return;
     const loc = ctx.findCellByUid?.(piece.dataset.uid);
-    if (!loc) return;
+    if (!loc || drag || (loc.where === "board" && !ctx.fog.isOpenIndex(loc.i))) return;
     if (e.cancelable) e.preventDefault();
     drag = {
       loc, piece,

@@ -463,14 +463,13 @@ function onBoardDown(e) {
   const piece = e.target.closest(".piece");
   if (!piece) return;
   const loc = findCellByUid(piece.dataset.uid);
-  if (!loc || dragging || (e.button != null && e.button !== 0)) return;
-  if (loc.where === "board" && !systems.fog.isOpenIndex(loc.i)) return;
+  if (!loc) return;
   const start = { x: e.clientX, y: e.clientY, t: Date.now() };
   dragging = { loc, piece, start, moved: false, ghost: null, pointerId: e.pointerId };
 }
 
 function onDragMove(e) {
-  if (!dragging || e.pointerId !== dragging.pointerId) return;
+  if (!dragging) return;
   const dx = e.clientX - dragging.start.x, dy = e.clientY - dragging.start.y;
   if (!dragging.moved && Math.hypot(dx, dy) < 10) return;
   if (!dragging.moved) {
@@ -490,53 +489,52 @@ function onDragMove(e) {
   highlightDrop(e);
 }
 
-function validDrop(cell, loc) {
-  if (!cell) return false;
-  if (cell.classList.contains("order")) {
-    return SAVE.orders.some(o => o.id === cell.dataset.id && o.reservedUid === loc.item.uid);
-  }
-  if (cell.id === "btn-bag" || cell.classList.contains("inv-cell")) {
-    return !cell.classList.contains("locked") && SAVE.inventory.filter(Boolean).length < bagCap(SAVE);
-  }
-  const r = +cell.dataset.r, c = +cell.dataset.c;
-  if (!Number.isInteger(r) || !Number.isInteger(c) || !systems.fog.canDropAt(r,c)) return false;
-  const dest = cellAt(r,c);
-  return !dest || dest === loc.item || canMerge(loc.item,dest,CHAINS,GENS);
-}
-
 function highlightDrop(e) {
-  $$(".cell.hot,.cell.bad,.order.hot,.order.bad,#btn-bag.hot,#btn-bag.bad").forEach(el => el.classList.remove("hot","bad"));
-  const cell = document.elementFromPoint(e.clientX,e.clientY)?.closest?.(".cell, .order, .inv-cell, #btn-bag");
-  if (cell && dragging) cell.classList.add(validDrop(cell,dragging.loc) ? "hot" : "bad");
-}
-
-function returnDrag(d) {
-  if (!d.ghost) { d.piece.classList.remove("lifted"); return; }
-  const rect = d.piece.getBoundingClientRect();
-  const animation = d.ghost.animate([
-    {left:d.ghost.style.left,top:d.ghost.style.top},
-    {left:`${rect.x+rect.width/2}px`,top:`${rect.y+rect.height/2}px`}
-  ], {duration:matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 240,easing:'ease-out'});
-  animation.onfinish = () => {d.ghost.remove();d.piece.classList.remove("lifted");};
+  $$(".cell.hot,.cell.bad,.order.hot").forEach((el) => el.classList.remove("hot", "bad"));
+  const cell = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order");
+  if (!cell || !dragging) return;
+  const item = dragging.loc.item;
+  if (cell.classList.contains("order")) {
+    const od = SAVE.orders.find((o) => o.id === cell.dataset.id);
+    const ok = od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier
+      && (!od.reservedUid || od.reservedUid === item.uid);
+    cell.classList.add(ok ? "hot" : "bad");
+  } else {
+    const r = +cell.dataset.r, c = +cell.dataset.c;
+    if (cell.classList.contains("locked") || (systems && !systems.fog.canDropAt(r, c))) {
+      cell.classList.add("bad");
+      return;
+    }
+    const dest = cellAt(r, c);
+    if (!dest || canMerge(item, dest, CHAINS, GENS)) cell.classList.add("hot");
+    else if (dragging.loc.where !== "board") cell.classList.add("bad");
+  }
 }
 
 function onDragUp(e) {
-  if (!dragging || e.pointerId !== dragging.pointerId) return;
+  if (!dragging) return;
   const d = dragging; dragging = null;
-  $$(".cell.hot,.cell.bad,.order.hot,.order.bad,#btn-bag.hot,#btn-bag.bad").forEach(el => el.classList.remove("hot","bad"));
-  if (e.type === "pointercancel") { returnDrag(d); return; }
-  const current = findCellByUid(d.loc.item.uid);
-  if (!current) { returnDrag(d); return; }
-  d.loc = current;
+  $$(".cell.hot,.cell.bad,.order.hot,.order.bad").forEach((el) => el.classList.remove("hot", "bad"));
+  d.piece.classList.remove("lifted");
+  d.ghost?.remove();
   if (!d.moved) { onTap(d.loc); return; }
-  const el = document.elementFromPoint(e.clientX,e.clientY)?.closest?.(".cell, .order, .inv-cell, #btn-bag");
-  if (!validDrop(el,d.loc)) { sfx.invalid(); returnDrag(d); return; }
-  d.piece.classList.remove("lifted"); d.ghost?.remove();
-  if (el.classList.contains("order")) { tryFulfill(d.loc,el.dataset.id); return; }
-  if (el.id === "btn-bag" || el.classList.contains("inv-cell")) {
-    moveToInventory(d.loc, el.dataset.slot == null ? -1 : +el.dataset.slot); return;
+  const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.(".cell, .order, .inv-cell");
+  if (!el) {
+    sfx.invalid();
+    const src = d.piece.closest(".cell") || d.piece;
+    systems?.fx.bounceCell?.(src);
+    return;
   }
-  moveOrMerge(d.loc,+el.dataset.r,+el.dataset.c);
+  if (el.classList.contains("order")) {
+    tryFulfill(d.loc, el.dataset.id);
+    return;
+  }
+  if (el.classList.contains("inv-cell") || el.dataset.inv !== undefined) {
+    moveToInventory(d.loc, el.dataset.inv === undefined ? -1 : +el.dataset.inv);
+    return;
+  }
+  const r = +el.dataset.r, c = +el.dataset.c;
+  moveOrMerge(d.loc, r, c);
 }
 
 function moveToInventory(loc, slot) {
@@ -1075,7 +1073,7 @@ function systemCtx() {
     chainPreview: (chain, tier) => chainPreview(CHAINS, chain, tier),
     getGens: () => GENS,
     discover,
-    canAutoGenerate: () => !dragging && $("#play").classList.contains("on") && !$$(".overlay.on,.sheet-overlay.on").length,
+    canAutoGenerate: () => !systems?.drag?.isDragging() && $("#play").classList.contains("on") && !$$(".overlay.on,.sheet-overlay.on").length,
     avatarSrc,
     get mascot() { return mascot; },
     showInfo: (item) => systems?.fx.showInfo(item),

@@ -309,10 +309,10 @@ export function reserveOrderItems(save) {
 }
 
 /** A due automatic producer waits when full; never charges energy or catches up in a burst. */
-export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.now()) {
+export function tickAutoGenerators(save, gens, cols, rows, isOpen, now = Date.now(), intervalFor = (_save, def) => def?.autoMs) {
   const made = []; let blocked = false, changed = false;
   for (let i = 0; i < save.board.length; i++) {
-    const gen = save.board[i], interval = gens[gen?.gen]?.autoMs;
+    const gen = save.board[i], interval = intervalFor(save, gens[gen?.gen], gen);
     if (gen?.kind !== 'gen' || !interval || !isOpen(i)) continue;
     if (!Number.isFinite(gen.autoAt)) { gen.autoAt = now + interval; changed = true; continue; }
     if (gen.autoAt > now) continue;
