@@ -1,0 +1,23 @@
+{
+  "hate": {
+    "changed_pixels": 1711,
+    "changed_bbox": [
+      231,
+      27,
+      379,
+      171
+    ],
+    "face_interior_unchanged": true
+  },
+  "spirit": {
+    "changed_pixels": 1137,
+    "changed_bbox": [
+      82,
+      258,
+      457,
+      468
+    ],
+    "crotch_changed_pixels": 21,
+    "face_interior_unchanged": true
+  }
+}

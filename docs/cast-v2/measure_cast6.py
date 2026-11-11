@@ -21,17 +21,13 @@ FIELDS = [('head_height','頭高'), ('ratio','頭身比'), ('face_width','臉最
           ('jaw_width','下顎寬'), ('head_width','含髮頭寬'), ('head_area','頭部面積'),
           ('head_area_no_ears','頭部面積扣耳'), ('ear_area','耳朵面積'),
           ('hair_area','可見髮量'), ('shoulder_right','右肩外輪廓單側'),
-          ('shoulder_total','肩膀外輪廓合計'), ('torso_length','下巴到腰'),
+          ('shoulder_total','y280肩膀外輪廓合計'), ('shoulder_relative_total','下巴+34肩寬合計'), ('torso_length','下巴到腰'),
           ('chin_to_crotch','下巴到胯下'), ('leg_length','腿長'), ('body_height','總高')]
 ALPHA = 128
 DELTA_E = 18
-# User explicitly chose the reviewer's cast5 baseline. Preserve it; expose
-# this run's independently recalculated blue values separately, never tune masks.
-REFERENCE = dict(head_height=216, ratio=216/656, face_width=133, jaw_width=115,
-                 head_width=204, head_area=32965, hair_area=16260,
-                 shoulder_right=84, shoulder_total=160, torso_length=146,
-                 chin_to_crotch=202, leg_length=237, body_height=656,
-                 head_area_no_ears=32078, ear_area=887)
+# Same-program baseline is assigned after all four sprites are measured.
+# Independent reviewer numbers are recorded separately; never mix definitions.
+REFERENCE = {}
 
 def font(n): return ImageFont.truetype(FONT,n)
 def fmt(v): return '無法驗證' if v is None else f'{v:.4f}' if isinstance(v,float) else str(v)
@@ -97,6 +93,7 @@ def measure(key,im,s):
            leg_length=None if crotch is None else sole-crotch,body_height=sole-top+1,
            waist_to_sole=sole-waist,skin_sample_rgb=skin_sample.tolist(),
            visible_only=key=='hate',crotch_estimated=key in ['bulu','spirit'])
+    r['shoulder_relative_total']=None if r['shoulder_chin34_left'] is None else r['shoulder_chin34_left']+r['shoulder_chin34_right']
     for name,m in [('hair',hair),('face',face),('ears',ears)]+([('long-hair',long_mask)] if 'long_hair' in s else []):
         Image.fromarray((m*255).astype('uint8')).save(OUT/f'mask-{key}-{name}-binary.png')
     colors=np.zeros_like(a);colors[hair]=[0,225,225,150];colors[face]=[20,210,80,110]
@@ -116,7 +113,7 @@ def labels(r):
     return [f'頭身比 {fmt(r["ratio"])}　頭高 {fmt(r["head_height"])}',
             f'臉寬 {fmt(r["face_width"])}　頭寬 {fmt(r["head_width"])}',
             f'頭部面積 {fmt(r["head_area"])}',f'髮量 {fmt(r["hair_area"])}',
-            f'右肩單側 {fmt(r["shoulder_right"])}',f'身長 {fmt(r["torso_length"])}　腿長 {fmt(r["leg_length"])}',
+            f'肩寬 {fmt(r.get("shoulder_relative_total"))}／單側{fmt(r["shoulder_right"])}',f'身長 {fmt(r["torso_length"])}　腿長 {fmt(r["leg_length"])}',
             f'總高 {fmt(r["body_height"])}　腳底 {r["sole_y"]}',
             '舊量法參考，未重驗' if r.get('legacy') else '可見範圍；遮蔽不算通過']
 
@@ -133,10 +130,14 @@ def make():
             r['chin']=json.loads((ROOT/'docs/cast-v2/landmarks.json').read_text())[key]['chin']
         r['name']=name; rows.append(r)
     blue=next(r for r in rows if r['id']=='bulu')
+    REFERENCE.update({f:blue[f] for f,_ in FIELDS})
     deltas={r['id']:{f:None if r.get(f) is None else round((r[f]/REFERENCE[f]-1)*100,2) for f,_ in FIELDS} for r in rows if r['id'] in specs and r['id']!='bulu'}
+    # Comparison captions use the independently reviewed values when available.
+    caption_path=OUT/'reviewer-labels.json'
+    captions=json.loads(caption_path.read_text()) if caption_path.exists() else {}
     for face_mode in [False,True]:
         canvas=Image.new('RGB',(3920,1080 if not face_mode else 800),'#f4f1eb');d=ImageDraw.Draw(canvas)
-        d.text((20,12),'cast6 草稿｜原尺寸不縮放｜'+('頭部下巴對齊' if face_mode else '七人腳底對齊'),font=font(28),fill='#27343c')
+        d.text((20,12),'cast6 第2輪草稿｜原尺寸不縮放｜'+('頭部下巴對齊' if face_mode else '七人腳底對齊'),font=font(28),fill='#27343c')
         baseline=330 if face_mode else 745
         d.line((0,baseline,3920,baseline),fill='#86969b',width=2)
         for i,r in enumerate(rows):
@@ -145,7 +146,7 @@ def make():
             else:pos=(i*560+10,baseline-r['sole_y'])
             canvas.paste(im,pos,im);y=450 if face_mode else 770
             d.text((i*560+20,y),r['name'],font=font(27),fill='#27343c')
-            for j,line in enumerate(labels(r)):d.text((i*560+20,y+40+j*29),line,font=font(20),fill='#43505b')
+            for j,line in enumerate(captions.get(r['id'],labels(r))):d.text((i*560+20,y+40+j*29),line,font=font(20),fill='#43505b')
         filename='cmp-faces.png' if face_mode else 'cmp-cast.png';canvas.save(OUT/filename)
         canvas.save(ROOT/('docs/cmp-cast-v2-faces.png' if face_mode else 'docs/cmp-cast-v2.png'))
     for key in ['jiejie','hate','spirit']:
@@ -159,10 +160,10 @@ def make():
         d.text((10,750),'原尺寸，只平移對齊腳底',font=font(22),fill='#27343c')
         canvas.convert('RGB').save(OUT/f'overlay-{key}-vs-blue.png')
         canvas.convert('RGB').save(ROOT/f'docs/cast-v2/overlay-{key}-vs-blue.png')
-        before=Image.open(io.BytesIO(subprocess.check_output(['git','show',f'3b3f1d9:assets/chars/{key}.png'],cwd=ROOT))).convert('RGBA')
+        before=Image.open(io.BytesIO(subprocess.check_output(['git','show',f'6c0c0f8:assets/chars/{key}.png'],cwd=ROOT))).convert('RGBA')
         original=Image.open(io.BytesIO(subprocess.check_output(['git','show',f'525ab99^:assets/chars/{key}.png'],cwd=ROOT))).convert('RGBA')
         cmp=Image.new('RGB',(1620,790),'#f4f1eb');d=ImageDraw.Draw(cmp)
-        for i,(im,title) in enumerate([(original,'原設定'),(before,'cast5'),(images[key],'cast6 草稿')]):
+        for i,(im,title) in enumerate([(original,'原設定'),(before,'cast6 第1輪'),(images[key],'cast6 第2輪草稿')]):
             sole=int(np.where(np.array(im)[:,:,3]>=128)[0].max());cmp.paste(im,(i*540,735-sole),im)
             d.text((i*540+20,10),title,font=font(27),fill='#27343c')
         d.line((0,735,1620,735),fill='#86969b',width=2);cmp.save(OUT/f'before-after-{key}.png')
@@ -187,7 +188,7 @@ def make():
     (OUT/'crown-boundary.md').write_text(crown)
     hashes={k:hashlib.sha1((ROOT/f'assets/chars/{k}.png').read_bytes()).hexdigest() for k in specs}
     batch=hashlib.sha256(json.dumps(hashes,sort_keys=True).encode()).hexdigest()[:16]
-    table=f'素材批次 `{batch}`；起始 commit `3b3f1d94fba77366e2cd7ea7f19cb111f337918b`（不是最終提交碼）。\n\n'
+    table=f'第2輪同程式可見像素量測；素材批次 `{batch}`。此表不補遮蔽；正式門檻請看小頌獨立量測。\n\n'
     for k,h in hashes.items():table+=f'- `assets/chars/{k}.png` SHA1 `{h}`\n'
     table+='\n|項目|布魯基準|布魯本次重算|姐姐|哈特|精靈|\n|---|---:|---:|---:|---:|---:|\n'
     for f,label in FIELDS:
@@ -198,16 +199,12 @@ def make():
             if f in ['leg_length','chin_to_crotch'] and key=='spirit':caveat+='；衣襬附近估計'
             cells.append('無法驗證' if delta is None else f'{fmt(r[f])}（{delta:+.2f}%）'+(' 參考、非關卡' if f=='ear_area' else ' 超標' if abs(delta)>5 else '')+caveat)
         table+='|'+label+'|'+fmt(REFERENCE[f])+'|'+fmt(blue[f])+'|'+'|'.join(cells)+'|\n'
-    (OUT/'measurements.md').write_text(table)
-    table+='\n核心欄位沿用小頌cast5；新增耳朵與扣耳面積依小頌最新審查改對照同程式布魯重算887／32078，耳朵不作關卡。\n'
-    table+='\n髮量補充對照本次布魯16412：'+ '、'.join(f'{r["name"]} {(r["hair_area"]/blue["hair_area"]-1)*100:+.2f}%' for r in rows if r['id'] in ['jiejie','hate','spirit'])+'。主表仍依使用者指定的16260基準，兩種基準均揭露。精靈髮頂判讀範圍y44–48，頭高207–211。\n'
-    table+='\n姐姐下巴以下可見長髮 '+str(next(r['long_hair_area'] for r in rows if r['id']=='jiejie'))+' px²，已加進髮量。\n'
-    table+='\n肩寬主表在固定 y280 量可見外輪廓，布魯包含上臂。抬手側不驗收。下巴+34 的參考寬（左／右／合計）：'+ '、'.join(f'{r["name"]} '+('不可量' if r['shoulder_chin34_left'] is None else str(r['shoulder_chin34_left']))+'/'+str(r['shoulder_chin34_right'])+'/'+('不可量' if r['shoulder_chin34_left'] is None else str(r['shoulder_chin34_left']+r['shoulder_chin34_right'])) for r in rows if r['id'] in specs)+'。\n'
-    table+='\n臉採最大膚色連通塊並補洞；人工耳朵區域先扣除。哈特頭髮受遮蔽、姐姐腿根受裙子遮蔽，不能以表內數字宣稱全項通過。基準胯下也是衣襬下估計。主表核心差距固定對照小頌 cast5 數字；補充耳朵欄使用本次重算值，髮量雙基準另列，不用微調門檻消除落差。\n'
-    (OUT/'measurements.md').write_text(table)
-    (OUT/'measurements.json').write_text(json.dumps(dict(alpha=ALPHA,delta_e=DELTA_E,batch=batch,asset_sha1=hashes,reviewer_reference=REFERENCE,rows=rows,deltas=deltas),ensure_ascii=False,indent=2)+'\n')
-    (ROOT/'docs/cast-v2/measurements.md').write_text(table)
-    (ROOT/'docs/cast-v2/measurements.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
+    (OUT/'visible-measurements.md').write_text(table)
+    table+='\n所有差距只對照本支程式重算的布魯。此程式的膚色/耳朵遮罩與小頌不同，髮量不能混用他的分母；遮蔽部分未補、姐姐腿根被裙子蓋住，因此本表不能證明全部通過。小頌第2輪表另存 xiaosong-r2/。\n'
+    (OUT/'visible-measurements.md').write_text(table)
+    (OUT/'visible-measurements.json').write_text(json.dumps(dict(alpha=ALPHA,delta_e=DELTA_E,batch=batch,asset_sha1=hashes,reviewer_reference=REFERENCE,rows=rows,deltas=deltas),ensure_ascii=False,indent=2)+'\n')
+    (ROOT/'docs/cast-v2/visible-measurements.md').write_text(table)
+    (ROOT/'docs/cast-v2/visible-measurements.json').write_text(json.dumps(rows,ensure_ascii=False,indent=2)+'\n')
     (ROOT/'docs/cast-v2/vs-blue.json').write_text(json.dumps(deltas,ensure_ascii=False,indent=2)+'\n')
     print(table)
 

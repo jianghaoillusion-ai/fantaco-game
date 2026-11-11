@@ -6,8 +6,8 @@
     ],
     "mode": "RGBA",
     "sole_y": 685,
-    "top_opaque_y": 5,
-    "sha256": "1b6229bc9cb9ab8935e26129172fdfd1e7c49183512c2c07b6f28162638f1943"
+    "top_opaque_y": 14,
+    "sha256": "18663584373fe02647d0f9e81142aae47229df82b10aed39436827c0163316a7"
   },
   "hate": {
     "size": [
@@ -17,7 +17,7 @@
     "mode": "RGBA",
     "sole_y": 685,
     "top_opaque_y": 22,
-    "sha256": "46a0bbde44e1df54b3ee289d69f0dee560eb38c5f7ea69c8fdde54913442404c"
+    "sha256": "bdfce3d9e2f251b4dff0a88338968580f1d352ebb3b3fecadf0c1272122f6b38"
   },
   "spirit": {
     "size": [
@@ -27,12 +27,12 @@
     "mode": "RGBA",
     "sole_y": 685,
     "top_opaque_y": 15,
-    "sha256": "7a8dc4420f6fb2864ff07ab2f009eb7c3102d964cc3ef929fb6902a9abd0cee4",
-    "body_alpha_mirror_iou": 0.9821
+    "sha256": "ca4e6de8404cf5f8ca1c0b7ca90902535b3ab65e3c1f7be496f53c695342e373",
+    "alpha_mirror_iou": 0.9846081998793563
   },
   "reference_assets_unchanged": true,
   "expr_avatars_js_unchanged": true,
-  "comparison_copies_identical": true,
-  "review_png_count": 28,
-  "rebuild_image_hashes_identical": true
+  "rebuild_image_hashes_identical": true,
+  "rebuild_image_count": 42,
+  "comparison_copies_identical": true
 }
