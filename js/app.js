@@ -25,12 +25,12 @@ let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
 let SAVE = loadSave();
 let mascot;
 let dragging = null;
-let combo = { n: 0, at: 0 };
 let pendingStory = null;
 let energyTimer;
 let selectedUid = null;
 let wandArmed = false;
 let systems;
+let orderAnimations = 0;
 let home, settingsUi;
 
 let COLS = 7, ROWS = 9;
@@ -105,7 +105,12 @@ export async function boot() {
   if (!placeToast._resize) { placeToast._resize = () => { if ($("#toast")?.classList.contains("on")) placeToast(); }; addEventListener("resize", placeToast._resize); }
 }
 
-function persist() { tickEnergy(SAVE); writeSave(SAVE); syncCloud(SAVE); }
+function persist() {
+  tickEnergy(SAVE);
+  reserveItems(SAVE.orders || [], SAVE.board, SAVE.inventory);
+  try { writeSave(SAVE); syncCloud(SAVE); }
+  catch { toast("無法儲存進度，請確認瀏覽器允許儲存並保留此分頁"); }
+}
 
 function show(name) {
   $$(".screen,.overlay").forEach((el) => el.classList.remove("on"));
@@ -557,10 +562,10 @@ function moveToInventory(loc, slot) {
       SAVE.inventory[loc.i] = dest;
       SAVE.inventory[slot] = src;
     }
-    sfx.drop(); persist(); renderBoard();
+    sfx.drop(); persist(); renderBoard(); renderOrders();
     return;
   }
-  if (SAVE.inventory.filter(Boolean).length >= cap && (slot < 0 || SAVE.inventory[slot])) {
+  if (SAVE.inventory.filter(Boolean).length >= cap) {
     sfx.invalid(); toast("背包滿了"); return;
   }
   removeFrom(loc);
@@ -568,7 +573,7 @@ function moveToInventory(loc, slot) {
   if (slot >= 0 && slot <= SAVE.inventory.length) SAVE.inventory.splice(slot, 0, src);
   else SAVE.inventory.push(src);
   SAVE.inventory = SAVE.inventory.filter(Boolean);
-  sfx.drop(); persist(); renderBoard();
+  sfx.drop(); persist(); renderBoard(); renderOrders();
 }
 
 function removeFrom(loc) {
@@ -610,6 +615,7 @@ function onTap(loc) {
 function tapGenerator(loc) {
   tickEnergy(SAVE);
   const gen = loc.item;
+  if (GENS[gen.gen]?.autoMs) { toast("會自動產出"); return; }
   if (gen.coolUntil && gen.coolUntil > Date.now()) {
     const s = Math.ceil((gen.coolUntil - Date.now()) / 1000);
     sfx.invalid();
@@ -626,14 +632,9 @@ function tapGenerator(loc) {
   }
   const origin = loc.where === "board" ? loc.i : -1;
   let empty = nearbyEmpty(SAVE.board, COLS, ROWS, origin, systems?.fog.isOpenIndex);
-  let toInv = false;
-  if (empty < 0) {
-    if (SAVE.inventory.filter(Boolean).length >= bagCap(SAVE)) {
-      toast("棋盤滿了，先把一樣的合在一起，或放進魔法袋。");
-      sfx.invalid();
-      return;
-    }
-    toInv = true;
+  if (empty < 0 && SAVE.inventory.filter(Boolean).length >= bagCap(SAVE)) {
+    toast("棋盤和魔法袋都滿了");
+    sfx.invalid(); return;
   }
   const chargeMax = gen.chargeMax || GENS[gen.gen]?.chargeMax;
   if (chargeMax) {
@@ -641,7 +642,7 @@ function tapGenerator(loc) {
     if (gen.charge < chargeMax) {
       sfx.tap();
       toast(`蓄力 ${gen.charge}/${chargeMax}`);
-      persist(); renderBoard();
+      persist(); renderBoard(); renderOrders();
       return;
     }
     gen.charge = 0;
@@ -659,15 +660,15 @@ function tapGenerator(loc) {
     else { gen.coolUntil = 0; gen.coolStarted = 0; }
   }
   systems?.orders?.bumpTask?.("gens");
-  if (toInv) SAVE.inventory.push(made);
+  if (empty < 0) SAVE.inventory.push(made);
   else SAVE.board[empty] = made;
   discover(made);
   sfx.generate();
   persist();
   const fromEl = document.querySelector(`.piece[data-uid="${gen.uid}"]`);
-  renderBoard();
+  renderBoard(); renderOrders();
   refreshHud();
-  const toEl = toInv ? document.getElementById("btn-bag") : document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
+  const toEl = empty < 0 ? $("#btn-bag") : document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
   if (systems?.fx.spawnArc && fromEl && toEl) systems.fx.spawnArc(fromEl, toEl, () => systems.fx.popAt(made.uid));
   else systems?.fx.popAt(made.uid);
 }
@@ -690,7 +691,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   if (canMerge(src, dest, CHAINS, GENS)) {
@@ -698,7 +699,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   // swap
@@ -706,7 +707,7 @@ function moveOrMerge(loc, r, c) {
     SAVE.board[loc.i] = dest;
     SAVE.board[destI] = src;
     sfx.drop();
-    persist(); renderBoard();
+    persist(); renderBoard(); renderOrders();
     return;
   }
   sfx.invalid();
@@ -714,13 +715,8 @@ function moveOrMerge(loc, r, c) {
 }
 
 function onMerged(merged) {
-  const now = Date.now();
-  if (now - combo.at < 2200) combo.n += 1; else combo.n = 1;
-  combo.at = now;
-  SAVE.comboBest = Math.max(SAVE.comboBest || 0, combo.n);
   const tier = merged.tier || 1;
   sfx.merge(tier);
-  if (combo.n >= 2) { /* combo pop-up retired */ }
   mascot?.merge(tier);
   systems?.fx.revealMerge?.(merged.uid) || systems?.fx.popAt(merged.uid);
   const at = findCellByUid(merged.uid);
@@ -733,7 +729,6 @@ function onMerged(merged) {
   systems?.orders?.bumpTask?.("merges");
   discover(merged);
   if (tier >= 5) shake(10);
-  else if (combo.n >= 3) {}
   // first-discover gift
 }
 
@@ -774,14 +769,6 @@ function shake(n) {
   setTimeout(() => play.classList.remove("shake"), 400);
 }
 
-function floatCombo(n) {
-  const el = document.createElement("div");
-  el.className = "combo-float";
-  el.textContent = n >= 4 ? `超讚連擊 ×${n}` : `連擊 ×${n}`;
-  $("#play").appendChild(el);
-  setTimeout(() => el.remove(), 1200);
-}
-
 function renderInventory() {
   if (systems?.shop) systems.shop.renderInventory();
 }
@@ -815,6 +802,7 @@ function ensureOrders() {
     discovered: SAVE.discovered,
     npcsByChapter: NPCS_BY_CHAPTER,
     seq: SAVE.ordersDone || 0,
+    availableChains: [...new Set(SAVE.board.concat(SAVE.inventory).filter(x => x?.kind === "gen").map(x => GENS[x.gen]?.produces).filter(Boolean))],
     nextStory: nextStoryOrder
   });
   reserveItems(SAVE.orders, SAVE.board, SAVE.inventory);
@@ -849,19 +837,25 @@ function unlockGenerators() {
 }
 
 function renderOrders() {
+  // Auto output and board actions must not remove cards mid-completion.
+  if (orderAnimations) return;
   reserveItems(SAVE.orders || [], SAVE.board, SAVE.inventory);
   if (systems?.orders) systems.orders.renderOrders();
 }
 
 function tryFulfill(loc, orderId) {
   const o = SAVE.orders.find((x) => x.id === orderId);
+  // Fly-in callbacks may finish after another transaction moved/consumed the item.
+  loc = findCellByUid(loc?.item?.uid);
+  if (!loc) return;
   const item = loc.item;
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
     sfx.invalid(); toast("這不是訂單要的東西"); return;
   }
-  if (o.reservedUid && item.uid !== o.reservedUid) {
+  if (item.uid !== o.reservedUid) {
     sfx.invalid(); toast("這件是另一張訂單要的"); return;
   }
+  orderAnimations += 1;
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
@@ -893,6 +887,7 @@ function tryFulfill(loc, orderId) {
   fromCard?.classList.add("task-glow");
   const after = (leveled) => {
     const finish = () => {
+      orderAnimations -= 1;
       renderBoard(); renderOrders(); refreshHud();
       if (o.outro) startStory(o.outro, () => {
         if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
@@ -1083,6 +1078,8 @@ function systemCtx() {
     maxTier: (chain) => maxTier(CHAINS, chain),
     chainPreview: (chain, tier) => chainPreview(CHAINS, chain, tier),
     getGens: () => GENS,
+    discover,
+    canAutoGenerate: () => !systems?.drag?.isDragging() && $("#play").classList.contains("on") && !$$(".overlay.on,.sheet-overlay.on").length,
     avatarSrc,
     get mascot() { return mascot; },
     showInfo: (item) => systems?.fx.showInfo(item),
@@ -1091,7 +1088,12 @@ function systemCtx() {
 }
 
 function giveEnergy(n) { SAVE.energy = Math.min(ENERGY.max, SAVE.energy + n); persist(); refreshHud(); }
-function completeTopOrder() { /* debug */ }
+function completeTopOrder() {
+  const order = SAVE.orders?.[0];
+  if (!order) return;
+  const card = document.querySelector(`.order[data-id="${order.id}"]`);
+  systems?.orders.clickGive(order.id, card);
+}
 
 boot().catch((err) => {
   console.error(err);

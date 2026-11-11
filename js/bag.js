@@ -23,8 +23,7 @@ export function migrateBagSlots(save, isExisting) {
   }
   const filled = (save.inventory || []).filter(Boolean).length;
   n = Math.max(BAG_START, Math.min(BAG_MAX, n));
-  if (filled > n) n = Math.min(BAG_MAX, filled);
-  save.inventorySlots = n;
+  n = Math.max(n, filled, save.inventorySlots || 0);
   save.inventorySlots = n; save.bagSlots = n;
   return save;
 }
@@ -77,7 +76,7 @@ export function createBag(ctx) {
     box.classList.add("bag-grid");
     box.innerHTML = "";
     let visible = Math.min(BAG_MAX, Math.max(owned + 4, 8));
-    visible = Math.min(BAG_MAX, Math.ceil(visible / 4) * 4);
+    visible = Math.max(owned, items.length, Math.min(BAG_MAX, Math.ceil(visible / 4) * 4));
     for (let i = 0; i < visible; i++) {
       const slot = document.createElement("div");
       const locked = i >= owned;
@@ -159,17 +158,17 @@ export function createBag(ctx) {
     const item = save.inventory[i];
     if (!item) return;
     const empty = ctx.emptyOpenCell?.();
-    if (empty == null) { sfx.invalid(); toast("棋盤上沒有空位"); return; }
+    if (empty == null || empty < 0) { sfx.invalid(); toast("棋盤上沒有空位"); return; }
     const fromEl = document.querySelector(`#inv-cells .piece[data-uid="${item.uid}"]`);
-    const toEl = document.querySelector(`.cell[data-r="${empty.r}"][data-c="${empty.c}"]`) || $("#btn-bag");
+    const toEl = document.querySelector(`.cell[data-r="${Math.floor(empty / ctx.getCols())}"][data-c="${empty % ctx.getCols()}"]`) || $("#btn-bag");
     const fly = ctx.fx?.flyTo || ((_a, _b, d) => d?.());
     fly(fromEl, toEl, () => {
       const save2 = ctx.getSave();
-      const it = save2.inventory[i];
-      if (!it) return;
-      save2.inventory.splice(i, 1);
-      const cols = ctx.getCols();
-      save2.board[empty.r * cols + empty.c] = it;
+      const at = save2.inventory.findIndex(x => x?.uid === item.uid);
+      const target = ctx.emptyOpenCell?.();
+      if (at < 0 || target == null || target < 0) return;
+      const [it] = save2.inventory.splice(at, 1);
+      save2.board[target] = it;
       persist();
       sfx.drop();
       ctx.refresh();

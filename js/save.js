@@ -1,4 +1,5 @@
-const KEY = "fantaco.mianhuatang.save.v2";
+const KEY = "fantaco.mianhuatang.save.v3";
+const PREVIOUS = "fantaco.mianhuatang.save.v2";
 const LEGACY = "fantaco.mianhuatang.save.v1";
 
 const ENERGY_MAX = 100;
@@ -41,78 +42,48 @@ export function emptySave() {
     flags: {},
     settings: { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 },
     daily: { day: "", streak: 0, claimed: false, challengeDay: "", challenge: 0, challengeClaimed: false },
-    comboBest: 0,
     ordersDone: 0,
     updatedAt: Date.now()
   };
 }
 
-function migrate(v1) {
-  const s = emptySave();
-  if (!v1) return s;
-  s.profile = v1.profile || null;
-  s.xp = v1.xp || 0;
-  s.level = v1.level || 1;
-  s.starSeeds = v1.starSeeds || 0;
-  s.treasures = v1.treasures || {};
-  s.flags = v1.flags || {};
+export function normalizeSave(raw) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) throw new Error("存檔格式損毀");
+  if ((raw.schemaVersion ?? raw.version ?? 1) > 4) throw new Error("存檔版本較新，請更新遊戲後再開啟");
+  const base = emptySave(), s = {...base, ...raw, version: 4, schemaVersion: 4};
+  delete s.comboBest;
+  for (const key of ["settings", "restore", "daily", "flags", "discovered", "treasures", "buildings", "boosters", "ads", "shopDaily"]) {
+    s[key] = {...base[key], ...(raw[key] && typeof raw[key] === "object" && !Array.isArray(raw[key]) ? raw[key] : {})};
+  }
+  for (const key of ["inventory", "orders", "storyDone", "unlockedCells", "unlockedRegions"]) {
+    s[key] = Array.isArray(raw[key]) ? [...raw[key]] : [...base[key]];
+  }
+  s.board = Array.isArray(raw.board) ? raw.board : null;
+  s.unlockedClumps = Array.isArray(raw.unlockedClumps) ? raw.unlockedClumps : s.board ? ["all"] : ["start"];
+  // Preserve previously bought bag capacity, including the earlier gameplay build.
+  s.inventorySlots = Math.max(raw.inventorySlots || raw.bagSlots || raw.magicBag?.capacity || ((raw.version || 1) < 3 ? 8 : 6), s.inventory.filter(Boolean).length);
+  for (const i of raw.fog?.revealed || []) {
+    if (Number.isInteger(i) && i >= 0 && i < 63) {
+      const key = Math.floor(i / 7) + "," + i % 7;
+      if (!s.unlockedCells.includes(key)) s.unlockedCells.push(key);
+    }
+  }
+  s.coinsEarned = raw.coinsEarned ?? Math.max(raw.xp || 0, 0);
+  migrateEconomy(s);
+  ensureDaily(s);
   return s;
 }
 
 export function loadSave() {
-  try {
-    const raw = localStorage.getItem(KEY);
-    if (raw) {
-      const loaded = { ...emptySave(), ...JSON.parse(raw) };
-      loaded.restore = { ...emptySave().restore, ...(loaded.restore || {}) };
-      loaded.daily = { ...emptySave().daily, ...(loaded.daily || {}) };
-      loaded.ads = { ...emptySave().ads, ...(loaded.ads || {}) };
-      loaded.shopDaily = { ...emptySave().shopDaily, ...(loaded.shopDaily || {}) };
-      if (loaded.coins == null) loaded.coins = 0;
-      if (!loaded.buildings) loaded.buildings = {};
-      if (!loaded.unlockedRegions) loaded.unlockedRegions = ["village"];
-      if (!loaded.region) loaded.region = loaded.chapter || "village";
-      // Existing boards already filled a full rectangle — keep them fully open.
-      if (loaded.board && loaded.board.length && loaded.unlockedClumps == null) loaded.unlockedClumps = ["all"];
-      migrateV3(loaded);
-      migrateEconomy(loaded);
-      ensureDaily(loaded);
-      return loaded;
+  for (const key of [KEY, PREVIOUS, LEGACY]) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (raw) return normalizeSave(JSON.parse(raw));
+    } catch (error) {
+      if (error.message.includes("存檔版本")) throw error;
     }
-    const old = localStorage.getItem(LEGACY);
-    if (old) { const m = migrate(JSON.parse(old)); migrateEconomy(m); return m; }
-  } catch {}
+  }
   return emptySave();
-}
-
-
-function migrateV3(s) {
-  if (!s || s.version >= 3) {
-    if (s.materials == null) s.materials = 0;
-    if (s.unlockedCells == null) s.unlockedCells = [];
-    if (s.inventorySlots == null) {
-      const filled = (s.inventory || []).filter(Boolean).length;
-      s.inventorySlots = Math.max(6, filled, s.bagSlots || 8);
-    }
-    if (s.settings) {
-      if (s.settings.musicVol == null) s.settings.musicVol = 0.72;
-      if (s.settings.sfxVol == null) s.settings.sfxVol = 0.85;
-    }
-    s.version = 3;
-    return s;
-  }
-  s.materials = s.materials || 0;
-  s.unlockedCells = s.unlockedCells || [];
-  const filled = (s.inventory || []).filter(Boolean).length;
-  // Existing v2 saves had 8 bag slots; never shrink, never drop items.
-  s.inventorySlots = Math.max(8, filled, s.inventorySlots || 0, s.bagSlots || 0);
-  if (!s.settings) s.settings = { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 };
-  else {
-    if (s.settings.musicVol == null) s.settings.musicVol = 0.72;
-    if (s.settings.sfxVol == null) s.settings.sfxVol = 0.85;
-  }
-  s.version = 3;
-  return s;
 }
 
 function migrateEconomy(s) {
@@ -131,6 +102,8 @@ function migrateEconomy(s) {
 }
 
 export function writeSave(data) {
+  if ((data.schemaVersion ?? data.version) > 4) throw new Error("存檔版本較新");
+  data.version = 4; data.schemaVersion = 4;
   data.updatedAt = Date.now();
   localStorage.setItem(KEY, JSON.stringify(data));
   // STUB: later POST JSON to Cloudflare Worker, persist in D1

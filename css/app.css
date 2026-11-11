@@ -177,7 +177,6 @@ a{color:var(--ink)}
 .inv-cells{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:nowrap}
 .inv-cell{width:var(--inv-cell,56px);height:var(--inv-cell,56px);flex:0 0 var(--inv-cell,56px);aspect-ratio:auto;background:var(--mint);border-radius:12px;position:relative;min-height:0}
 
-.combo-float{position:absolute;left:50%;top:38%;transform:translate(-50%,-20px);font-family:var(--sans);font-size:28px;font-weight:700;color:var(--ink-2);text-shadow:0 2px 0 #fff,0 8px 18px rgba(59,68,104,.2);animation:floaty .9s ease-out both;pointer-events:none;z-index:20}
 
 /* Chapter washes (reuse official stills, tint only) */
 #play[data-chapter-id="bulu"]{background:
