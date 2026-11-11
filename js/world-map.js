@@ -1,7 +1,7 @@
 /** Balloon Kingdom world map: drag, pinch-zoom with inertia, cloud-covered regions, repair states.
  *  Art is drawn by assets/map/src (vector, sticker style) and baked to webp.
  *  Looks and motion only. Costs, unlock rules and saving stay in map.js / world.js. */
-import { isRegionUnlocked, regionVisible, regionUnlockBlocked } from "./world.js?v=25";
+import { isRegionUnlocked, regionVisible, regionUnlockBlocked } from "./world.js?v=26";
 
 const ART = "assets/map/";
 const ICON = {
@@ -96,7 +96,6 @@ export function createWorldMap(ctx, mapApi) {
     if (shopBtn) {
       shopBtn.classList.add("wm-hud-btn");
       shopBtn.setAttribute("aria-label", shopBtn.textContent.trim() || "小舖");
-      shopBtn.title = shopBtn.getAttribute("aria-label");
       shopBtn.innerHTML = `<img src="${ICON.shop}" alt="">`;
     }
     const backBtn = host.querySelector(".hud [data-back]");
@@ -265,6 +264,8 @@ export function createWorldMap(ctx, mapApi) {
         const set = cloudSet(region, p);
         if (near) { set.classList.add("near"); layers.pins.appendChild(lockPin(region, p)); }
         layers.clouds.appendChild(set);
+        // what peeks out from under the cloud is still flat and grey
+        (region.buildings || []).forEach((b, i) => { const { rect, drawn } = buildingRect(region, b, i); if (drawn && lvOf(b.id) < maxOf(b)) layers.ruins.appendChild(ruin(b, rect, lvOf(b.id), maxOf(b))); });
         continue;
       }
       layers.pins.appendChild(regionPin(region, p));
@@ -383,10 +384,10 @@ export function createWorldMap(ctx, mapApi) {
         const bt = layout?.regions?.[region.id]?.buildings?.[b.id] && !region.map?.pin ? `${ART}thumb-${b.id}.webp` : thumb;
         const action = done
           ? `<span class="wm-done" aria-label="修好了"></span>`
-          : `<button type="button" class="wm-btn green small" data-repair="${b.id}" ${ok && canPay(cost) ? "" : "disabled"} title="${b.desc || b.name}">
+          : `<button type="button" class="wm-btn green small" data-repair="${b.id}" ${ok && canPay(cost) ? "" : "disabled"} aria-label="${b.name}">
                <img class="ico" src="${ICON.hammer}" alt="">${ok ? costChips(cost) || "修復" : `<img class="ico" src="${ICON.lock}" alt="">`}
              </button>`;
-        return `<li class="wm-bldg${done ? " done" : ""}${focusBuilding === b.id ? " focus" : ""}" data-b="${b.id}" title="${b.desc || ""}">
+        return `<li class="wm-bldg${done ? " done" : ""}${focusBuilding === b.id ? " focus" : ""}" data-b="${b.id}">
             <span class="wm-bthumb${done ? "" : " faded"}"><img src="${bt}" alt=""></span>
             <span class="wm-binfo"><b>${b.name}</b><span class="wm-pips">${pips}</span></span>
             ${action}
@@ -492,7 +493,7 @@ export function createWorldMap(ctx, mapApi) {
   /* ---------- entry ---------- */
   async function render() {
     if (!layout) {
-      try { layout = await (await fetch(ART + "layout.json?v=25")).json(); } catch { layout = { regions: {}, spare: [] }; }
+      try { layout = await (await fetch(ART + "layout.json?v=26")).json(); } catch { layout = { regions: {}, spare: [] }; }
       if (layout.size) [W, H] = layout.size;
       if (layout.cloud) CLOUD_RATIO = layout.cloud[1] / layout.cloud[0];
     }

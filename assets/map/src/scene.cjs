@@ -54,21 +54,13 @@ function blob(cx, cy, rx, ry, seed, wob = 0.07) {
 }
 const at = (x, y, k, s) => `<g transform="translate(${f(x)} ${f(y)}) scale(${k})">${s}</g>`;
 
-/* a landmark, more or less inflated */
+/* a landmark, more or less inflated: with no air it is a grey, sagging heap of soft balloons */
 function landmark(id, t) {
-  const { at: [x, y], k } = BUILDINGS[id], [bx, by, bw, bh] = BOX[id];
+  const { at: [x, y], k } = BUILDINGS[id], [bx, by, bw] = BOX[id];
   A.setT(t);
-  let s = `<g transform="scale(${f(1 + 0.05 * (1 - t))} ${f(0.66 + 0.34 * t)}) skewX(${f(-6 * (1 - t))})">${B[id]()}</g>`;
-  if (t < 1) {
-    const r = rng(id.length * 77 + id.charCodeAt(0)), n = t > 0.4 ? 1 : 3;
-    for (let i = 0; i < n; i++) {
-      const px = bx + bw * (0.28 + 0.22 * i + r() * 0.08), py = (by + bh * (0.5 + r() * 0.3)) * (0.66 + 0.34 * t), rot = Math.round(r() * 60 - 30);
-      s += `<g transform="translate(${f(px)} ${f(py)}) rotate(${rot})"><rect x="-15" y="-5.500" width="30" height="11" rx="4" fill="#FFF3D9" stroke="${OUT}" stroke-width="2.600"/><rect x="-5.500" y="-15" width="11" height="30" rx="4" fill="#FFF3D9" stroke="${OUT}" stroke-width="2.600"/><rect x="-13" y="-3.500" width="26" height="7" rx="3" fill="#FFF3D9"/></g>`;
-    }
-    A.setT(1);
-    if (t < 0.4) for (const [dx, dy, r2] of [[bx + bw * 0.14, -8, 13], [bx + bw * 0.88, -10, 11]]) s += cloud([[dx - 12, dy, r2 * 0.8], [dx, dy - 6, r2], [dx + 13, dy, r2 * 0.75]], { sw: 2.8, shade: "#E9E2D6" });
-  }
+  let s = `<g transform="scale(${f(1 + 0.02 * (1 - t))} ${f(0.6 + 0.4 * t)}) skewX(${f(-4 * (1 - t))})">${B[id]()}</g>`;
   A.setT(1);
+  if (t < 0.3) s += A.hiss(bx + bw * 0.8, by * 0.42, -24);
   return at(x, y, k, s);
 }
 

@@ -2,7 +2,7 @@
 import {
   regionById, isRegionUnlocked, regionVisible, regionUnlockBlocked,
   allBuildings, buildingDef, formatCost, payCost, canAfford
-} from "./world.js?v=10";
+} from "./world.js?v=26";
 
 export function createMap(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, startStory, applyChapterLook, playMusic } = ctx;
@@ -163,7 +163,6 @@ export function createMap(ctx) {
     persist();
     refreshHud();
     renderMap();
-    ctx.fx?.celebrateRestore?.(b.name);
     ctx.playMusic?.(region?.music || region?.chapter || ch);
     ctx.mascot?.cheer?.();
   }

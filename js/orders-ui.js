@@ -1,5 +1,5 @@
-import { formatDailyResetLeft, ensureDaily } from "./save.js?v=25";
-import { bindTip, hideTip } from "./tip.js?v=25";
+import { formatDailyResetLeft, ensureDaily } from "./save.js?v=26";
+import { bindTip, hideTip } from "./tip.js?v=26";
 /** Vertical character-order cards, green Give button, daily challenge, fly-in fulfill. */
 
 export function createOrdersUi(ctx) {

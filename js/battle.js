@@ -1,4 +1,4 @@
-import { sfx } from "./audio.js?v=25";
+import { sfx } from "./audio.js?v=26";
 
 const W = 1280, H = 720;
 const GROUND = 600;

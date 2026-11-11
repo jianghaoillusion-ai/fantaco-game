@@ -105,6 +105,7 @@ B.sack = () => {
   const [b, sh, l] = P("purple");
   s += `<path d="${body}" fill="${sh}"/><path d="M-70 -12C-106 -44 -92 -118 -40 -146C-26 -153 22 -153 34 -146C80 -120 92 -52 64 -16C36 0 -42 2 -70 -12Z" fill="${b}"/><ellipse cx="-50" cy="-84" rx="22" ry="38" fill="${l}" opacity=".6" transform="rotate(18 -50 -84)"/><ellipse cx="-58" cy="-104" rx="7" ry="15" fill="#fff" opacity="${0.9 * Math.max(0.15, A.getT())}" transform="rotate(22 -58 -104)"/>`;
   s += shape(body, "none");
+  if (A.getT() < 1) s += `<g opacity="${f(0.6 * (1 - A.getT()))}">${curve("M-84 -52q26 20 58 8M34 -128q22 14 34 44M-18 -22q30 10 62 -6M-66 -112q10 -16 30 -22", 2.6)}</g>`;
   s += star(18, -70, 17, "gold") + star(-22, -34, 9, "gold") + star(52, -104, 8, "gold") + star(54, -36, 7, "white");
   // open mouth
   s += shape("M-62 -176C-62 -196 62 -196 62 -176C62 -160 44 -150 0 -150S-62 -160 -62 -176Z", PAL.purple[2]) + `<ellipse cx="0" cy="-176" rx="48" ry="12" fill="${tone("#5B3F9A")}" stroke="${OUT}" stroke-width="3"/>`;

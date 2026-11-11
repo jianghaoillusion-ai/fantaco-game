@@ -1,23 +1,23 @@
-import { Auth } from "./auth.js?v=25";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
-import { mountMascot } from "./mascot.js?v=25";
-import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=25";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=25";
-import { bagCap, migrateBagSlots } from "./bag.js?v=25";
-import { reserveItems } from "./merge.js?v=25";
-import { avatarSrc } from "./portraits.js?v=25";
+import { Auth } from "./auth.js?v=26";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=26";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=26";
+import { mountMascot } from "./mascot.js?v=26";
+import { mountHome } from "./home.js?v=26";
+import { bindStory, startStory } from "./story.js?v=26";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=26";
+import { bagCap, migrateBagSlots } from "./bag.js?v=26";
+import { reserveItems } from "./merge.js?v=26";
+import { avatarSrc } from "./portraits.js?v=26";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=25";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=25";
-import { regionById } from "./world.js?v=25";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
-import { createWorldMap } from "./world-map.js?v=25";
-import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
+} from "./merge.js?v=26";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=26";
+import { regionById } from "./world.js?v=26";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=26";
+import { createWorldMap } from "./world-map.js?v=26";
+import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=26";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=25");
+  const res = await fetch(url + "?v=26");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -127,7 +127,7 @@ function show(name) {
   } else if (name === "book") renderBook();
   else if (name === "redeem") $("#redeem-count").textContent = SAVE.starSeeds;
   else if (name === "lyrics") renderLyrics();
-    else if (name === "map") renderMap();
+    else if (name === "map") { $("#toast")?.classList.remove("on"); hideTip(); renderMap(); }
   else if (name === "daily") renderDaily();
   refreshHud();
 }
@@ -334,6 +334,7 @@ function placeToast() {
 
 function toast(msg) {
   const t = $("#toast");
+  if ($("#map")?.classList.contains("on") && !document.querySelector(".overlay.on")) return;   // the map stays clean: no pop-up text there
   t.textContent = msg;
   placeToast();
   t.classList.add("on");

@@ -24,7 +24,7 @@ function dull(h) { const [r, g, b] = hex(h); const l = 0.3 * r + 0.59 * g + 0.11
 /* T = how inflated the thing being drawn is. 1 = repaired, 0 = flat and grey. */
 let T = 1;
 const setT = (t) => { T = t; };
-const tone = (h) => (T >= 1 ? h : mix(mix(dull(h), h, 0.34), h, T));
+const tone = (h) => (T >= 1 ? h : mix(dull(h), h, T * T));   // no air = plain grey; colour only comes back as it fills up
 const P = (c) => (PAL[c] || [c, mix(c, "#2A2218", 0.22), mix(c, "#ffffff", 0.45)]).map(tone);
 const f = (n) => Math.round(n * 10) / 10;
 
@@ -33,9 +33,15 @@ function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) | 0
 
 /* ---------- primitives ---------- */
 function ball(x, y, r, c, o = {}) {
-  const rx = o.rx || r, ry = o.ry || r, sw = o.sw || (r < 9 ? 2.6 : SW), [b, s, l] = P(c);
-  const hi = o.plain ? "" : `<ellipse cx="${f(-rx * 0.4)}" cy="${f(-ry * 0.44)}" rx="${f(rx * 0.24)}" ry="${f(ry * 0.14)}" fill="#fff" opacity="${f(0.92 * Math.max(0.15, T))}" transform="rotate(-38 ${f(-rx * 0.4)} ${f(-ry * 0.44)})"/>`;
-  return `<g transform="translate(${f(x)} ${f(y)})${o.rot ? ` rotate(${o.rot})` : ""}"><ellipse rx="${f(rx)}" ry="${f(ry)}" fill="${s}"/><ellipse cx="${f(-rx * 0.08)}" cy="${f(-ry * 0.1)}" rx="${f(rx * 0.88)}" ry="${f(ry * 0.86)}" fill="${b}"/><ellipse cx="${f(-rx * 0.2)}" cy="${f(-ry * 0.26)}" rx="${f(rx * 0.52)}" ry="${f(ry * 0.46)}" fill="${l}" opacity=".6"/>${hi}<ellipse rx="${f(rx)}" ry="${f(ry)}" fill="none" stroke="${OUT}" stroke-width="${sw}"/></g>`;
+  const rx = o.rx || r, ry0 = o.ry || r, ry = ry0 * (0.78 + 0.22 * T), sw = o.sw || (r < 9 ? 2.6 : SW), [b, s, l] = P(c);
+  y += ry0 - ry;   // a soft balloon sinks onto whatever is under it
+  const crease = T < 1 && r >= 12 ? `<path d="M${f(rx * 0.18)} ${f(ry * 0.5)}q${f(rx * 0.3)} ${f(-ry * 0.12)} ${f(rx * 0.44)} ${f(-ry * 0.42)}M${f(-rx * 0.62)} ${f(ry * 0.28)}q${f(rx * 0.16)} ${f(ry * 0.26)} ${f(rx * 0.44)} ${f(ry * 0.3)}" fill="none" stroke="${OUT}" stroke-width="2" stroke-linecap="round" opacity="${f(0.5 * (1 - T))}"/>` : "";
+  const hi = o.plain || T < 0.3 ? "" : `<ellipse cx="${f(-rx * 0.4)}" cy="${f(-ry * 0.44)}" rx="${f(rx * 0.24)}" ry="${f(ry * 0.14)}" fill="#fff" opacity="${f(0.92 * Math.max(0.15, T))}" transform="rotate(-38 ${f(-rx * 0.4)} ${f(-ry * 0.44)})"/>`;
+  return `<g transform="translate(${f(x)} ${f(y)})${o.rot ? ` rotate(${o.rot})` : ""}"><ellipse rx="${f(rx)}" ry="${f(ry)}" fill="${s}"/><ellipse cx="${f(-rx * 0.08)}" cy="${f(-ry * 0.1)}" rx="${f(rx * 0.88)}" ry="${f(ry * 0.86)}" fill="${b}"/><ellipse cx="${f(-rx * 0.2)}" cy="${f(-ry * 0.26)}" rx="${f(rx * 0.52)}" ry="${f(ry * 0.46)}" fill="${l}" opacity=".6"/>${hi}${crease}<ellipse rx="${f(rx)}" ry="${f(ry)}" fill="none" stroke="${OUT}" stroke-width="${sw}"/></g>`;
+}
+/* little puffs of air still leaking out */
+function hiss(x, y, rot = 0) {
+  return `<g transform="translate(${f(x)} ${f(y)}) rotate(${rot})" fill="none" stroke="#fff" stroke-width="3.200" stroke-linecap="round" opacity=".9"><path d="M0 -6q7 -5 14 -1"/><path d="M2 2q9 -3 18 2"/><path d="M0 10q7 1 13 6"/></g>`;
 }
 /* long balloon segment */
 function cap(x1, y1, x2, y2, w, c, o = {}) {
@@ -109,4 +115,4 @@ function cloud(lobes, o = {}) {
 const CLOUD_A = [[-150, 30, 58], [-92, -8, 70], [-10, -40, 92], [84, -6, 74], [150, 30, 56], [-60, 40, 62], [40, 44, 66], [-10, 30, 70]];
 const CLOUD_B = [[-120, 20, 50], [-56, -18, 66], [30, -26, 74], [110, 18, 54], [-20, 30, 58], [50, 34, 52]];
 
-module.exports = { OUT, SW, W, H, PAL, RAINBOW, mix, tone, setT, getT: () => T, P, f, rng, ball, cap, chain, shadow, shape, flat, rrect, line, curve, star, arcPts, beads, flag, floaty, tree, bush, flower, tuft, tinyFlower, dog, cottage, archGate, cloud, CLOUD_A, CLOUD_B };
+module.exports = { OUT, SW, W, H, PAL, RAINBOW, mix, tone, setT, getT: () => T, P, f, rng, ball, hiss, cap, chain, shadow, shape, flat, rrect, line, curve, star, arcPts, beads, flag, floaty, tree, bush, flower, tuft, tinyFlower, dog, cottage, archGate, cloud, CLOUD_A, CLOUD_B };

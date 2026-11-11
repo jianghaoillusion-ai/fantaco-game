@@ -424,17 +424,6 @@ a{color:var(--ink)}
 .play-hud{margin:0 0 4px}
 .daily-bar{min-height:32px;padding:3px 10px}
 .orders{gap:4px;padding:0 2px 4px}
-.restore-fx{position:fixed;inset:0;z-index:90;display:grid;place-items:center;pointer-events:none;background:rgba(251,252,246,.28)}
-.restore-fx b{font-size:28px;color:var(--ink);text-shadow:0 2px 0 #fff;animation:pop .4s var(--ease)}
-.restore-fx span{display:block;text-align:center;font-weight:700;color:var(--ink)}
-.restore-fx .restore-burst{position:absolute;inset:0;pointer-events:none}
-.restore-fx .restore-burst span{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--yellow);left:50%;top:50%;animation:burst 1s ease-out both}
-.restore-fx .restore-burst span:nth-child(1){--dx:-80px;--dy:-60px}
-.restore-fx .restore-burst span:nth-child(2){--dx:90px;--dy:-40px;background:var(--pink)}
-.restore-fx .restore-burst span:nth-child(3){--dx:-40px;--dy:80px;background:var(--green)}
-.restore-fx .restore-burst span:nth-child(4){--dx:70px;--dy:70px}
-.restore-fx .restore-burst span:nth-child(5){--dx:0;--dy:-100px;background:#fff}
-.restore-fx .restore-burst span:nth-child(6){--dx:-90px;--dy:20px;background:var(--pink)}
 @keyframes burst{0%{transform:translate(-50%,-50%) scale(.2);opacity:1}100%{transform:translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1);opacity:0}}
 .map-soon{text-align:center;color:var(--muted);font-size:13px;padding:8px 12px 20px}
 
