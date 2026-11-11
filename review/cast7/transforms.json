@@ -1,0 +1,31 @@
+{
+  "status": "僅回復原設定與對齊腳底；比例調整待約束決定",
+  "jiejie": {
+    "commit": "525ab99f5d635f75cf3553877422fa018a81d35f",
+    "path": "assets/chars/jiejie.png",
+    "scale": 1,
+    "translate": [
+      0,
+      0
+    ]
+  },
+  "spirit": {
+    "commit": "525ab99f5d635f75cf3553877422fa018a81d35f",
+    "path": "assets/chars/spirit.png",
+    "scale": 1,
+    "translate": [
+      0,
+      3
+    ]
+  },
+  "hate": {
+    "commit": "78bb5adcc143f7f433c46d1992067bb01f3a6a34",
+    "path": "assets/chars/hate.png",
+    "scale": 1,
+    "translate": [
+      0,
+      0
+    ],
+    "edit": "右側髮緣 alpha 反鋸齒，見 hate-diff.json"
+  }
+}

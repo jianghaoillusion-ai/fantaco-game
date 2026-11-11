@@ -1,0 +1,74 @@
+{
+  "jiejie": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "boundary_pixels": 7091,
+      "intermediate_alpha_pixels": 5760,
+      "intermediate_ratio_percent": 81.23,
+      "alpha_levels": 192,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 0
+  },
+  "hate": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "boundary_pixels": 6683,
+      "intermediate_alpha_pixels": 4476,
+      "intermediate_ratio_percent": 66.98,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 440,
+    "head_width_before": 197,
+    "head_width_after": 197,
+    "hair_edge_before": {
+      "boundary_pixels": 440,
+      "intermediate_alpha_pixels": 218,
+      "intermediate_ratio_percent": 49.55,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "hair_edge_after": {
+      "boundary_pixels": 437,
+      "intermediate_alpha_pixels": 437,
+      "intermediate_ratio_percent": 100.0,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "outside_roi_changed": 0
+  },
+  "spirit": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "boundary_pixels": 7325,
+      "intermediate_alpha_pixels": 6272,
+      "intermediate_ratio_percent": 85.62,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 0,
+    "cropped_source_bottom_alpha_pixels": 0
+  },
+  "status": "部分完成：哈特局部修邊，姐姐／精靈回復指定原設定；比例未修改且未通過全部≤5%",
+  "alpha_definition": "alpha≥128 輪廓的3×3膨脹減侵蝕帶；其中 1..254 像素 / 全帶像素。非全圖半透明比例；比例非零不能證明無背景殘色或所有邊緣無鋸齒。",
+  "visual_caveat": "姐姐／精靈原圖外緣帶青色描邊／暈邊；保留原圖，尚未清理，不宣稱全部邊緣通過。"
+}

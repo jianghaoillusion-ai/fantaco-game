@@ -1,0 +1,18 @@
+{
+  "source_commit": "78bb5adcc143f7f433c46d1992067bb01f3a6a34",
+  "roi_xyxy": [
+    322,
+    45,
+    380,
+    171
+  ],
+  "changed_pixels": 440,
+  "changed_bbox_inclusive": [
+    322,
+    45,
+    368,
+    170
+  ],
+  "outside_roi_changed": 0,
+  "outside_boundary_band_changed": 0
+}
