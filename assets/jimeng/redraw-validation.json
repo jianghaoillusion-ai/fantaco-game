@@ -1,0 +1,137 @@
+{
+  "poses": {
+    "sad": {
+      "body": "#FFFFFF",
+      "outline": "#47536F",
+      "yellow_pixels": 0,
+      "face_red_pixels": 0
+    },
+    "hold-hat": {
+      "body": "#FFFFFF",
+      "outline": "#47536F",
+      "yellow_pixels": 0,
+      "face_red_pixels": 0
+    },
+    "hold-rose": {
+      "body": "#FFFFFF",
+      "outline": "#47536F",
+      "yellow_pixels": 0,
+      "face_red_pixels": 0
+    },
+    "blink": {
+      "body": "#FFFFFF",
+      "outline": "#47536F",
+      "yellow_pixels": 0,
+      "face_red_pixels": 0
+    }
+  },
+  "animation": {
+    "mp4": {
+      "frames": 120,
+      "seconds": 5.0,
+      "first_last_identical": true,
+      "unique_frames": 119,
+      "sampled_palette": [
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        }
+      ],
+      "alpha_range": [
+        255,
+        255
+      ],
+      "audio_streams": 0,
+      "codec": "h264",
+      "pixel_format": "gbrp"
+    },
+    "webm": {
+      "frames": 120,
+      "seconds": 5.0,
+      "first_last_identical": true,
+      "unique_frames": 119,
+      "sampled_palette": [
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        },
+        {
+          "body": "#FFFFFF",
+          "outline": "#47536F",
+          "yellow_pixels": 0
+        }
+      ],
+      "alpha_range": [
+        0,
+        255
+      ],
+      "audio_streams": 0,
+      "codec": "vp9",
+      "pixel_format": "yuv420p"
+    }
+  },
+  "stroke": {
+    "official": {
+      "width_px": 10.770329614269007,
+      "height_px": 417,
+      "ratio": 0.0258
+    },
+    "sad": {
+      "width_px": 14.0,
+      "height_px": 487,
+      "ratio": 0.0287
+    },
+    "hold-hat": {
+      "width_px": 14.0,
+      "height_px": 541,
+      "ratio": 0.0259
+    },
+    "hold-rose": {
+      "width_px": 14.0,
+      "height_px": 541,
+      "ratio": 0.0259
+    },
+    "blink": {
+      "width_px": 14.0,
+      "height_px": 541,
+      "ratio": 0.0259
+    }
+  }
+}
