@@ -22,12 +22,23 @@
       "body": "#FFFFFF",
       "outline": "#47536F",
       "yellow_pixels": 0,
-      "face_red_pixels": 0
+      "face_red_pixels": 0,
+      "face_parts": {
+        "components": 3,
+        "eye_mouth_blank_px": [
+          10.18,
+          10.66
+        ]
+      }
     }
   },
   "animation": {
     "mp4": {
-      "bytes": 2064412,
+      "face_components_all_frames": [
+        3
+      ],
+      "minimum_eye_mouth_blank_px": 9.3,
+      "bytes": 3273630,
       "frames": 120,
       "seconds": 5.0,
       "first_last_identical": true,
@@ -35,27 +46,27 @@
       "sampled_palette": [
         {
           "body": "#FFFFFF",
-          "outline": "#47536F",
+          "outline": "#485370",
           "yellow_pixels": 0
         },
         {
           "body": "#FFFFFF",
-          "outline": "#47536F",
+          "outline": "#485370",
           "yellow_pixels": 0
         },
         {
           "body": "#FFFFFF",
-          "outline": "#47536F",
+          "outline": "#485370",
           "yellow_pixels": 0
         },
         {
           "body": "#FFFFFF",
-          "outline": "#47536F",
+          "outline": "#485370",
           "yellow_pixels": 0
         },
         {
           "body": "#FFFFFF",
-          "outline": "#47536F",
+          "outline": "#485370",
           "yellow_pixels": 0
         }
       ],
@@ -68,7 +79,11 @@
       "pixel_format": "yuv420p"
     },
     "webm": {
-      "bytes": 211057,
+      "face_components_all_frames": [
+        3
+      ],
+      "minimum_eye_mouth_blank_px": 9.3,
+      "bytes": 700439,
       "frames": 120,
       "seconds": 4.999,
       "first_last_identical": true,
@@ -109,7 +124,12 @@
       "pixel_format": "yuv420p"
     },
     "gif": {
-      "bytes": 442437,
+      "opaque_colors": 18,
+      "face_components_all_frames": [
+        3
+      ],
+      "minimum_eye_mouth_blank_px": 5.71,
+      "bytes": 709578,
       "frames": 120,
       "duration_ms": 5000,
       "first_last_identical": true,

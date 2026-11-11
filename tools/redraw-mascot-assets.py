@@ -2,7 +2,7 @@
 Outputs only the four requested poses, happy animation and review evidence.
 """
 from pathlib import Path
-import math, json, subprocess, tempfile
+import math, json, subprocess, tempfile, os
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage
@@ -55,11 +55,11 @@ def face(im,kind):
         line(im,curve([(111,165),(119,159),(128,159),(137,165)]),10.8)
     elif kind=='blink':
         d.ellipse((71*S,145*S,85*S,159*S),fill=LINE)
-        line(im,curve([(158,154),(164,147),(174,147),(180,154)]),10.8)
+        line(im,curve([(165,148),(168.5,139),(175.5,139),(179,148)]),10.8)
         line(im,[(124,149),(124,165)],10.8)
         line(im,curve([(99,158),(115,168),(133,168),(147,158)]),10.8)
     else:
-        for x in [78,169]:line(im,curve([(x-10,154),(x-5,145),(x+5,145),(x+10,154)]),10.8)
+        for x in [75,172]:line(im,curve([(x-7,148),(x-3.5,139),(x+3.5,139),(x+7,148)]),10.8)
         line(im,[(124,149),(124,165)],10.8)
         line(im,curve([(99,158),(115,168),(133,168),(147,158)]),10.8)
 
@@ -96,6 +96,11 @@ def character(kind):
         prop.thumbnail((67*S,67*S),Image.Resampling.LANCZOS)
         im.alpha_composite(prop,(137*S,181*S))
         line(im,curve([(179,247),(176,258),(156,258),(151,266)]),10)
+        # Put the original hand outline over the stem tip, preserving its shape.
+        hands=np.array(base.crop((145*S,250*S,165*S,270*S)))
+        strength=np.clip((255-hands[:,:,:3].astype(float).mean(2))/(255-np.mean(LINE)),0,1)
+        hands[:,:,:3]=LINE;hands[:,:,3]=np.rint(strength*255).astype('uint8')
+        im.alpha_composite(Image.fromarray(hands),(145*S,250*S))
     return im
 
 def frame(im,dy=0,angle=0):
@@ -105,18 +110,21 @@ def frame(im,dy=0,angle=0):
     out=Image.new('RGBA',(720,720));out.alpha_composite(im,((720-im.width)//2,72+round(dy)-(im.height-573)//2));return out
 
 for name in ['sad','hold-hat','hold-rose','blink']:frame(character(name)).save(OUT/f'poses/{name}.png')
-with tempfile.TemporaryDirectory(prefix='mascot-redraw-',dir='/Volumes/外接資料碟/AI工作/暫存') as tmp:
+with tempfile.TemporaryDirectory(prefix='mascot-redraw-',dir=os.environ['TMPDIR']) as tmp:
     tmp=Path(tmp); (tmp/'webm').mkdir(); happy=character('happy')
     for i in range(120):
         phase=0 if i==119 else 2*math.pi*i/119
         im=frame(happy,-22*(1-math.cos(phase*2))/2,2.3*math.sin(phase))
+        # Remove sub-threshold resampling ringing in white interiors before encoding.
+        a=np.array(im);nearwhite=a[:,:,:3].min(2)>230;a[nearwhite,:3]=WHITE
+        im=Image.fromarray(a)
         im.save(tmp/f'{i:03}.png')
         # Compensate the measured +1 RGB VP9 full-range round trip for outline pixels.
         a=np.array(im);strength=np.clip((255-a[:,:,:3].astype(float).mean(2))/(255-np.mean(LINE)),0,1)
         a[:,:,:3]=np.clip(a[:,:,:3].astype(int)-np.rint(strength[:,:,None]).astype(int),0,255)
         Image.fromarray(a).save(tmp/'webm'/f'{i:03}.png')
     common=[FF,'-v','error','-y','-framerate','24','-i',str(tmp/'webm/%03d.png'),'-an']
-    subprocess.run(common+['-c:v','libvpx-vp9','-crf','42','-b:v','0','-g','120','-pix_fmt','yuva420p','-vf','scale=in_range=full:out_range=full','-color_range','pc','-auto-alt-ref','0',str(OUT/'anim/happy.webm')],check=True)
+    subprocess.run(common+['-c:v','libvpx-vp9','-crf','24','-b:v','0','-g','120','-pix_fmt','yuva420p','-vf','scale=in_range=full:out_range=full','-color_range','pc','-auto-alt-ref','0',str(OUT/'anim/happy.webm')],check=True)
     webm=OUT/'anim/happy.webm'
     subprocess.run([FF,'-v','error','-y','-i',str(webm),'-frames:v','119','-c','copy',str(tmp/'body.webm')],check=True)
     subprocess.run([FF,'-v','error','-y','-i',str(webm),'-frames:v','1','-c','copy',str(tmp/'end.webm')],check=True)
@@ -126,7 +134,8 @@ with tempfile.TemporaryDirectory(prefix='mascot-redraw-',dir='/Volumes/外接資
     # Refresh the existing transparent GIF from the repaired source frames.
     gif_frames=[]
     palette=Image.new('P',(1,1))
-    palette.putpalette([0,0,0,*WHITE,*LINE]+[0,0,0]*253)
+    ramp=np.rint(np.linspace(WHITE,LINE,18)).astype('uint8').ravel().tolist()
+    palette.putpalette([0,0,0]+ramp+list(LINE)*237)
     for i in range(120):
         rgba=Image.open(tmp/f'{i:03}.png').resize((480,480),Image.Resampling.LANCZOS)
         g=rgba.convert('RGB').quantize(palette=palette,dither=Image.Dither.NONE)
@@ -137,7 +146,7 @@ with tempfile.TemporaryDirectory(prefix='mascot-redraw-',dir='/Volumes/外接資
     # Standard H.264 4:2:0 for mobile playback; identical intra coding at loop ends.
     for p in tmp.glob('*.png'):
         im=Image.open(p);bg=Image.new('RGBA',im.size,(222,239,247,255));bg.alpha_composite(im);bg.convert('RGB').save(p)
-    subprocess.run(common+['-c:v','libx264','-qp','18','-g','1','-preset','medium','-pix_fmt','yuv420p','-movflags','+faststart',str(OUT/'anim/happy.mp4')],check=True)
+    subprocess.run(common+['-c:v','libx264','-qp','10','-g','1','-preset','medium','-pix_fmt','yuv420p','-colorspace','bt709','-color_primaries','bt709','-color_trc','bt709','-movflags','+faststart',str(OUT/'anim/happy.mp4')],check=True)
 
 # Contact sheet: official upper row, replacements lower row; explicit no-star labels.
 font='/System/Library/Fonts/Supplemental/Arial Unicode.ttf'
@@ -166,5 +175,7 @@ for i,name in enumerate(['sad','hold-hat','hold-rose','blink','happy']):
         d.rectangle((x+15,870+j*31,x+33,888+j*31),fill=color,outline=LINE)
         d.text((x+43,866+j*31),text,font=small,fill=LINE)
 d.text((25,985),'星星官方色 #F4E969（本次全為正面，不使用）；無腮紅、無紅口腔。',font=small,fill=LINE)
+review=ROOT/'review/jimeng5';review.mkdir(parents=True,exist_ok=True)
+sheet.save(review/'style-compare.png')
 sheet.save(OUT/'style-compare.png')
 print('Rendered four poses, happy MP4/WebM and style comparison.')

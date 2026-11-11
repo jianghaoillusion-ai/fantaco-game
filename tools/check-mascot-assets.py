@@ -1,14 +1,37 @@
 """Verify delivered pixels, animation loop, alpha and absence of audio."""
 from pathlib import Path
-import json,subprocess,hashlib
+import json,subprocess,hashlib,math
 import numpy as np
-from PIL import Image
+from PIL import Image,ImageDraw
 ROOT=Path(__file__).resolve().parents[1];OUT=ROOT/'assets/jimeng';FF=str(Path.home()/'media-tools/bin/ffmpeg');FP=str(Path.home()/'media-tools/bin/ffprobe')
 def colors(a):
  rgb=a[:,:,:3].astype(int);opaque=a[:,:,3]>250
  def mode(mask):
   p=rgb[mask&opaque];c,n=np.unique(p,axis=0,return_counts=True);return '#%02X%02X%02X'%tuple(c[n.argmax()]) if len(c) else None
  return {'body':mode(rgb.min(2)>240),'outline':mode((rgb[:,:,2]-rgb[:,:,0]>20)&(rgb.max(2)<140)),'yellow_pixels':int(((rgb[:,:,0]>180)&(rgb[:,:,1]>170)&(rgb[:,:,2]<150)&opaque).sum())}
+from scipy import ndimage
+
+def face_parts(a,index=None):
+ # Follow the source animation transform so the ROI never includes the head outline.
+ scale=a.shape[0]/720
+ region=Image.new('L',(720,720));ImageDraw.Draw(region).rectangle((277,248,442,302),fill=255)
+ if index is not None:
+  phase=0 if index==119 else 2*math.pi*index/119
+  dy=round(-22*(1-math.cos(phase*2))/2);angle=2.3*math.sin(phase)
+  region=region.rotate(angle,center=(360,358.5),resample=Image.Resampling.NEAREST)
+  region=region.transform(region.size,Image.Transform.AFFINE,(1,0,0,0,1,-dy))
+ region=np.array(region.resize((a.shape[1],a.shape[0]),Image.Resampling.NEAREST))>0
+ brightness=a[:,:,:3].astype(float)@np.array([.2126,.7152,.0722])
+ labels,n=ndimage.label((brightness<240)&(a[:,:,3]>128)&region,structure=np.ones((3,3)))
+ assert n==3,('face components',n,index)
+ parts=sorted([np.argwhere(labels==i) for i in range(1,n+1)],key=lambda p:p[:,1].mean())
+ mouth=labels==int(labels[tuple(parts[1][0])])
+ dist=ndimage.distance_transform_edt(~mouth)
+ gaps=[float(dist[tuple(p.T)].min()-1) for p in (parts[0],parts[2])]
+ # Pixel-center distance minus one pixel is the edge-to-edge blank gap.
+ assert min(gaps)>=8*scale,('eye-mouth gap',gaps,scale)
+ return {'components':n,'eye_mouth_blank_px':[round(v,2) for v in gaps]}
+
 report={'poses':{},'animation':{}}
 for name in ['sad','hold-hat','hold-rose','blink']:
  a=np.array(Image.open(OUT/f'poses/{name}.png').convert('RGBA'));result=colors(a)
@@ -17,6 +40,7 @@ for name in ['sad','hold-hat','hold-rose','blink']:
  assert result['face_red_pixels']==0
  assert result['body']=='#FFFFFF' and result['outline']=='#47536F' and result['yellow_pixels']==0
  assert a[:,:,3].min()==0 and a[:,:,3].max()==255
+ if name=='blink':result['face_parts']=face_parts(a)
  report['poses'][name]=result
 for ext in ['mp4','webm']:
  path=OUT/f'anim/happy.{ext}'
@@ -25,13 +49,14 @@ for ext in ['mp4','webm']:
  if ext=='mp4': assert meta['streams'][0]['codec_name']=='h264' and meta['streams'][0]['pix_fmt']=='yuv420p'
  else: assert path.stat().st_size<1500000
  cmd=[FF,'-v','error']+(['-c:v','libvpx-vp9'] if ext=='webm' else [])+['-i',str(path),'-f','rawvideo','-pix_fmt','rgba','-']
- proc=subprocess.Popen(cmd,stdout=subprocess.PIPE);frames=[];first=None;last=None;count=0;unique=set();alpha=[]
+ proc=subprocess.Popen(cmd,stdout=subprocess.PIPE);frames=[];first=None;last=None;count=0;unique=set();alpha=[];face_checks=[]
  while True:
   data=proc.stdout.read(720*720*4)
   if not data:break
   assert len(data)==720*720*4
   a=np.frombuffer(data,np.uint8).reshape(720,720,4)
   if first is None:first=a.copy()
+  face_checks.append(face_parts(a,count))
   last=a.copy();unique.add(hashlib.sha256(data).hexdigest());count+=1
   if count in [1,31,61,91,120]:
    sample=colors(a)
@@ -44,7 +69,7 @@ for ext in ['mp4','webm']:
  assert proc.wait()==0 and count==120 and len(unique)>20
  assert np.array_equal(first,last),ext+' first/last differ'
  if ext=='webm':assert all(x==[0,255] for x in alpha)
- report['animation'][ext]={'bytes':path.stat().st_size,'frames':count,'seconds':float(meta['format']['duration']),'first_last_identical':True,'unique_frames':len(unique),'sampled_palette':frames,'alpha_range':alpha[0],'audio_streams':0,'codec':meta['streams'][0]['codec_name'],'pixel_format':meta['streams'][0]['pix_fmt']}
+ report['animation'][ext]={'face_components_all_frames':sorted(set(x['components'] for x in face_checks)),'minimum_eye_mouth_blank_px':min(min(x['eye_mouth_blank_px']) for x in face_checks),'bytes':path.stat().st_size,'frames':count,'seconds':float(meta['format']['duration']),'first_last_identical':True,'unique_frames':len(unique),'sampled_palette':frames,'alpha_range':alpha[0],'audio_streams':0,'codec':meta['streams'][0]['codec_name'],'pixel_format':meta['streams'][0]['pix_fmt']}
 # Measure the actual decoded happy face separately as well.
 from scipy.ndimage import distance_transform_edt
 from skimage.morphology import skeletonize
@@ -74,11 +99,17 @@ for name,path in [('official',ROOT/'assets/mascot/sticker/front.png')]+[(n,OUT/f
  width=float(2*np.median(distance_transform_edt(mask)[skeletonize(mask)]))
  assert 12<=width<=16,(name,width)
  report.setdefault('face_stroke',{})[name]={'median_width_px':width}
-gif=Image.open(OUT/'anim/happy.gif');start=gif.convert('RGBA');duration=0
+gif=Image.open(OUT/'anim/happy.gif');start=gif.convert('RGBA');duration=0;gif_checks=[];gif_colors=set()
+assert gif.size==(480,480) and gif.n_frames==120
+assert (OUT/'anim/happy.gif').stat().st_size<1500000
 for i in range(gif.n_frames):
- gif.seek(i);duration+=gif.info['duration'];assert gif.convert('RGBA').getchannel('A').getextrema()==(0,255)
+ gif.seek(i);duration+=gif.info['duration']
+ a=np.array(gif.convert('RGBA'));gif_checks.append(face_parts(a,i))
+ gif_colors.update(map(tuple,np.unique(a[a[:,:,3]>0,:3],axis=0)))
+ assert gif.convert('RGBA').getchannel('A').getextrema()==(0,255)
 assert np.array_equal(np.array(start),np.array(gif.convert('RGBA')))
 assert duration==5000 and gif.info['loop']==0
-report['animation']['gif']={'bytes':(OUT/'anim/happy.gif').stat().st_size,'frames':gif.n_frames,'duration_ms':duration,'first_last_identical':True,'transparent':True}
+assert len(gif_colors)>=18
+report['animation']['gif']={'opaque_colors':len(gif_colors),'face_components_all_frames':sorted(set(x['components'] for x in gif_checks)),'minimum_eye_mouth_blank_px':min(min(x['eye_mouth_blank_px']) for x in gif_checks),'bytes':(OUT/'anim/happy.gif').stat().st_size,'frames':gif.n_frames,'duration_ms':duration,'first_last_identical':True,'transparent':True}
 (OUT/'redraw-validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
 print(json.dumps(report,ensure_ascii=False,indent=2))
