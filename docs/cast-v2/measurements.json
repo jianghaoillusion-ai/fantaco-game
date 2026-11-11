@@ -1,0 +1,72 @@
+[
+  {
+    "id": "feifei",
+    "name": "飛飛",
+    "head_height": 220,
+    "face_width": 151,
+    "hair_width": 283,
+    "head_area": 66133,
+    "body_height": 655,
+    "ratio": 0.3359
+  },
+  {
+    "id": "apiao",
+    "name": "阿飄",
+    "head_height": 225,
+    "face_width": 141,
+    "hair_width": 210,
+    "head_area": 35555,
+    "body_height": 656,
+    "ratio": 0.343
+  },
+  {
+    "id": "sika",
+    "name": "西卡",
+    "head_height": 225,
+    "face_width": 147,
+    "hair_width": 211,
+    "head_area": 25540,
+    "body_height": 656,
+    "ratio": 0.343
+  },
+  {
+    "id": "bulu",
+    "name": "布魯",
+    "head_height": 220,
+    "face_width": 141,
+    "hair_width": 204,
+    "head_area": 33097,
+    "body_height": 657,
+    "ratio": 0.3349
+  },
+  {
+    "id": "jiejie",
+    "name": "新姐姐",
+    "head_height": 228,
+    "face_width": 155,
+    "hair_width": 227,
+    "head_area": 48162,
+    "body_height": 636,
+    "ratio": 0.3585
+  },
+  {
+    "id": "hate",
+    "name": "新哈特",
+    "head_height": 215,
+    "face_width": 166,
+    "hair_width": 252,
+    "head_area": 38832,
+    "body_height": 628,
+    "ratio": 0.3424
+  },
+  {
+    "id": "spirit",
+    "name": "新精靈",
+    "head_height": 207,
+    "face_width": 140,
+    "hair_width": 195,
+    "head_area": 31186,
+    "body_height": 628,
+    "ratio": 0.3296
+  }
+]
