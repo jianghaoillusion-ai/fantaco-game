@@ -128,7 +128,7 @@ export function applyCastMetrics(fig, id, src, roleMul) {
 
 // Invalidate cached matte/specks across all cleaned character portraits.
 function castAsset(id, src) {
-  return `${src}?v=mobile3`;
+  return `${src}?v=20261112`;
 }
 
 export function avatarSrc(id, expr = "happy") {

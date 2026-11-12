@@ -1,4 +1,4 @@
-import { sfx } from "./audio.js?v=bgm3r2";
+import { sfx } from "./audio.js?v=20261112";
 
 const W = 1280, H = 720;
 const GROUND = 600;
@@ -16,17 +16,17 @@ function loadImg(src) {
 }
 
 const IM = {
-  jump: loadImg("assets/mascot/sticker/jump.png?v=mobile2"),
-  run: loadImg("assets/mascot/sticker/side.png?v=mobile2"),
-  front: loadImg("assets/mascot/sticker/front.png?v=mobile2"),
-  side: loadImg("assets/mascot/sticker/side.png?v=mobile2"),
-  wish: loadImg("assets/mascot/sticker/hold-star.png?v=mobile2"),
+  jump: loadImg("assets/mascot/sticker/jump.png?v=20261112"),
+  run: loadImg("assets/mascot/sticker/side.png?v=20261112"),
+  front: loadImg("assets/mascot/sticker/front.png?v=20261112"),
+  side: loadImg("assets/mascot/sticker/side.png?v=20261112"),
+  wish: loadImg("assets/mascot/sticker/hold-star.png?v=20261112"),
   seed: loadImg("assets/items/star-seed.png"),
   smile: loadImg("assets/fx/smile.png"),
   bag: loadImg("assets/fx/bag.png"),
   happy: loadImg("assets/fx/balloon-happy.png"),
-  feifei: loadImg("assets/chars/feifei.png?v=mobile2"),
-  sika: loadImg("assets/chars/sika.png?v=mobile2"),
+  feifei: loadImg("assets/chars/feifei.png?v=20261112"),
+  sika: loadImg("assets/chars/sika.png?v=20261112"),
   fog: loadImg("assets/fx/fog.png"),
   deflate: loadImg("assets/fx/deflate.png"),
   shadow: loadImg("assets/fx/shadow.png")

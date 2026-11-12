@@ -2,7 +2,7 @@
 import {
   regionById, isRegionUnlocked, regionVisible, regionUnlockBlocked,
   allBuildings, buildingDef, formatCost, payCost, canAfford
-} from "./world.js?v=10";
+} from "./world.js?v=20261112";
 
 export function createMap(ctx) {
   const { $, toast, sfx, persist, refresh, refreshHud, show, startStory, applyChapterLook } = ctx;

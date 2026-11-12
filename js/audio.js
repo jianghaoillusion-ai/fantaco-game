@@ -97,7 +97,7 @@ async function load(id) {
   let error,codecFailures=0;
   // Prefer MP3 (small, gapless metadata); try Vorbis if decoding fails.
   for(const ext of ['mp3','ogg'])try {
-   const response=await fetch(`assets/audio/${MUSIC_FILES[id]}.${ext}?v=bgm3r2`);
+   const response=await fetch(`assets/audio/${MUSIC_FILES[id]}.${ext}?v=20261112`);
    if(!response.ok)throw new Error(`BGM HTTP ${response.status}`);
    const bytes=await response.arrayBuffer();
    let buffer;try{buffer=await ac().decodeAudioData(bytes);}catch(e){codecFailures++;throw e;}
@@ -146,7 +146,7 @@ export async function playMusic(sceneId) {
   if(token!==generation || paused)return;
   if(web) {active={id,...data,offset:0};start(active);}
   else {
-   const el=new Audio();el.src=`assets/audio/${MUSIC_FILES[id]}.mp3?v=bgm3r2`;el.volume=.5*musicGain();el.muted=!musicGain();
+   const el=new Audio();el.src=`assets/audio/${MUSIC_FILES[id]}.mp3?v=20261112`;el.volume=.5*musicGain();el.muted=!musicGain();
    active={id,el};
    el.onloadedmetadata=()=>{if(active?.el===el)el.currentTime=LOOP_GUARD;};
    const wrap=()=>{if(active?.el!==el || paused)return;if(el.ended || el.currentTime>=LOOP_GUARD+MUSIC_SECONDS[id]){el.currentTime=el.ended?LOOP_GUARD:el.currentTime-MUSIC_SECONDS[id];el.play().catch(()=>{});}};
