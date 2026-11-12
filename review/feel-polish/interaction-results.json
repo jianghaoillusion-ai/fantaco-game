@@ -1,0 +1,13 @@
+{
+  "passed": [
+    "real touch merge commits synchronously",
+    "100ms convergence + 320ms reveal on connected new piece",
+    "260ms spawn arc + 280ms settle",
+    "native label input forwarded click does not double-deliver",
+    "setting changed after card render cancels native toggle",
+    "settings UI shares one audio module instance",
+    "reduced motion uses 80ms opacity",
+    "three predecoded Web Audio sounds; muted starts=0, enabled starts=3"
+  ],
+  "errors": []
+}

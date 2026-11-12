@@ -1,0 +1,17 @@
+{
+  "source": "game-rec.mp4",
+  "r_frame_rate": "60/1",
+  "avg_frame_rate": "837/14",
+  "frames": 279,
+  "interval_ms": {
+    "16.67": 276,
+    "25.0": 2
+  },
+  "vfr": true,
+  "tracked_frames": [
+    8,
+    43
+  ],
+  "tracking": "cyan-region centroid/area proxy, original 1320x2868 px; not whole sprite bounds",
+  "time_curve_basis": "drag only; no identifiable spring/merge impulse in selected segment"
+}

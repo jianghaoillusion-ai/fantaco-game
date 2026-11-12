@@ -230,21 +230,43 @@ function sparkle(at, gain) {
   } catch {}
 }
 
+const shortBuffers = new Map();
+let shortLoading, shortRetryAt = 0;
+export function preloadSfx() {
+ if (shortLoading) return shortLoading;
+ if (Date.now() < shortRetryAt) return Promise.resolve();
+ shortLoading = Promise.all(['merge','generate','order'].map(async id => {
+  if (shortBuffers.has(id)) return;
+  for (const ext of ['mp3','ogg']) {
+   try {
+    const response=await fetch(`assets/audio/sfx-${id}.${ext}?v=20261113-feel1`);
+    if (!response.ok) continue;
+    shortBuffers.set(id,await ac().decodeAudioData(await response.arrayBuffer()));return;
+   } catch {}
+  }
+ })).finally(()=>{if(shortBuffers.size<3){shortRetryAt=Date.now()+30000;shortLoading=null;}});
+ return shortLoading;
+}
+function shortSound(id) {
+ if (!sfxGain() || !unlocked) return;
+ const buffer=shortBuffers.get(id);
+ if (!buffer) {preloadSfx();beep(780,.1,'sine',.012);return;} // Quiet immediate fallback; never replay late.
+ try {
+  const c=ac(),source=c.createBufferSource(),gain=c.createGain();
+  source.buffer=buffer;gain.gain.value=.16*sfxGain();
+  source.connect(gain);gain.connect(c.destination);
+  source.onended=()=>{source.disconnect();gain.disconnect();};source.start();
+ } catch {}
+}
+
 export const sfx = {
   tap() { beep(660, 0.07, "sine", 0.03); },
   pickup() { beep(880, 0.08, "sine", 0.04); },
   drop() { beep(420, 0.08, "triangle", 0.04); },
   invalid() { beep(180, 0.16, "square", 0.025); },
-  merge(tier = 1) {
-    const f = 523 + Math.min(5, tier) * 40;
-    beep(f, 0.11, "sine", 0.055);
-    beep(f * 1.5, 0.14, "triangle", 0.04, 0.04);
-    beep(f * 2, 0.16, "sine", 0.03, 0.08);
-    sparkle(0.05, 0.035);
-    if (tier >= 4) beep(f * 2.5, 0.18, "sine", 0.03, 0.12);
-  },
-  generate() { beep(520, 0.07, "triangle", 0.04); beep(740, 0.08, "sine", 0.03, 0.05); },
-  order() { beep(523, 0.12, "sine", 0.05); beep(659, 0.12, "sine", 0.05, 0.1); beep(784, 0.2, "sine", 0.06, 0.2); },
+  merge() { shortSound('merge'); },
+  generate() { shortSound('generate'); },
+  order() { shortSound('order'); },
   energy() { beep(240, 0.18, "square", 0.03); },
   level() { beep(392, 0.12, "sine", 0.05); beep(523, 0.12, "sine", 0.05, 0.1); beep(659, 0.12, "sine", 0.05, 0.2); beep(784, 0.28, "sine", 0.06, 0.32); },
   daily() { beep(700, 0.1, "sine", 0.05); beep(900, 0.14, "sine", 0.05, 0.08); },

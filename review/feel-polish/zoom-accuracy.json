@@ -1,0 +1,961 @@
+{
+  "name": "visualViewport 1.5 / actual drag module fixture",
+  "width": 390,
+  "height": 844,
+  "dpr": 3,
+  "requestedScale": 1.5,
+  "observed": {
+    "scale": 1.5,
+    "scrollY": 0
+  },
+  "meanPx": 0.000005880321639997442,
+  "maxPx": 0.000010789593218788873,
+  "misclassified": 0,
+  "samples": [
+    {
+      "dest": 0,
+      "actual": 0,
+      "misclassified": false,
+      "floatErrorPx": 9.5367431640625e-7,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 1,
+      "actual": 1,
+      "misclassified": false,
+      "floatErrorPx": 9.5367431640625e-7,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 2,
+      "actual": 2,
+      "misclassified": false,
+      "floatErrorPx": 9.5367431640625e-7,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 3,
+      "actual": 3,
+      "misclassified": false,
+      "floatErrorPx": 0.000003932099938981686,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 4,
+      "actual": 4,
+      "misclassified": false,
+      "floatErrorPx": 0.000007688768146799611,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 5,
+      "actual": 5,
+      "misclassified": false,
+      "floatErrorPx": 0.000007688768146799611,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 6,
+      "actual": 6,
+      "misclassified": false,
+      "floatErrorPx": 0.000007688768146799611,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 35
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 7,
+      "actual": 7,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 8,
+      "actual": 8,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 9,
+      "actual": 9,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 10,
+      "actual": 10,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 11,
+      "actual": 11,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 12,
+      "actual": 12,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 13,
+      "actual": 13,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 65
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 14,
+      "actual": 14,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 15,
+      "actual": 15,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 16,
+      "actual": 16,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 17,
+      "actual": 17,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 18,
+      "actual": 18,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 19,
+      "actual": 19,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 20,
+      "actual": 20,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 95
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 21,
+      "actual": 21,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 22,
+      "actual": 22,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 23,
+      "actual": 23,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 24,
+      "actual": 24,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 155,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 25,
+      "actual": 25,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 26,
+      "actual": 26,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 27,
+      "actual": 27,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 125
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 28,
+      "actual": 28,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 29,
+      "actual": 29,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 30,
+      "actual": 30,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 31,
+      "actual": 31,
+      "misclassified": false,
+      "floatErrorPx": 0.0000053947966093944364,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 32,
+      "actual": 32,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 33,
+      "actual": 33,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 34,
+      "actual": 34,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 155
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 35,
+      "actual": 35,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 36,
+      "actual": 36,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 37,
+      "actual": 37,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 38,
+      "actual": 38,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 39,
+      "actual": 39,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 40,
+      "actual": 40,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 41,
+      "actual": 41,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 185
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 42,
+      "actual": 42,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 43,
+      "actual": 43,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 44,
+      "actual": 44,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 45,
+      "actual": 45,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 46,
+      "actual": 46,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 47,
+      "actual": 47,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 48,
+      "actual": 48,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 215
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 49,
+      "actual": 49,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 50,
+      "actual": 50,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 51,
+      "actual": 51,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 52,
+      "actual": 52,
+      "misclassified": false,
+      "floatErrorPx": 0.000008529922399520072,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 53,
+      "actual": 53,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 54,
+      "actual": 54,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 55,
+      "actual": 55,
+      "misclassified": false,
+      "floatErrorPx": 0.000010789593218788873,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 245
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 56,
+      "actual": 56,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 35,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 57,
+      "actual": 57,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 65,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 58,
+      "actual": 58,
+      "misclassified": false,
+      "floatErrorPx": 0,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 95,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 59,
+      "actual": 59,
+      "misclassified": false,
+      "floatErrorPx": 0.000003814697265625,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 125,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 60,
+      "actual": 60,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 155,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 61,
+      "actual": 61,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 185,
+        "y": 275
+      },
+      "scale": 1.5
+    },
+    {
+      "dest": 62,
+      "actual": 62,
+      "misclassified": false,
+      "floatErrorPx": 0.00000762939453125,
+      "a": {
+        "x": 125,
+        "y": 125
+      },
+      "b": {
+        "x": 215,
+        "y": 275
+      },
+      "scale": 1.5
+    }
+  ]
+}

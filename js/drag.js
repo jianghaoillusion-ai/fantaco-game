@@ -25,7 +25,7 @@ export function createBoardDrag(ctx) {
     raf = 0;
     if (!drag?.float) return;
     hoverAt(drag.x, drag.y);
-    const x = drag.x, y = drag.y - (drag.touch ? Math.max(56, drag.fh * 1.25) : 0);
+    const x = drag.x, y = drag.y - (drag.touch ? 32 : 0);
     const w = drag.fw, h = drag.fh;
     drag.float.style.transform = `translate3d(${x - w / 2}px, ${y - h / 2}px, 0) scale(${drag.touch ? 1.2 : 1.1})`;
   }
@@ -56,7 +56,7 @@ export function createBoardDrag(ctx) {
     document.body.classList.add("is-dragging");
     hideTip();
     ctx.sfx?.pickup?.();
-    if (drag.touch) ctx.haptics?.pickup();
+
     document.querySelectorAll("#board .cell:not(.locked)").forEach((cell) => {
       const dest = ctx.getSave().board[ctx.getCols() * +cell.dataset.r + +cell.dataset.c];
       if (dest && dest.uid !== drag.loc.item.uid && ctx.canMerge?.(drag.loc.item, dest)) cell.classList.add("merge-target");
@@ -136,8 +136,8 @@ export function createBoardDrag(ctx) {
     const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell");
     const valid = el && dropOk(el, d.loc.item, d.loc);
     const settle = (fn) => {
-      if (fl) fl.classList.remove("on", "spring");
       fn?.();
+      if (fl) fl.classList.remove("on", "spring");
     };
     if (!el || !valid) {
       ctx.sfx?.invalid?.();
@@ -167,6 +167,7 @@ export function createBoardDrag(ctx) {
     if (!loc) return;
     if (e.cancelable) e.preventDefault();
     try { piece.setPointerCapture?.(e.pointerId); } catch {}
+    if (e.pointerType === "touch") ctx.haptics?.pickup();
     drag = {
       loc, piece, touch: e.pointerType === "touch",
       start: { x: e.clientX, y: e.clientY, t: Date.now() },
