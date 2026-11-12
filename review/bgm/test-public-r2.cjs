@@ -176,6 +176,7 @@ function instrument() {
     await enterRegion('theater');    // 還在快取裡：不該重新解碼
     await enterRegion('village');    // 已被 LRU 擠掉：要重新解碼，但只播一次
     await enterRegion('lamplight');  // 以前會連切兩次的區（journey→bulu）
+    await page.screenshot({path:path.join(__dirname,'public-game-r2.png')});
     G.fetch_log = await page.evaluate(() => window.__p.fetches);
 
     // 2b) 同場景操作不重播（目前在 lamplight）
@@ -316,6 +317,7 @@ function instrument() {
           T.plays.push({ext, i, status: await p.textContent('#status'), live: await p.evaluate(() => window.__p.live)});
         }
       }
+      await p.screenshot({path:path.join(__dirname,'public-loop-r2.png')});
       T.alive = await p.evaluate(() => window.__alive());
       await p.click('#stop'); await wait(200);
       T.after_stop = await p.evaluate(() => ({live: window.__p.live, max: window.__p.max, contexts: window.__p.contexts, starts: window.__p.starts}));

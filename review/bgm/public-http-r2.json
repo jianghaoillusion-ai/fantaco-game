@@ -1,0 +1,192 @@
+{
+  "base": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/",
+  "checks": [
+    {
+      "path": "index.html",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/index.html",
+      "status_and_mime": "200 text/html; charset=utf-8",
+      "pass_": true
+    },
+    {
+      "path": "review/bgm/loop-test.html",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/review/bgm/loop-test.html",
+      "status_and_mime": "200 text/html; charset=utf-8",
+      "pass_": true
+    },
+    {
+      "path": "js/audio.js",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/js/audio.js",
+      "status_and_mime": "200 application/javascript; charset=utf-8",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-village.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-village.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-village.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-village.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-journey.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-journey.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-journey.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-journey.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-candy.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-candy.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-candy.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-candy.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-bulu.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-bulu.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-bulu.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-bulu.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-hate.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-hate.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-hate.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-hate.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-ending.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-ending.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-ending.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-ending.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-castle.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-castle.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-castle.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-castle.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-slope.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-slope.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-slope.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-slope.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-hill.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-hill.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-hill.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-hill.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-bagvalley.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-bagvalley.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-bagvalley.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-bagvalley.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-candylane.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-candylane.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-candylane.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-candylane.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-lamplight.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-lamplight.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-lamplight.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-lamplight.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-theater.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-theater.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-theater.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-theater.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-plaza.mp3",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-plaza.mp3",
+      "status_and_mime": "200 audio/mpeg",
+      "pass_": true
+    },
+    {
+      "path": "assets/audio/bgm-plaza.ogg",
+      "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/audio/bgm-plaza.ogg",
+      "status_and_mime": "200 audio/ogg",
+      "pass_": true
+    }
+  ],
+  "pass": true
+}

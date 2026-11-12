@@ -10393,5 +10393,655 @@
     }
   ],
   "pass": true,
-  "actual_loop_loudness_pass": true
+  "actual_loop_loudness_pass": true,
+  "round2": {
+    "playback_commit": "97963f922b7cb4a4cf10fa8278c211241d2bea1a",
+    "actual_environment": "macOS headless Chromium 148.0.7778.96",
+    "iphone_safari": "尚待我的王實機測試",
+    "checks": {
+      "public_commit": true,
+      "curl_http_mime": true,
+      "regressions": true,
+      "phone_proxy": true,
+      "no_overlap": true,
+      "one_start_per_new_region": true,
+      "same_scene_no_restart": true,
+      "cache_max_3": true,
+      "no_retained_raw_decode": true,
+      "audition_all_28": true,
+      "no_js_errors": true,
+      "no_failed_bgm_request": true,
+      "stings_unchanged": true
+    },
+    "regression_checks": {
+      "muted_entry_no_download": true,
+      "enable_downloads_wanted": true,
+      "muted_switch_no_download": true,
+      "enable_after_switch_downloads": true,
+      "muted_multi_switch_only_latest": true,
+      "rapid_mute_unlock_no_restart": true,
+      "fallback_muted": true,
+      "fallback_zero_volume_muted": true,
+      "fallback_unmuted": true,
+      "default_mp3": true,
+      "rapid_audition_no_overlap": true,
+      "seven_rapid_auditions_only_latest": true,
+      "release_gestures": true
+    },
+    "public_base": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/",
+    "public_region_switches": [
+      {
+        "id": "castle",
+        "region_on_screen": "castle",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1431,
+        "started": [
+          {
+            "track": "castle",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 41.3793125,
+            "frames": 1986207,
+            "rate": 48000,
+            "rms": 0.09502480584057373
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 2,
+          "decoded": 0,
+          "megabytes": 32.73168182373047,
+          "everCreated": 4
+        }
+      },
+      {
+        "id": "slope",
+        "region_on_screen": "slope",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1417,
+        "started": [
+          {
+            "track": "slope",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 36.36364583333334,
+            "frames": 1745455,
+            "rate": 48000,
+            "rms": 0.1136115082134309
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 46.04844665527344,
+          "everCreated": 6
+        }
+      },
+      {
+        "id": "hill",
+        "region_on_screen": "hill",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1415,
+        "started": [
+          {
+            "track": "hill",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 36.610166666666665,
+            "frames": 1757288,
+            "rate": 48000,
+            "rms": 0.10282430098234405
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 41.87736511230469,
+          "everCreated": 8
+        }
+      },
+      {
+        "id": "bagvalley",
+        "region_on_screen": "bagvalley",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1598,
+        "started": [
+          {
+            "track": "bagvalley",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 43.63635416666666,
+            "frames": 2094545,
+            "rate": 48000,
+            "rms": 0.11500685861197686
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 42.70391845703125,
+          "everCreated": 10
+        }
+      },
+      {
+        "id": "candylane",
+        "region_on_screen": "candylane",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 673,
+        "started": [
+          {
+            "track": "candylane",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 35.82089583333333,
+            "frames": 1719403,
+            "rate": 48000,
+            "rms": 0.10913808944317677
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 42.505157470703125,
+          "everCreated": 12
+        }
+      },
+      {
+        "id": "lamplight",
+        "region_on_screen": "lamplight",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1640,
+        "started": [
+          {
+            "track": "lamplight",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 43.2,
+            "frames": 2073600,
+            "rate": 48000,
+            "rms": 0.10667440947539805
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 44.918426513671875,
+          "everCreated": 14
+        }
+      },
+      {
+        "id": "theater",
+        "region_on_screen": "theater",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 748,
+        "started": [
+          {
+            "track": "theater",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 46.15385416666667,
+            "frames": 2215385,
+            "rate": 48000,
+            "rms": 0.10163440456712103
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 45.840362548828125,
+          "everCreated": 16
+        }
+      },
+      {
+        "id": "plaza",
+        "region_on_screen": "plaza",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1455,
+        "started": [
+          {
+            "track": "plaza",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 38.09522916666667,
+            "frames": 1828571,
+            "rate": 48000,
+            "rms": 0.10552684972707534
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 46.673248291015625,
+          "everCreated": 18
+        }
+      },
+      {
+        "id": "plaza",
+        "region_on_screen": "plaza",
+        "new_starts": 0,
+        "new_decodes": 0,
+        "new_fetches": 0,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": null,
+        "started": [],
+        "order": "",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 46.673248291015625,
+          "everCreated": 18
+        }
+      },
+      {
+        "id": "theater",
+        "region_on_screen": "theater",
+        "new_starts": 1,
+        "new_decodes": 0,
+        "new_fetches": 0,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 949,
+        "started": [
+          {
+            "track": "theater",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 46.15385416666667,
+            "frames": 2215385,
+            "rate": 48000,
+            "rms": 0.10163440456712103
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 46.673248291015625,
+          "everCreated": 18
+        }
+      },
+      {
+        "id": "village",
+        "region_on_screen": "village",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 978,
+        "started": [
+          {
+            "track": "village",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 48,
+            "frames": 2304000,
+            "rate": 48000,
+            "rms": 0.10702721129900103
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 48.431060791015625,
+          "everCreated": 20
+        }
+      },
+      {
+        "id": "lamplight",
+        "region_on_screen": "lamplight",
+        "new_starts": 1,
+        "new_decodes": 1,
+        "new_fetches": 1,
+        "live": 1,
+        "max_live": 1,
+        "ms_from_click_to_new_track": 1018,
+        "started": [
+          {
+            "track": "lamplight",
+            "offset": 0,
+            "liveBefore": 0,
+            "loopStart": 0,
+            "loopEnd": 43.2,
+            "frames": 2073600,
+            "rate": 48000,
+            "rms": 0.10667440947539805
+          }
+        ],
+        "order": "stop>start",
+        "alive": {
+          "gc": true,
+          "loop": 3,
+          "decoded": 0,
+          "megabytes": 50.30048370361328,
+          "everCreated": 22
+        }
+      }
+    ],
+    "public_same_scene": [
+      {
+        "name": "show(play) x3",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "圖鑑→回遊玩",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "地圖→回遊玩（不進別區）",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "開設定",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "音量拉到 0",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0
+      },
+      {
+        "name": "音量拉到 100",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.5
+      },
+      {
+        "name": "音量拉回 72",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "關音樂",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0
+      },
+      {
+        "name": "開音樂",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "關設定",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "地圖修「目前這區」的建築",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "地圖修「別區」的建築",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "修完回遊玩",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "開關背包",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "故事對話→略過",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "拖曳合成",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      },
+      {
+        "name": "交訂單",
+        "new_starts": 0,
+        "new_stops": 0,
+        "live": 1,
+        "gain": 0.36000001430511475
+      }
+    ],
+    "public_audition": {
+      "live": 0,
+      "max": 1,
+      "contexts": 1,
+      "starts": 28
+    },
+    "phone_proxy": {
+      "method": "ffmpeg 2-pole highpass 400 Hz + ebur128; guard excluded; MP3",
+      "not_phone_hardware": true,
+      "reference_median_lufs": -16.8,
+      "rows": [
+        {
+          "id": "village",
+          "highpass_400_lufs": -16.6,
+          "difference_from_other_11_median_db": 0.2
+        },
+        {
+          "id": "journey",
+          "highpass_400_lufs": -18.0,
+          "difference_from_other_11_median_db": -1.2
+        },
+        {
+          "id": "candy",
+          "highpass_400_lufs": -16.6,
+          "difference_from_other_11_median_db": 0.2
+        },
+        {
+          "id": "bulu",
+          "highpass_400_lufs": -17.9,
+          "difference_from_other_11_median_db": -1.1
+        },
+        {
+          "id": "hate",
+          "highpass_400_lufs": -17.9,
+          "difference_from_other_11_median_db": -1.1
+        },
+        {
+          "id": "ending",
+          "highpass_400_lufs": -16.8,
+          "difference_from_other_11_median_db": 0.0
+        },
+        {
+          "id": "castle",
+          "highpass_400_lufs": -16.6,
+          "difference_from_other_11_median_db": 0.2
+        },
+        {
+          "id": "slope",
+          "highpass_400_lufs": -18.6,
+          "difference_from_other_11_median_db": -1.8
+        },
+        {
+          "id": "hill",
+          "highpass_400_lufs": -16.6,
+          "difference_from_other_11_median_db": 0.2
+        },
+        {
+          "id": "bagvalley",
+          "highpass_400_lufs": -18.2,
+          "difference_from_other_11_median_db": -1.4
+        },
+        {
+          "id": "candylane",
+          "highpass_400_lufs": -16.8,
+          "difference_from_other_11_median_db": 0.0
+        },
+        {
+          "id": "lamplight",
+          "highpass_400_lufs": -17.7,
+          "difference_from_other_11_median_db": -0.9
+        },
+        {
+          "id": "theater",
+          "highpass_400_lufs": -17.8,
+          "difference_from_other_11_median_db": -1.0
+        },
+        {
+          "id": "plaza",
+          "highpass_400_lufs": -17.2,
+          "difference_from_other_11_median_db": -0.4
+        }
+      ],
+      "pass": true
+    },
+    "unchanged_audio_from_r1": [
+      "assets/audio/bgm-village.mp3",
+      "assets/audio/bgm-village.ogg",
+      "assets/audio/bgm-journey.mp3",
+      "assets/audio/bgm-journey.ogg",
+      "assets/audio/bgm-candy.mp3",
+      "assets/audio/bgm-candy.ogg",
+      "assets/audio/bgm-bulu.mp3",
+      "assets/audio/bgm-bulu.ogg",
+      "assets/audio/bgm-ending.mp3",
+      "assets/audio/bgm-ending.ogg",
+      "assets/audio/bgm-castle.mp3",
+      "assets/audio/bgm-castle.ogg",
+      "assets/audio/bgm-slope.mp3",
+      "assets/audio/bgm-slope.ogg",
+      "assets/audio/bgm-hill.mp3",
+      "assets/audio/bgm-hill.ogg",
+      "assets/audio/bgm-candylane.mp3",
+      "assets/audio/bgm-candylane.ogg",
+      "assets/audio/bgm-lamplight.mp3",
+      "assets/audio/bgm-lamplight.ogg",
+      "assets/audio/bgm-plaza.mp3",
+      "assets/audio/bgm-plaza.ogg"
+    ],
+    "stings": [
+      {
+        "path": "assets/audio/sting-clear.ogg",
+        "unchanged_from_start_main": true,
+        "sha256": "74a74444fcb0b0295050a394d840c28c08cc46865bdbcd939112d4638dab1178"
+      },
+      {
+        "path": "assets/audio/sting-clear.mp3",
+        "unchanged_from_start_main": true,
+        "sha256": "c5122c79c2300b55018d24c644ba4ec348357865462c866d1929f49bfc34b42b"
+      },
+      {
+        "path": "assets/audio/feixiang-sting.ogg",
+        "unchanged_from_start_main": true,
+        "sha256": "d886a547c2564274205c044cd914b3e61fffd4302148ee5b3696e14467b4b68b"
+      },
+      {
+        "path": "assets/audio/feixiang-sting.m4a",
+        "unchanged_from_start_main": true,
+        "sha256": "4a6e39b624d13eef588be9e83f99856dae55a24b58f9ed81a80eab78b20dc89e"
+      }
+    ],
+    "details": [
+      "public-r2.json",
+      "public-http-r2.json",
+      "validation-r2.json"
+    ],
+    "non_audio_request_failures": [
+      "https://server.ethicalads.io/api/v1/decision/?publisher=githackcom&ad_types=image-v1&div_ids=githack-other-ad&callback=ad_1794468077858_36141&keywords=&campaign_types=paid%7Cpublisher-house%7Ccommunity%7Chouse&format=jsonp&client_version=2.5.0&placement_index=0&url=https%3A%2F%2Frawcdn.githack.com%2Fjianghaoillusion-ai%2Ffantaco-game%2F97963f922b7cb4a4cf10fa8278c211241d2bea1a%2Findex.html",
+      "https://raw.githubusercontent.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/chars/expr/mascot-happy-open.png",
+      "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/chars/expr/mascot-happy.png",
+      "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/97963f922b7cb4a4cf10fa8278c211241d2bea1a/assets/chars/expr/jiejie-happy.png?v=cast10r2"
+    ]
+  },
+  "round2_pass": true
 }
