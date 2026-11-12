@@ -1,0 +1,3670 @@
+{
+ "files": [
+  {
+   "id": "village",
+   "ext": "mp3",
+   "bytes": 774956,
+   "sha256": "cb8e49b4d6317377322406208a216a282122963b0a665bab73aadeff38ff1e49",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128134,
+    "duration": 48.384,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2322432,
+   "expected_samples": 2322432,
+   "excess": 0,
+   "loop_frames": 2304000,
+   "loop_seconds": 48.0,
+   "player_origin": 8915,
+   "seam": {
+    "jump": 0.0006669461727142334,
+    "adj_p50": 0.007716550957411528,
+    "adj_p99": 0.04837673563510181,
+    "d2": 0.0038378238677978516,
+    "d2_inner_max": 0.026486091315746307,
+    "d2_inner_median": 0.010035604238510132,
+    "dip": 0.5089446325036988,
+    "dip_inner_max": 10.56504097522203,
+    "pre100_db": -19.314699183733033,
+    "post100_db": -14.72466865137148,
+    "min10ms_last150_db": -20.310151595527046,
+    "d2_percentile_in_song": 41.225,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.31282586027111575,
+   "longest_quiet_ms": 50,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.59294076639467,
+   "guard_tail_db": -15.660851139667889,
+   "periodic_error_pre_db": -64.6683763754594,
+   "periodic_error_post_db": -55.481066952130476,
+   "loop": {
+    "lufs": -16.3,
+    "lra": 3.3,
+    "true_peak": -4.8
+   },
+   "whole_file": {
+    "lufs": -16.3,
+    "lra": 3.3,
+    "true_peak": -4.8
+   },
+   "max_abs": 0.5782260298728943,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 6.006087127097466e-06,
+    "below_200hz_pct": 0.0003665900821774842,
+    "above_5k_pct": 0.11051482854181455,
+    "centroid_hz": 941.1610644722502
+   }
+  },
+  {
+   "id": "village",
+   "ext": "ogg",
+   "bytes": 399350,
+   "sha256": "bcf7e230035a8ce6f930630dbd59e9515da4b6153551e26eb33252c8d004e791",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 66030,
+    "duration": 48.384,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2322432,
+   "expected_samples": 2322432,
+   "excess": 0,
+   "loop_frames": 2304000,
+   "loop_seconds": 48.0,
+   "player_origin": 8907,
+   "seam": {
+    "jump": 0.02019127458333969,
+    "adj_p50": 0.008175365626811981,
+    "adj_p99": 0.051141278073191666,
+    "d2": 0.004000991582870483,
+    "d2_inner_max": 0.02648712694644928,
+    "d2_inner_median": 0.009741619229316711,
+    "dip": 0.7506381756429441,
+    "dip_inner_max": 10.835329381437266,
+    "pre100_db": -18.8196242343492,
+    "post100_db": -14.230055382516383,
+    "min10ms_last150_db": -19.84504246286349,
+    "d2_percentile_in_song": 40.25,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.10427528675703858,
+   "longest_quiet_ms": 50,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.102420044997267,
+   "guard_tail_db": -15.18722109190386,
+   "periodic_error_pre_db": -33.66170052363042,
+   "periodic_error_post_db": -29.134821353964803,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 3.3,
+    "true_peak": -4.3
+   },
+   "whole_file": {
+    "lufs": -15.8,
+    "lra": 3.3,
+    "true_peak": -4.3
+   },
+   "max_abs": 0.6060959696769714,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 2.0671756717554092e-05,
+    "below_200hz_pct": 0.0003769964801598962,
+    "above_5k_pct": 0.10977355819481337,
+    "centroid_hz": 940.3651905625279
+   }
+  },
+  {
+   "id": "journey",
+   "ext": "mp3",
+   "bytes": 829868,
+   "sha256": "54ff7a0822e58d1df97aecfdba2caf4dea22cb035ab4bf3b4d66da0e1d0fe049",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128133,
+    "duration": 51.812563,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2487003,
+   "expected_samples": 2487003,
+   "excess": 0,
+   "loop_frames": 2468571,
+   "loop_seconds": 51.4285625,
+   "player_origin": 8802,
+   "seam": {
+    "jump": 0.007949970662593842,
+    "adj_p50": 0.005049671977758408,
+    "adj_p99": 0.04147068299353128,
+    "d2": 0.005537547171115875,
+    "d2_inner_max": 0.0209096297621727,
+    "d2_inner_median": 0.0114622563123703,
+    "dip": 1.8674368408450448,
+    "dip_inner_max": 8.56578427718507,
+    "pre100_db": -18.074126080979134,
+    "post100_db": -14.156744508755716,
+    "min10ms_last150_db": -22.371452409484455,
+    "d2_percentile_in_song": 59.724999999999994,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -17.608803518523533,
+   "guard_tail_db": -15.58765251708045,
+   "periodic_error_pre_db": -28.903221074801177,
+   "periodic_error_post_db": -26.15936861170425,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 2.8,
+    "true_peak": -4.1
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 2.8,
+    "true_peak": -4.1
+   },
+   "max_abs": 0.6246650815010071,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.00022314906313747183,
+    "below_200hz_pct": 2.443997534266468,
+    "above_5k_pct": 0.031176223399756973,
+    "centroid_hz": 608.0124678664627
+   }
+  },
+  {
+   "id": "journey",
+   "ext": "ogg",
+   "bytes": 667914,
+   "sha256": "f973a41ff7ed63b3868b1d61c15a68b1160a365d8109a5167a5ace8a7f52679d",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 103127,
+    "duration": 51.812563,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2487003,
+   "expected_samples": 2487003,
+   "excess": 0,
+   "loop_frames": 2468571,
+   "loop_seconds": 51.4285625,
+   "player_origin": 8850,
+   "seam": {
+    "jump": 0.010437570977956057,
+    "adj_p50": 0.005355179309844971,
+    "adj_p99": 0.043717870339751344,
+    "d2": 0.00481598824262619,
+    "d2_inner_max": 0.022303789854049683,
+    "d2_inner_median": 0.012343965470790863,
+    "dip": 0.0,
+    "dip_inner_max": 8.663886684289832,
+    "pre100_db": -17.80885019407449,
+    "post100_db": -13.716846627910906,
+    "min10ms_last150_db": -22.037584167273238,
+    "d2_percentile_in_song": 52.5,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -17.115428477064995,
+   "guard_tail_db": -15.092329086873121,
+   "periodic_error_pre_db": -22.208234193806646,
+   "periodic_error_post_db": -22.973157875064473,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 2.8,
+    "true_peak": -3.6
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 2.8,
+    "true_peak": -3.6
+   },
+   "max_abs": 0.6580992937088013,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0004093081956738037,
+    "below_200hz_pct": 2.459094109571908,
+    "above_5k_pct": 0.029914349592324262,
+    "centroid_hz": 606.1384772593453
+   }
+  },
+  {
+   "id": "candy",
+   "ext": "mp3",
+   "bytes": 726956,
+   "sha256": "0f69863d1c3a962597fc84ce5d8958b6d710c25c6793f1821172c48131c05a3f",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128143,
+    "duration": 45.384,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2178432,
+   "expected_samples": 2178432,
+   "excess": 0,
+   "loop_frames": 2160000,
+   "loop_seconds": 45.0,
+   "player_origin": 8913,
+   "seam": {
+    "jump": 0.014545515179634094,
+    "adj_p50": 0.010674362070858479,
+    "adj_p99": 0.04745768413878978,
+    "d2": 0.0048697590827941895,
+    "d2_inner_max": 0.007147155702114105,
+    "d2_inner_median": 0.0029296986758708954,
+    "dip": 0.0,
+    "dip_inner_max": 4.6387647372416865,
+    "pre100_db": -18.629119690891976,
+    "post100_db": -17.44926829634437,
+    "min10ms_last150_db": -20.25152903315886,
+    "d2_percentile_in_song": 33.050000000000004,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.97254906754465,
+   "guard_tail_db": -17.130118157058916,
+   "periodic_error_pre_db": -41.051498613345686,
+   "periodic_error_post_db": -40.45320867743792,
+   "loop": {
+    "lufs": -16.5,
+    "lra": 2.1,
+    "true_peak": -8.2
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 2.1,
+    "true_peak": -8.2
+   },
+   "max_abs": 0.3892323672771454,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 7.87948269471265e-05,
+    "below_200hz_pct": 0.4974186531698814,
+    "above_5k_pct": 0.027197451491220773,
+    "centroid_hz": 1251.562320728532
+   }
+  },
+  {
+   "id": "candy",
+   "ext": "ogg",
+   "bytes": 543891,
+   "sha256": "5469525d517275311eb4bafcb8ec66313d5650120a80cff32e61f461d931ee34",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 95873,
+    "duration": 45.384,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2178432,
+   "expected_samples": 2178432,
+   "excess": 0,
+   "loop_frames": 2160000,
+   "loop_seconds": 45.0,
+   "player_origin": 8893,
+   "seam": {
+    "jump": 0.018213987350463867,
+    "adj_p50": 0.01127922534942627,
+    "adj_p99": 0.05013811245560646,
+    "d2": 0.005487996153533459,
+    "d2_inner_max": 0.007508993148803711,
+    "d2_inner_median": 0.0026379674673080444,
+    "dip": 0.2451663774445514,
+    "dip_inner_max": 4.339804990282154,
+    "pre100_db": -18.13899209883008,
+    "post100_db": -16.928332642863396,
+    "min10ms_last150_db": -19.82754554326055,
+    "d2_percentile_in_song": 35.9,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.480705681667914,
+   "guard_tail_db": -16.653101312380972,
+   "periodic_error_pre_db": -33.283451732630255,
+   "periodic_error_post_db": -31.825077145829518,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 2.1,
+    "true_peak": -7.7
+   },
+   "whole_file": {
+    "lufs": -16.0,
+    "lra": 2.1,
+    "true_peak": -7.7
+   },
+   "max_abs": 0.41060277819633484,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 8.302576008847895e-05,
+    "below_200hz_pct": 0.5010951216140423,
+    "above_5k_pct": 0.02548683696311872,
+    "centroid_hz": 1251.040852138262
+   }
+  },
+  {
+   "id": "bulu",
+   "ext": "mp3",
+   "bytes": 718124,
+   "sha256": "0cf202f7a388cc0771388126cf961f14cc04585638f6ec7cc6ad5c71d410cdeb",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128155,
+    "duration": 44.828438,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2151765,
+   "expected_samples": 2151765,
+   "excess": 0,
+   "loop_frames": 2133333,
+   "loop_seconds": 44.4444375,
+   "player_origin": 9262,
+   "seam": {
+    "jump": 0.011842228472232819,
+    "adj_p50": 0.0041885413229465485,
+    "adj_p99": 0.04094158321619033,
+    "d2": 0.0028426051139831543,
+    "d2_inner_max": 0.007198292762041092,
+    "d2_inner_median": 0.0033585280179977417,
+    "dip": 1.4985185130591603,
+    "dip_inner_max": 6.50530079145603,
+    "pre100_db": -21.568893783164423,
+    "post100_db": -13.487176417936011,
+    "min10ms_last150_db": -22.964057902648104,
+    "d2_percentile_in_song": 72.475,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.6527919592736,
+   "guard_tail_db": -15.714833914559119,
+   "periodic_error_pre_db": -45.5903871942965,
+   "periodic_error_post_db": -51.255853379657765,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.6,
+    "true_peak": -4.9
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.6,
+    "true_peak": -4.9
+   },
+   "max_abs": 0.5710669755935669,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.001125857148445577,
+    "below_200hz_pct": 7.765001148091516,
+    "above_5k_pct": 2.881405298072918e-07,
+    "centroid_hz": 631.1032531522624
+   }
+  },
+  {
+   "id": "bulu",
+   "ext": "ogg",
+   "bytes": 330335,
+   "sha256": "141e86163b5698c3cd947596aac23b6906c9c064fd5988308a39847a742ac3b7",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 58950,
+    "duration": 44.828438,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2151765,
+   "expected_samples": 2151765,
+   "excess": 0,
+   "loop_frames": 2133333,
+   "loop_seconds": 44.4444375,
+   "player_origin": 9220,
+   "seam": {
+    "jump": 0.0064271315932273865,
+    "adj_p50": 0.004446316510438919,
+    "adj_p99": 0.04325188155518842,
+    "d2": 0.0030789226293563843,
+    "d2_inner_max": 0.0076508671045303345,
+    "d2_inner_median": 0.003531411290168762,
+    "dip": 1.7731803912519126,
+    "dip_inner_max": 6.988333674192688,
+    "pre100_db": -21.047591709269348,
+    "post100_db": -13.012176163111066,
+    "min10ms_last150_db": -22.27407839559415,
+    "d2_percentile_in_song": 73.475,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.176811640162857,
+   "guard_tail_db": -15.212352272882438,
+   "periodic_error_pre_db": -26.214804726858794,
+   "periodic_error_post_db": -31.491901904513334,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 0.6,
+    "true_peak": -4.4
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 0.6,
+    "true_peak": -4.4
+   },
+   "max_abs": 0.6006812453269958,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0013094568510416303,
+    "below_200hz_pct": 7.782485403522539,
+    "above_5k_pct": 1.0896882618597825e-07,
+    "centroid_hz": 630.3865739493076
+   }
+  },
+  {
+   "id": "hate",
+   "ext": "mp3",
+   "bytes": 626348,
+   "sha256": "279e9e3c413bab4578425b43aa16b51e8f179f3b6dadc75b9e9e5ac1614b2ef8",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128173,
+    "duration": 39.093688,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 1876497,
+   "expected_samples": 1876497,
+   "excess": 0,
+   "loop_frames": 1858065,
+   "loop_seconds": 38.7096875,
+   "player_origin": 9216,
+   "seam": {
+    "jump": 0.005315499845892191,
+    "adj_p50": 0.006135624833405018,
+    "adj_p99": 0.027535119503736483,
+    "d2": 0.0006525442004203796,
+    "d2_inner_max": 0.0019035935401916504,
+    "d2_inner_median": 0.0011684000492095947,
+    "dip": 1.8840428881699154,
+    "dip_inner_max": 5.84049665981405,
+    "pre100_db": -20.104568639148013,
+    "post100_db": -18.11644302724721,
+    "min10ms_last150_db": -22.366489044317596,
+    "d2_percentile_in_song": 16.625,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.04050183070255,
+   "guard_tail_db": -17.522098755584288,
+   "periodic_error_pre_db": -60.72082995774237,
+   "periodic_error_post_db": -61.55675196132581,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.6,
+    "true_peak": -7.0
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.6,
+    "true_peak": -7.0
+   },
+   "max_abs": 0.44851845502853394,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.026618021878575846,
+    "below_200hz_pct": 12.698504029911684,
+    "above_5k_pct": 2.1259614556916572e-07,
+    "centroid_hz": 574.0658085758015
+   }
+  },
+  {
+   "id": "hate",
+   "ext": "ogg",
+   "bytes": 306460,
+   "sha256": "baa9b9f365567e1a34775f0d307455bf8101502443fc81b588307d1447147177",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 62712,
+    "duration": 39.093688,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 1876497,
+   "expected_samples": 1876497,
+   "excess": 0,
+   "loop_frames": 1858065,
+   "loop_seconds": 38.7096875,
+   "player_origin": 9600,
+   "seam": {
+    "jump": 0.0003590583801269531,
+    "adj_p50": 0.006507815793156624,
+    "adj_p99": 0.029223915524780725,
+    "d2": 0.000721171498298645,
+    "d2_inner_max": 0.0020088031888008118,
+    "d2_inner_median": 0.001234486699104309,
+    "dip": 1.5098882790437855,
+    "dip_inner_max": 5.720874340668608,
+    "pre100_db": -19.93788735425919,
+    "post100_db": -17.560102768877965,
+    "min10ms_last150_db": -22.30410651455751,
+    "d2_percentile_in_song": 18.175,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -17.52836076235685,
+   "guard_tail_db": -17.02229645207722,
+   "periodic_error_pre_db": -31.840966645345574,
+   "periodic_error_post_db": -32.75223567693446,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 0.6,
+    "true_peak": -6.5
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 0.6,
+    "true_peak": -6.5
+   },
+   "max_abs": 0.4738765060901642,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.026298683585021132,
+    "below_200hz_pct": 12.710672518997365,
+    "above_5k_pct": 6.206219765134338e-08,
+    "centroid_hz": 574.1875147196553
+   }
+  },
+  {
+   "id": "ending",
+   "ext": "mp3",
+   "bytes": 684716,
+   "sha256": "0ab56d513ca55868eda873617afcdd5ec9192a356cd398147bf9757a2ca6aa62",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128173,
+    "duration": 42.736938,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2051373,
+   "expected_samples": 2051373,
+   "excess": 0,
+   "loop_frames": 2032941,
+   "loop_seconds": 42.3529375,
+   "player_origin": 9228,
+   "seam": {
+    "jump": 0.004926733672618866,
+    "adj_p50": 0.008478675037622452,
+    "adj_p99": 0.05216878018807616,
+    "d2": 0.003661520779132843,
+    "d2_inner_max": 0.022101446986198425,
+    "d2_inner_median": 0.010897375643253326,
+    "dip": 2.3285513539533937,
+    "dip_inner_max": 4.348175212436644,
+    "pre100_db": -24.174193407545246,
+    "post100_db": -15.700079145138675,
+    "min10ms_last150_db": -27.049435380165548,
+    "d2_percentile_in_song": 39.75,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -22.598315688971972,
+   "guard_tail_db": -16.93129134207748,
+   "periodic_error_pre_db": -43.70169838808984,
+   "periodic_error_post_db": -47.38499292541622,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 1.4,
+    "true_peak": -5.7
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 1.4,
+    "true_peak": -5.7
+   },
+   "max_abs": 0.5149739384651184,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 3.054369439983317e-05,
+    "below_200hz_pct": 1.4523071972902404,
+    "above_5k_pct": 0.12927685858386853,
+    "centroid_hz": 986.7014524033025
+   }
+  },
+  {
+   "id": "ending",
+   "ext": "ogg",
+   "bytes": 367101,
+   "sha256": "b05fe09f58fd448c495b24611cb40a5b2dc494e9e799ef09540a1e9763d3467a",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 68718,
+    "duration": 42.736938,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2051373,
+   "expected_samples": 2051373,
+   "excess": 0,
+   "loop_frames": 2032941,
+   "loop_seconds": 42.3529375,
+   "player_origin": 9139,
+   "seam": {
+    "jump": 0.010617494583129883,
+    "adj_p50": 0.008974832599051297,
+    "adj_p99": 0.055119021108839504,
+    "d2": 0.0038129761815071106,
+    "d2_inner_max": 0.023151129484176636,
+    "d2_inner_median": 0.011235445737838745,
+    "dip": 1.8106198295837714,
+    "dip_inner_max": 4.320406823025234,
+    "pre100_db": -23.635552861254034,
+    "post100_db": -15.255040316142988,
+    "min10ms_last150_db": -26.376442301997542,
+    "d2_percentile_in_song": 39.574999999999996,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -22.15684394859182,
+   "guard_tail_db": -16.433633984769454,
+   "periodic_error_pre_db": -22.14494487624157,
+   "periodic_error_post_db": -27.41395909672578,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 1.4,
+    "true_peak": -5.2
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 1.4,
+    "true_peak": -5.2
+   },
+   "max_abs": 0.5491399168968201,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 9.532175039706368e-05,
+    "below_200hz_pct": 1.4580409030647719,
+    "above_5k_pct": 0.12844052084032578,
+    "centroid_hz": 985.6969494714198
+   }
+  },
+  {
+   "id": "castle",
+   "ext": "mp3",
+   "bytes": 669356,
+   "sha256": "356bca79a37840cff5a9ad19760d2f9056be2804054560d1af4507adae2822c5",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128218,
+    "duration": 41.763313,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2004639,
+   "expected_samples": 2004639,
+   "excess": 0,
+   "loop_frames": 1986207,
+   "loop_seconds": 41.3793125,
+   "player_origin": 8959,
+   "seam": {
+    "jump": 0.0010365545749664307,
+    "adj_p50": 0.012373730540275574,
+    "adj_p99": 0.05673770366702225,
+    "d2": 0.005239173769950867,
+    "d2_inner_max": 0.02050795406103134,
+    "d2_inner_median": 0.012307245284318924,
+    "dip": 1.0300627653395615,
+    "dip_inner_max": 4.331998440478792,
+    "pre100_db": -22.617267371636366,
+    "post100_db": -16.680272747195993,
+    "min10ms_last150_db": -23.846017601713537,
+    "d2_percentile_in_song": 19.825,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -21.481519975816255,
+   "guard_tail_db": -17.882903232854137,
+   "periodic_error_pre_db": -43.682836803748316,
+   "periodic_error_post_db": -38.82675722395927,
+   "loop": {
+    "lufs": -16.5,
+    "lra": 1.7,
+    "true_peak": -7.3
+   },
+   "whole_file": {
+    "lufs": -16.5,
+    "lra": 1.7,
+    "true_peak": -7.3
+   },
+   "max_abs": 0.4303995668888092,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 7.535300744173618e-07,
+    "below_200hz_pct": 1.2075239478104887e-05,
+    "above_5k_pct": 0.2970267312046072,
+    "centroid_hz": 1345.7657313245497
+   }
+  },
+  {
+   "id": "castle",
+   "ext": "ogg",
+   "bytes": 400017,
+   "sha256": "77809ac7f343c4e7e32f8384c2b49e85034f828f3be8decd93572068291ff81a",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 76625,
+    "duration": 41.763313,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2004639,
+   "expected_samples": 2004639,
+   "excess": 0,
+   "loop_frames": 1986207,
+   "loop_seconds": 41.3793125,
+   "player_origin": 8952,
+   "seam": {
+    "jump": 0.01703525334596634,
+    "adj_p50": 0.013075655326247215,
+    "adj_p99": 0.0599476530216634,
+    "d2": 0.005548015236854553,
+    "d2_inner_max": 0.01956634223461151,
+    "d2_inner_median": 0.01296905055642128,
+    "dip": 1.5033243759520012,
+    "dip_inner_max": 4.051826311709846,
+    "pre100_db": -22.15959274971057,
+    "post100_db": -16.19977640284086,
+    "min10ms_last150_db": -23.53854420355941,
+    "d2_percentile_in_song": 19.75,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -21.03007657460306,
+   "guard_tail_db": -17.381999034141067,
+   "periodic_error_pre_db": -29.387365352320266,
+   "periodic_error_post_db": -25.619502744105965,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 1.7,
+    "true_peak": -6.9
+   },
+   "whole_file": {
+    "lufs": -16.0,
+    "lra": 1.7,
+    "true_peak": -6.9
+   },
+   "max_abs": 0.44988885521888733,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 7.950885251186356e-06,
+    "below_200hz_pct": 2.4296982043205472e-05,
+    "above_5k_pct": 0.29673196785145983,
+    "centroid_hz": 1344.8380172882758
+   }
+  },
+  {
+   "id": "slope",
+   "ext": "mp3",
+   "bytes": 589100,
+   "sha256": "444e735828fb95d65ff924c41f0286657f3c749c2fbe0f1ed64720104137315f",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128247,
+    "duration": 36.747646,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 1763887,
+   "expected_samples": 1763887,
+   "excess": 0,
+   "loop_frames": 1745455,
+   "loop_seconds": 36.36364583333334,
+   "player_origin": 9216,
+   "seam": {
+    "jump": 0.0033017017121892422,
+    "adj_p50": 0.004550360143184662,
+    "adj_p99": 0.03585080789402124,
+    "d2": 0.0012301169335842133,
+    "d2_inner_max": 0.005788810551166534,
+    "d2_inner_median": 0.0029160454869270325,
+    "dip": 0.0,
+    "dip_inner_max": 7.610383230031513,
+    "pre100_db": -21.701212989906548,
+    "post100_db": -21.70592787073938,
+    "min10ms_last150_db": -23.92614952273592,
+    "d2_percentile_in_song": 11.600000000000001,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -19.758345792579135,
+   "guard_tail_db": -17.780831324276082,
+   "periodic_error_pre_db": -50.26122047908078,
+   "periodic_error_post_db": -52.060735225785756,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.8,
+    "true_peak": -5.0
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.8,
+    "true_peak": -5.0
+   },
+   "max_abs": 0.5609664916992188,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0005865727592121189,
+    "below_200hz_pct": 3.0509714848462104,
+    "above_5k_pct": 7.899112318498666e-06,
+    "centroid_hz": 514.3225386276976
+   }
+  },
+  {
+   "id": "slope",
+   "ext": "ogg",
+   "bytes": 296224,
+   "sha256": "b7b021ca574c90b6b02a2a270fd6c019709e2731e157d94b0ca54dfbe7732d9e",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 64488,
+    "duration": 36.747646,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 1763887,
+   "expected_samples": 1763887,
+   "excess": 0,
+   "loop_frames": 1745455,
+   "loop_seconds": 36.36364583333334,
+   "player_origin": 9225,
+   "seam": {
+    "jump": 0.003983438014984131,
+    "adj_p50": 0.004815910942852497,
+    "adj_p99": 0.037797089740633956,
+    "d2": 0.0013205595314502716,
+    "d2_inner_max": 0.00609394907951355,
+    "d2_inner_median": 0.002858288586139679,
+    "dip": 0.0,
+    "dip_inner_max": 7.689676839655078,
+    "pre100_db": -21.245904357554515,
+    "post100_db": -21.23148919537762,
+    "min10ms_last150_db": -23.55230131171559,
+    "d2_percentile_in_song": 12.35,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -19.279176463457944,
+   "guard_tail_db": -17.28180253265642,
+   "periodic_error_pre_db": -32.112344616197234,
+   "periodic_error_post_db": -33.62547768312561,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 0.8,
+    "true_peak": -4.6
+   },
+   "whole_file": {
+    "lufs": -16.0,
+    "lra": 0.8,
+    "true_peak": -4.6
+   },
+   "max_abs": 0.5885839462280273,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0007556234863619617,
+    "below_200hz_pct": 3.062430335848252,
+    "above_5k_pct": 7.940002577774786e-06,
+    "centroid_hz": 513.4560335134548
+   }
+  },
+  {
+   "id": "hill",
+   "ext": "mp3",
+   "bytes": 592940,
+   "sha256": "7d4ab28786cdab7c68f875cba344c8066355a19bd54a59ea508c94ce25f50e7b",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128223,
+    "duration": 36.994167,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 1775720,
+   "expected_samples": 1775720,
+   "excess": 0,
+   "loop_frames": 1757288,
+   "loop_seconds": 36.610166666666665,
+   "player_origin": 9143,
+   "seam": {
+    "jump": 0.0003173649311065674,
+    "adj_p50": 0.010321561247110367,
+    "adj_p99": 0.038006937839090774,
+    "d2": 0.004736185073852539,
+    "d2_inner_max": 0.011543422937393188,
+    "d2_inner_median": 0.006608977913856506,
+    "dip": 0.0,
+    "dip_inner_max": 2.6920901573486233,
+    "pre100_db": -18.003677040591437,
+    "post100_db": -16.196469503648256,
+    "min10ms_last150_db": -19.121367961048463,
+    "d2_percentile_in_song": 38.3,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.272407862944863,
+   "guard_tail_db": -17.388321000977015,
+   "periodic_error_pre_db": -41.32267713977289,
+   "periodic_error_post_db": -38.514925333437816,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.7,
+    "true_peak": -7.6
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.7,
+    "true_peak": -7.6
+   },
+   "max_abs": 0.4160350263118744,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 1.5892210363149589e-06,
+    "below_200hz_pct": 4.069244091708637e-05,
+    "above_5k_pct": 0.005712374191744927,
+    "centroid_hz": 1019.5655204623275
+   }
+  },
+  {
+   "id": "hill",
+   "ext": "ogg",
+   "bytes": 412889,
+   "sha256": "9ca2b1dc7fd28fac202abd69e596f63d2930a9286b0ee7cca6454266cd850dac",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 89287,
+    "duration": 36.994167,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 1775720,
+   "expected_samples": 1775720,
+   "excess": 0,
+   "loop_frames": 1757288,
+   "loop_seconds": 36.610166666666665,
+   "player_origin": 9135,
+   "seam": {
+    "jump": 0.02733255922794342,
+    "adj_p50": 0.010925546288490295,
+    "adj_p99": 0.04018590487539768,
+    "d2": 0.004876419901847839,
+    "d2_inner_max": 0.011737331748008728,
+    "d2_inner_median": 0.006790295243263245,
+    "dip": 0.2349464921718436,
+    "dip_inner_max": 2.817677637415251,
+    "pre100_db": -17.510796930815296,
+    "post100_db": -15.683605048393403,
+    "min10ms_last150_db": -18.623566758893134,
+    "d2_percentile_in_song": 37.8,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -17.762975519172844,
+   "guard_tail_db": -16.903763555579275,
+   "periodic_error_pre_db": -34.878558157869435,
+   "periodic_error_post_db": -32.35338375765094,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 0.7,
+    "true_peak": -7.1
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 0.7,
+    "true_peak": -7.1
+   },
+   "max_abs": 0.4386368989944458,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 5.928857506402751e-07,
+    "below_200hz_pct": 3.479813836419443e-05,
+    "above_5k_pct": 0.0049167550969180926,
+    "centroid_hz": 1019.1092145982705
+   }
+  },
+  {
+   "id": "bagvalley",
+   "ext": "mp3",
+   "bytes": 705452,
+   "sha256": "9097b64349688656000da3faea1578da3fb569f6c01da445e6cea062da11f6bf",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128204,
+    "duration": 44.020354,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2112977,
+   "expected_samples": 2112977,
+   "excess": 0,
+   "loop_frames": 2094545,
+   "loop_seconds": 43.63635416666666,
+   "player_origin": 9221,
+   "seam": {
+    "jump": 0.005763579159975052,
+    "adj_p50": 0.005236499011516571,
+    "adj_p99": 0.05168334033340219,
+    "d2": 0.0026094531640410423,
+    "d2_inner_max": 0.01979944109916687,
+    "d2_inner_median": 0.006542816758155823,
+    "dip": 0.2215957176470944,
+    "dip_inner_max": 4.936980776045139,
+    "pre100_db": -20.33233085846835,
+    "post100_db": -14.734120343643207,
+    "min10ms_last150_db": -22.57158012395263,
+    "d2_percentile_in_song": 27.700000000000003,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.573824661652246,
+   "guard_tail_db": -16.109586670995146,
+   "periodic_error_pre_db": -43.3952693204792,
+   "periodic_error_post_db": -45.27435334212706,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.9,
+    "true_peak": -4.6
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.9,
+    "true_peak": -4.6
+   },
+   "max_abs": 0.5853428244590759,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.008505998937232195,
+    "below_200hz_pct": 19.019228332992423,
+    "above_5k_pct": 0.020233758072732148,
+    "centroid_hz": 634.7709313727864
+   }
+  },
+  {
+   "id": "bagvalley",
+   "ext": "ogg",
+   "bytes": 400831,
+   "sha256": "56503d9a44758923b0f524188d460a7a2e513916917a52fc8d4ddc64927ce78c",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 72844,
+    "duration": 44.020354,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2112977,
+   "expected_samples": 2112977,
+   "excess": 0,
+   "loop_frames": 2094545,
+   "loop_seconds": 43.63635416666666,
+   "player_origin": 9191,
+   "seam": {
+    "jump": 0.0036357566714286804,
+    "adj_p50": 0.0055440329015254974,
+    "adj_p99": 0.05458257019519806,
+    "d2": 0.002702668309211731,
+    "d2_inner_max": 0.020743072032928467,
+    "d2_inner_median": 0.006932452321052551,
+    "dip": 0.0,
+    "dip_inner_max": 5.087905627033898,
+    "pre100_db": -19.829547260463926,
+    "post100_db": -14.326095728721334,
+    "min10ms_last150_db": -22.054599829681983,
+    "d2_percentile_in_song": 27.375,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.09203598652714,
+   "guard_tail_db": -15.632156652560676,
+   "periodic_error_pre_db": -26.49528754780996,
+   "periodic_error_post_db": -28.64786811041113,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 0.9,
+    "true_peak": -4.3
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 0.9,
+    "true_peak": -4.3
+   },
+   "max_abs": 0.6093649864196777,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.010040675784357337,
+    "below_200hz_pct": 19.050428022808536,
+    "above_5k_pct": 0.020258668116702176,
+    "centroid_hz": 633.8494305601163
+   }
+  },
+  {
+   "id": "candylane",
+   "ext": "mp3",
+   "bytes": 580268,
+   "sha256": "0e9c09e13c671ddb869331d36676c29286f7313666407ee073435673904b4890",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128218,
+    "duration": 36.204896,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 1737835,
+   "expected_samples": 1737835,
+   "excess": 0,
+   "loop_frames": 1719403,
+   "loop_seconds": 35.82089583333333,
+   "player_origin": 9224,
+   "seam": {
+    "jump": 0.0021714195609092712,
+    "adj_p50": 0.009707356337457895,
+    "adj_p99": 0.055595037396997206,
+    "d2": 0.0015489719808101654,
+    "d2_inner_max": 0.008984878659248352,
+    "d2_inner_median": 0.005639076232910156,
+    "dip": 0.0,
+    "dip_inner_max": 4.347968082712082,
+    "pre100_db": -26.521802116118035,
+    "post100_db": -17.909885365314683,
+    "min10ms_last150_db": -30.469735432515975,
+    "d2_percentile_in_song": 0.8,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -21.093713909303094,
+   "guard_tail_db": -19.721616893815895,
+   "periodic_error_pre_db": -39.668079169305315,
+   "periodic_error_post_db": -43.36630466174973,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.9,
+    "true_peak": -7.4
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.8,
+    "true_peak": -7.4
+   },
+   "max_abs": 0.42674702405929565,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 9.817915779621395e-06,
+    "below_200hz_pct": 0.04940943633722325,
+    "above_5k_pct": 0.05322108453032741,
+    "centroid_hz": 1179.9400596402438
+   }
+  },
+  {
+   "id": "candylane",
+   "ext": "ogg",
+   "bytes": 310789,
+   "sha256": "99f2d2d6deec2567abc829de0a6d1f52516ce8a0b3cf57344126671a0a46e7c2",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 68673,
+    "duration": 36.204896,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 1737835,
+   "expected_samples": 1737835,
+   "excess": 0,
+   "loop_frames": 1719403,
+   "loop_seconds": 35.82089583333333,
+   "player_origin": 9227,
+   "seam": {
+    "jump": 0.005427548661828041,
+    "adj_p50": 0.010259168688207865,
+    "adj_p99": 0.05862356172874569,
+    "d2": 0.0015564002096652985,
+    "d2_inner_max": 0.009471535682678223,
+    "d2_inner_median": 0.005953684449195862,
+    "dip": 0.0,
+    "dip_inner_max": 4.436959516767345,
+    "pre100_db": -26.039142272230684,
+    "post100_db": -17.428601384140734,
+    "min10ms_last150_db": -29.85335685802244,
+    "d2_percentile_in_song": 0.525,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -20.662797733521984,
+   "guard_tail_db": -19.278683333893827,
+   "periodic_error_pre_db": -23.90336597050581,
+   "periodic_error_post_db": -26.504775026871993,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 0.8,
+    "true_peak": -6.5
+   },
+   "whole_file": {
+    "lufs": -16.0,
+    "lra": 0.8,
+    "true_peak": -6.5
+   },
+   "max_abs": 0.47167274355888367,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.00010588356883203646,
+    "below_200hz_pct": 0.04996545427353314,
+    "above_5k_pct": 0.05298325945560857,
+    "centroid_hz": 1177.3948941254478
+   }
+  },
+  {
+   "id": "lamplight",
+   "ext": "mp3",
+   "bytes": 698156,
+   "sha256": "8a5ee240a81b02186f54ec7b4e38c82e8e9af3603ad61e0ecfbd1ab5bd746a8a",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128149,
+    "duration": 43.584,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2092032,
+   "expected_samples": 2092032,
+   "excess": 0,
+   "loop_frames": 2073600,
+   "loop_seconds": 43.2,
+   "player_origin": 9214,
+   "seam": {
+    "jump": 0.004688754212111235,
+    "adj_p50": 0.005498263984918594,
+    "adj_p99": 0.03764181081205609,
+    "d2": 0.0010507337283343077,
+    "d2_inner_max": 0.005402117967605591,
+    "d2_inner_median": 0.003165632486343384,
+    "dip": 0.8880505197162805,
+    "dip_inner_max": 5.227805162518315,
+    "pre100_db": -25.67588979963324,
+    "post100_db": -14.174456680068344,
+    "min10ms_last150_db": -32.17563838415818,
+    "d2_percentile_in_song": 15.975,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -21.368679432365717,
+   "guard_tail_db": -15.422862355678433,
+   "periodic_error_pre_db": -39.44775859722023,
+   "periodic_error_post_db": -46.406608548188885,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 1.7,
+    "true_peak": -4.8
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 1.7,
+    "true_peak": -4.8
+   },
+   "max_abs": 0.573103666305542,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 3.316109378185395e-06,
+    "below_200hz_pct": 0.0001270991617811492,
+    "above_5k_pct": 0.007675659549594759,
+    "centroid_hz": 593.4726093634054
+   }
+  },
+  {
+   "id": "lamplight",
+   "ext": "ogg",
+   "bytes": 356282,
+   "sha256": "66a1508b39df5dfa3ce4c75e7e391b4d2e5310dd1d2512e1971ab97f97d5dfc6",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 65396,
+    "duration": 43.584,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2092032,
+   "expected_samples": 2092032,
+   "excess": 0,
+   "loop_frames": 2073600,
+   "loop_seconds": 43.2,
+   "player_origin": 9550,
+   "seam": {
+    "jump": 0.006176019087433815,
+    "adj_p50": 0.005822174251079559,
+    "adj_p99": 0.03976669408380986,
+    "d2": 0.001160256564617157,
+    "d2_inner_max": 0.0054209232330322266,
+    "d2_inner_median": 0.003181055188179016,
+    "dip": 0.039192317626003614,
+    "dip_inner_max": 5.185394266230201,
+    "pre100_db": -25.729829389264026,
+    "post100_db": -13.440943022798514,
+    "min10ms_last150_db": -31.981229856162695,
+    "d2_percentile_in_song": 17.775,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -20.85211581030748,
+   "guard_tail_db": -14.932466565916272,
+   "periodic_error_pre_db": -21.889186120854355,
+   "periodic_error_post_db": -31.29290081530715,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 1.7,
+    "true_peak": -4.3
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 1.7,
+    "true_peak": -4.3
+   },
+   "max_abs": 0.6066054105758667,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 2.3215083953124658e-05,
+    "below_200hz_pct": 0.00015578860156459295,
+    "above_5k_pct": 0.007632989424643462,
+    "centroid_hz": 592.8592952135367
+   }
+  },
+  {
+   "id": "theater",
+   "ext": "mp3",
+   "bytes": 745772,
+   "sha256": "6396be9be3456bd36d2b4e398b4c11bbf96aacb4d744c4551a694bf13453a94e",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128200,
+    "duration": 46.537854,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 2233817,
+   "expected_samples": 2233817,
+   "excess": 0,
+   "loop_frames": 2215385,
+   "loop_seconds": 46.15385416666667,
+   "player_origin": 8952,
+   "seam": {
+    "jump": 0.004007257521152496,
+    "adj_p50": 0.004829492419958115,
+    "adj_p99": 0.056645663082599565,
+    "d2": 0.0018399134278297424,
+    "d2_inner_max": 0.016594380140304565,
+    "d2_inner_median": 0.007113819941878319,
+    "dip": 0.0,
+    "dip_inner_max": 7.482541213296848,
+    "pre100_db": -21.587539162106385,
+    "post100_db": -15.650404601748978,
+    "min10ms_last150_db": -23.284848920748082,
+    "d2_percentile_in_song": 26.3,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -19.627397189724114,
+   "guard_tail_db": -16.64682131670836,
+   "periodic_error_pre_db": -50.35110370800766,
+   "periodic_error_post_db": -47.77772618396084,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 0.9,
+    "true_peak": -6.2
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 0.9,
+    "true_peak": -6.2
+   },
+   "max_abs": 0.48865988850593567,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0010456070476482166,
+    "below_200hz_pct": 7.942844565588179,
+    "above_5k_pct": 0.04919641928669886,
+    "centroid_hz": 697.1175995567456
+   }
+  },
+  {
+   "id": "theater",
+   "ext": "ogg",
+   "bytes": 403274,
+   "sha256": "c1323e5039473a67d0e9ad28d853c65063a9c9f94b5404df85802ed368989d16",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 69324,
+    "duration": 46.537854,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 2233817,
+   "expected_samples": 2233817,
+   "excess": 0,
+   "loop_frames": 2215385,
+   "loop_seconds": 46.15385416666667,
+   "player_origin": 8952,
+   "seam": {
+    "jump": 0.004446253180503845,
+    "adj_p50": 0.005110431462526321,
+    "adj_p99": 0.05982506036758417,
+    "d2": 0.0017862659879028797,
+    "d2_inner_max": 0.01784122735261917,
+    "d2_inner_median": 0.007645063102245331,
+    "dip": 0.0,
+    "dip_inner_max": 8.088348411145244,
+    "pre100_db": -21.104953891461395,
+    "post100_db": -15.147674860407282,
+    "min10ms_last150_db": -22.83213162851613,
+    "d2_percentile_in_song": 23.775,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -19.14326941552051,
+   "guard_tail_db": -16.171451652446066,
+   "periodic_error_pre_db": -25.852598729014204,
+   "periodic_error_post_db": -25.437233645697482,
+   "loop": {
+    "lufs": -16.0,
+    "lra": 0.9,
+    "true_peak": -5.5
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 0.9,
+    "true_peak": -5.5
+   },
+   "max_abs": 0.5310437679290771,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.001503111567665625,
+    "below_200hz_pct": 7.955064063789408,
+    "above_5k_pct": 0.04886617051162417,
+    "centroid_hz": 696.3364445717552
+   }
+  },
+  {
+   "id": "plaza",
+   "ext": "mp3",
+   "bytes": 616748,
+   "sha256": "3ad9f89108b08f18939dace869bc4b770bb50972dee519be842075d63703cbab",
+   "probe": {
+    "codec": "mp3",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 128224,
+    "duration": 38.479229,
+    "tags": {
+     "encoder": "Lavc61.19"
+    }
+   },
+   "decoded_samples": 1847003,
+   "expected_samples": 1847003,
+   "excess": 0,
+   "loop_frames": 1828571,
+   "loop_seconds": 38.09522916666667,
+   "player_origin": 9450,
+   "seam": {
+    "jump": 0.009551815688610077,
+    "adj_p50": 0.00818287581205368,
+    "adj_p99": 0.03239233888685704,
+    "d2": 0.0035249143838882446,
+    "d2_inner_max": 0.009983658790588379,
+    "d2_inner_median": 0.005014359951019287,
+    "dip": 0.0024513689837490915,
+    "dip_inner_max": 3.0970362840674532,
+    "pre100_db": -19.237981292064173,
+    "post100_db": -15.790710854689314,
+    "min10ms_last150_db": -19.688089212897783,
+    "d2_percentile_in_song": 31.974999999999998,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.946966447910786,
+   "guard_tail_db": -16.741494224390706,
+   "periodic_error_pre_db": -41.328523948239614,
+   "periodic_error_post_db": -38.81265062559531,
+   "loop": {
+    "lufs": -16.4,
+    "lra": 1.2,
+    "true_peak": -5.6
+   },
+   "whole_file": {
+    "lufs": -16.4,
+    "lra": 1.2,
+    "true_peak": -5.6
+   },
+   "max_abs": 0.5272398591041565,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.002046015761829467,
+    "below_200hz_pct": 7.065745470702471,
+    "above_5k_pct": 0.005602477958504896,
+    "centroid_hz": 769.2369484360725
+   }
+  },
+  {
+   "id": "plaza",
+   "ext": "ogg",
+   "bytes": 421937,
+   "sha256": "31833f74549ccb9083f0de07ac23558ffed691dc093ee7b6fba316bcb5b85baa",
+   "probe": {
+    "codec": "vorbis",
+    "sample_rate": 48000,
+    "channels": 2,
+    "bit_rate": 87722,
+    "duration": 38.479229,
+    "tags": {
+     "encoder": "Lavc61.19.100 libvorbis"
+    }
+   },
+   "decoded_samples": 1847003,
+   "expected_samples": 1847003,
+   "excess": 0,
+   "loop_frames": 1828571,
+   "loop_seconds": 38.09522916666667,
+   "player_origin": 9094,
+   "seam": {
+    "jump": 0.015109121799468994,
+    "adj_p50": 0.008675627410411835,
+    "adj_p99": 0.03427208635956049,
+    "d2": 0.0036117583513259888,
+    "d2_inner_max": 0.0098610520362854,
+    "d2_inner_median": 0.005322948098182678,
+    "dip": 1.1823454127543087,
+    "dip_inner_max": 3.182040531450781,
+    "pre100_db": -18.7947125659498,
+    "post100_db": -15.415980561885064,
+    "min10ms_last150_db": -19.199367667976244,
+    "d2_percentile_in_song": 31.125000000000004,
+    "tail_quiet_ms": 0
+   },
+   "quiet_fraction_pct": 0.0,
+   "longest_quiet_ms": 0,
+   "file_lead_silence_samples": 0,
+   "file_trail_silence_samples": 0,
+   "guard_head_db": -18.451828145509555,
+   "guard_tail_db": -16.246398991992564,
+   "periodic_error_pre_db": -32.53257178029527,
+   "periodic_error_post_db": -29.473976619086876,
+   "loop": {
+    "lufs": -15.9,
+    "lra": 1.2,
+    "true_peak": -5.0
+   },
+   "whole_file": {
+    "lufs": -15.9,
+    "lra": 1.2,
+    "true_peak": -5.0
+   },
+   "max_abs": 0.5603237152099609,
+   "clipped_samples": 0,
+   "spectrum": {
+    "below_100hz_pct": 0.0022069979895741896,
+    "below_200hz_pct": 7.056301793494553,
+    "above_5k_pct": 0.004835781099053329,
+    "centroid_hz": 769.1716096329665
+   }
+  }
+ ],
+ "songs": {
+  "village": {
+   "resynth_corr": 0.9999987431917068,
+   "resynth_shift": 301,
+   "resynth_len": 2304000,
+   "sample_corr": 0.9999987318712068,
+   "sample_shift": 301,
+   "sample": "cute-a-glock-bubbles",
+   "name": "微笑村",
+   "claimed_key": "C 大調",
+   "claimed_bpm": 120,
+   "meter": 4,
+   "bars": 24,
+   "measured_bpm_guided": 80.74951171875,
+   "measured_bpm_free": 80.74951171875,
+   "measured_key": [
+    {
+     "key": "C 大調",
+     "r": 0.727
+    },
+    {
+     "key": "F 大調",
+     "r": 0.691
+    }
+   ],
+   "melody_notes": 88,
+   "melody_range": [
+    60,
+    84
+   ],
+   "notes_per_bar": 3.6666666666666665,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.25,
+    1.5,
+    2.0,
+    2.25,
+    2.5,
+    3.0,
+    3.25,
+    3.5
+   ],
+   "distinct_bar_rhythms": 7,
+   "distinct_bar_melodies": 19,
+   "mean_abs_interval": 5.655172413793103,
+   "leaps_over_fifth_pct": 24.137931034482758,
+   "stepwise_pct": 9.195402298850574,
+   "self_beat_chroma_repeat_corr": 0.9702599634151415
+  },
+  "journey": {
+   "resynth_corr": 0.9997895544450989,
+   "resynth_shift": 414,
+   "resynth_len": 2468571,
+   "sample_corr": 0.9997893379869937,
+   "sample_shift": 414,
+   "sample": "cute-b-uke-hop",
+   "name": "神祕魔法袋",
+   "claimed_key": "F 大調",
+   "claimed_bpm": 112,
+   "meter": 4,
+   "bars": 24,
+   "measured_bpm_guided": 112.34714673913044,
+   "measured_bpm_free": 112.34714673913044,
+   "measured_key": [
+    {
+     "key": "D 小調",
+     "r": 0.822
+    },
+    {
+     "key": "F 大調",
+     "r": 0.791
+    }
+   ],
+   "melody_notes": 84,
+   "melody_range": [
+    65,
+    89
+   ],
+   "notes_per_bar": 3.5,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.67,
+    1.0,
+    1.67,
+    2.0,
+    2.67,
+    3.0,
+    3.67
+   ],
+   "distinct_bar_rhythms": 8,
+   "distinct_bar_melodies": 19,
+   "mean_abs_interval": 4.975903614457831,
+   "leaps_over_fifth_pct": 13.253012048192772,
+   "stepwise_pct": 19.27710843373494,
+   "self_beat_chroma_repeat_corr": 0.9973115985018023
+  },
+  "candy": {
+   "resynth_corr": 0.9999705164551779,
+   "resynth_shift": 303,
+   "resynth_len": 2160000,
+   "sample_corr": 0.9999706639970588,
+   "sample_shift": 303,
+   "sample": "cute-c-whistle-parade",
+   "name": "第一願：西卡",
+   "claimed_key": "G 大調",
+   "claimed_bpm": 128,
+   "meter": 4,
+   "bars": 24,
+   "measured_bpm_guided": 64.599609375,
+   "measured_bpm_free": 64.599609375,
+   "measured_key": [
+    {
+     "key": "G 大調",
+     "r": 0.779
+    },
+    {
+     "key": "D 大調",
+     "r": 0.727
+    }
+   ],
+   "melody_notes": 81,
+   "melody_range": [
+    69,
+    91
+   ],
+   "notes_per_bar": 3.375,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    2.5,
+    3.0
+   ],
+   "distinct_bar_rhythms": 7,
+   "distinct_bar_melodies": 19,
+   "mean_abs_interval": 4.7,
+   "leaps_over_fifth_pct": 10.0,
+   "stepwise_pct": 12.5,
+   "self_beat_chroma_repeat_corr": 0.9910046359856836
+  },
+  "bulu": {
+   "resynth_corr": 0.9999997766217784,
+   "resynth_shift": 2133287,
+   "resynth_len": 2133333,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "第二願：布魯",
+   "claimed_key": "D 大調",
+   "claimed_bpm": 108,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 107.666015625,
+   "measured_bpm_free": 107.666015625,
+   "measured_key": [
+    {
+     "key": "B 小調",
+     "r": 0.878
+    },
+    {
+     "key": "D 大調",
+     "r": 0.707
+    }
+   ],
+   "melody_notes": 100,
+   "melody_range": [
+    74,
+    86
+   ],
+   "notes_per_bar": 5.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.5,
+    1.5,
+    2.25,
+    3.5
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 4.333333333333333,
+   "leaps_over_fifth_pct": 10.1010101010101,
+   "stepwise_pct": 19.19191919191919,
+   "self_beat_chroma_repeat_corr": 0.9937977422857053
+  },
+  "hate": {
+   "resynth_corr": 0.9999999590414838,
+   "resynth_shift": 0,
+   "resynth_len": 1858065,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "最後一願：哈特",
+   "claimed_key": "Bb 大調",
+   "claimed_bpm": 124,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 0.0,
+   "measured_bpm_free": 0.0,
+   "measured_key": [
+    {
+     "key": "Bb 大調",
+     "r": 0.874
+    },
+    {
+     "key": "F 大調",
+     "r": 0.721
+    }
+   ],
+   "melody_notes": 100,
+   "melody_range": [
+    70,
+    82
+   ],
+   "notes_per_bar": 5.0,
+   "melody_onsets_in_bar": [
+    0.25,
+    1.0,
+    1.75,
+    3.0,
+    3.5
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 4.05050505050505,
+   "leaps_over_fifth_pct": 7.07070707070707,
+   "stepwise_pct": 18.181818181818183,
+   "self_beat_chroma_repeat_corr": 0.9954847465008619
+  },
+  "ending": {
+   "resynth_corr": 0.9999979081107012,
+   "resynth_shift": 2032929,
+   "resynth_len": 2032941,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "漫天氣球",
+   "claimed_key": "Eb 大調",
+   "claimed_bpm": 102,
+   "meter": 3,
+   "bars": 24,
+   "measured_bpm_guided": 67.99958881578948,
+   "measured_bpm_free": 67.99958881578948,
+   "measured_key": [
+    {
+     "key": "Eb 大調",
+     "r": 0.881
+    },
+    {
+     "key": "Bb 大調",
+     "r": 0.774
+    }
+   ],
+   "melody_notes": 72,
+   "melody_range": [
+    77,
+    91
+   ],
+   "notes_per_bar": 3.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    1.5,
+    2.25
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 17,
+   "mean_abs_interval": 4.71830985915493,
+   "leaps_over_fifth_pct": 11.267605633802818,
+   "stepwise_pct": 18.30985915492958,
+   "self_beat_chroma_repeat_corr": 0.8440513946804304
+  },
+  "castle": {
+   "resynth_corr": 0.9999966634684739,
+   "resynth_shift": 257,
+   "resynth_len": 1986207,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "微笑城堡",
+   "claimed_key": "A 大調",
+   "claimed_bpm": 116,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 117.45383522727273,
+   "measured_bpm_free": 117.45383522727273,
+   "measured_key": [
+    {
+     "key": "Db 小調",
+     "r": 0.779
+    },
+    {
+     "key": "A 大調",
+     "r": 0.774
+    }
+   ],
+   "melody_notes": 100,
+   "melody_range": [
+    81,
+    97
+   ],
+   "notes_per_bar": 5.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.75,
+    1.5,
+    2.5,
+    3.25
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 4.595959595959596,
+   "leaps_over_fifth_pct": 9.090909090909092,
+   "stepwise_pct": 20.2020202020202,
+   "self_beat_chroma_repeat_corr": 0.997825729021398
+  },
+  "slope": {
+   "resynth_corr": 0.9999987848861301,
+   "resynth_shift": 15714,
+   "resynth_len": 1745455,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "飛飛的出發坡",
+   "claimed_key": "E 大調",
+   "claimed_bpm": 132,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 89.10290948275862,
+   "measured_bpm_free": 89.10290948275862,
+   "measured_key": [
+    {
+     "key": "E 大調",
+     "r": 0.866
+    },
+    {
+     "key": "B 大調",
+     "r": 0.839
+    }
+   ],
+   "melody_notes": 120,
+   "melody_range": [
+    64,
+    78
+   ],
+   "notes_per_bar": 6.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.75,
+    1.5,
+    2.0,
+    2.75,
+    3.5
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 3.302521008403361,
+   "leaps_over_fifth_pct": 2.5210084033613445,
+   "stepwise_pct": 38.655462184873954,
+   "self_beat_chroma_repeat_corr": 0.9982541281915288
+  },
+  "hill": {
+   "resynth_corr": 0.9999900915519845,
+   "resynth_shift": 73,
+   "resynth_len": 1757288,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "阿飄的探險丘",
+   "claimed_key": "F# 大調",
+   "claimed_bpm": 118,
+   "meter": 3,
+   "bars": 24,
+   "measured_bpm_guided": 161.4990234375,
+   "measured_bpm_free": 161.4990234375,
+   "measured_key": [
+    {
+     "key": "Eb 小調",
+     "r": 0.752
+    },
+    {
+     "key": "F# 大調",
+     "r": 0.74
+    }
+   ],
+   "melody_notes": 96,
+   "melody_range": [
+    78,
+    90
+   ],
+   "notes_per_bar": 4.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.5,
+    1.75,
+    2.5
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 17,
+   "mean_abs_interval": 3.0,
+   "leaps_over_fifth_pct": 3.1578947368421053,
+   "stepwise_pct": 49.473684210526315,
+   "self_beat_chroma_repeat_corr": 0.8316976473963719
+  },
+  "bagvalley": {
+   "resynth_corr": 0.9999973272596167,
+   "resynth_shift": 2094540,
+   "resynth_len": 2094545,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "魔法袋谷",
+   "claimed_key": "B 大調",
+   "claimed_bpm": 110,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 54.978390957446805,
+   "measured_bpm_free": 54.978390957446805,
+   "measured_key": [
+    {
+     "key": "B 大調",
+     "r": 0.825
+    },
+    {
+     "key": "F# 大調",
+     "r": 0.777
+    }
+   ],
+   "melody_notes": 100,
+   "melody_range": [
+    71,
+    85
+   ],
+   "notes_per_bar": 5.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.67,
+    2.0,
+    2.67,
+    3.67
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 5.292929292929293,
+   "leaps_over_fifth_pct": 26.262626262626267,
+   "stepwise_pct": 17.17171717171717,
+   "self_beat_chroma_repeat_corr": 0.9967777950821247
+  },
+  "candylane": {
+   "resynth_corr": 0.9999987603810957,
+   "resynth_shift": 16288,
+   "resynth_len": 1719403,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "西卡的糖果巷",
+   "claimed_key": "Ab 大調",
+   "claimed_bpm": 134,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 107.666015625,
+   "measured_bpm_free": 107.666015625,
+   "measured_key": [
+    {
+     "key": "Ab 大調",
+     "r": 0.822
+    },
+    {
+     "key": "F 小調",
+     "r": 0.737
+    }
+   ],
+   "melody_notes": 120,
+   "melody_range": [
+    82,
+    94
+   ],
+   "notes_per_bar": 6.0,
+   "melody_onsets_in_bar": [
+    0.5,
+    1.0,
+    1.5,
+    2.75,
+    3.25,
+    3.75
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 3.9747899159663866,
+   "leaps_over_fifth_pct": 5.88235294117647,
+   "stepwise_pct": 27.73109243697479,
+   "self_beat_chroma_repeat_corr": 0.9955718271722613
+  },
+  "lamplight": {
+   "resynth_corr": 0.9999990687920325,
+   "resynth_shift": 2,
+   "resynth_len": 2073600,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "布魯的夜燈林",
+   "claimed_key": "F 大調",
+   "claimed_bpm": 100,
+   "meter": 3,
+   "bars": 24,
+   "measured_bpm_guided": 112.34714673913044,
+   "measured_bpm_free": 112.34714673913044,
+   "measured_key": [
+    {
+     "key": "F 大調",
+     "r": 0.867
+    },
+    {
+     "key": "D 小調",
+     "r": 0.762
+    }
+   ],
+   "melody_notes": 72,
+   "melody_range": [
+    65,
+    77
+   ],
+   "notes_per_bar": 3.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    1.25,
+    2.5
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 17,
+   "mean_abs_interval": 3.5774647887323945,
+   "leaps_over_fifth_pct": 1.4084507042253522,
+   "stepwise_pct": 39.436619718309856,
+   "self_beat_chroma_repeat_corr": 0.8478641353246384
+  },
+  "theater": {
+   "resynth_corr": 0.999997538166209,
+   "resynth_shift": 264,
+   "resynth_len": 2215385,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "哈特的魔術劇場",
+   "claimed_key": "Db 大調",
+   "claimed_bpm": 104,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 69.83741554054055,
+   "measured_bpm_free": 69.83741554054055,
+   "measured_key": [
+    {
+     "key": "Db 大調",
+     "r": 0.832
+    },
+    {
+     "key": "Ab 大調",
+     "r": 0.757
+    }
+   ],
+   "melody_notes": 80,
+   "melody_range": [
+    73,
+    85
+   ],
+   "notes_per_bar": 4.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    1.5,
+    2.0,
+    3.25
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 3.8987341772151898,
+   "leaps_over_fifth_pct": 5.063291139240507,
+   "stepwise_pct": 34.177215189873415,
+   "self_beat_chroma_repeat_corr": 0.9959586871162728
+  },
+  "plaza": {
+   "resynth_corr": 0.999990470621806,
+   "resynth_shift": 1828337,
+   "resynth_len": 1828571,
+   "sample_corr": null,
+   "sample_shift": null,
+   "sample": null,
+   "name": "漫天氣球廣場",
+   "claimed_key": "C 大調",
+   "claimed_bpm": 126,
+   "meter": 4,
+   "bars": 20,
+   "measured_bpm_guided": 99.38401442307692,
+   "measured_bpm_free": 99.38401442307692,
+   "measured_key": [
+    {
+     "key": "C 大調",
+     "r": 0.948
+    },
+    {
+     "key": "G 大調",
+     "r": 0.793
+    }
+   ],
+   "melody_notes": 100,
+   "melody_range": [
+    72,
+    88
+   ],
+   "notes_per_bar": 5.0,
+   "melody_onsets_in_bar": [
+    0.0,
+    0.5,
+    1.25,
+    2.5,
+    3.0
+   ],
+   "distinct_bar_rhythms": 1,
+   "distinct_bar_melodies": 16,
+   "mean_abs_interval": 4.606060606060606,
+   "leaps_over_fifth_pct": 7.07070707070707,
+   "stepwise_pct": 15.151515151515152,
+   "self_beat_chroma_repeat_corr": 0.9943470180838051
+  }
+ },
+ "pairs": [
+  {
+   "a": "village",
+   "b": "journey",
+   "melody_4gram_jaccard": 0.006666666666666667,
+   "melody_3gram_jaccard": 0.014184397163120567,
+   "beat_profile_corr": 0.23544487471375636,
+   "bar_profile_corr": 0.24343958199145124,
+   "beat_chroma_best_corr": 0.5150250471202485,
+   "timbre_mfcc_dist": 45.22793960571289,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "candy",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.029197080291970802,
+   "beat_profile_corr": 0.3641698454893862,
+   "bar_profile_corr": 0.26963673681853373,
+   "beat_chroma_best_corr": 0.509811174785851,
+   "timbre_mfcc_dist": 49.36040115356445,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "bulu",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.023809523809523808,
+   "beat_profile_corr": 0.8918819150453344,
+   "bar_profile_corr": 0.5657965335621943,
+   "beat_chroma_best_corr": 0.4055039654716264,
+   "timbre_mfcc_dist": 58.09611129760742,
+   "bpm_diff": 12,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "hate",
+   "melody_4gram_jaccard": 0.006666666666666667,
+   "melody_3gram_jaccard": 0.023622047244094488,
+   "beat_profile_corr": 0.895954855811683,
+   "bar_profile_corr": 0.6890613262004343,
+   "beat_chroma_best_corr": 0.40683836850211214,
+   "timbre_mfcc_dist": 95.95450592041016,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "ending",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.7902971203378766,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.44145765880517845,
+   "timbre_mfcc_dist": 39.977760314941406,
+   "bpm_diff": 18,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.046511627906976744,
+   "beat_profile_corr": 0.8914097698596715,
+   "bar_profile_corr": 0.8608810943393553,
+   "beat_chroma_best_corr": 0.4210630057439684,
+   "timbre_mfcc_dist": 78.08638000488281,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008130081300813009,
+   "beat_profile_corr": 0.7936497241374475,
+   "bar_profile_corr": 0.5396904847445303,
+   "beat_chroma_best_corr": 0.5148930759369255,
+   "timbre_mfcc_dist": 65.24457550048828,
+   "bpm_diff": 12,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0072992700729927005,
+   "beat_profile_corr": 0.8634947792005461,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.3902848479361909,
+   "timbre_mfcc_dist": 47.13597106933594,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.006666666666666667,
+   "melody_3gram_jaccard": 0.048,
+   "beat_profile_corr": -0.06469213784171142,
+   "bar_profile_corr": 0.0006326022745364313,
+   "beat_chroma_best_corr": 0.5277155500738909,
+   "timbre_mfcc_dist": 67.25572204589844,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.015151515151515152,
+   "beat_profile_corr": 0.8925464887240129,
+   "bar_profile_corr": 0.683563303528145,
+   "beat_chroma_best_corr": 0.4870780039472382,
+   "timbre_mfcc_dist": 99.6235122680664,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.010526315789473684,
+   "beat_profile_corr": 0.43454129343053777,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.3808047747166345,
+   "timbre_mfcc_dist": 40.95570755004883,
+   "bpm_diff": 20,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.015151515151515152,
+   "beat_profile_corr": 0.8562400729585207,
+   "bar_profile_corr": 0.7492599277231264,
+   "beat_chroma_best_corr": 0.3978103989700621,
+   "timbre_mfcc_dist": 48.35511779785156,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "village",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0064516129032258064,
+   "melody_3gram_jaccard": 0.03076923076923077,
+   "beat_profile_corr": 0.7089075593799369,
+   "bar_profile_corr": 0.5164862546454425,
+   "beat_chroma_best_corr": 0.44602288620924985,
+   "timbre_mfcc_dist": 70.05406188964844,
+   "bpm_diff": 6,
+   "same_key": true,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "candy",
+   "melody_4gram_jaccard": 0.006993006993006993,
+   "melody_3gram_jaccard": 0.046153846153846156,
+   "beat_profile_corr": 0.46535366798865185,
+   "bar_profile_corr": 0.35869544399394204,
+   "beat_chroma_best_corr": 0.5914257084826565,
+   "timbre_mfcc_dist": 36.58537292480469,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "bulu",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.01639344262295082,
+   "beat_profile_corr": 0.5316021112355052,
+   "bar_profile_corr": 0.3616318973828304,
+   "beat_chroma_best_corr": 0.4071961868327651,
+   "timbre_mfcc_dist": 41.0877685546875,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "hate",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.016260162601626018,
+   "beat_profile_corr": 0.22794323809052636,
+   "bar_profile_corr": 0.17303609134814196,
+   "beat_chroma_best_corr": 0.4426567137248821,
+   "timbre_mfcc_dist": 78.42548370361328,
+   "bpm_diff": 12,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "ending",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.5012399190746183,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4255498275601985,
+   "timbre_mfcc_dist": 29.12256622314453,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.007751937984496124,
+   "beat_profile_corr": 0.4453034071807086,
+   "bar_profile_corr": 0.42847658078131184,
+   "beat_chroma_best_corr": 0.46557714569342684,
+   "timbre_mfcc_dist": 93.7860107421875,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.00847457627118644,
+   "beat_profile_corr": 0.3410229397416071,
+   "bar_profile_corr": 0.27140438744699413,
+   "beat_chroma_best_corr": 0.5371441109236033,
+   "timbre_mfcc_dist": 28.729063034057617,
+   "bpm_diff": 20,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.2143051557922935,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.44592433276725885,
+   "timbre_mfcc_dist": 65.59378814697266,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.024390243902439025,
+   "beat_profile_corr": 0.8655933299174269,
+   "bar_profile_corr": 0.7939401011066072,
+   "beat_chroma_best_corr": 0.5384170090620778,
+   "timbre_mfcc_dist": 50.12525177001953,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.20714314448747348,
+   "bar_profile_corr": 0.1806952789898952,
+   "beat_chroma_best_corr": 0.5254798716056893,
+   "timbre_mfcc_dist": 88.33415222167969,
+   "bpm_diff": 22,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.20828127500180263,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4070906425331245,
+   "timbre_mfcc_dist": 39.52082824707031,
+   "bpm_diff": 12,
+   "same_key": true,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0078125,
+   "beat_profile_corr": 0.32367564144773825,
+   "bar_profile_corr": 0.28331281704014816,
+   "beat_chroma_best_corr": 0.4897656047042835,
+   "timbre_mfcc_dist": 29.816728591918945,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "journey",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.38832589326936556,
+   "bar_profile_corr": 0.28882536413576554,
+   "beat_chroma_best_corr": 0.47149428472446336,
+   "timbre_mfcc_dist": 63.36467742919922,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "bulu",
+   "melody_4gram_jaccard": 0.006896551724137931,
+   "melody_3gram_jaccard": 0.03389830508474576,
+   "beat_profile_corr": 0.6037980844139226,
+   "bar_profile_corr": 0.4780201570623389,
+   "beat_chroma_best_corr": 0.5214847735057777,
+   "timbre_mfcc_dist": 58.0915641784668,
+   "bpm_diff": 20,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "hate",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.025,
+   "beat_profile_corr": 0.3637313633204402,
+   "bar_profile_corr": 0.24460460225806196,
+   "beat_chroma_best_corr": 0.46586016734795993,
+   "timbre_mfcc_dist": 82.71652221679688,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "ending",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.011494252873563218,
+   "beat_profile_corr": 0.6719675775806832,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.5246078796034496,
+   "timbre_mfcc_dist": 35.57573699951172,
+   "bpm_diff": 26,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.007874015748031496,
+   "beat_profile_corr": 0.5978681652167485,
+   "bar_profile_corr": 0.46167685491787275,
+   "beat_chroma_best_corr": 0.39804188211044894,
+   "timbre_mfcc_dist": 81.27677917480469,
+   "bpm_diff": 12,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.035398230088495575,
+   "beat_profile_corr": 0.5138953131419236,
+   "bar_profile_corr": 0.24671724598837622,
+   "beat_chroma_best_corr": 0.4637267005302473,
+   "timbre_mfcc_dist": 60.6745491027832,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.007692307692307693,
+   "beat_profile_corr": 0.17255999766137523,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.3702057111269102,
+   "timbre_mfcc_dist": 45.706356048583984,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008130081300813009,
+   "beat_profile_corr": 0.21493153427430503,
+   "bar_profile_corr": -0.003974989848353546,
+   "beat_chroma_best_corr": 0.49681284622620603,
+   "timbre_mfcc_dist": 67.18418884277344,
+   "bpm_diff": 18,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.013888888888888888,
+   "melody_3gram_jaccard": 0.058333333333333334,
+   "beat_profile_corr": 0.2421131344281067,
+   "bar_profile_corr": 0.13560755510404235,
+   "beat_chroma_best_corr": 0.5444785782685724,
+   "timbre_mfcc_dist": 71.0568618774414,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.4827219872653492,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.3919176651465583,
+   "timbre_mfcc_dist": 49.50840377807617,
+   "bpm_diff": 28,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.032520325203252036,
+   "beat_profile_corr": 0.4905935799113455,
+   "bar_profile_corr": 0.31185594377058934,
+   "beat_chroma_best_corr": 0.5158793719343965,
+   "timbre_mfcc_dist": 50.60947799682617,
+   "bpm_diff": 24,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candy",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.040983606557377046,
+   "beat_profile_corr": 0.7614029298096263,
+   "bar_profile_corr": 0.28273345354487944,
+   "beat_chroma_best_corr": 0.41184554596939044,
+   "timbre_mfcc_dist": 55.93765640258789,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "hate",
+   "melody_4gram_jaccard": 0.04225352112676056,
+   "melody_3gram_jaccard": 0.12121212121212122,
+   "beat_profile_corr": 0.7389014619793847,
+   "bar_profile_corr": 0.32458818999389066,
+   "beat_chroma_best_corr": 0.437024122131714,
+   "timbre_mfcc_dist": 63.18290710449219,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "ending",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.013333333333333334,
+   "beat_profile_corr": 0.9463518606865906,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.423421678113737,
+   "timbre_mfcc_dist": 49.92373275756836,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.006578947368421052,
+   "melody_3gram_jaccard": 0.04504504504504504,
+   "beat_profile_corr": 0.9419081265105999,
+   "bar_profile_corr": 0.6000073680101043,
+   "beat_chroma_best_corr": 0.43533125346920043,
+   "timbre_mfcc_dist": 119.34407043457031,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.029411764705882353,
+   "beat_profile_corr": 0.7584712321924229,
+   "bar_profile_corr": 0.40852946229381115,
+   "beat_chroma_best_corr": 0.40345583890930636,
+   "timbre_mfcc_dist": 42.261756896972656,
+   "bpm_diff": 24,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.034782608695652174,
+   "beat_profile_corr": 0.6683792137783314,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.39547919072876914,
+   "timbre_mfcc_dist": 82.84577178955078,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.006802721088435374,
+   "melody_3gram_jaccard": 0.06666666666666667,
+   "beat_profile_corr": 0.2333815960090414,
+   "bar_profile_corr": 0.09841738290045524,
+   "beat_chroma_best_corr": 0.3940954115651905,
+   "timbre_mfcc_dist": 47.61783981323242,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.013513513513513514,
+   "melody_3gram_jaccard": 0.036036036036036036,
+   "beat_profile_corr": 0.7314017412146833,
+   "bar_profile_corr": 0.427936774183172,
+   "beat_chroma_best_corr": 0.47262330062731817,
+   "timbre_mfcc_dist": 113.06401824951172,
+   "bpm_diff": 26,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.5201043758914645,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.3924269195885317,
+   "timbre_mfcc_dist": 68.72366333007812,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008771929824561403,
+   "beat_profile_corr": 0.9110786080388569,
+   "bar_profile_corr": 0.4177106585994436,
+   "beat_chroma_best_corr": 0.41927669373521215,
+   "timbre_mfcc_dist": 40.84946823120117,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bulu",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.036036036036036036,
+   "beat_profile_corr": 0.7550751757095229,
+   "bar_profile_corr": 0.29129962310968893,
+   "beat_chroma_best_corr": 0.3827012498138465,
+   "timbre_mfcc_dist": 46.11225509643555,
+   "bpm_diff": 18,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "ending",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.013157894736842105,
+   "beat_profile_corr": 0.6239510421278759,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4451506048599169,
+   "timbre_mfcc_dist": 86.11907196044922,
+   "bpm_diff": 22,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.013422818791946308,
+   "melody_3gram_jaccard": 0.07339449541284404,
+   "beat_profile_corr": 0.8579847915427901,
+   "bar_profile_corr": 0.6435931865658905,
+   "beat_chroma_best_corr": 0.469500396842367,
+   "timbre_mfcc_dist": 150.6258087158203,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.02912621359223301,
+   "beat_profile_corr": 0.8808189169043985,
+   "bar_profile_corr": 0.4345348935496281,
+   "beat_chroma_best_corr": 0.5095994591019383,
+   "timbre_mfcc_dist": 82.27619171142578,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008403361344537815,
+   "beat_profile_corr": 0.8810323483296522,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4208565855922881,
+   "timbre_mfcc_dist": 109.13903045654297,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.056074766355140186,
+   "beat_profile_corr": -0.12945528163959302,
+   "bar_profile_corr": -0.09017736975726762,
+   "beat_chroma_best_corr": 0.46486934476569663,
+   "timbre_mfcc_dist": 78.66752624511719,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.006802721088435374,
+   "melody_3gram_jaccard": 0.02654867256637168,
+   "beat_profile_corr": 0.9312542177565094,
+   "bar_profile_corr": 0.32620736718439985,
+   "beat_chroma_best_corr": 0.5925222199649234,
+   "timbre_mfcc_dist": 124.77053833007812,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.012987012987012988,
+   "beat_profile_corr": 0.4578523730731968,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.37931116766241013,
+   "timbre_mfcc_dist": 99.60132598876953,
+   "bpm_diff": 24,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.61836516771384,
+   "bar_profile_corr": 0.3509551975977956,
+   "beat_chroma_best_corr": 0.6075587171449474,
+   "timbre_mfcc_dist": 75.67494201660156,
+   "bpm_diff": 20,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hate",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.04504504504504504,
+   "beat_profile_corr": 0.6983118283006285,
+   "bar_profile_corr": 0.3796040465851631,
+   "beat_chroma_best_corr": 0.5105089288415638,
+   "timbre_mfcc_dist": 45.34987258911133,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "castle",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.012345679012345678,
+   "beat_profile_corr": 0.8940702273311589,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4286733841316252,
+   "timbre_mfcc_dist": 78.98316955566406,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.011494252873563218,
+   "melody_3gram_jaccard": 0.05970149253731343,
+   "beat_profile_corr": 0.6986923089544026,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.40348853825629766,
+   "timbre_mfcc_dist": 44.5587272644043,
+   "bpm_diff": 30,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.024096385542168676,
+   "beat_profile_corr": 0.5296977872640469,
+   "bar_profile_corr": 0.5306159403930383,
+   "beat_chroma_best_corr": 0.48371561961958137,
+   "timbre_mfcc_dist": 57.30888748168945,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.24961770743159892,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4521196347644479,
+   "timbre_mfcc_dist": 48.6595458984375,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0125,
+   "beat_profile_corr": 0.5737593934330714,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.530516414708378,
+   "timbre_mfcc_dist": 79.60406494140625,
+   "bpm_diff": 32,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.023809523809523808,
+   "beat_profile_corr": 0.5040081825008995,
+   "bar_profile_corr": 0.2130790905875845,
+   "beat_chroma_best_corr": 0.3933330528735672,
+   "timbre_mfcc_dist": 46.461395263671875,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.02531645569620253,
+   "beat_profile_corr": 0.9379136666292262,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.420414182387055,
+   "timbre_mfcc_dist": 35.060794830322266,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "ending",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.02531645569620253,
+   "beat_profile_corr": 0.7528903219244439,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4467332472228532,
+   "timbre_mfcc_dist": 64.02326202392578,
+   "bpm_diff": 24,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "slope",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.027777777777777776,
+   "beat_profile_corr": 0.8724510277110575,
+   "bar_profile_corr": 0.5799593067298436,
+   "beat_chroma_best_corr": 0.46853521169192974,
+   "timbre_mfcc_dist": 111.04580688476562,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.7237428327156246,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.44671907672953487,
+   "timbre_mfcc_dist": 60.43337631225586,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.013422818791946308,
+   "melody_3gram_jaccard": 0.08256880733944955,
+   "beat_profile_corr": 0.08222592872826402,
+   "bar_profile_corr": 0.08867656445924725,
+   "beat_chroma_best_corr": 0.3933310488051127,
+   "timbre_mfcc_dist": 112.78360748291016,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.8286126811227641,
+   "bar_profile_corr": 0.6358493766250572,
+   "beat_chroma_best_corr": 0.34806202979488887,
+   "timbre_mfcc_dist": 98.94445037841797,
+   "bpm_diff": 18,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.5209636204365118,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.41530140532398657,
+   "timbre_mfcc_dist": 75.62979888916016,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008333333333333333,
+   "beat_profile_corr": 0.8271048923005047,
+   "bar_profile_corr": 0.7689607162488261,
+   "beat_chroma_best_corr": 0.4141707443917595,
+   "timbre_mfcc_dist": 101.53504943847656,
+   "bpm_diff": 12,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "castle",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.03418803418803419,
+   "beat_profile_corr": 0.7310868426787513,
+   "bar_profile_corr": 0.5167368910768908,
+   "beat_chroma_best_corr": 0.48343371766153614,
+   "timbre_mfcc_dist": 125.03373718261719,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "hill",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.02702702702702703,
+   "beat_profile_corr": 0.7682249312542303,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.42979506652268196,
+   "timbre_mfcc_dist": 87.39633178710938,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.009433962264150943,
+   "beat_profile_corr": -0.09594272034027364,
+   "bar_profile_corr": 0.012761607243787937,
+   "beat_chroma_best_corr": 0.5924639510596045,
+   "timbre_mfcc_dist": 51.22726058959961,
+   "bpm_diff": 22,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.05223880597014925,
+   "melody_3gram_jaccard": 0.1111111111111111,
+   "beat_profile_corr": 0.9001343498741706,
+   "bar_profile_corr": 0.6825739412921565,
+   "beat_chroma_best_corr": 0.47277951178276406,
+   "timbre_mfcc_dist": 102.73329162597656,
+   "bpm_diff": 2,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.011363636363636364,
+   "melody_3gram_jaccard": 0.02857142857142857,
+   "beat_profile_corr": 0.3793456829809392,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4684907994347777,
+   "timbre_mfcc_dist": 58.17267990112305,
+   "bpm_diff": 32,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.018518518518518517,
+   "beat_profile_corr": 0.6594046021896208,
+   "bar_profile_corr": 0.392808956104446,
+   "beat_chroma_best_corr": 0.4569214175995849,
+   "timbre_mfcc_dist": 40.87982940673828,
+   "bpm_diff": 28,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "slope",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.028037383177570093,
+   "beat_profile_corr": 0.7025121095723954,
+   "bar_profile_corr": 0.2579709619683566,
+   "beat_chroma_best_corr": 0.510134813450113,
+   "timbre_mfcc_dist": 77.09217834472656,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hill",
+   "b": "bagvalley",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.01680672268907563,
+   "beat_profile_corr": -0.1595081968307255,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.5206030302216109,
+   "timbre_mfcc_dist": 97.67110443115234,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hill",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.014084507042253521,
+   "melody_3gram_jaccard": 0.04201680672268908,
+   "beat_profile_corr": 0.9088055472379043,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.48444726373671915,
+   "timbre_mfcc_dist": 95.46092224121094,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hill",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.011764705882352941,
+   "beat_profile_corr": 0.2877974914967271,
+   "bar_profile_corr": 0.3337265105407545,
+   "beat_chroma_best_corr": 0.5370274382404504,
+   "timbre_mfcc_dist": 49.01251983642578,
+   "bpm_diff": 18,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hill",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.04201680672268908,
+   "beat_profile_corr": 0.6052192228520914,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.40935905939201245,
+   "timbre_mfcc_dist": 80.50543975830078,
+   "bpm_diff": 14,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "hill",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.01639344262295082,
+   "beat_profile_corr": 0.6328191183567596,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4299855802506971,
+   "timbre_mfcc_dist": 82.08878326416016,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bagvalley",
+   "b": "candylane",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.02631578947368421,
+   "beat_profile_corr": -0.19208825858377532,
+   "bar_profile_corr": -0.08821259539948556,
+   "beat_chroma_best_corr": 0.5033999488613489,
+   "timbre_mfcc_dist": 97.24901580810547,
+   "bpm_diff": 24,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bagvalley",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.01282051282051282,
+   "beat_profile_corr": 0.015939759716431228,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.44011427329591424,
+   "timbre_mfcc_dist": 80.58992767333984,
+   "bpm_diff": 10,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bagvalley",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.10323190616910154,
+   "bar_profile_corr": 0.08284535774091147,
+   "beat_chroma_best_corr": 0.506989545969859,
+   "timbre_mfcc_dist": 24.72793197631836,
+   "bpm_diff": 6,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "bagvalley",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.044642857142857144,
+   "beat_profile_corr": 0.07387222010129028,
+   "bar_profile_corr": 0.1663063960997703,
+   "beat_chroma_best_corr": 0.49354652140549443,
+   "timbre_mfcc_dist": 65.10224914550781,
+   "bpm_diff": 16,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candylane",
+   "b": "lamplight",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.012345679012345678,
+   "beat_profile_corr": 0.29063111643139056,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4679926163035941,
+   "timbre_mfcc_dist": 102.73937225341797,
+   "bpm_diff": 34,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candylane",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.6209702225106216,
+   "bar_profile_corr": 0.5308499820678456,
+   "beat_chroma_best_corr": 0.45137816416079035,
+   "timbre_mfcc_dist": 89.85595703125,
+   "bpm_diff": 30,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "candylane",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008403361344537815,
+   "beat_profile_corr": 0.586692209883732,
+   "bar_profile_corr": 0.24205152464359891,
+   "beat_chroma_best_corr": 0.4651458813812077,
+   "timbre_mfcc_dist": 105.60088348388672,
+   "bpm_diff": 8,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "lamplight",
+   "b": "theater",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.452327801277532,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.4213475561530898,
+   "timbre_mfcc_dist": 59.51285171508789,
+   "bpm_diff": 4,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "lamplight",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.0,
+   "beat_profile_corr": 0.4139664059897059,
+   "bar_profile_corr": null,
+   "beat_chroma_best_corr": 0.419231630894187,
+   "timbre_mfcc_dist": 84.64361572265625,
+   "bpm_diff": 26,
+   "same_key": false,
+   "same_meter": false,
+   "same_rhythm_cell": false
+  },
+  {
+   "a": "theater",
+   "b": "plaza",
+   "melody_4gram_jaccard": 0.0,
+   "melody_3gram_jaccard": 0.008403361344537815,
+   "beat_profile_corr": 0.6472599587672728,
+   "bar_profile_corr": 0.4269715179272727,
+   "beat_chroma_best_corr": 0.4533948422642202,
+   "timbre_mfcc_dist": 59.48979568481445,
+   "bpm_diff": 22,
+   "same_key": false,
+   "same_meter": true,
+   "same_rhythm_cell": false
+  }
+ ]
+}
