@@ -12,3 +12,6 @@ assets/audio/tmp/
 auth.json
 credentials*.json
 token*.json
+**/token.json
+**/tokens.json
+__pycache__/
