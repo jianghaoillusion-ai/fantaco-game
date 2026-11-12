@@ -1,0 +1,12 @@
+import {chromium} from '/Volumes/外接資料碟/tools/skills/guizang-social-card-skill/node_modules/playwright/index.mjs';
+import fs from 'node:fs';
+const browser=await chromium.launch({headless:true});
+const page=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await page.goto('http://127.0.0.1:8913/review/feel-polish/haptic-test.html');
+const notes=await page.locator('section small').allTextContents();
+if(notes.length!==11||notes.some(s=>!s.includes('iOS')))throw Error('Missing per-control iOS requirement');
+await page.locator('#direct').tap();await page.locator('label.direct').tap();
+await page.screenshot({path:'review/feel-polish/haptic-test-r2.png',fullPage:true});
+fs.writeFileSync('review/feel-polish/haptic-check-r2.json',JSON.stringify({environment:'macOS headless Chromium; no physical iPhone; no motor verification',notes,errors,directChecked:await page.locator('#direct').isChecked(),labelChecked:await page.locator('#real').isChecked()},null,2));
+await browser.close();if(errors.length)throw Error(errors.join('\n'));

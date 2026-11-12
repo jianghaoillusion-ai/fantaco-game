@@ -1,9 +1,9 @@
 <!doctype html><html lang="zh-Hant"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>FANTACO 觸覺測試</title>
 <style>body{font:17px system-ui;background:#f5f5f7;color:#202124;max-width:540px;margin:32px auto;padding:20px}h1{font-size:26px}section{background:white;padding:16px;margin:12px 0;border-radius:16px}button,label.direct{display:block;padding:14px;border:0;border-radius:12px;background:#ececf0;font:inherit;width:100%;box-sizing:border-box}small{display:block;font-size:12px;color:#636366;margin-top:8px}output{display:block;white-space:pre-wrap;font-size:12px}#legacy{position:fixed;left:-100px;top:0;opacity:.001;pointer-events:none}</style>
 <h1>觸覺測試</h1><p>沒有 iPhone 實測；請逐一操作，自己判斷有沒有震動。</p>
-<section><input id="direct" type="checkbox" switch aria-label="直接點 switch"><small>直接點 switch 本體：Safari 17.4 起有此控制項；系統設定與硬體允許時，最可能有原生觸覺。</small></section>
-<section><label class="direct" for="real">直接點 label</label><input id="real" type="checkbox" switch><small>真實點 label，保留瀏覽器預設動作；新版 WebKit 仍可傳遞 trusted 點擊。</small></section>
-<label id="legacy"><input id="hiddenSwitch" type="checkbox" switch tabindex="-1"></label><main></main><output id="log"></output>
+<section><input id="direct" type="checkbox" switch aria-label="直接點 switch"><small>直接點 switch 本體：iOS 18.0 以上才加入觸覺（17.4 只有控制項）；硬體與系統設定允許時預期會震，尚未實機驗證。</small></section>
+<section><label class="direct" for="real">直接點 label</label><input id="real" type="checkbox" switch><small>iOS 18.0 以上：真實手指點 label，保留系統轉送，預期可震；仍須實機確認。</small></section>
+<label id="legacy"><input id="hiddenSwitch" type="checkbox" switch tabindex="-1"></label><main></main><small>版本依據：<a href="https://webkit.org/blog/15865/webkit-features-in-safari-18-0/">WebKit 官方：iOS 18.0 加入觸覺</a>；<a href="https://docs.flarum.org/extend/haptic-feedback/">Flarum：26.5 封鎖說法</a>。PWA、LINE／IG 未實機驗證，不能假定與 Safari 相同。</small><output id="log"></output>
 <script>
 const legacy=document.querySelector('#legacy'),input=document.querySelector('#hiddenSwitch'),log=document.querySelector('#log');
 const report=(name,e)=>log.textContent=`${name}\n事件 trusted=${e?.isTrusted}\nuserActivation=${navigator.userActivation?.isActive}\nstandalone=${matchMedia('(display-mode:standalone)').matches || navigator.standalone || false}\n${navigator.userAgent}`;
@@ -11,14 +11,14 @@ for(const type of ['touchend','pointerup','click','touchstart','touchmove']) {
  const section=document.createElement('section');const button=document.createElement('button');
  button.textContent=type+' 內 label.click()';button.style.touchAction='none';
  button.addEventListener(type,e=>{if(e.cancelable)e.preventDefault();legacy.click();report(type,e);},{passive:false});
- const note=document.createElement('small');note.textContent='舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。'+(type==='touchmove'?'請在此按住滑動；move 不是可靠的使用者啟用。':'需實際手勢；不能由切換成功判定有震動。');
+ const note=document.createElement('small');note.textContent='iOS 18.0–26.4 可能會震，並非每版已驗證；26.5 起封鎖程式點擊（封鎖版本為第三方說法）。'+(type==='touchmove'?'請在此按住滑動；move 不是可靠的使用者啟用。':'需實際手勢；不能由切換成功判定有震動。');
  section.append(button,note);document.querySelector('main').append(section);
 }
 for(const [name,fn,note] of [
- ['click 內 input.click()',()=>input.click(),'程式 click 非 trusted；不能當成可靠 iOS 觸覺方法。'],
- ['checked = !checked',()=>input.checked=!input.checked,'只改值，沒有原生點擊，不預期震動。'],
- ['navigator.vibrate',()=>navigator.vibrate?.(30),'iOS Safari 沒有此 API；Android 支援仍取決於硬體與設定。'],
- ['延遲 500ms label.click()',()=>setTimeout(()=>legacy.click(),500),'離開同步手勢且非 trusted，不預期可靠觸覺。']]){
+ ['click 內 input.click()',()=>input.click(),'iOS 18.0 以上：程式點擊不是真實手指點擊，不預期可靠震動；18.0 以下沒有 switch 觸覺。'],
+ ['checked = !checked',()=>input.checked=!input.checked,'所有 iOS 版本：只改值，沒有原生點擊，不預期震動。'],
+ ['navigator.vibrate',()=>navigator.vibrate?.(30),'所有 iOS Safari 版本：沒有此 API；Android 支援仍取決於硬體與設定。'],
+ ['延遲 500ms label.click()',()=>setTimeout(()=>legacy.click(),500),'iOS 18.0–26.4 也不保證延遲觸發；26.5 起程式點擊被封（第三方說法），不預期可靠震動。']]){
  const section=document.createElement('section');const button=document.createElement('button');button.textContent=name;
  button.onclick=e=>{fn();report(name,e)};const small=document.createElement('small');small.textContent=note;section.append(button,small);document.querySelector('main').append(section);
 }

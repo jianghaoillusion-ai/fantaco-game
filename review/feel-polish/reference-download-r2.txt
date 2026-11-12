@@ -1,0 +1,10 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=pLBNXe7lqYM
+[youtube] pLBNXe7lqYM: Downloading webpage
+[youtube] pLBNXe7lqYM: Downloading tv samsung player API JSON
+[youtube] pLBNXe7lqYM: Downloading visionos player API JSON
+[youtube] pLBNXe7lqYM: Downloading player fad7e4e9-main
+[youtube] [jsc:node] Solving JS challenges using node
+WARNING: [youtube] [jsc] Remote component challenge solver script (node) was skipped. It may be required to solve JS challenges. You can enable the download with  --remote-components ejs:github  (recommended). For more information and alternatives, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
+WARNING: [youtube] pLBNXe7lqYM: n challenge solving failed: Some formats may be missing. Ensure you have a supported JavaScript runtime and challenge solver script distribution installed. Review any warnings presented before this message. For more details, refer to  https://github.com/yt-dlp/yt-dlp/wiki/EJS
+[youtube] pLBNXe7lqYM: Downloading m3u8 information
+ERROR: [youtube] pLBNXe7lqYM: Requested format is not available. Use --list-formats for a list of available formats

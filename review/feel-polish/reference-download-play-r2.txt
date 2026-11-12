@@ -1,0 +1,32 @@
+[youtube] Extracting URL: https://www.youtube.com/watch?v=pLBNXe7lqYM
+[youtube] pLBNXe7lqYM: Downloading webpage
+WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is enabled by default; to use another runtime add  --js-runtimes RUNTIME[:PATH]  to your command/config. YouTube extraction without a JS runtime has been deprecated, and some formats may be missing. See  https://github.com/yt-dlp/yt-dlp/wiki/EJS  for details on installing one
+[youtube] pLBNXe7lqYM: Downloading visionos player API JSON
+[youtube] pLBNXe7lqYM: Downloading m3u8 information
+[info] pLBNXe7lqYM: Downloading 1 format(s): 315
+[info] pLBNXe7lqYM: Downloading 1 time ranges: 300.0-310.0
+[download] Destination: /Volumes/外接資料碟/ai-lab/fantaco-feel-ref/merge-play.webm
+Input #0, matroska,webm, from '[temporary CDN URL removed]':
+  Metadata:
+    encoder         : google/video-file
+  Duration: 00:18:33.48, start: 0.000000, bitrate: 3502 kb/s
+  Stream #0:0(eng): Video: vp9 (Profile 0), yuv420p(tv, smpte170m/bt470bg/bt709), 2160x3840, SAR 1:1 DAR 9:16, 60 fps, 60 tbr, 1k tbn (default)
+Stream mapping:
+  Stream #0:0 -> #0:0 (copy)
+Output #0, webm, to 'file:/Volumes/外接資料碟/ai-lab/fantaco-feel-ref/merge-play.webm.part':
+  Metadata:
+    encoder         : Lavf61.7.100
+  Stream #0:0(eng): Video: vp9 (Profile 0), yuv420p(tv, smpte170m/bt470bg/bt709), 2160x3840 [SAR 1:1 DAR 9:16], q=2-31, 60 fps, 60 tbr, 1k tbn (default)
+Press [q] to stop, [?] for help
+frame=   31 fps=0.0 q=-1.0 size=       0KiB time=-00:00:00.55 bitrate=N/A speed=N/A    
+frame=  139 fps=138 q=-1.0 size=       0KiB time=00:00:01.24 bitrate=   2.8kbits/s speed=1.24x    
+frame=  273 fps=181 q=-1.0 size=       0KiB time=00:00:03.48 bitrate=   1.0kbits/s speed= 2.3x    
+frame=  304 fps=151 q=-1.0 size=    1280KiB time=00:00:03.99 bitrate=2622.1kbits/s speed=1.99x    
+frame=  395 fps=157 q=-1.0 size=    1280KiB time=00:00:05.51 bitrate=1901.0kbits/s speed=2.19x    
+frame=  510 fps=169 q=-1.0 size=    1280KiB time=00:00:07.43 bitrate=1410.7kbits/s speed=2.46x    
+frame=  608 fps=173 q=-1.0 size=    2816KiB time=00:00:09.06 bitrate=2544.5kbits/s speed=2.57x    
+frame=  661 fps=164 q=-1.0 size=    2816KiB time=00:00:09.95 bitrate=2318.5kbits/s speed=2.47x    
+[out#0/webm @ 0x15b2041b0] video:3584KiB audio:0KiB subtitle:0KiB other streams:0KiB global headers:0KiB muxing overhead: 0.141850%
+frame=  664 fps=158 q=-1.0 Lsize=    3589KiB time=00:00:10.00 bitrate=2940.2kbits/s speed=2.38x    
+
+[download] 100% of    3.51MiB in 00:00:05 at 709.98KiB/s

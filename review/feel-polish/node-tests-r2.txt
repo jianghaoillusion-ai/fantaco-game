@@ -1,0 +1,29 @@
+PASS order haptic and disabled gate
+✔ review/feel-polish/regression.test.mjs (50.071459ms)
+✔ Web Audio loop, same scene/mute retain source; stop cancels it (11.578875ms)
+✔ pause keeps offset; stale loads and stop cannot restart (59.285958ms)
+✔ a source creation error does not poison later transitions (0.344375ms)
+✔ loop durations match the rendered score for every scene (1.776667ms)
+✔ extra codec length accepts the boundary, rejects one sample beyond it (14.417584ms)
+✔ 44.1k periodic signal with leading delay keeps a complete, unchanged cycle (9.088208ms)
+✔ unsupported codecs are remembered per scene, without repeated downloads (3.099458ms)
+ok: 14 viewports all returned 7×9; migration keeps items
+✔ tests/board-layout.test.mjs (47.356291ms)
+cast10: mixed canvases, ground anchors, versioned assets and fallback passed
+✔ tests/cast10.test.mjs (51.151875ms)
+daily-reset tests ok
+✔ tests/daily-reset.test.mjs (61.494292ms)
+events tests ok
+✔ tests/events.test.mjs (74.01825ms)
+haptics: Android durations, iOS label activation, disabled gate passed
+✔ tests/mobile-haptics.test.mjs (48.69075ms)
+PASS new/legacy boards, locked order replacement, producer queues, 3-open-cell claim, dedupe and tier-1 sale
+✔ tests/mobile-progression.test.mjs (59.121792ms)
+ℹ tests 14
+ℹ suites 0
+ℹ pass 14
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.348708
