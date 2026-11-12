@@ -2,7 +2,7 @@
 
 這份整份取代上一輪報告。第1輪報告保留在 `/Volumes/外接資料碟/ai-lab/fantaco-logs/xiaoxia-final-cast9-r1.md`。不是全部完成、不是發布許可。
 起點：cast8 最終 HEAD `65216ca`；本輪接續第1輪與小頌審查 HEAD `6178f43`，沒有重置歷史。
-本輪素材提交：待填。只在 `xiaoxia/cast-redraw-v2`，PR #5 維持 draft。
+本輪素材提交：`8c843e69f9a7c502cb6202b70b3e428ed41985bd`。只在 `xiaoxia/cast-redraw-v2`，PR #5 維持 draft。
 
 ## 逐項回應小頌第1輪
 
