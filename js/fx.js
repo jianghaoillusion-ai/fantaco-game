@@ -119,7 +119,7 @@ export function createFx(ctx) {
       $("#info-hint").textContent = "";
       const chainBox = $("#info-chain");
       if (chainBox) { chainBox.hidden = true; chainBox.innerHTML = ""; }
-      if ($("#btn-sell")) $("#btn-sell").disabled = true;
+      if ($("#btn-sell")) { $("#btn-sell").disabled = true; $("#btn-sell").textContent = "出售"; }
       if (thumb) { thumb.hidden = true; thumb.removeAttribute("src"); }
       return;
     }
@@ -141,10 +141,12 @@ export function createFx(ctx) {
     if (item.kind === "gen") {
       const cool = item.coolUntil && item.coolUntil > Date.now();
       if (hint) hint.textContent = cool ? "休息中" : "";
-      if ($("#btn-sell")) $("#btn-sell").disabled = true;
+      if ($("#btn-sell")) { $("#btn-sell").disabled = true; $("#btn-sell").textContent = "出售"; }
     } else {
-      if (hint) hint.textContent = "";
-      if ($("#btn-sell")) $("#btn-sell").disabled = item.tier <= 1;
+      const retired = ctx.isRetired?.(item);
+      const offer = retired ? ctx.recycleOffer(item) : null;
+      if (hint) hint.textContent = retired ? `此系列已退役：棋盤與背包共 ${offer.count} 件，回收得 ${offer.coins} 金幣` : "";
+      if ($("#btn-sell")) { $("#btn-sell").disabled = false; $("#btn-sell").textContent = retired ? "回收此系列" : "出售"; }
     }
   }
 

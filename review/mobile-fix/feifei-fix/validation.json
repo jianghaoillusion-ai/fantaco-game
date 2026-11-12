@@ -1,0 +1,151 @@
+{
+  "baseline": "33ada9198ad30a6cf7271e8340d1276ad97f8e27",
+  "checks": [
+    {
+      "path": "assets/chars/avatars/feifei-determined.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/avatars/feifei-happy.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/avatars/feifei-sad.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/avatars/feifei-surprised.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/avatars/feifei-worried.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/avatars/feifei.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-determined-open.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-determined.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-happy-open.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-happy.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-sad-open.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-sad.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-surprised-open.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-surprised.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-worried-open.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    },
+    {
+      "path": "assets/chars/expr/feifei-worried.png",
+      "opaque_rgb_p99": 0.0,
+      "opaque_rgb_max": 0,
+      "all_original_visible_rgb_max": 0,
+      "size_unchanged": true,
+      "round2_all_rgb_max": 0,
+      "round2_alpha_only_cleared": true
+    }
+  ],
+  "modified_assets": 16,
+  "round2_baseline": "4b227d8"
+}

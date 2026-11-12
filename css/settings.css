@@ -21,3 +21,5 @@
 .shop-row.locked{opacity:.55}
 #shop .shop-card .notice{display:none}
 #shop-title{cursor:help}
+
+.haptics-row{display:flex;align-items:center;justify-content:space-between;color:var(--ink)}

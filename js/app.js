@@ -1,19 +1,22 @@
+import { availableChains, retiredChains, queueGenerator, claimGenerators, recycleOffer } from "./progression.js?v=mobile3";
+import { isCellOpen } from "./world.js?v=25";
+import { createHaptics } from "./haptics.js?v=mobile2";
 import { Auth } from "./auth.js?v=25";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
 import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
-import { mountMascot } from "./mascot.js?v=25";
+import { mountMascot } from "./mascot.js?v=mobile3";
 import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=cast10r2";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=25";
+import { bindStory, startStory } from "./story.js?v=mobile3";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=mobile2";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
-import { reserveItems } from "./merge.js?v=25";
-import { avatarSrc } from "./portraits.js?v=cast10r2";
+import { reserveItems } from "./merge.js?v=mobile3";
+import { avatarSrc } from "./portraits.js?v=mobile3";
 import {
-  starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
+  starterBoard, canMerge, mergeCells, produceFrom, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=25";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=25";
+} from "./merge.js?v=mobile3";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=mobile3";
 import { regionById } from "./world.js?v=25";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
@@ -23,6 +26,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
 let SAVE = loadSave();
+const haptics = createHaptics(() => SAVE.settings?.haptics !== false);
 let mascot;
 let dragging = null;
 let combo = { n: 0, at: 0 };
@@ -51,7 +55,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=25");
+  const res = await fetch(url + "?v=mobile3");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -66,6 +70,8 @@ export async function boot() {
   ]);
   GENS = CHAINS.generators;
   CHAINS = CHAINS.chains;
+  for (const chain of Object.values(CHAINS)) for (const it of chain.items) it.img += "?v=mobile3";
+  for (const gen of Object.values(GENS)) for (const it of gen.tiers) it.img += "?v=mobile3";
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
   tickEnergy(SAVE);
@@ -84,8 +90,8 @@ export async function boot() {
   for (const cell of (SAVE.board || []).concat(SAVE.inventory || [])) {
     if (cell) discover(cell, { silent: true });
   }
-  ensureOrders();
   unlockGenerators();
+  ensureOrders();
   persist();
   migrateSettings(SAVE);
   migrateBagSlots(SAVE, !!(SAVE.board && SAVE.board.length));
@@ -112,6 +118,7 @@ function show(name) {
   const el = document.getElementById(name);
   if (el) el.classList.add("on");
   if (name === "play") {
+    unlockGenerators(); ensureOrders(); persist();
     applyChapterLook();
     playMusic(SAVE.chapter);
     mascot?.wake?.();
@@ -201,7 +208,7 @@ function bind() {
   }
 }
 
-function refresh() { refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } if ($("#title")?.classList.contains("on")) home?.refresh?.(); if ($("#daily")?.classList.contains("on")) renderDaily(); }
+function refresh() { unlockGenerators(); ensureOrders(); renderPendingGenerators(); refreshHud(); if ($("#play")?.classList.contains("on")) { renderBoard(); renderOrders(); } if ($("#title")?.classList.contains("on")) home?.refresh?.(); if ($("#daily")?.classList.contains("on")) renderDaily(); }
 
 function refreshHud() {
   tickEnergy(SAVE);
@@ -672,7 +679,7 @@ function tapGenerator(loc) {
   else systems?.fx.popAt(made.uid);
 }
 
-function moveOrMerge(loc, r, c) {
+function moveOrMerge(loc, r, c, touch = false) {
   if (systems && !systems.fog.canDropAt(r, c)) {
     sfx.invalid();
     toast("這一格還沒揭開");
@@ -698,6 +705,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
+    if (touch) haptics.merge();
     persist(); renderBoard();
     return;
   }
@@ -728,7 +736,6 @@ function onMerged(merged) {
     const cols = COLS;
     systems?.fog.revealAdjacent?.(Math.floor(at.i / cols), at.i % cols);
   }
-  try { navigator.vibrate?.(12); } catch {}
   systems?.events?.noteMerge?.(merged);
   systems?.orders?.bumpTask?.("merges");
   discover(merged);
@@ -811,6 +818,7 @@ function nextStoryOrder() {
 function ensureOrders() {
   fillOrderSlots(SAVE, GAME.board?.orders || 3, {
     chains: CHAINS,
+    availableChains: availableChains(SAVE, GENS, retiredChains(SAVE, CHAINS, STORY)),
     chapter: SAVE.chapter,
     discovered: SAVE.discovered,
     npcsByChapter: NPCS_BY_CHAPTER,
@@ -820,30 +828,33 @@ function ensureOrders() {
   reserveItems(SAVE.orders, SAVE.board, SAVE.inventory);
 }
 
-function hasGen(id) {
-  return SAVE.board.some((c) => c && c.kind === "gen" && c.gen === id)
-    || SAVE.inventory.some((c) => c && c.kind === "gen" && c.gen === id);
-}
-
+function openIndex(i) { return isCellOpen(SAVE, Math.floor(i / COLS), i % COLS, COLS, ROWS); }
 function grantGen(id, tier = 1) {
-  if (hasGen(id)) return false;
-  const empty = systems
-    ? nearbyEmpty(SAVE.board, COLS, ROWS, -1, systems.fog.isOpenIndex)
-    : firstEmpty(SAVE.board);
-  const cell = { kind: "gen", gen: id, tier, uid: makeUid() };
-  if (GENS[id]?.autoMs) { cell.autoMs = GENS[id].autoMs; cell.coolUntil = Date.now() + GENS[id].autoMs; }
-  if (empty >= 0) SAVE.board[empty] = cell;
-  else if (SAVE.inventory.filter(Boolean).length < bagCap(SAVE)) SAVE.inventory.push(cell);
-  else return false;
-  toast(`新的產生器：${GENS[id]?.name || id}`);
-  return true;
+  if (id === "garden" && (SAVE.restore.village || 0) < 2 && !SAVE.storyDone.includes("v2") && !SAVE.storyDone.includes("v3")) return false;
+  const granted = queueGenerator(SAVE, id, tier, GENS, openIndex, makeUid());
+  if (granted) toast(SAVE.pendingGenerators.some(c => c.gen === id)
+    ? `${GENS[id]?.name}待領取，請先空出 3 格` : `新的產生器：${GENS[id]?.name}`);
+  renderPendingGenerators();
+  return granted;
+}
+function renderPendingGenerators() {
+  const button = $("#btn-claim-generators");
+  if (!button) return;
+  const pending = SAVE.pendingGenerators || [];
+  button.hidden = !pending.length;
+  button.textContent = pending.length ? `待領取：${pending.map(c => GENS[c.gen]?.name).join("、")}（先空出 3 格）` : "";
+  button.onclick = () => {
+    const n = claimGenerators(SAVE, openIndex);
+    toast(n ? `已領取 ${n} 個產生器` : "請先空出 3 格");
+    refresh(); persist();
+  };
 }
 
 function unlockGenerators() {
   const done = (f) => SAVE.storyDone.includes(f);
   grantGen("star");
   if (done("v2") || done("v3") || (SAVE.restore.village || 0) >= 2) grantGen("garden");
-  if (chapterUnlocked("journey")) grantGen("forest");
+  if ((SAVE.restore.village || 0) >= 5 || chapterUnlocked("journey")) grantGen("forest");
   if (done("j2") || done("j3") || SAVE.chapter === "candy") grantGen("magic");
   if (chapterUnlocked("candy")) grantGen("candy");
 }
@@ -887,8 +898,8 @@ function tryFulfill(loc, orderId) {
   mascot?.order();
   const chapterClear = Object.values(CHAPTER_END).includes(o.flag);
   if (chapterClear && CHAPTER_NEXT[o.chapter]) SAVE.chapter = CHAPTER_NEXT[o.chapter];
-  ensureOrders();
   unlockGenerators();
+  ensureOrders();
   const fromCard = document.querySelector(`.order[data-id="${orderId}"]`);
   fromCard?.classList.add("task-glow");
   const after = (leveled) => {
@@ -1062,6 +1073,9 @@ function renderLyrics() {
 
 function systemCtx() {
   return {
+    haptics,
+    recycleOffer: (item) => recycleOffer(SAVE, item.chain, openIndex),
+    isRetired: (item) => item.kind === "item" && retiredChains(SAVE, CHAINS, STORY).includes(item.chain),
     $, $$,
     getSave: () => SAVE,
     getGame: () => GAME,

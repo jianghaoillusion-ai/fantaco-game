@@ -308,10 +308,10 @@
       "items": [
         {
           "tier": 1,
-          "name": "眠花糖鑰匙圈",
-          "img": "assets/tiles/goods-1.webp",
+          "name": "星星吊飾",
+          "img": "assets/tiles/goods-star-charm.webp",
           "rarity": "rare",
-          "origin": "official"
+          "origin": "extended"
         },
         {
           "tier": 2,
@@ -364,7 +364,7 @@
         },
         {
           "tier": 2,
-          "img": "assets/tiles/gen-star-2.webp",
+          "img": "assets/tiles/gen-star-empty-2.webp",
           "table": [
             [
               1,
@@ -382,7 +382,7 @@
         },
         {
           "tier": 3,
-          "img": "assets/tiles/gen-star-3.webp",
+          "img": "assets/tiles/gen-star-empty-3.webp",
           "table": [
             [
               2,

@@ -2,7 +2,7 @@
 
 import { setAudioSettings, playMusic, stopMusic, getAudioSettings, sfx } from "./audio.js?v=25";
 
-export const DEFAULT_SETTINGS = { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 };
+export const DEFAULT_SETTINGS = { music: true, sfx: true, haptics: true, musicVol: 0.72, sfxVol: 0.85 };
 
 export function migrateSettings(save) {
   const cur = { ...DEFAULT_SETTINGS, ...(save.settings || {}) };
@@ -33,6 +33,8 @@ export function createSettingsUi(ctx) {
   function sync() {
     const s = { ...DEFAULT_SETTINGS, ...(ctx.getSave().settings || {}) };
     const tm = $("#tog-music"), ts = $("#tog-sfx");
+    const th = $("#tog-haptics");
+    if (th) th.checked = s.haptics !== false;
     const vm = $("#vol-music"), vs = $("#vol-sfx");
     if (tm) tm.checked = s.music !== false;
     if (ts) ts.checked = s.sfx !== false;
@@ -64,6 +66,7 @@ export function createSettingsUi(ctx) {
       if (e.target.id === "settings-sheet") close();
     });
     $("#tog-music")?.addEventListener("change", (e) => apply({ music: e.target.checked }));
+    $("#tog-haptics")?.addEventListener("change", (e) => apply({ haptics: e.target.checked }));
     $("#tog-sfx")?.addEventListener("change", (e) => apply({ sfx: e.target.checked }));
     $("#vol-music")?.addEventListener("input", (e) => apply({ musicVol: Number(e.target.value) / 100 }));
     $("#vol-sfx")?.addEventListener("input", (e) => apply({ sfxVol: Number(e.target.value) / 100 }));

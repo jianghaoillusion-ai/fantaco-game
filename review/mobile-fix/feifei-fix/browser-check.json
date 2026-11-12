@@ -1,0 +1,76 @@
+{
+  "results": [
+    {
+      "phase": "before",
+      "expr": "determined",
+      "src": "assets/chars/expr/feifei-determined.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "before",
+      "expr": "happy",
+      "src": "assets/chars/expr/feifei-happy.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "before",
+      "expr": "sad",
+      "src": "assets/chars/expr/feifei-sad.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "before",
+      "expr": "surprised",
+      "src": "assets/chars/expr/feifei-surprised.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "before",
+      "expr": "worried",
+      "src": "assets/chars/expr/feifei-worried.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "after",
+      "expr": "determined",
+      "src": "assets/chars/expr/feifei-determined.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "after",
+      "expr": "happy",
+      "src": "assets/chars/expr/feifei-happy.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "after",
+      "expr": "sad",
+      "src": "assets/chars/expr/feifei-sad.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "after",
+      "expr": "surprised",
+      "src": "assets/chars/expr/feifei-surprised.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    },
+    {
+      "phase": "after",
+      "expr": "worried",
+      "src": "assets/chars/expr/feifei-worried.png?v=mobile3",
+      "open": "production portraitSrc, frozen talking frame",
+      "viewport": "390x844"
+    }
+  ],
+  "pageErrors": [],
+  "note": "真實遊戲畫面，測試注入劇情與訂單；張嘴畫面經正式 portraitSrc 凍結，非自然劇情進度驗收。"
+}
