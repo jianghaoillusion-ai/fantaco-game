@@ -3,7 +3,7 @@ const {chromium}=require('playwright');const fs=require('node:fs');
  const page=await browser.newPage();await page.goto('http://127.0.0.1:8938/review/bgm/loop-test.html');
  const scores=JSON.parse(fs.readFileSync(__dirname+'/scores-bgm3.json'));
  const rows=await page.evaluate(async scores=>{
-  const {prepareLoopBuffer}=await import('../../js/audio.js?v=bgm3');const rows=[];
+  const {prepareLoopBuffer}=await import('../../js/audio.js?v=bgm3r2');const rows=[];
   for(const rate of [48000,44100])for(const song of scores){
    const c=new OfflineAudioContext(2,1,rate),raw=await c.decodeAudioData(await(await fetch('../../assets/audio/bgm-'+song.id+'.mp3')).arrayBuffer());
    for(const delay of [529,1105,2257]){

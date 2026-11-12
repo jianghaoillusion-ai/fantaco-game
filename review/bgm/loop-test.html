@@ -7,7 +7,7 @@
 body{font:18px system-ui,sans-serif;background:#fff9ef;color:#493d4e;max-width:620px;margin:10vh auto;padding:24px}h1{font-size:28px}button,select{font:inherit;padding:14px 18px;border:1px solid #c9b9cf;border-radius:14px;background:white;color:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #9253a1;outline-offset:3px}.songs{display:grid;gap:14px;margin:24px 0}button[aria-pressed=true]{background:#e8d9ef}#status{line-height:1.7;min-height:3em}
 </style>
 <h1>14 首 BGM 循環試聽</h1>
-<label>格式 <select id="format"><option value="ogg">OGG</option><option value="mp3">MP3</option></select></label>
+<label>格式 <select id="format"><option value="mp3">MP3</option><option value="ogg">OGG</option></select></label>
 <div class="songs">
 <button data-song="0" aria-pressed="false">微笑村 · 鐵琴泡泡音樂盒</button>
 <button data-song="1" aria-pressed="false">神祕魔法袋 · 烏克麗麗搖擺跳跳</button>
@@ -27,20 +27,21 @@ body{font:18px system-ui,sans-serif;background:#fff9ef;color:#493d4e;max-width:6
 <button id="stop">停止</button>
 <p id="status" role="status">點一首開始，會持續循環。</p>
 <script type="module">
-import {prepareLoopBuffer} from '../../js/audio.js?v=bgm3';
+import {prepareDecodedLoop} from '../../js/audio.js?v=bgm3r2';
 const songs = [{"stem": "../../assets/audio/bgm-village", "samples": 2304000}, {"stem": "../../assets/audio/bgm-journey", "samples": 2468571}, {"stem": "../../assets/audio/bgm-candy", "samples": 2160000}, {"stem": "../../assets/audio/bgm-bulu", "samples": 2133333}, {"stem": "../../assets/audio/bgm-hate", "samples": 1858065}, {"stem": "../../assets/audio/bgm-ending", "samples": 2032941}, {"stem": "../../assets/audio/bgm-castle", "samples": 1986207}, {"stem": "../../assets/audio/bgm-slope", "samples": 1745455}, {"stem": "../../assets/audio/bgm-hill", "samples": 1757288}, {"stem": "../../assets/audio/bgm-bagvalley", "samples": 2094545}, {"stem": "../../assets/audio/bgm-candylane", "samples": 1719403}, {"stem": "../../assets/audio/bgm-lamplight", "samples": 2073600}, {"stem": "../../assets/audio/bgm-theater", "samples": 2215385}, {"stem": "../../assets/audio/bgm-plaza", "samples": 1828571}];
 const status = document.querySelector('#status');
 const format = document.querySelector('#format');
 const buttons = [...document.querySelectorAll('[data-song]')];
 const cache = new Map();
 let context, active, wanted = null, generation = 0;
-function retire(voice) {
+async function retire(voice) {
   if (!voice) return;
   const now = context.currentTime;
   voice.gain.gain.cancelScheduledValues(now);
   voice.gain.gain.setValueAtTime(voice.gain.gain.value, now);
   voice.gain.gain.linearRampToValueAtTime(0, now + .025);
-  voice.source.stop(now + .03);
+  await new Promise(resolve => setTimeout(resolve, 35));
+  voice.source.stop();
   voice.source.onended = () => { voice.source.disconnect(); voice.gain.disconnect(); };
 }
 async function play(index) {
@@ -65,17 +66,13 @@ async function play(index) {
       const response = await fetch(key);
       if (!response.ok) throw new Error(`音檔讀取失敗（${response.status}）`);
       buffer = await context.decodeAudioData(await response.arrayBuffer());
-      const expected = Math.round((song.samples + 18432) / 48000 * buffer.sampleRate);
-      // Chromium Vorbis may retain a final codec block; verified head alignment.
-      const excess = buffer.length - expected;
-      const allowance = ext === 'ogg' ? Math.ceil(2048 / 48000 * buffer.sampleRate) : 2;
-      if (excess < -2 || excess > allowance) {
-        throw new Error('解碼長度不符，可能有編碼補零；請換另一種格式');
-      }
-      buffer = prepareLoopBuffer(buffer, Math.round(song.samples / 48000 * buffer.sampleRate), Math.round(9216 / 48000 * buffer.sampleRate), context).buffer;
+      buffer = prepareDecodedLoop(buffer, song.samples / 48000, ext, context).buffer;
       cache.set(key, buffer);
       while(cache.size>3)cache.delete(cache.keys().next().value);
     }
+    if (token !== generation) return;
+    const old = active; active = null;
+    await retire(old);
     if (token !== generation) return;
     const source = context.createBufferSource();
     const gain = context.createGain();
@@ -88,7 +85,6 @@ async function play(index) {
     gain.gain.setValueAtTime(0, context.currentTime);
     gain.gain.linearRampToValueAtTime(.65, context.currentTime + .025);
     source.start(0, source.loopStart);
-    retire(active);
     active = {source, gain, key, index};
     buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
     status.textContent = active.message = `${buttons[index].textContent} · ${ext.toUpperCase()} · ${(source.loopEnd-source.loopStart).toFixed(6)} 秒，循環播放中`;

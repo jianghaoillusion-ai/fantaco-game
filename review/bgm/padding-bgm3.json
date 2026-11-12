@@ -102,24 +102,24 @@
       "id": "hate",
       "rate": 48000,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.0007831539760997458,
-      "absolute_rmse": 0.00003698606295380837,
+      "relative_rmse": 0.000866129480895681,
+      "absolute_rmse": 0.000055935013409433414,
       "accepted": true
     },
     {
       "id": "hate",
       "rate": 48000,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.0009337231335894462,
-      "absolute_rmse": 0.00004108671791241622,
+      "relative_rmse": 0.0011596876403545213,
+      "absolute_rmse": 0.00009104933036811755,
       "accepted": true
     },
     {
       "id": "hate",
       "rate": 48000,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.000950623907189245,
-      "absolute_rmse": 0.0000814009143112914,
+      "relative_rmse": 0.0006945478995110816,
+      "absolute_rmse": 0.00007986780351057885,
       "accepted": true
     },
     {
@@ -222,24 +222,24 @@
       "id": "bagvalley",
       "rate": 48000,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.005163051203700545,
-      "absolute_rmse": 0.0003628889357079817,
+      "relative_rmse": 0.010377221506636404,
+      "absolute_rmse": 0.0006181169071327532,
       "accepted": true
     },
     {
       "id": "bagvalley",
       "rate": 48000,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.002886056457961692,
-      "absolute_rmse": 0.0002261961309849504,
+      "relative_rmse": 0.005186717431742361,
+      "absolute_rmse": 0.000497878497970565,
       "accepted": true
     },
     {
       "id": "bagvalley",
       "rate": 48000,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.0013409598435122855,
-      "absolute_rmse": 0.00011745347322017605,
+      "relative_rmse": 0.0035361339432416527,
+      "absolute_rmse": 0.00031834102035860074,
       "accepted": true
     },
     {
@@ -294,24 +294,24 @@
       "id": "theater",
       "rate": 48000,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.0023406096160000175,
-      "absolute_rmse": 0.00018852713203024009,
+      "relative_rmse": 0.0038382739924579645,
+      "absolute_rmse": 0.00028032873339192097,
       "accepted": true
     },
     {
       "id": "theater",
       "rate": 48000,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.001665410379638368,
-      "absolute_rmse": 0.00015530068363099744,
+      "relative_rmse": 0.002504386901985582,
+      "absolute_rmse": 0.0001628786641753318,
       "accepted": true
     },
     {
       "id": "theater",
       "rate": 48000,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.0011049457601072488,
-      "absolute_rmse": 0.000050990002745932535,
+      "relative_rmse": 0.003057265096530346,
+      "absolute_rmse": 0.00021370742378424895,
       "accepted": true
     },
     {
@@ -438,24 +438,24 @@
       "id": "hate",
       "rate": 44100,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.008521414184342178,
-      "absolute_rmse": 0.0005703287860492618,
+      "relative_rmse": 0.016236397327671497,
+      "absolute_rmse": 0.0012785993756796819,
       "accepted": true
     },
     {
       "id": "hate",
       "rate": 44100,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.008897166985092122,
-      "absolute_rmse": 0.0005527493526780665,
+      "relative_rmse": 0.016236397327671497,
+      "absolute_rmse": 0.0012785993756796819,
       "accepted": true
     },
     {
       "id": "hate",
       "rate": 44100,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.009464464365104973,
-      "absolute_rmse": 0.0006421882023292629,
+      "relative_rmse": 0.015073436886643718,
+      "absolute_rmse": 0.0015765938986549086,
       "accepted": true
     },
     {
@@ -558,24 +558,24 @@
       "id": "bagvalley",
       "rate": 44100,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.017054799867535657,
-      "absolute_rmse": 0.0011615650259915262,
+      "relative_rmse": 0.021628110986310525,
+      "absolute_rmse": 0.001532204192009336,
       "accepted": true
     },
     {
       "id": "bagvalley",
       "rate": 44100,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.014233485131180421,
-      "absolute_rmse": 0.0011487904249472456,
+      "relative_rmse": 0.019460854088329996,
+      "absolute_rmse": 0.0015744277912690921,
       "accepted": true
     },
     {
       "id": "bagvalley",
       "rate": 44100,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.016172461066697685,
-      "absolute_rmse": 0.0013071266504704963,
+      "relative_rmse": 0.019631394467348566,
+      "absolute_rmse": 0.0019155001160706512,
       "accepted": true
     },
     {
@@ -630,24 +630,24 @@
       "id": "theater",
       "rate": 44100,
       "leading_zero_samples": 529,
-      "relative_rmse": 0.008049247568054073,
-      "absolute_rmse": 0.0005292556107315292,
+      "relative_rmse": 0.003243073222922677,
+      "absolute_rmse": 0.0002363734494749168,
       "accepted": true
     },
     {
       "id": "theater",
       "rate": 44100,
       "leading_zero_samples": 1105,
-      "relative_rmse": 0.0018559170589829118,
-      "absolute_rmse": 0.00016229885371083576,
+      "relative_rmse": 0.004273032417513829,
+      "absolute_rmse": 0.0003199454314510869,
       "accepted": true
     },
     {
       "id": "theater",
       "rate": 44100,
       "leading_zero_samples": 2257,
-      "relative_rmse": 0.0017451346663823035,
-      "absolute_rmse": 0.00014391442384026828,
+      "relative_rmse": 0.002781021368960777,
+      "absolute_rmse": 0.00020038712660042375,
       "accepted": true
     },
     {

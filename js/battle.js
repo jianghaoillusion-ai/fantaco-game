@@ -1,4 +1,4 @@
-import { sfx } from "./audio.js?v=bgm3";
+import { sfx } from "./audio.js?v=bgm3r2";
 
 const W = 1280, H = 720;
 const GROUND = 600;

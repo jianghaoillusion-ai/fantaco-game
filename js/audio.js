@@ -28,10 +28,19 @@ function sfxGain() { return settings.sfx ? (settings.sfxVol ?? .85) : 0; }
 function applyMusicVolume() {
  const value=.5*musicGain();
  if(active?.gain) { const p=active.gain.gain; p.cancelScheduledValues(ctx.currentTime);p.setValueAtTime(p.value,ctx.currentTime);p.linearRampToValueAtTime(value,ctx.currentTime+.025); }
- if(active?.el) active.el.volume=value;
+ if(active?.el) { active.el.volume=value;active.el.muted=value===0; }
  if(clearVoice) { clearVoice.el.volume=.88*musicGain();if(!musicGain()) clearVoice.finish(); }
 }
-export function setAudioSettings(s) { settings={...settings,...s};applyMusicVolume(); }
+export function setAudioSettings(s) {
+ const wasAudible=musicGain()>0;
+ settings={...settings,...s};
+ if(!musicGain())generation++; // Invalidate a load that began before muting.
+ if(!wasAudible && musicGain() && wanted && active?.id!==wanted) {
+  dispose(active);active=null; // Never unmute the previous region while loading.
+  if(!paused)playMusic(wanted);
+ }
+ applyMusicVolume();
+}
 export function getAudioSettings() { return settings; }
 function dispose(v) {
  if(!v)return;
@@ -67,22 +76,13 @@ export function prepareLoopBuffer(buffer, frames, guard, context) {
  channels.forEach((x,c)=>loop.copyToChannel(x.subarray(origin,origin+frames),c));
  return {buffer:loop,loopStart:0,duration:frames/buffer.sampleRate,codecOrigin:origin};
 }
-async function load(id) {
- if(cache.has(id)){const hit=cache.get(id);cache.delete(id);cache.set(id,hit);return hit;}
- const promise=(async()=>{
-  let error,codecFailures=0;
-  // Prefer MP3 (small, gapless metadata); try Vorbis if decoding fails.
-  for(const ext of ['mp3','ogg'])try {
-   const response=await fetch(`assets/audio/${MUSIC_FILES[id]}.${ext}?v=bgm3`);
-   if(!response.ok)throw new Error(`BGM HTTP ${response.status}`);
-   const bytes=await response.arrayBuffer();
-   let buffer;try{buffer=await ac().decodeAudioData(bytes);}catch(e){codecFailures++;throw e;}
-   const frames=Math.round(Math.round(MUSIC_SECONDS[id]*48000)/48000*buffer.sampleRate);
+export function prepareDecodedLoop(buffer,seconds,ext,context) {
+   const frames=Math.round(Math.round(seconds*48000)/48000*buffer.sampleRate);
    const loopStart=Math.round(LOOP_GUARD*buffer.sampleRate)/buffer.sampleRate;
-   const expected=Math.round((Math.round(MUSIC_SECONDS[id]*48000)+18432)/48000*buffer.sampleRate);
+   const expected=Math.round((Math.round(seconds*48000)+18432)/48000*buffer.sampleRate);
    const excess=buffer.length-expected;
    if(excess < -2 || excess > Math.ceil((ext==='ogg'?2048:4096)/48000*buffer.sampleRate))throw new Error('BGM decoded length mismatch');
-   const prepared=prepareLoopBuffer(buffer,frames,Math.round(loopStart*buffer.sampleRate),ac());
+   const prepared=prepareLoopBuffer(buffer,frames,Math.round(loopStart*buffer.sampleRate),context);
    // Extra leading codec delay is accepted only with measured periodic agreement.
    if(excess>2 && ext==='mp3') {
     let error=0,power=0,count=0;const q=prepared.codecOrigin,w=Math.round(buffer.sampleRate*.002);
@@ -90,6 +90,18 @@ async function load(id) {
     if(Math.sqrt(error/Math.max(power,1e-12))>.25 || Math.sqrt(error/count)>.025)throw new Error('BGM codec alignment mismatch');
    }
    return prepared;
+}
+async function load(id) {
+ if(cache.has(id)){const hit=cache.get(id);cache.delete(id);cache.set(id,hit);return hit;}
+ const promise=(async()=>{
+  let error,codecFailures=0;
+  // Prefer MP3 (small, gapless metadata); try Vorbis if decoding fails.
+  for(const ext of ['mp3','ogg'])try {
+   const response=await fetch(`assets/audio/${MUSIC_FILES[id]}.${ext}?v=bgm3r2`);
+   if(!response.ok)throw new Error(`BGM HTTP ${response.status}`);
+   const bytes=await response.arrayBuffer();
+   let buffer;try{buffer=await ac().decodeAudioData(bytes);}catch(e){codecFailures++;throw e;}
+   return prepareDecodedLoop(buffer,MUSIC_SECONDS[id],ext,ac());
   }catch(e){error=e}
   if(codecFailures===2)decodeUnavailable.add(id);
   throw error;
@@ -121,7 +133,7 @@ export async function playMusic(sceneId) {
  const id=MUSIC_FILES[sceneId]?sceneId:'village';wanted=id;
  const token=++generation;
  if(clearVoice)clearVoice.finish(false);
- if(!unlocked || paused)return;
+ if(!unlocked || paused || !musicGain())return;
  if(active?.id===id) {applyMusicVolume();return;}
  let data;
  let web=!!(window.AudioContext || window.webkitAudioContext) && !decodeUnavailable.has(id);
@@ -134,7 +146,7 @@ export async function playMusic(sceneId) {
   if(token!==generation || paused)return;
   if(web) {active={id,...data,offset:0};start(active);}
   else {
-   const el=new Audio();el.src=`assets/audio/${MUSIC_FILES[id]}.mp3?v=bgm3`;el.volume=.5*musicGain();
+   const el=new Audio();el.src=`assets/audio/${MUSIC_FILES[id]}.mp3?v=bgm3r2`;el.volume=.5*musicGain();el.muted=!musicGain();
    active={id,el};
    el.onloadedmetadata=()=>{if(active?.el===el)el.currentTime=LOOP_GUARD;};
    const wrap=()=>{if(active?.el!==el || paused)return;if(el.ended || el.currentTime>=LOOP_GUARD+MUSIC_SECONDS[id]){el.currentTime=el.ended?LOOP_GUARD:el.currentTime-MUSIC_SECONDS[id];el.play().catch(()=>{});}};

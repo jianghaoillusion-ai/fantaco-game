@@ -4,7 +4,7 @@ import { createFx } from "./fx.js?v=25";
 import { createShop } from "./shop.js?v=25";
 import { createBag } from "./bag.js?v=25";
 import { createOrdersUi } from "./orders-ui.js?v=25";
-import { createMap } from "./map.js?v=bgm3";
+import { createMap } from "./map.js?v=bgm3r2";
 import { createAds } from "./ads.js?v=25";
 import { nearbyEmpty } from "./merge.js?v=25";
 import { createEvents } from "./events.js";

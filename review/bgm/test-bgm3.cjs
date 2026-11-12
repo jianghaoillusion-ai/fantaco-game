@@ -9,7 +9,7 @@ const scores=JSON.parse(fs.readFileSync(__dirname+'/scores-bgm3.json'));
  const page=await browser.newPage();page.setDefaultTimeout(15000);const errors=[];page.on('pageerror',e=>errors.push(String(e)));
  await page.goto('http://127.0.0.1:8938/review/bgm/loop-test.html');
  if(!process.env.GAME_ONLY) report.decoded=await page.evaluate(async scores=>{
-  const {prepareLoopBuffer}=await import("../../js/audio.js?v=bgm3");
+  const {prepareLoopBuffer}=await import("../../js/audio.js?v=bgm3r2");
   const results=[];
   for(const rate of [48000,44100])for(const song of scores)for(const ext of ['mp3','ogg']){
    const bytes=await(await fetch('../../assets/audio/bgm-'+song.id+'.'+ext)).arrayBuffer();
@@ -96,7 +96,7 @@ const scores=JSON.parse(fs.readFileSync(__dirname+'/scores-bgm3.json'));
   report.game.chapter_routes.push({id,loopEnd:loop});
  }
  // Explicit pause/resume position, rapid loads, stop while loading and muted behavior.
- await page.evaluate(async()=>{window.audio=await import('./js/audio.js?v=bgm3');audio.pauseMusic()});
+ await page.evaluate(async()=>{window.audio=await import('./js/audio.js?v=bgm3r2');audio.pauseMusic()});
  assert.equal((await snapshot()).live,0);await page.evaluate(()=>audio.resumeMusic());
  assert.equal((await snapshot()).live,1);
  report.game.resume=await snapshot();assert.ok(report.game.resume.events.at(-1).offset>0);
@@ -123,7 +123,7 @@ const scores=JSON.parse(fs.readFileSync(__dirname+'/scores-bgm3.json'));
  await fallback.goto('http://127.0.0.1:8938/review/bgm/loop-test.html');
  await fallback.evaluate(()=>document.head.insertAdjacentHTML('afterbegin','<base href="/">'));
  await fallback.click('#stop');
- await fallback.evaluate(async()=>{window.a=await import('/js/audio.js?v=bgm3');a.unlockAudio();await a.playMusic('village');await a.playMusic('journey')});
+ await fallback.evaluate(async()=>{window.a=await import('/js/audio.js?v=bgm3r2');a.unlockAudio();await a.playMusic('village');await a.playMusic('journey')});
  await fallback.waitForFunction(()=>htmlVoices.filter(e=>e.src&&!e.paused&&e.readyState>=2).length===1);
  assert.equal(await fallback.evaluate(()=>htmlVoices.filter(e=>e.src).length),1);
  await fallback.evaluate(()=>{htmlVoices.find(e=>e.src).currentTime=.192+2468571/48000-.05});

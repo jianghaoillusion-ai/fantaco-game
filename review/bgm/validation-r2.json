@@ -1,0 +1,16 @@
+{
+  "browser": "148.0.7778.96",
+  "platform": "darwin",
+  "checks": {
+    "muted_entry_no_download": true,
+    "enable_downloads_wanted": true,
+    "muted_switch_no_download": true,
+    "enable_after_switch_downloads": true,
+    "fallback_muted": true,
+    "fallback_zero_volume_muted": true,
+    "fallback_unmuted": true,
+    "default_mp3": true,
+    "release_gestures": true
+  },
+  "pass": true
+}

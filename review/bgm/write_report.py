@@ -30,15 +30,15 @@ A 鐵琴 → village，B 烏克麗麗 → journey，C 口哨 → candy。保留�
 
 ## 播放器與場景
 
-js/audio.js 先 fetch、decodeAudioData，再 AudioBufferSourceNode loop=true；抽出有效範圍，三曲大小的 LRU 解碼快取限制手機記憶體。第一次手勢建立／resume AudioContext，之後手勢也可恢復 suspended/interrupted context。每個 source 只 start 一次；同曲請求只更新音量，不重播。
+js/audio.js 先 fetch、decodeAudioData，再 AudioBufferSourceNode loop=true；抽出有效範圍，三曲大小的 LRU 解碼快取限制手機記憶體。第一次 pointerdown／pointerup／touchend／click／keydown 手勢建立／resume AudioContext，之後手勢也可恢復 suspended/interrupted context。每個 source 只 start 一次；同曲請求只更新音量，不重播。
 
-換曲先載好新檔，再把舊曲淡出 25ms、停止／disconnect，才開新曲；設計上不交叉疊兩首。序號取消過時載入，序列化切換避免競態；失敗不會讓後續切歌鏈永久失效。音樂關閉或音量零只改 gain，保留時間；廣告暫停記錄 offset，恢復從原位置。sting 使用獨立單一播放器，結束／取消恢復 BGM，sting 音檔沒有改。原遊戲沒有呼叫 playClearTheme，本輪保留這個範圍，不額外接入結算。
+換曲先載好新檔，再把舊曲淡出 25ms、停止／disconnect，才開新曲；設計上不交叉疊兩首。序號取消過時載入，序列化切換避免競態；失敗不會讓後續切歌鏈永久失效。同場景音樂關閉或音量零只改 gain／HTMLAudio.muted，保留時間；關閉後換區只記錄想播的場景，不下載或解碼，重新開啟才載入，而且不會短暫放出舊地區音樂；廣告暫停記錄 offset，恢復從原位置。sting 使用獨立單一播放器，結束／取消恢復 BGM，sting 音檔沒有改。原遊戲沒有呼叫 playClearTheme，本輪保留這個範圍，不額外接入結算。
 
 app 的 playSceneMusic 統一選曲：region.chapter 與 SAVE.chapter 一致才用地區 id；章節已推進時用新章節 id，背景／名稱也使用相同判斷。地圖進入只由 show(play) 選一次；修建築依玩家所在場景、不依正在修的另一區選曲。設定 UI 不再另行重選曲。地圖／章節 music metadata 同步改成自己的 id。
 
 Web Audio 不存在或兩格式解碼都失敗時退回 HTMLAudio，保留同曲與音量行為；**這條退路在 loadedmetadata 後定位、用 timeupdate／ended 跳過保護區，但事件排程不能保證 sample 精準循環，平順度仍不如 Web Audio**。MP3 若多出最多 4096 個 48k 等效樣本，還要以兩端 2ms 週期訊號的相對／絕對誤差確認，再採用完整圈；超量或不符合週期就退格式／播放器，不盲剪尾。這是程式與模擬驗證，不等於 Safari 已實測。
 
-模組與資料載入版本更新為 bgm3；音檔網址也帶 ?v=bgm3。本 repo 沒有 service worker。
+模組與資料載入版本更新為 bgm3r2；音檔網址也帶 ?v=bgm3r2。本 repo 沒有 service worker。
 
 ## 驗證與重跑
 
@@ -55,15 +55,17 @@ Web Audio 不存在或兩格式解碼都失敗時退回 HTMLAudio，保留同曲
 
 ## 交叉檢查
 
-小頌只讀程式與小夏的證據後，同意作為 draft 交付；沒有獨立跑量測或耳聽。詳見 [xiaosong-review-bgm3.md](xiaosong-review-bgm3.md)。
+小頌第 1 輪已親自重新量測 28 檔與操作 headless Chromium；12 項中 10 項通過，擋在公開測試入口與 OGG 尾塊數字。詳見 [第 1 輪獨立審查](xiaosong/review-bgm3.md)。第 2 輪修正與驗證詳見下方，不把第 1 輪結論當成第 2 輪放行。
 
 ## 還沒實測的部分
 
 Safari、iPhone、Android、來電／鎖屏／真正 bfcache 與手機靜音開關尚未實機驗收。suspend/resume 只有 Chromium 模擬。沒有實際耳聽，不保證「可愛程度／刺耳感／回音乾濕」符合每個人的感受。波形與數字不能替代我的王用耳朵確認。
 
-只提交 xiaoxia/bgm-cute 與 draft PR #6，不 merge、不推 main、不部署。前輪盤點與證據保留於 [README-bgm2.md](README-bgm2.md)，其歷史「未整合」敘述不適用本輪。
+只提交 xiaoxia/bgm-cute 與 draft PR #6，不 merge、不推 main、不改 Pages 設定；公開測試使用固定 commit 的免費 raw.githack。前輪盤點與證據保留於 [README-bgm2.md](README-bgm2.md)，其歷史「未整合」敘述不適用本輪。
 '''
 old=P/'README.md';history=P/'README-bgm2.md'
 if not history.exists():history.write_text(old.read_text())
+extra=P/'round2-notes.md'
+if extra.exists():body+='\n'+extra.read_text()
 old.write_text(body)
 (P/'scene-table-bgm3.md').write_text(table+'\n')

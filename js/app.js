@@ -1,10 +1,10 @@
 import { Auth } from "./auth.js?v=25";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=bgm3";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=bgm3r2";
 import { mountMascot } from "./mascot.js?v=25";
 import { mountHome } from "./home.js?v=25";
 import { bindStory, startStory } from "./story.js?v=cast10r2";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=bgm3";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=bgm3r2";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
 import { reserveItems } from "./merge.js?v=25";
 import { avatarSrc } from "./portraits.js?v=cast10r2";
@@ -13,7 +13,7 @@ import {
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js?v=25";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=bgm3";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=bgm3r2";
 import { regionById } from "./world.js?v=25";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
@@ -51,7 +51,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=bgm3");
+  const res = await fetch(url + "?v=bgm3r2");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -155,8 +155,8 @@ function applyChapterLook() {
 }
 
 function bind() {
-  document.addEventListener("pointerdown", () => unlockAudio());
-  document.addEventListener("keydown", () => unlockAudio());
+  ["pointerdown", "pointerup", "touchend", "click", "keydown"].forEach(event =>
+    document.addEventListener(event, () => unlockAudio()));
 
   $("#nick-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();

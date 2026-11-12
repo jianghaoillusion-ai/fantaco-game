@@ -53,7 +53,7 @@ def new_synth(s):
    if bar==bars-1: note=CADENCES[id][j%len(CADENCES[id])]
    dur=min(.85,(rhythm[j+1]-off)*.83) if j+1<len(rhythm) else meter-off+.22
    if kind=='organ':dur*=1.25
-   midi=tonic+note+(12 if kind in ('wood','bell','whistle') else 0)
+   midi=tonic+note+(12 if kind in ('wood','bell','whistle') or id in ('hate','bagvalley','theater') else 0)
    add(midi,bar*meter+off,dur,kind,.19,.12)
    events.append([round(bar*meter+off,4),midi,round(dur,4)])
   at=bar*meter
