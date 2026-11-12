@@ -16,7 +16,7 @@ viewport、Safari gesturestart／gesturechange、多指 touchmove、約 300ms �
 
 ## 證據與測試
 
-- `before-level1-open.png`（本輪修改前 9f25700）、`after-level1-open.png`：390×844，新存檔，無改棋盤的截圖。
+- `before-level1-open.png`（本輪修改前 dd0d6d7；程式與素材同 9f25700）、`after-level1-open.png`：390×844，新存檔，無改棋盤的截圖。
 - `unlock-flow.md`：解鎖時間軸、遷移與回收定義。
 - `recycle-demo.png`：滿盤舊檔、待領取與回收件數／金幣提示（測試存檔）。
 - `no-characters-in-tiles.png`：目前 data/chains.json 的全部 52 張合成圖與產生器。
