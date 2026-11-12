@@ -3,7 +3,7 @@ T=sys.argv[1]; sys.path.insert(0,T)
 from seg import load,hsv
 from PIL import Image
 # name: path, face box (x0,y0,x1,y1) rough, faceW (proper, no ear)
-C={'jiejie9':('assets/chars/jiejie.png',(200,130,350,255),136),'jiejie_orig':(T+'/jiejie-orig.png',(222,95,312,190),None),'jiejie8':(T+'/jiejie-c8.png',(190,95,350,255),140),
+C={'jiejie9':('assets/chars/jiejie.png',(205,125,340,240),124),'jiejie_r1':(T+'/jiejie-r1.png',(200,130,350,255),136),'jiejie_orig':(T+'/jiejie-orig.png',(222,95,312,190),None),'jiejie8':(T+'/jiejie-c8.png',(190,95,350,255),140),
    'feifei':('assets/chars/feifei.png',(170,110,340,250),None),'spirit':('assets/chars/spirit.png',(205,195,340,320),130),'spirit_orig':(T+'/spirit-orig.png',(228,200,312,280),None),'bulu':('assets/chars/bulu.png',(199,110,333,250),134)}
 res={}; tiles=[]
 for n,(p,b,fw) in C.items():

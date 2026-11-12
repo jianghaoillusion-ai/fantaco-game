@@ -39,8 +39,8 @@ def overlay(n,fn,note):
     if r.get('leg'): s+=f'　腿長 {r["leg"]:g}（{pc("leg")}）'
     d.text((8,H+34),s,fill=(0,0,0),font=F(13)); d.text((8,H+60),note,fill=(200,0,0),font=F(14,True))
     o.save(f'{OUT}/{fn}')
-overlay('jiejie','overlay-sister-vs-blue.png','cast9 姐姐（整張重畫）。頭部面積、髮量、身長超過 ±5%。')
-overlay('spirit','overlay-spirit-vs-blue.png','注意：精靈這張圖和 cast8 逐像素相同，這一輪沒有重畫、沒有加高。')
+overlay('jiejie','overlay-sister-vs-blue.png','cast9 第 2 輪姐姐（整張重畫）。頭部面積、身長、總高在 ±5% 內；頭高 −11.1%、頭身比 −9.1%、臉寬 −7.5% 超過 ±5%。')
+overlay('spirit','overlay-spirit-vs-blue.png','注意：精靈這張圖和 cast8 逐像素相同，第 2 輪仍然沒有重畫、沒有加高。')
 # seven
 order=['bulu','jiejie','hate','spirit','feifei','apiao','sika']; cw=420; H=720
 o=Image.new('RGB',(cw*7+20,H+400),'white'); d=ImageDraw.Draw(o)
@@ -71,7 +71,7 @@ for i,(lab,k,fm) in enumerate(rows):
             elif n!='bulu' and bv:
                 p=(v-bv)/bv*100; s+='（%+.1f%%）'%p; col=(200,0,0) if abs(p)>5 else (0,120,0)
         d.text((300+j*300,y),s,fill=col,font=F(14))
-d.text((10,y0+28+len(rows)*27+4),'紅字＝和布魯差超過 5%。哈特像素和 cast7 完全相同，數字沿用。精靈這一輪沒有換圖，數字和 cast8 相同：身長、腿長、不含帽總高都沒有達到這一輪的要求。',fill=(60,60,60),font=F(13))
+d.text((10,y0+28+len(rows)*27+4),'紅字＝和布魯差超過 5%。哈特像素和 cast7 完全相同，數字沿用。精靈第 2 輪仍沒有換圖，數字和 cast8 相同：身長、腿長、不含帽總高都沒有達到要求。',fill=(60,60,60),font=F(13))
 o.save(f'{OUT}/cmp-seven.png')
 def edges(n,regions,title):
     full_d=comp(P(n),(40,40,48)); full_w=comp(P(n),(255,255,255)); dw=ImageDraw.Draw(full_w)
@@ -90,8 +90,8 @@ def edges(n,regions,title):
             d.text((x,y),lab,fill=(0,0,0),font=F(14)); o.paste(p,(x,y+24)); y+=p.size[1]+34
         x+=cwid[j]
     o.save(f'{OUT}/edges-{n}.png')
-edges('jiejie',[('蝴蝶結',(225,12,325,62),4),('瀏海',(200,105,350,150),3),('舉手指縫',(108,192,192,266),4),('下巴、脖子',(225,228,335,280),4),('右側頭髮外緣與肩膀間的空隙',(350,225,420,300),4),('左袖口',(115,285,200,385),3),('叉腰手、手錶',(295,345,405,415),3),('襪口與裙擺',(185,495,355,560),3),('鞋子',(180,615,360,690),3)],'微笑姐姐　cast9　左：深色底　右：白底＋放大位置')
-edges('spirit',[('舉手袖口',(130,335,200,405),5),('皇冠底座和頭髮交界',(215,108,325,148),5),('左耳、鬢角',(140,225,220,300),4),('下巴、脖子',(220,295,320,345),4),('右耳尖',(320,205,400,275),4)],'氣球精靈　和 cast8 逐像素相同（這一輪沒有換圖）　左：深色底　右：白底＋放大位置')
+edges('jiejie',[('蝴蝶結',(248,15,402,120),3),('瀏海',(205,95,345,150),3),('舉手指縫、手和頭髮之間的空隙',(125,125,215,240),4),('下巴、脖子',(225,212,335,262),4),('右側頭髮外緣與袖子間的空隙',(370,235,430,310),4),('左袖口',(105,215,205,335),3),('叉腰手、手錶、手臂和腰的空隙',(290,300,425,420),3),('襪口與裙擺',(185,500,355,570),3),('腳踝、鞋子',(180,600,360,690),3)],'微笑姐姐　cast9 第 2 輪　左：深色底　右：白底＋放大位置')
+edges('spirit',[('舉手袖口',(130,335,200,405),5),('皇冠底座和頭髮交界',(215,108,325,148),5),('左耳、鬢角',(140,225,220,300),4),('下巴、脖子',(220,295,320,345),4),('右耳尖',(320,205,400,275),4)],'氣球精靈　和 cast8 逐像素相同（第 2 輪仍沒有換圖）　左：深色底　右：白底＋放大位置')
 edges('hate',[('右側頭髮外緣',(322,45,372,170),4),('頭頂',(200,15,300,60),5)],'哈特　和 5b125dc 逐像素相同　左：深色底　右：白底＋放大位置')
 # legs
 L=json.load(open(T+'/legs.json')); J={int(k):v for k,v in L['J'].items()}; Fe={int(k):v for k,v in L['F'].items()}
@@ -107,24 +107,27 @@ def gapc(p,y):
 dx=int(round(gapc(P('jiejie'),600)-gapc(P('feifei'),600)))
 Lr=Image.new('RGBA',(540,720),(255,255,255,255)); Lr.alpha_composite(half(ja)); sh=Image.new('RGBA',(540,720),(0,0,0,0)); sh.paste(fa,(dx,0)); Lr.alpha_composite(half(sh))
 o.paste(big(P('jiejie')),(0,30)); o.paste(big(P('feifei')),(bw+20,30)); o.paste(Lr.convert('RGB').crop(box).resize((bw,bh),Image.LANCZOS),(bw*2+40,30))
-for i,t in enumerate(['微笑姐姐 cast9','飛飛',f'兩人各 50% 相疊（飛飛橫移 {dx:+d} px 對齊兩腿中線，腳底同一條線）']): d.text((i*(bw+20)+6,4),t,fill=(0,0,0),font=F(16,True))
+for i,t in enumerate(['微笑姐姐 cast9 第 2 輪','飛飛',f'兩人各 50% 相疊（飛飛橫移 {dx:+d} px 對齊兩腿中線，腳底同一條線）']): d.text((i*(bw+20)+6,4),t,fill=(0,0,0),font=F(16,True))
 for y in (572,590,608,620,632):
     yy=30+(y-box[1])*k
     for i,(dct,xo) in enumerate([(J,0),(Fe,bw+20)]):
         for xx in range(xo,xo+bw,10): d.line([(xx,yy),(xx+5,yy)],fill=RED)
         d.text((xo+6,yy-18),f'y{y}　左腿 {dct[y][0]}　右腿 {dct[y][1]} px',fill=RED,font=F(13,True))
 yb=bh+40
+def _m(d,y0,y1): return np.array([(d[y][0]+d[y][1])/2 for y in range(y0,y1+1) if y in d])
+jm,fm=_m(J,572,632),_m(Fe,572,632); jc,fc=_m(J,572,604),_m(Fe,572,604); ja_,fa_=_m(J,608,628),_m(Fe,608,628)
 lines=['單腿寬（alpha≥128、原圖 540×720、腳底 y685；左右指畫面左右）',
- '同一高度 y572～632（兩人都露出兩條腿、鞋子以上）平均：姐姐 50.0 px／飛飛 56.3 px＝0.89',
- '最粗處：姐姐 60／飛飛 59.5＝1.01　　最細處（腳踝）：姐姐 40（y618）／飛飛 54＝0.74',
- '姐姐腿露出的整段（y530～632）平均 52.9／飛飛 56.3＝0.94',
- '對照：cast8 姐姐同高度平均 32.7 px（對飛飛 0.58）。布魯單腿平均 52.5 px。',
+ '同一高度 y572～632（兩人都露出兩條腿）平均：姐姐 %.1f px／飛飛 %.1f px＝%.2f'%(jm.mean(),fm.mean(),jm.mean()/fm.mean()),
+ '小腿段 y572～604：姐姐 %.1f／飛飛 %.1f＝%.2f　　腳踝段 y608～628：姐姐 %.1f／飛飛 %.1f＝%.2f'%(jc.mean(),fc.mean(),jc.mean()/fc.mean(),ja_.mean(),fa_.mean(),ja_.mean()/fa_.mean()),
+ '最粗處：姐姐 %.1f／飛飛 %.1f＝%.2f　　最細處（腳踝）：姐姐 %.1f／飛飛 %.1f＝%.2f'%(jm.max(),fm.max(),jm.max()/fm.max(),jm.min(),fm.min(),jm.min()/fm.min()),
+ '對照：cast8 姐姐同高度平均 32.7 px（對飛飛 0.58）；cast9 第 1 輪 50.0 px（0.89）。布魯單腿平均 52.5 px。',
  '姐姐穿及膝長襪、飛飛光腿穿短襪，量的是外輪廓。姐姐腿往腳踝收細，飛飛是直筒。']
+print(lines)
 for i,t in enumerate(lines): d.text((8,yb+i*28),t,fill=(0,0,0),font=F(16,i==0))
 o.save(f'{OUT}/legs-sister-vs-feifei.png')
 # naturalness
 I=json.load(open(T+'/iris.json'))
-items=[('微笑姐姐 cast9','assets/chars/jiejie.png',(150,8,410,290),'jiejie9'),('氣球精靈（仍是 cast8）','assets/chars/spirit.png',(135,95,415,355),'spirit'),('飛飛（參考）','assets/chars/feifei.png',(110,20,430,340),'feifei'),
+items=[('微笑姐姐 cast9 第 2 輪','assets/chars/jiejie.png',(125,12,425,312),'jiejie9'),('氣球精靈（仍是 cast8）','assets/chars/spirit.png',(135,95,415,355),'spirit'),('飛飛（參考）','assets/chars/feifei.png',(110,20,430,340),'feifei'),
        ('姐姐原設定 origin/main',T+'/jiejie-orig.png',(190,35,350,210),None),('姐姐 cast8（被說魚眼那版）',T+'/jiejie-c8.png',(150,8,420,290),None),('精靈原設定 origin/main',T+'/spirit-orig.png',(190,150,350,300),'spirit_orig'),('布魯（比例標準）','assets/chars/bulu.png',(150,20,390,280),'bulu')]
 S=560; o=Image.new('RGB',(S*4+50,(S+70)*2+10),'white'); d=ImageDraw.Draw(o)
 for i,(t,p,b,key) in enumerate(items):

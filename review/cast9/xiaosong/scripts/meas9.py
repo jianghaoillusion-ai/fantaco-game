@@ -26,8 +26,9 @@ def measure(n,p,top,chin,waist,seed,kind,open_k=0):
     hat=np.zeros_like(A)
     if kind=='jiejie':
         pink=A&((h>=300)|(h<=4))&(s>0.25)&(v>0.35)
-        hat=fill(dil(pink&(yy<52),1))&A&(yy<52)&~((h>5)&(h<45)&(v<0.62))   # bow
-        hand=comp_from_seed(sk,(150,240)); handz=dil(hand,4)
+        bowz=(yy<125)&(xx>250)&~dil(face,2)
+        hat=fill(dil(pink&bowz,1))&A&bowz&~((h>5)&(h<45)&(v<0.62))   # bow (r2: big, right side)
+        hand=comp_from_seed(sk,(170,170)); handz=dil(hand,4)
         cloth=A&pink&(yy>=200)
         zone&=~hat&~handz&~dil(cloth,1)&~face | face
         zone&=~((xx<170))            # anything left of hair = arm/sleeve
@@ -48,7 +49,7 @@ def measure(n,p,top,chin,waist,seed,kind,open_k=0):
     ears=np.zeros_like(A); fy,fx=np.where(face)
     for i in range(1,nl):
         cxi=_[i][0]
-        if st[i,4]>=60 and (cxi<fx.min()+8 or cxi>fx.max()-8): ears|=lab==i
+        if st[i,4]>=60 and (cxi<fx.min()+8 or cxi>fx.max()-8) and not (kind=='jiejie' and _[i][1]<140): ears|=lab==i
     ears=fill(dil(ears,EARD))&head&~face
     hair=head&~face&~ears
     fy,fx=np.where(face)
@@ -95,7 +96,7 @@ def measure(n,p,top,chin,waist,seed,kind,open_k=0):
 if __name__=='__main__':
     R={}
     R['bulu']=measure('bulu','assets/chars/bulu.png',30,246.5,394,(268,150),'bulu')
-    R['jiejie']=measure('jiejie','assets/chars/jiejie.png',int(sys.argv[2]),float(sys.argv[3]),368,(232,225),'jiejie')
+    R['jiejie']=measure('jiejie','assets/chars/jiejie.png',int(sys.argv[2]),float(sys.argv[3]),389,(265,170),'jiejie')
     R['spirit']=measure('spirit','assets/chars/spirit.png',int(sys.argv[4]),float(sys.argv[5]),421.5,(268,240),'spirit',open_k=3)
     json.dump(R,open(T+'/R.json','w'),indent=1,default=float)
     ks=[k for k in R['bulu']]
