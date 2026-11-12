@@ -1,0 +1,754 @@
+[
+  {
+    "path": "assets/chars/avatars/feifei-determined.png",
+    "before": {
+      "independent_enclosed_holes": 387,
+      "independent_enclosed_area": 11292,
+      "full_image_blue_pixels": 6407,
+      "all_detached_components": 39,
+      "transparent_holes": 396,
+      "transparent_hole_area": 19690,
+      "holes": 672,
+      "hole_area": 59830,
+      "fragments": 12,
+      "fragment_area": 14,
+      "halo_pixels": 4001
+    },
+    "after": {
+      "independent_enclosed_holes": 52,
+      "independent_enclosed_area": 886,
+      "full_image_blue_pixels": 2461,
+      "all_detached_components": 0,
+      "transparent_holes": 2,
+      "transparent_hole_area": 2,
+      "holes": 2,
+      "hole_area": 2,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 19691,
+    "alpha_restored_pixels": 59830,
+    "alpha_changed_pixels": 64416,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.8502174620748277,
+        0.04742955172413399,
+        -253.5947059213394
+      ],
+      [
+        -0.020645734009776935,
+        1.7550071701256995,
+        -48.599933141642246
+      ]
+    ],
+    "alignment_inliers": 19,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/avatars/feifei-happy.png",
+    "before": {
+      "independent_enclosed_holes": 0,
+      "independent_enclosed_area": 0,
+      "full_image_blue_pixels": 7768,
+      "all_detached_components": 6,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 72,
+      "hole_area": 111,
+      "fragments": 6,
+      "fragment_area": 9,
+      "halo_pixels": 4718
+    },
+    "after": {
+      "independent_enclosed_holes": 2,
+      "independent_enclosed_area": 807,
+      "full_image_blue_pixels": 3050,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 0,
+    "alpha_restored_pixels": 111,
+    "alpha_changed_pixels": 5389,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.8296061989587786,
+        0.0007791642532263542,
+        -236.34504728379125
+      ],
+      [
+        0.00017967889038741181,
+        1.8290072241894677,
+        -78.68825875946318
+      ]
+    ],
+    "alignment_inliers": 118,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/avatars/feifei-sad.png",
+    "before": {
+      "independent_enclosed_holes": 377,
+      "independent_enclosed_area": 7210,
+      "full_image_blue_pixels": 7112,
+      "all_detached_components": 35,
+      "transparent_holes": 442,
+      "transparent_hole_area": 16870,
+      "holes": 706,
+      "hole_area": 58778,
+      "fragments": 16,
+      "fragment_area": 26,
+      "halo_pixels": 4023
+    },
+    "after": {
+      "independent_enclosed_holes": 21,
+      "independent_enclosed_area": 874,
+      "full_image_blue_pixels": 3134,
+      "all_detached_components": 0,
+      "transparent_holes": 2,
+      "transparent_hole_area": 3,
+      "holes": 2,
+      "hole_area": 3,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 16894,
+    "alpha_restored_pixels": 58802,
+    "alpha_changed_pixels": 63121,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.8261962859240872,
+        -0.014315472968713884,
+        -232.66549695769726
+      ],
+      [
+        -0.002368915918366189,
+        1.8452519199109696,
+        -80.57176039421728
+      ]
+    ],
+    "alignment_inliers": 24,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/avatars/feifei-surprised.png",
+    "before": {
+      "independent_enclosed_holes": 338,
+      "independent_enclosed_area": 7106,
+      "full_image_blue_pixels": 7735,
+      "all_detached_components": 50,
+      "transparent_holes": 370,
+      "transparent_hole_area": 18203,
+      "holes": 755,
+      "hole_area": 60130,
+      "fragments": 18,
+      "fragment_area": 30,
+      "halo_pixels": 4849
+    },
+    "after": {
+      "independent_enclosed_holes": 30,
+      "independent_enclosed_area": 909,
+      "full_image_blue_pixels": 2946,
+      "all_detached_components": 0,
+      "transparent_holes": 2,
+      "transparent_hole_area": 3,
+      "holes": 2,
+      "hole_area": 3,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 18246,
+    "alpha_restored_pixels": 60173,
+    "alpha_changed_pixels": 65173,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.8461689282423694,
+        0.00022728607058357213,
+        -241.2151292030155
+      ],
+      [
+        0.0015948165289249503,
+        1.851978981813625,
+        -82.47543717844432
+      ]
+    ],
+    "alignment_inliers": 34,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/avatars/feifei-worried.png",
+    "before": {
+      "independent_enclosed_holes": 365,
+      "independent_enclosed_area": 10709,
+      "full_image_blue_pixels": 7092,
+      "all_detached_components": 46,
+      "transparent_holes": 402,
+      "transparent_hole_area": 19342,
+      "holes": 717,
+      "hole_area": 62273,
+      "fragments": 19,
+      "fragment_area": 50,
+      "halo_pixels": 4264
+    },
+    "after": {
+      "independent_enclosed_holes": 28,
+      "independent_enclosed_area": 900,
+      "full_image_blue_pixels": 2870,
+      "all_detached_components": 0,
+      "transparent_holes": 3,
+      "transparent_hole_area": 3,
+      "holes": 3,
+      "hole_area": 3,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 19363,
+    "alpha_restored_pixels": 62292,
+    "alpha_changed_pixels": 66722,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.8411462947946433,
+        -4.202684278622675e-05,
+        -238.43584157920185
+      ],
+      [
+        -0.002899269082532793,
+        1.8433073425286692,
+        -79.8838182495578
+      ]
+    ],
+    "alignment_inliers": 36,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/avatars/feifei.png",
+    "before": {
+      "independent_enclosed_holes": 2,
+      "independent_enclosed_area": 2,
+      "full_image_blue_pixels": 6080,
+      "all_detached_components": 8,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 123,
+      "hole_area": 437,
+      "fragments": 8,
+      "fragment_area": 10,
+      "halo_pixels": 3373
+    },
+    "after": {
+      "independent_enclosed_holes": 6,
+      "independent_enclosed_area": 566,
+      "full_image_blue_pixels": 2707,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 0,
+    "alpha_restored_pixels": 437,
+    "alpha_changed_pixels": 4399,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.5256198625879107,
+        0.0010151041690620363,
+        -154.70825765314265
+      ],
+      [
+        0.0011044309315021844,
+        1.5244643389069623,
+        -1.9762537066669446
+      ]
+    ],
+    "alignment_inliers": 98,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-determined-open.png",
+    "before": {
+      "independent_enclosed_holes": 317,
+      "independent_enclosed_area": 4080,
+      "full_image_blue_pixels": 4746,
+      "all_detached_components": 41,
+      "transparent_holes": 412,
+      "transparent_hole_area": 11459,
+      "holes": 212,
+      "hole_area": 21966,
+      "fragments": 3,
+      "fragment_area": 394,
+      "halo_pixels": 2214
+    },
+    "after": {
+      "independent_enclosed_holes": 18,
+      "independent_enclosed_area": 1632,
+      "full_image_blue_pixels": 2580,
+      "all_detached_components": 0,
+      "transparent_holes": 1,
+      "transparent_hole_area": 1,
+      "holes": 1,
+      "hole_area": 1,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 11616,
+    "alpha_restored_pixels": 22123,
+    "alpha_changed_pixels": 25455,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0104135589913807,
+        -0.0005407212873903504,
+        0.8210918509697194
+      ],
+      [
+        -0.0023575217320584295,
+        1.0064715557408592,
+        0.9097391874435863
+      ]
+    ],
+    "alignment_inliers": 70,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-determined.png",
+    "before": {
+      "independent_enclosed_holes": 317,
+      "independent_enclosed_area": 4080,
+      "full_image_blue_pixels": 4746,
+      "all_detached_components": 41,
+      "transparent_holes": 412,
+      "transparent_hole_area": 11459,
+      "holes": 212,
+      "hole_area": 21966,
+      "fragments": 3,
+      "fragment_area": 394,
+      "halo_pixels": 2214
+    },
+    "after": {
+      "independent_enclosed_holes": 18,
+      "independent_enclosed_area": 1632,
+      "full_image_blue_pixels": 2580,
+      "all_detached_components": 0,
+      "transparent_holes": 1,
+      "transparent_hole_area": 1,
+      "holes": 1,
+      "hole_area": 1,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 11616,
+    "alpha_restored_pixels": 22123,
+    "alpha_changed_pixels": 25455,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0104135589913807,
+        -0.0005407212873903504,
+        0.8210918509697194
+      ],
+      [
+        -0.0023575217320584295,
+        1.0064715557408592,
+        0.9097391874435863
+      ]
+    ],
+    "alignment_inliers": 70,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-happy-open.png",
+    "before": {
+      "independent_enclosed_holes": 3,
+      "independent_enclosed_area": 48,
+      "full_image_blue_pixels": 4835,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 2331
+    },
+    "after": {
+      "independent_enclosed_holes": 4,
+      "independent_enclosed_area": 646,
+      "full_image_blue_pixels": 2504,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 0,
+    "alpha_restored_pixels": 0,
+    "alpha_changed_pixels": 3929,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        0.9999659617397507,
+        -1.1483695871357942e-05,
+        0.013835757686234492
+      ],
+      [
+        -1.0541362885697953e-05,
+        1.0000197219120763,
+        -0.003110096926759988
+      ]
+    ],
+    "alignment_inliers": 328,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-happy.png",
+    "before": {
+      "independent_enclosed_holes": 3,
+      "independent_enclosed_area": 48,
+      "full_image_blue_pixels": 4835,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 2300
+    },
+    "after": {
+      "independent_enclosed_holes": 4,
+      "independent_enclosed_area": 617,
+      "full_image_blue_pixels": 2535,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 0,
+    "alpha_restored_pixels": 0,
+    "alpha_changed_pixels": 3896,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0,
+        6.313741146666642e-20,
+        1.103777497917762e-14
+      ],
+      [
+        -3.6407947862638375e-17,
+        1.0,
+        4.665461007533657e-16
+      ]
+    ],
+    "alignment_inliers": 329,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-sad-open.png",
+    "before": {
+      "independent_enclosed_holes": 220,
+      "independent_enclosed_area": 4267,
+      "full_image_blue_pixels": 4284,
+      "all_detached_components": 107,
+      "transparent_holes": 342,
+      "transparent_hole_area": 13867,
+      "holes": 192,
+      "hole_area": 24815,
+      "fragments": 99,
+      "fragment_area": 1636,
+      "halo_pixels": 1843
+    },
+    "after": {
+      "independent_enclosed_holes": 29,
+      "independent_enclosed_area": 804,
+      "full_image_blue_pixels": 2155,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 13967,
+    "alpha_restored_pixels": 24915,
+    "alpha_changed_pixels": 27593,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0115807903539678,
+        8.83554859108197e-05,
+        -1.9693361664910949
+      ],
+      [
+        -0.003303062585008593,
+        1.0149174146981352,
+        -2.256068983396299
+      ]
+    ],
+    "alignment_inliers": 71,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-sad.png",
+    "before": {
+      "independent_enclosed_holes": 318,
+      "independent_enclosed_area": 3726,
+      "full_image_blue_pixels": 4672,
+      "all_detached_components": 29,
+      "transparent_holes": 429,
+      "transparent_hole_area": 9561,
+      "holes": 234,
+      "hole_area": 21146,
+      "fragments": 20,
+      "fragment_area": 1753,
+      "halo_pixels": 2075
+    },
+    "after": {
+      "independent_enclosed_holes": 20,
+      "independent_enclosed_area": 1255,
+      "full_image_blue_pixels": 2543,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 9753,
+    "alpha_restored_pixels": 21338,
+    "alpha_changed_pixels": 24312,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0067239880997174,
+        0.00031093402339778416,
+        -1.077654952617357
+      ],
+      [
+        -0.0013823168493124745,
+        1.0081384505711628,
+        -1.6446929962839671
+      ]
+    ],
+    "alignment_inliers": 93,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-surprised-open.png",
+    "before": {
+      "independent_enclosed_holes": 281,
+      "independent_enclosed_area": 3393,
+      "full_image_blue_pixels": 5133,
+      "all_detached_components": 44,
+      "transparent_holes": 406,
+      "transparent_hole_area": 9865,
+      "holes": 207,
+      "hole_area": 21288,
+      "fragments": 42,
+      "fragment_area": 2397,
+      "halo_pixels": 2440
+    },
+    "after": {
+      "independent_enclosed_holes": 45,
+      "independent_enclosed_area": 959,
+      "full_image_blue_pixels": 2571,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 9911,
+    "alpha_restored_pixels": 21334,
+    "alpha_changed_pixels": 24768,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0091368825229385,
+        0.0004064532038793512,
+        -1.95452192452484
+      ],
+      [
+        -0.0007292944985810289,
+        1.0091188759827834,
+        -1.6779335818741075
+      ]
+    ],
+    "alignment_inliers": 100,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-surprised.png",
+    "before": {
+      "independent_enclosed_holes": 281,
+      "independent_enclosed_area": 3393,
+      "full_image_blue_pixels": 5133,
+      "all_detached_components": 44,
+      "transparent_holes": 406,
+      "transparent_hole_area": 9865,
+      "holes": 207,
+      "hole_area": 21288,
+      "fragments": 42,
+      "fragment_area": 2397,
+      "halo_pixels": 2440
+    },
+    "after": {
+      "independent_enclosed_holes": 45,
+      "independent_enclosed_area": 959,
+      "full_image_blue_pixels": 2571,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 9911,
+    "alpha_restored_pixels": 21334,
+    "alpha_changed_pixels": 24768,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.0091368825229385,
+        0.0004064532038793512,
+        -1.95452192452484
+      ],
+      [
+        -0.0007292944985810289,
+        1.0091188759827834,
+        -1.6779335818741075
+      ]
+    ],
+    "alignment_inliers": 100,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-worried-open.png",
+    "before": {
+      "independent_enclosed_holes": 272,
+      "independent_enclosed_area": 5162,
+      "full_image_blue_pixels": 5048,
+      "all_detached_components": 21,
+      "transparent_holes": 378,
+      "transparent_hole_area": 10438,
+      "holes": 232,
+      "hole_area": 22199,
+      "fragments": 11,
+      "fragment_area": 1526,
+      "halo_pixels": 2381
+    },
+    "after": {
+      "independent_enclosed_holes": 40,
+      "independent_enclosed_area": 1263,
+      "full_image_blue_pixels": 2679,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 10579,
+    "alpha_restored_pixels": 22340,
+    "alpha_changed_pixels": 25667,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.007295963989861,
+        -0.00013435125642666308,
+        -1.3444165062907558
+      ],
+      [
+        -0.001502409269317824,
+        1.0073791792982154,
+        -1.5414766547268746
+      ]
+    ],
+    "alignment_inliers": 114,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  },
+  {
+    "path": "assets/chars/expr/feifei-worried.png",
+    "before": {
+      "independent_enclosed_holes": 272,
+      "independent_enclosed_area": 5162,
+      "full_image_blue_pixels": 5048,
+      "all_detached_components": 21,
+      "transparent_holes": 378,
+      "transparent_hole_area": 10438,
+      "holes": 232,
+      "hole_area": 22199,
+      "fragments": 11,
+      "fragment_area": 1526,
+      "halo_pixels": 2381
+    },
+    "after": {
+      "independent_enclosed_holes": 40,
+      "independent_enclosed_area": 1263,
+      "full_image_blue_pixels": 2679,
+      "all_detached_components": 0,
+      "transparent_holes": 0,
+      "transparent_hole_area": 0,
+      "holes": 0,
+      "hole_area": 0,
+      "fragments": 0,
+      "fragment_area": 0,
+      "halo_pixels": 0
+    },
+    "filled_pixels": 10579,
+    "alpha_restored_pixels": 22340,
+    "alpha_changed_pixels": 25667,
+    "rgb_visible_max": 0,
+    "alignment": [
+      [
+        1.007295963989861,
+        -0.00013435125642666308,
+        -1.3444165062907558
+      ],
+      [
+        -0.001502409269317824,
+        1.0073791792982154,
+        -1.5414766547268746
+      ]
+    ],
+    "alignment_inliers": 114,
+    "method": "SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。"
+  }
+]
