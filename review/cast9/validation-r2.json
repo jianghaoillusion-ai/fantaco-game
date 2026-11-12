@@ -1,0 +1,16 @@
+{
+  "sister": {
+    "size": [
+      540,
+      720
+    ],
+    "sole": 685,
+    "components_alpha_positive": 1,
+    "hard_edge_pixels": 0
+  },
+  "hate": {
+    "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d",
+    "reference_sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d",
+    "file_identical": true
+  }
+}

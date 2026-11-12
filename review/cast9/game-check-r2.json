@@ -1,0 +1,46 @@
+{
+  "feet": [
+    {
+      "src": "assets/chars/expr/jiejie-happy.png",
+      "box": {
+        "x": 88,
+        "y": 272.484375,
+        "w": 346.46875,
+        "h": 461.96875
+      },
+      "sourceFoot": 685
+    },
+    {
+      "src": "assets/chars/expr/bulu-happy.png",
+      "box": {
+        "x": -76,
+        "y": 327.859375,
+        "w": 301.921875,
+        "h": 402.578125
+      },
+      "sourceFoot": 687
+    }
+  ],
+  "scope": "直接啟動遊戲story模組的姐姐/布魯測試對話，非完整遊玩",
+  "errors": [],
+  "imgs": [
+    {
+      "src": "assets/chars/expr/jiejie-happy.png",
+      "loaded": true,
+      "w": 540,
+      "h": 720
+    },
+    {
+      "src": "assets/chars/expr/bulu-happy.png",
+      "loaded": true,
+      "w": 540,
+      "h": 720
+    }
+  ],
+  "computed_css_feet_y": [
+    711.9963107638889,
+    711.9860026041667
+  ],
+  "computed_css_feet_delta": 0.010308159722171695,
+  "mouth_boundary_vs_original_max_delta": 6
+}

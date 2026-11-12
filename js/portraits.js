@@ -28,7 +28,7 @@ const MASCOT_FULL = {
  * 眠花糖 uses the skull crown between the ear bases, not the ear tips.
  */
 export const CAST_METRICS = {
-  jiejie: { w: 540, h: 720, headTop: 35, chin: 256, head: 222, feet: 690, bboxTop: 5, contentL: 80, contentR: 459, faceL: 197, faceR: 353 },
+  jiejie: { w: 540, h: 720, headTop: 46, chin: 236.5, head: 190.5, feet: 685, bboxTop: 22, contentL: 112, contentR: 427, faceL: 210, faceR: 334 },
   feifei: { w: 540, h: 720, headTop: 30, chin: 262, head: 233, feet: 686, bboxTop: 30, contentL: 113, contentR: 426, faceL: 200, faceR: 350 },
   apiao:  { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 687, bboxTop: 29, contentL: 128, contentR: 412, faceL: 185, faceR: 355 },
   sika:   { w: 540, h: 720, headTop: 29, chin: 252, head: 224, feet: 687, bboxTop: 29, contentL: 152, contentR: 388, faceL: 180, faceR: 365 },
