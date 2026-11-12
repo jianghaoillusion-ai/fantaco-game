@@ -52,7 +52,11 @@ def bar_events(s, bar):
     if bar>=16:
         events=[(off,note+(12 if bar in (18,20) else 0),dur) for off,note,dur in events]
     if bar==23:
-        events=[(0,11,.6),(1.5,7,.6),(3,2,.75)]
+        events = {
+            'bell': [(0,11,1.2),(1.5,7,.8),(3,2,.5),(3.5,11,.8)],
+            'pluck': [(0,7,.7),(1.67,5,.6),(2.67,2,.5),(3.67,11,.7)],
+            'whistle': [(0,11,1.4),(1.5,7,1.1),(3,2,1.12)],
+        }[s['kind']]
     return events
 
 
@@ -74,6 +78,9 @@ def write_wav(path, signal):
 
 
 def tone(midi, seconds, kind):
+    # Let struck/plucked strings decay naturally; fold all overflow into the loop.
+    if kind == 'bell': seconds = max(seconds, 2.8)
+    elif kind == 'pluck': seconds = max(seconds, 1.6)
     t = np.arange(round(seconds*SR))/SR
     f = 440*2**((midi-69)/12)
     attack = 1-np.exp(-t/0.004)
@@ -152,18 +159,22 @@ def synth(s):
                 for off,note in [(1,chord[2]+12),(2.75,chord[1]+12)]:
                     add(tone(note,.2,'wood'),bar*4+off,.13,.25)
     # 循環卷積殘響，所有音尾折回下一輪，沒有末尾淡出或空拍。
-    x += .07*np.roll(x,round(.17*SR),axis=0)+.035*np.roll(x,round(.29*SR),axis=0)
+    dry = x.copy()
+    for delay in [.113,.173,.239,.307,.397,.499,.613,.743,.887,1.051,1.237,1.447]:
+        x += .24*np.exp(-delay/.8)*np.roll(dry,round(delay*SR),axis=0)
     # 頻域週期高通：100Hz 為 -3dB，避免濾波啟動狀態破壞接點。
     freq=np.fft.rfftfreq(n,1/SR)
     hp=1/np.sqrt(1+(100/np.maximum(freq,.0001))**4); hp[0]=0
     lp=1/np.sqrt(1+(freq/7800)**6)
     x=np.fft.irfft(np.fft.rfft(x,axis=0)*(hp*lp)[:,None],n=n,axis=0)
-    # A 3 ms cosine micro-splice limits lossy encoder edge transients.
-    # No extra samples or beats: only the plucked track's file boundary.
-    if s['kind']=='pluck':
-        w=round(.003*SR)
-        ramp=.5-.5*np.cos(np.linspace(0,np.pi,w))
-        x[:w]*=ramp[:,None]; x[-w:]*=ramp[::-1,None]
+    # Move the circular file origin by at most 10 ms to a joint-channel
+    # low-energy point before the downbeat. This rotates EVERY sample, never fades/cuts a tail.
+    # The musical downbeat remains on the same 96-beat periodic grid.
+    candidates = np.arange(-480, 1)
+    score = np.sum(x[candidates % n]**2 + x[(candidates-1) % n]**2, axis=1)
+    shift = int(candidates[np.argmin(score)])
+    s['origin_shift_samples'] = shift
+    x = np.roll(x, -shift, axis=0)
     return x*.75/np.max(np.abs(x))
 
 
@@ -198,7 +209,7 @@ def main():
             write_wav(master,x)
             result={k:v for k,v in s.items() if k not in ['motifs','chords','tonic','kind','rhythms']}
             result.update(samples=len(x), duration_seconds=len(x)/SR, bars=24, master=measure(master),master_seam=seam_stats(x),files={})
-            for ext,codec in [('mp3',['-c:a','libmp3lame','-b:a','192k']),('ogg',['-c:a','libvorbis','-q:a','5'])]:
+            for ext,codec in [('mp3',['-c:a','libmp3lame','-b:a','320k']),('ogg',['-c:a','libvorbis','-q:a','5'])]:
                 dest=OUT/(s['stem']+'.'+ext)
                 run([FF,'-v','error','-y','-i',str(master),'-map_metadata','-1',*codec,str(dest)])
                 decoded=np.frombuffer(run([FF,'-v','error','-i',str(dest),'-f','f32le','-ar',str(SR),'-ac','2','-']).stdout,dtype='<f4').reshape(-1,2)

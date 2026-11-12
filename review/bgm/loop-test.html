@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="zh-Hant">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>三首 BGM 循環試聽</title>
+<style>
+body{font:18px system-ui,sans-serif;background:#fff9ef;color:#493d4e;max-width:620px;margin:10vh auto;padding:24px}h1{font-size:28px}button,select{font:inherit;padding:14px 18px;border:1px solid #c9b9cf;border-radius:14px;background:white;color:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #9253a1;outline-offset:3px}.songs{display:grid;gap:14px;margin:24px 0}button[aria-pressed=true]{background:#e8d9ef}#status{line-height:1.7;min-height:3em}
+</style>
+<h1>三首 BGM 循環試聽</h1>
+<label>格式 <select id="format"><option value="ogg">OGG</option><option value="mp3">MP3</option></select></label>
+<div class="songs">
+<button data-song="0" aria-pressed="false">A · 鐵琴泡泡</button>
+<button data-song="1" aria-pressed="false">B · 烏克麗麗跳跳</button>
+<button data-song="2" aria-pressed="false">C · 口哨氣球遊行</button>
+</div>
+<button id="stop">停止</button>
+<p id="status" role="status">點一首開始，會持續循環。</p>
+<script type="module">
+const songs = [
+  {stem:'cute-a-glock-bubbles', samples:2304000},
+  {stem:'cute-b-uke-hop', samples:2468571},
+  {stem:'cute-c-whistle-parade', samples:2160000},
+];
+const status = document.querySelector('#status');
+const format = document.querySelector('#format');
+const buttons = [...document.querySelectorAll('[data-song]')];
+const cache = new Map();
+let context, active, wanted = null, generation = 0;
+function retire(voice) {
+  if (!voice) return;
+  const now = context.currentTime;
+  voice.gain.gain.cancelScheduledValues(now);
+  voice.gain.gain.setValueAtTime(voice.gain.gain.value, now);
+  voice.gain.gain.linearRampToValueAtTime(0, now + .025);
+  voice.source.stop(now + .03);
+  voice.source.onended = () => { voice.source.disconnect(); voice.gain.disconnect(); };
+}
+async function play(index) {
+  const token = ++generation;
+  wanted = index;
+  const ext = format.value;
+  const song = songs[index];
+  const key = `${song.stem}.${ext}`;
+  try {
+    // This function is called only by a user's click/change gesture.
+    if (!context || context.state === 'closed') context = new (window.AudioContext || window.webkitAudioContext)();
+    await context.resume();
+    if (token !== generation) return;
+    if (active?.key === key) {
+      status.textContent = active.message;
+      return;
+    }
+    status.textContent = '載入中…';
+    let buffer = cache.get(key);
+    if (!buffer) {
+      const response = await fetch(key);
+      if (!response.ok) throw new Error(`音檔讀取失敗（${response.status}）`);
+      buffer = await context.decodeAudioData(await response.arrayBuffer());
+      const expected = Math.round(song.samples / 48000 * buffer.sampleRate);
+      // Chromium Vorbis may retain a final codec block; verified head alignment.
+      const excess = buffer.length - expected;
+      const allowance = ext === 'ogg' ? Math.ceil(2048 / 48000 * buffer.sampleRate) : 2;
+      if (excess < -2 || excess > allowance) {
+        throw new Error('解碼長度不符，可能有編碼補零；請換另一種格式');
+      }
+      cache.set(key, buffer);
+    }
+    if (token !== generation) return;
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+    source.buffer = buffer;
+    source.loop = true;
+    source.loopStart = 0;
+    const loopFrames = Math.min(buffer.length, Math.round(song.samples / 48000 * buffer.sampleRate));
+    source.loopEnd = loopFrames / buffer.sampleRate;
+    source.connect(gain); gain.connect(context.destination);
+    gain.gain.setValueAtTime(0, context.currentTime);
+    gain.gain.linearRampToValueAtTime(.65, context.currentTime + .025);
+    source.start();
+    retire(active);
+    active = {source, gain, key, index};
+    buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
+    status.textContent = active.message = `${buttons[index].textContent} · ${ext.toUpperCase()} · ${source.loopEnd.toFixed(6)} 秒，循環播放中`;
+  } catch (error) {
+    if (token !== generation) return;
+    wanted = active?.index ?? null;
+    status.textContent = `${error.message}。${active ? '原曲繼續播放。' : '請透過本機 HTTP 網址開啟；若格式不支援可切換後重試。'}`;
+  }
+}
+function stop() {
+  generation++;
+  wanted = null;
+  retire(active); active = null;
+  buttons.forEach(button => button.setAttribute('aria-pressed', 'false'));
+  status.textContent = '已停止';
+}
+buttons.forEach((button, index) => button.addEventListener('click', () => play(index)));
+format.addEventListener('change', () => { if (wanted !== null) play(wanted); });
+document.querySelector('#stop').addEventListener('click', stop);
+window.addEventListener('pagehide', () => { stop(); context?.close(); });
+</script>
+</html>
