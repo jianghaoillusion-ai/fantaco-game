@@ -16,10 +16,14 @@
 三音效長度 .30/.18/.42 秒，預設播放gain .136；原始RMS約−27dBFS，播放約−44.4dBFS。village BGM原始平均−19.4dBFS，預設gain .36後約−28.3dBFS，音效平均低約16dB。不同BGM／音量滑桿與瞬間音樂空隙會改變差距；可愛程度與聽感需本人驗收。對照影片沒有音軌，屬預期，音效請在遊戲測。
 
 ## 公開測試網址
-完成分支推送後在此填入釘選commit網址；不指向會變動的分支名。
+程式測試版本：`42e7fc837f5a398bf18c6c93feb9846fcf5bcbea`。後續commit僅補驗證結果與文件。
+
+[遊戲測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/index.html) · [觸覺測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/review/feel-polish/haptic-test.html) · [Draft PR #9](https://github.com/jianghaoillusion-ai/fantaco-game/pull/9)
+
+curl兩頁均HTTP200；headless點過githack的「Open the page」通知後，觸覺頁與遊戲正常，棋盤63格、遊戲資源及JavaScript錯誤均0。見public-check.json。通知頁自身廣告遭瀏覽器阻擋，與遊戲資源無關。
 
 ## iPhone 測試（五步）
-1. 用Safari開觸覺測試頁，記下iOS版本，逐一試直接switch、label和各按鈕；滑動touchmove那格，記錄哪個真的震。
+1. 用Safari開觸覺測試頁，若先出現外部內容通知，點「Open the page」；記下iOS版本，逐一試直接switch、label和各按鈕；滑動touchmove那格，記錄哪個真的震。
 2. 開遊戲測試頁，設定開啟震動；拿起、合成、直接點「交付」，再關閉震動重做一次。
 3. 拖到棋盤四角及各列，看高亮格是否就是放下格；圖示預期浮在手指上方32px。
 4. 開啟音樂與音效，生成、合成、交單；確認短音效比背景輕，關音效後重做應無短音效。
@@ -30,3 +34,5 @@
 `node --test tests/*.test.mjs review/feel-polish/regression.test.mjs`、`node review/feel-polish/interaction-test.mjs`、`node review/feel-polish/drop-test.mjs`、`node review/feel-polish/zoom-test.mjs`、`node review/feel-polish/record-fps.mjs`、`python3 review/feel-polish/guard-audio.py`。
 
 本次只用既有本機免費工具，沒有即夢、付費生成、AppleScript或可見瀏覽器。沒有服務端資料庫；私人localStorage存檔不包含於程式碼備份。
+
+最後一輪4x CPU：合成平均70.71／最低61.73 FPS／掉幀0；生成平均71.28／最低37.74 FPS／掉幀4。headless虛擬compositor節奏可高於60Hz，不是手機螢幕FPS；單次短樣本，掉幀依60Hz間隔計算。
