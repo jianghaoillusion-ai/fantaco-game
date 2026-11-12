@@ -1,0 +1,333 @@
+{
+ "env": "macOS headless Chromium（Playwright），iPhone 13 尺寸 390×664、DPR3，沒有錄影；不是 iPhone 實機",
+ "fps": [
+  {
+   "version": "修後",
+   "cpuThrottle": 4,
+   "action": "閒置",
+   "runs": 6,
+   "frames": 252,
+   "meanFps": 60.24,
+   "minFps": 29.24,
+   "maxIntervalMs": 34.2,
+   "dropped": 1,
+   "over25ms": 1
+  },
+  {
+   "version": "修後",
+   "cpuThrottle": 4,
+   "action": "合成",
+   "runs": 6,
+   "frames": 276,
+   "meanFps": 59.52,
+   "minFps": 30.49,
+   "maxIntervalMs": 32.8,
+   "dropped": 9,
+   "over25ms": 9
+  },
+  {
+   "version": "修後",
+   "cpuThrottle": 4,
+   "action": "生成",
+   "runs": 6,
+   "frames": 295,
+   "meanFps": 60.88,
+   "minFps": 29.67,
+   "maxIntervalMs": 33.7,
+   "dropped": 7,
+   "over25ms": 7
+  },
+  {
+   "version": "修後",
+   "cpuThrottle": 1,
+   "action": "閒置",
+   "runs": 6,
+   "frames": 266,
+   "meanFps": 63.91,
+   "minFps": 30.12,
+   "maxIntervalMs": 33.2,
+   "dropped": 12,
+   "over25ms": 12
+  },
+  {
+   "version": "修後",
+   "cpuThrottle": 1,
+   "action": "合成",
+   "runs": 6,
+   "frames": 281,
+   "meanFps": 61.14,
+   "minFps": 26.74,
+   "maxIntervalMs": 37.4,
+   "dropped": 16,
+   "over25ms": 16
+  },
+  {
+   "version": "修後",
+   "cpuThrottle": 1,
+   "action": "生成",
+   "runs": 6,
+   "frames": 286,
+   "meanFps": 61.11,
+   "minFps": 17.73,
+   "maxIntervalMs": 56.4,
+   "dropped": 15,
+   "over25ms": 13
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 4,
+   "action": "閒置",
+   "runs": 6,
+   "frames": 260,
+   "meanFps": 62.63,
+   "minFps": 27.78,
+   "maxIntervalMs": 36,
+   "dropped": 28,
+   "over25ms": 28
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 4,
+   "action": "合成",
+   "runs": 6,
+   "frames": 294,
+   "meanFps": 63.87,
+   "minFps": 29.15,
+   "maxIntervalMs": 34.3,
+   "dropped": 18,
+   "over25ms": 18
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 4,
+   "action": "生成",
+   "runs": 6,
+   "frames": 310,
+   "meanFps": 65.03,
+   "minFps": 34.84,
+   "maxIntervalMs": 28.7,
+   "dropped": 21,
+   "over25ms": 21
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 1,
+   "action": "閒置",
+   "runs": 6,
+   "frames": 255,
+   "meanFps": 61,
+   "minFps": 23.81,
+   "maxIntervalMs": 42,
+   "dropped": 8,
+   "over25ms": 7
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 1,
+   "action": "合成",
+   "runs": 6,
+   "frames": 275,
+   "meanFps": 60.24,
+   "minFps": 28.74,
+   "maxIntervalMs": 34.8,
+   "dropped": 7,
+   "over25ms": 7
+  },
+  {
+   "version": "修前",
+   "cpuThrottle": 1,
+   "action": "生成",
+   "runs": 6,
+   "frames": 281,
+   "meanFps": 60.24,
+   "minFps": 38.17,
+   "maxIntervalMs": 26.2,
+   "dropped": 1,
+   "over25ms": 1
+  }
+ ],
+ "props": {
+  "修後": {
+   "animatedProperties": [
+    "opacity",
+    "transform"
+   ],
+   "maxConcurrentAnimations": 10,
+   "errors": []
+  },
+  "修前": {
+   "animatedProperties": [
+    "opacity",
+    "transform"
+   ],
+   "maxConcurrentAnimations": 2,
+   "errors": []
+  }
+ },
+ "audio": {
+  "開_解鎖後": {
+   "short": [],
+   "osc": 1,
+   "gains": []
+  },
+  "開_合成後": {
+   "short": [
+    0.3
+   ],
+   "osc": 2,
+   "gains": [
+    0.13600000739097595
+   ]
+  },
+  "開_生成後": {
+   "short": [
+    0.3,
+    0.18
+   ],
+   "osc": 3,
+   "gains": [
+    0.13600000739097595,
+    0.13600000739097595
+   ]
+  },
+  "開_交單後": {
+   "short": [
+    0.3,
+    0.18,
+    0.42
+   ],
+   "osc": 14,
+   "gains": [
+    0.13600000739097595,
+    0.13600000739097595,
+    0.13600000739097595
+   ]
+  },
+  "關_動作前": {
+   "short": [
+    0.3,
+    0.18,
+    0.42
+   ],
+   "osc": 14,
+   "gains": [
+    0.13600000739097595,
+    0.13600000739097595,
+    0.13600000739097595
+   ]
+  },
+  "關_三個動作後": {
+   "short": [
+    0.3,
+    0.18,
+    0.42
+   ],
+   "osc": 14,
+   "gains": [
+    0.13600000739097595,
+    0.13600000739097595,
+    0.13600000739097595
+   ]
+  },
+  "關音效後新增短音效次數": 0,
+  "關音效後新增振盪器次數": 0,
+  "errors": [
+   "console: Failed to load resource: the server responded with a status of 404 (File not found)",
+   "console: Failed to load resource: the server responded with a status of 404 (File not found)"
+  ]
+ },
+ "haptics": {
+  "模擬iOS（沒有navigator.vibrate）": {
+   "震動開": {
+    "拿起加合成": {
+     "labelClicks": [
+      {
+       "during": "pointerdown",
+       "trusted": true,
+       "hasSwitch": true
+      },
+      {
+       "during": "pointerup",
+       "trusted": true,
+       "hasSwitch": true
+      }
+     ],
+     "vib": null
+    },
+    "點交付": {
+     "delivered": 1,
+     "switchClicks": [
+      {
+       "trusted": true,
+       "connected": true,
+       "disabled": false,
+       "checked": true,
+       "rendered": true
+      }
+     ],
+     "labelClicks": [],
+     "vib": null
+    }
+   },
+   "震動關": {
+    "拿起加合成": {
+     "labelClicks": [],
+     "vib": null
+    },
+    "點交付": {
+     "delivered": 1,
+     "switchClicks": [],
+     "labelClicks": [],
+     "vib": null
+    }
+   },
+   "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
+    "console: Failed to load resource: the server responded with a status of 404 (File not found)"
+   ]
+  },
+  "有navigator.vibrate（Android路徑）": {
+   "震動開": {
+    "拿起加合成": {
+     "labelClicks": [],
+     "vib": [
+      8,
+      24
+     ]
+    },
+    "點交付": {
+     "delivered": 1,
+     "switchClicks": [
+      {
+       "trusted": true,
+       "connected": true,
+       "disabled": false,
+       "checked": true,
+       "rendered": true
+      }
+     ],
+     "labelClicks": [],
+     "vib": [
+      32
+     ]
+    }
+   },
+   "震動關": {
+    "拿起加合成": {
+     "labelClicks": [],
+     "vib": []
+    },
+    "點交付": {
+     "delivered": 1,
+     "switchClicks": [],
+     "labelClicks": [],
+     "vib": []
+    }
+   },
+   "errors": [
+    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
+    "console: Failed to load resource: the server responded with a status of 404 (File not found)"
+   ]
+  }
+ }
+}

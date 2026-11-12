@@ -25,5 +25,5 @@ export function createHaptics(isEnabled, nav = navigator, doc = document) {
       label.click();
     } catch { /* Unsupported feedback must never interrupt a move. */ }
   }
-  return { pickup: () => pulse(8), merge: () => pulse(24) };
+  return { pickup: () => pulse(8), merge: () => pulse(24), order: () => pulse(32) };
 }

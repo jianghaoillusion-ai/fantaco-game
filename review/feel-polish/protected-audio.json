@@ -1,0 +1,162 @@
+[
+  {
+    "path": "assets/audio/bgm-bagvalley.mp3",
+    "baseline": "9097b64349688656000da3faea1578da3fb569f6c01da445e6cea062da11f6bf",
+    "current": "9097b64349688656000da3faea1578da3fb569f6c01da445e6cea062da11f6bf"
+  },
+  {
+    "path": "assets/audio/bgm-bagvalley.ogg",
+    "baseline": "56503d9a44758923b0f524188d460a7a2e513916917a52fc8d4ddc64927ce78c",
+    "current": "56503d9a44758923b0f524188d460a7a2e513916917a52fc8d4ddc64927ce78c"
+  },
+  {
+    "path": "assets/audio/bgm-bulu.mp3",
+    "baseline": "0cf202f7a388cc0771388126cf961f14cc04585638f6ec7cc6ad5c71d410cdeb",
+    "current": "0cf202f7a388cc0771388126cf961f14cc04585638f6ec7cc6ad5c71d410cdeb"
+  },
+  {
+    "path": "assets/audio/bgm-bulu.ogg",
+    "baseline": "141e86163b5698c3cd947596aac23b6906c9c064fd5988308a39847a742ac3b7",
+    "current": "141e86163b5698c3cd947596aac23b6906c9c064fd5988308a39847a742ac3b7"
+  },
+  {
+    "path": "assets/audio/bgm-candy.mp3",
+    "baseline": "0f69863d1c3a962597fc84ce5d8958b6d710c25c6793f1821172c48131c05a3f",
+    "current": "0f69863d1c3a962597fc84ce5d8958b6d710c25c6793f1821172c48131c05a3f"
+  },
+  {
+    "path": "assets/audio/bgm-candy.ogg",
+    "baseline": "5469525d517275311eb4bafcb8ec66313d5650120a80cff32e61f461d931ee34",
+    "current": "5469525d517275311eb4bafcb8ec66313d5650120a80cff32e61f461d931ee34"
+  },
+  {
+    "path": "assets/audio/bgm-candylane.mp3",
+    "baseline": "0e9c09e13c671ddb869331d36676c29286f7313666407ee073435673904b4890",
+    "current": "0e9c09e13c671ddb869331d36676c29286f7313666407ee073435673904b4890"
+  },
+  {
+    "path": "assets/audio/bgm-candylane.ogg",
+    "baseline": "99f2d2d6deec2567abc829de0a6d1f52516ce8a0b3cf57344126671a0a46e7c2",
+    "current": "99f2d2d6deec2567abc829de0a6d1f52516ce8a0b3cf57344126671a0a46e7c2"
+  },
+  {
+    "path": "assets/audio/bgm-castle.mp3",
+    "baseline": "356bca79a37840cff5a9ad19760d2f9056be2804054560d1af4507adae2822c5",
+    "current": "356bca79a37840cff5a9ad19760d2f9056be2804054560d1af4507adae2822c5"
+  },
+  {
+    "path": "assets/audio/bgm-castle.ogg",
+    "baseline": "77809ac7f343c4e7e32f8384c2b49e85034f828f3be8decd93572068291ff81a",
+    "current": "77809ac7f343c4e7e32f8384c2b49e85034f828f3be8decd93572068291ff81a"
+  },
+  {
+    "path": "assets/audio/bgm-ending.mp3",
+    "baseline": "0ab56d513ca55868eda873617afcdd5ec9192a356cd398147bf9757a2ca6aa62",
+    "current": "0ab56d513ca55868eda873617afcdd5ec9192a356cd398147bf9757a2ca6aa62"
+  },
+  {
+    "path": "assets/audio/bgm-ending.ogg",
+    "baseline": "b05fe09f58fd448c495b24611cb40a5b2dc494e9e799ef09540a1e9763d3467a",
+    "current": "b05fe09f58fd448c495b24611cb40a5b2dc494e9e799ef09540a1e9763d3467a"
+  },
+  {
+    "path": "assets/audio/bgm-hate.mp3",
+    "baseline": "279e9e3c413bab4578425b43aa16b51e8f179f3b6dadc75b9e9e5ac1614b2ef8",
+    "current": "279e9e3c413bab4578425b43aa16b51e8f179f3b6dadc75b9e9e5ac1614b2ef8"
+  },
+  {
+    "path": "assets/audio/bgm-hate.ogg",
+    "baseline": "baa9b9f365567e1a34775f0d307455bf8101502443fc81b588307d1447147177",
+    "current": "baa9b9f365567e1a34775f0d307455bf8101502443fc81b588307d1447147177"
+  },
+  {
+    "path": "assets/audio/bgm-hill.mp3",
+    "baseline": "7d4ab28786cdab7c68f875cba344c8066355a19bd54a59ea508c94ce25f50e7b",
+    "current": "7d4ab28786cdab7c68f875cba344c8066355a19bd54a59ea508c94ce25f50e7b"
+  },
+  {
+    "path": "assets/audio/bgm-hill.ogg",
+    "baseline": "9ca2b1dc7fd28fac202abd69e596f63d2930a9286b0ee7cca6454266cd850dac",
+    "current": "9ca2b1dc7fd28fac202abd69e596f63d2930a9286b0ee7cca6454266cd850dac"
+  },
+  {
+    "path": "assets/audio/bgm-journey.mp3",
+    "baseline": "54ff7a0822e58d1df97aecfdba2caf4dea22cb035ab4bf3b4d66da0e1d0fe049",
+    "current": "54ff7a0822e58d1df97aecfdba2caf4dea22cb035ab4bf3b4d66da0e1d0fe049"
+  },
+  {
+    "path": "assets/audio/bgm-journey.ogg",
+    "baseline": "f973a41ff7ed63b3868b1d61c15a68b1160a365d8109a5167a5ace8a7f52679d",
+    "current": "f973a41ff7ed63b3868b1d61c15a68b1160a365d8109a5167a5ace8a7f52679d"
+  },
+  {
+    "path": "assets/audio/bgm-lamplight.mp3",
+    "baseline": "8a5ee240a81b02186f54ec7b4e38c82e8e9af3603ad61e0ecfbd1ab5bd746a8a",
+    "current": "8a5ee240a81b02186f54ec7b4e38c82e8e9af3603ad61e0ecfbd1ab5bd746a8a"
+  },
+  {
+    "path": "assets/audio/bgm-lamplight.ogg",
+    "baseline": "66a1508b39df5dfa3ce4c75e7e391b4d2e5310dd1d2512e1971ab97f97d5dfc6",
+    "current": "66a1508b39df5dfa3ce4c75e7e391b4d2e5310dd1d2512e1971ab97f97d5dfc6"
+  },
+  {
+    "path": "assets/audio/bgm-plaza.mp3",
+    "baseline": "3ad9f89108b08f18939dace869bc4b770bb50972dee519be842075d63703cbab",
+    "current": "3ad9f89108b08f18939dace869bc4b770bb50972dee519be842075d63703cbab"
+  },
+  {
+    "path": "assets/audio/bgm-plaza.ogg",
+    "baseline": "31833f74549ccb9083f0de07ac23558ffed691dc093ee7b6fba316bcb5b85baa",
+    "current": "31833f74549ccb9083f0de07ac23558ffed691dc093ee7b6fba316bcb5b85baa"
+  },
+  {
+    "path": "assets/audio/bgm-slope.mp3",
+    "baseline": "444e735828fb95d65ff924c41f0286657f3c749c2fbe0f1ed64720104137315f",
+    "current": "444e735828fb95d65ff924c41f0286657f3c749c2fbe0f1ed64720104137315f"
+  },
+  {
+    "path": "assets/audio/bgm-slope.ogg",
+    "baseline": "b7b021ca574c90b6b02a2a270fd6c019709e2731e157d94b0ca54dfbe7732d9e",
+    "current": "b7b021ca574c90b6b02a2a270fd6c019709e2731e157d94b0ca54dfbe7732d9e"
+  },
+  {
+    "path": "assets/audio/bgm-theater.mp3",
+    "baseline": "6396be9be3456bd36d2b4e398b4c11bbf96aacb4d744c4551a694bf13453a94e",
+    "current": "6396be9be3456bd36d2b4e398b4c11bbf96aacb4d744c4551a694bf13453a94e"
+  },
+  {
+    "path": "assets/audio/bgm-theater.ogg",
+    "baseline": "c1323e5039473a67d0e9ad28d853c65063a9c9f94b5404df85802ed368989d16",
+    "current": "c1323e5039473a67d0e9ad28d853c65063a9c9f94b5404df85802ed368989d16"
+  },
+  {
+    "path": "assets/audio/bgm-village.mp3",
+    "baseline": "cb8e49b4d6317377322406208a216a282122963b0a665bab73aadeff38ff1e49",
+    "current": "cb8e49b4d6317377322406208a216a282122963b0a665bab73aadeff38ff1e49"
+  },
+  {
+    "path": "assets/audio/bgm-village.ogg",
+    "baseline": "bcf7e230035a8ce6f930630dbd59e9515da4b6153551e26eb33252c8d004e791",
+    "current": "bcf7e230035a8ce6f930630dbd59e9515da4b6153551e26eb33252c8d004e791"
+  },
+  {
+    "path": "assets/audio/feixiang-sting.m4a",
+    "baseline": "4a6e39b624d13eef588be9e83f99856dae55a24b58f9ed81a80eab78b20dc89e",
+    "current": "4a6e39b624d13eef588be9e83f99856dae55a24b58f9ed81a80eab78b20dc89e"
+  },
+  {
+    "path": "assets/audio/feixiang-sting.ogg",
+    "baseline": "d886a547c2564274205c044cd914b3e61fffd4302148ee5b3696e14467b4b68b",
+    "current": "d886a547c2564274205c044cd914b3e61fffd4302148ee5b3696e14467b4b68b"
+  },
+  {
+    "path": "assets/audio/sting-clear.mp3",
+    "baseline": "c5122c79c2300b55018d24c644ba4ec348357865462c866d1929f49bfc34b42b",
+    "current": "c5122c79c2300b55018d24c644ba4ec348357865462c866d1929f49bfc34b42b"
+  },
+  {
+    "path": "assets/audio/sting-clear.ogg",
+    "baseline": "74a74444fcb0b0295050a394d840c28c08cc46865bdbcd939112d4638dab1178",
+    "current": "74a74444fcb0b0295050a394d840c28c08cc46865bdbcd939112d4638dab1178"
+  }
+]

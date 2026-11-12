@@ -196,16 +196,26 @@ export function createOrdersUi(ctx) {
           <img class="${ready ? "have" : "missing"}" src="${def?.img || ""}" alt="${def?.name || ""}">
         </div>
         <div class="rew"><img src="assets/ui/coin.png" alt="">${coins}<img src="assets/ui/diamond.png" alt="">${gems}<img src="assets/items/star-seed.png" alt="">${o.reward.seeds || 0}</div>
-        ${ready ? '<button type="button" class="give">交付</button>' : '<span class="give-slot" aria-hidden="true"></span>'}`;
+        ${ready ? '<label class="give" tabindex="0" role="button">交付<input class="haptic-switch" type="checkbox" switch tabindex="-1" aria-hidden="true"></label>' : '<span class="give-slot" aria-hidden="true"></span>'}`;
       card.addEventListener("click", () => {
         hideTip();
         if (ready) clickGive(o.id, card);
         else { sfx.invalid(); toast("還沒做出來喔"); }
       });
+      const nativeSwitch = card.querySelector(".haptic-switch");
+      if (nativeSwitch) nativeSwitch.disabled = save.settings?.haptics === false;
+      card.querySelector(".give")?.addEventListener("keydown", e => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); clickGive(o.id, card); }
+      });
       card.querySelector(".give")?.addEventListener("click", (e) => {
         e.stopPropagation();
+        const off = ctx.getSave().settings?.haptics === false;
+        if (off) e.preventDefault();
+        if (nativeSwitch) nativeSwitch.disabled = off;
+        if (e.target === nativeSwitch) return;
+        if (!ctx.getSave().orders.some(order => order.id === o.id)) { e.preventDefault(); return; }
         hideTip();
-        clickGive(o.id, card);
+        clickGive(o.id, card, !nativeSwitch?.disabled && e.isTrusted && typeof navigator.vibrate !== "function");
       });
       bindTip(card, npc.name, `${def?.name || ""}　${tip}`);
       if (ready && !seenReady.has(o.id)) seenReady.add(o.id);
@@ -218,14 +228,15 @@ export function createOrdersUi(ctx) {
     ctx.eventsUi?.render?.();
   }
 
-  function clickGive(orderId, card) {
+  function clickGive(orderId, card, nativeHaptic = false) {
     const save = ctx.getSave();
     const o = (save.orders || []).find((x) => x.id === orderId);
     if (!o) return;
     const loc = findNeed(o);
     if (!loc) { sfx.invalid(); toast("還沒做出來喔"); return; }
     const fromEl = document.querySelector(`.piece[data-uid="${loc.item.uid}"]`);
-    ctx.fx?.flyTo(fromEl, card, () => ctx.tryFulfill(loc, orderId));
+    ctx.fx?.flyTo(fromEl, card);
+    ctx.tryFulfill(loc, orderId, nativeHaptic);
   }
 
   return { renderOrders, hasItem, findNeed, clickGive, bumpDaily, bumpTask, dailyState, openChallenge, closeChallenge };

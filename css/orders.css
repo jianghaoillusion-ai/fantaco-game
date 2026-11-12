@@ -66,3 +66,7 @@
   .order .npc{width:50px;height:50px}
   .order .need img{width:32px;height:32px}
 }
+
+/* Native switch remains rendered: real label taps preserve trusted activation. */
+.haptic-switch{position:absolute;width:1px;height:1px;opacity:.001;pointer-events:none;clip-path:inset(50%)}
+label.give{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}

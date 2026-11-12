@@ -1,13 +1,13 @@
 import { availableChains, retiredChains, queueGenerator, claimGenerators, recycleOffer } from "./progression.js?v=20261112";
 import { isCellOpen } from "./world.js?v=20261112";
-import { createHaptics } from "./haptics.js?v=20261112";
+import { createHaptics } from "./haptics.js?v=20261113-feel1";
 import { Auth } from "./auth.js?v=20261112";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=20261112";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=20261112";
+import { preloadSfx, unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=20261113-feel1";
 import { mountMascot } from "./mascot.js?v=20261112";
 import { mountHome } from "./home.js?v=20261112";
 import { bindStory, startStory } from "./story.js?v=20261112";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=20261112";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=20261113-feel1";
 import { bagCap, migrateBagSlots } from "./bag.js?v=20261112";
 import { reserveItems } from "./merge.js?v=20261112";
 import { avatarSrc } from "./portraits.js?v=20261112";
@@ -16,7 +16,7 @@ import {
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js?v=20261112";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=20261112";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=20261113-feel1";
 import { regionById } from "./world.js?v=20261112";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=20261112";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=20261112";
@@ -162,6 +162,7 @@ function applyChapterLook() {
 }
 
 function bind() {
+  preloadSfx();
   ["pointerdown", "pointerup", "touchend", "click", "keydown"].forEach(event =>
     document.addEventListener(event, () => unlockAudio()));
 
@@ -562,10 +563,18 @@ function moveToInventory(loc, slot) {
       SAVE.inventory.splice(at, 0, src);
       SAVE.inventory = SAVE.inventory.filter(Boolean);
     } else if (canMerge(src, dest, CHAINS, GENS)) {
+      const fromEl = document.getElementById("drag-float")?.classList.contains("on")
+        ? document.getElementById("drag-float")
+        : document.querySelector(`.piece[data-uid="${src.uid}"]`);
+      const toEl = document.querySelector(`.piece[data-uid="${dest.uid}"]`);
+      const snapshots = systems?.fx.captureMerge?.(fromEl, toEl);
       const merged = mergeCells(src, dest, CHAINS, GENS);
       SAVE.inventory[slot] = merged;
       removeFrom(loc);
       onMerged(merged);
+      persist(); renderBoard();
+      systems?.fx.mergeInto?.(snapshots, merged.uid);
+      return;
     } else {
       // swap
       SAVE.inventory[loc.i] = dest;
@@ -679,10 +688,11 @@ function tapGenerator(loc) {
   sfx.generate();
   persist();
   const fromEl = document.querySelector(`.piece[data-uid="${gen.uid}"]`);
+  const fromRect = fromEl?.getBoundingClientRect();
   renderBoard();
   refreshHud();
   const toEl = toInv ? document.getElementById("btn-bag") : document.querySelector(`.piece[data-uid="${made.uid}"]`)?.closest(".cell");
-  if (systems?.fx.spawnArc && fromEl && toEl) systems.fx.spawnArc(fromEl, toEl, () => systems.fx.popAt(made.uid));
+  if (!toInv && systems?.fx.spawnArc && fromRect && toEl) systems.fx.spawnArc(fromRect, toEl, () => systems.fx.popAt(made.uid));
   else systems?.fx.popAt(made.uid);
 }
 
@@ -708,12 +718,18 @@ function moveOrMerge(loc, r, c, touch = false) {
     return;
   }
   if (canMerge(src, dest, CHAINS, GENS)) {
+    const fromEl = document.getElementById("drag-float")?.classList.contains("on")
+      ? document.getElementById("drag-float")
+      : document.querySelector(`.piece[data-uid="${src.uid}"]`);
+    const toEl = document.querySelector(`.piece[data-uid="${dest.uid}"]`);
+    const snapshots = systems?.fx.captureMerge?.(fromEl, toEl);
     const merged = mergeCells(src, dest, CHAINS, GENS);
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
     if (touch) haptics.merge();
     persist(); renderBoard();
+    systems?.fx.mergeInto?.(snapshots, merged.uid);
     return;
   }
   // swap
@@ -737,7 +753,7 @@ function onMerged(merged) {
   sfx.merge(tier);
   if (combo.n >= 2) { /* combo pop-up retired */ }
   mascot?.merge(tier);
-  systems?.fx.revealMerge?.(merged.uid) || systems?.fx.popAt(merged.uid);
+
   const at = findCellByUid(merged.uid);
   if (at?.where === "board") {
     const cols = COLS;
@@ -871,7 +887,7 @@ function renderOrders() {
   if (systems?.orders) systems.orders.renderOrders();
 }
 
-function tryFulfill(loc, orderId) {
+function tryFulfill(loc, orderId, nativeHaptic = false) {
   const o = SAVE.orders.find((x) => x.id === orderId);
   const item = loc.item;
   if (!o || item.kind !== "item" || item.chain !== o.need.chain || item.tier !== o.need.tier) {
@@ -880,6 +896,7 @@ function tryFulfill(loc, orderId) {
   if (o.reservedUid && item.uid !== o.reservedUid) {
     sfx.invalid(); toast("這件是另一張訂單要的"); return;
   }
+  if (!nativeHaptic) haptics.order();
   removeFrom(loc);
   SAVE.orders = SAVE.orders.filter((x) => x.id !== orderId);
   SAVE.ordersDone = (SAVE.ordersDone || 0) + 1;
@@ -1096,7 +1113,7 @@ function systemCtx() {
     makePiece, infoName, infoImg, findCellByUid, removeFrom,
     canMerge: (a, b) => canMerge(a, b, CHAINS, GENS),
     moveOrMerge, onTap, moveToInventory,
-    tryFulfill: (loc, id) => tryFulfill(loc, id),
+    tryFulfill: (loc, id, native) => tryFulfill(loc, id, native),
     grantGen: (id, tier) => grantGen(id, tier),
     xpLevel: (xp) => xpLevel(xp, GAME.xpCurve || [0, 40, 100]),
     makeUid, ENERGY, todayKey,

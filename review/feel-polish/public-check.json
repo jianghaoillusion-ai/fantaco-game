@@ -1,0 +1,29 @@
+[
+  {
+    "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/review/feel-polish/haptic-test.html",
+    "status": 200,
+    "notice": true,
+    "noticeFailures": [
+      {
+        "url": "https://server.ethicalads.io/api/v1/decision/?publisher=githackcom&ad_types=image-v1&div_ids=githack-other-ad&callback=ad_1794500891930_919422&keywords=&campaign_types=paid%7Cpublisher-house%7Ccommunity%7Chouse&format=jsonp&client_version=2.5.0&placement_index=0&url=https%3A%2F%2Frawcdn.githack.com%2Fjianghaoillusion-ai%2Ffantaco-game%2F42e7fc837f5a398bf18c6c93feb9846fcf5bcbea%2Freview%2Ffeel-polish%2Fhaptic-test.html",
+        "error": "net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin"
+      }
+    ],
+    "title": "FANTACO 觸覺測試",
+    "errors": [],
+    "failed": [],
+    "httpErrors": [],
+    "boardCells": null
+  },
+  {
+    "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/index.html",
+    "status": 200,
+    "notice": false,
+    "noticeFailures": [],
+    "title": "眠花糖的異想世界",
+    "errors": [],
+    "failed": [],
+    "httpErrors": [],
+    "boardCells": 63
+  }
+]

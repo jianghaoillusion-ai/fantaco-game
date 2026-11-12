@@ -160,6 +160,7 @@ export function createFog(ctx) {
     const cols = ctx.getCols(), rows = ctx.getRows();
     const now = Date.now();
     let changed = false;
+    const animations = [];
     (save.board || []).forEach((cell, i) => {
       if (!cell || cell.kind !== "gen") return;
       const def = gens[cell.gen];
@@ -179,12 +180,15 @@ export function createFog(ctx) {
       cell.coolUntil = now + ms;
       changed = true;
       const fromEl = document.querySelector(`.piece[data-uid="${cell.uid}"]`);
-      const toEl = document.querySelector(`.cell[data-r="${Math.floor(empty / cols)}"][data-c="${empty % cols}"]`);
-      ctx.fx?.spawnArc?.(fromEl, toEl, () => ctx.fx?.popAt?.(made.uid));
+      animations.push({from: fromEl?.getBoundingClientRect(), uid: made.uid});
     });
     if (changed) {
       ctx.persist?.();
       ctx.refresh?.();
+      for (const {from, uid} of animations) {
+        const to = document.querySelector(`.piece[data-uid="${uid}"]`)?.closest(".cell");
+        ctx.fx?.spawnArc?.(from, to, () => ctx.fx?.popAt?.(uid));
+      }
     }
   }
 

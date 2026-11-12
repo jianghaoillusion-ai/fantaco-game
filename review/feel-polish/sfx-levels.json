@@ -1,0 +1,23 @@
+[
+  {
+    "name": "merge",
+    "seconds": 0.3,
+    "peak_dbfs": -15.917600346881503,
+    "rms_dbfs": -27.359904385775007,
+    "playback_gain": 0.136
+  },
+  {
+    "name": "generate",
+    "seconds": 0.18,
+    "peak_dbfs": -15.917600346881503,
+    "rms_dbfs": -26.75867320617423,
+    "playback_gain": 0.136
+  },
+  {
+    "name": "order",
+    "seconds": 0.42,
+    "peak_dbfs": -15.917600346881503,
+    "rms_dbfs": -27.059814066897236,
+    "playback_gain": 0.136
+  }
+]
