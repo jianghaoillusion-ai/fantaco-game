@@ -3,11 +3,11 @@ import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ens
 import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
 import { mountMascot } from "./mascot.js?v=25";
 import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=25";
+import { bindStory, startStory } from "./story.js?v=cast10";
 import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=25";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
 import { reserveItems } from "./merge.js?v=25";
-import { avatarSrc } from "./portraits.js?v=25";
+import { avatarSrc } from "./portraits.js?v=cast10";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,

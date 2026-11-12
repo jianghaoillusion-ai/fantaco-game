@@ -1,0 +1,80 @@
+[
+  {
+    "viewport": [
+      1100,
+      820
+    ],
+    "threshold": "至少一RGB色版<200；最大連通角色輪廓",
+    "soleDeltaPixels": 0,
+    "actors": [
+      {
+        "id": "spirit",
+        "bottomPixelY": 688,
+        "topPixelY": 197,
+        "componentPixels": 44342
+      },
+      {
+        "id": "bulu",
+        "bottomPixelY": 688,
+        "topPixelY": 322,
+        "componentPixels": 25537
+      },
+      {
+        "id": "jiejie",
+        "bottomPixelY": 688,
+        "topPixelY": 313,
+        "componentPixels": 40523
+      }
+    ]
+  },
+  {
+    "viewport": [
+      390,
+      844
+    ],
+    "threshold": "至少一RGB色版<200；最大連通角色輪廓",
+    "soleDeltaPixels": 0,
+    "actors": [
+      {
+        "id": "spirit",
+        "bottomPixelY": 712,
+        "topPixelY": 207,
+        "componentPixels": 46939
+      },
+      {
+        "id": "bulu",
+        "bottomPixelY": 712,
+        "topPixelY": 335,
+        "componentPixels": 27013
+      }
+    ]
+  },
+  {
+    "viewport": [
+      844,
+      390
+    ],
+    "threshold": "至少一RGB色版<200；最大連通角色輪廓",
+    "soleDeltaPixels": 1,
+    "actors": [
+      {
+        "id": "spirit",
+        "bottomPixelY": 270,
+        "topPixelY": 36,
+        "componentPixels": 10384
+      },
+      {
+        "id": "bulu",
+        "bottomPixelY": 269,
+        "topPixelY": 96,
+        "componentPixels": 6022
+      },
+      {
+        "id": "jiejie",
+        "bottomPixelY": 269,
+        "topPixelY": 92,
+        "componentPixels": 9289
+      }
+    ]
+  }
+]

@@ -29,12 +29,12 @@ const MASCOT_FULL = {
  */
 export const CAST_METRICS = {
   jiejie: { w: 540, h: 720, headTop: 46, chin: 236.5, head: 190.5, feet: 685, bboxTop: 22, contentL: 112, contentR: 427, faceL: 210, faceR: 334 },
-  feifei: { w: 540, h: 720, headTop: 30, chin: 262, head: 233, feet: 686, bboxTop: 30, contentL: 113, contentR: 426, faceL: 200, faceR: 350 },
-  apiao:  { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 687, bboxTop: 29, contentL: 128, contentR: 412, faceL: 185, faceR: 355 },
-  sika:   { w: 540, h: 720, headTop: 29, chin: 252, head: 224, feet: 687, bboxTop: 29, contentL: 152, contentR: 388, faceL: 180, faceR: 365 },
-  bulu:   { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 687, bboxTop: 29, contentL: 146, contentR: 393, faceL: 180, faceR: 350 },
+  feifei: { w: 540, h: 720, headTop: 30, chin: 262, head: 233, feet: 684, bboxTop: 30, contentL: 113, contentR: 426, faceL: 200, faceR: 350 },
+  apiao:  { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 684, bboxTop: 29, contentL: 128, contentR: 412, faceL: 185, faceR: 355 },
+  sika:   { w: 540, h: 720, headTop: 29, chin: 252, head: 224, feet: 685, bboxTop: 29, contentL: 152, contentR: 388, faceL: 180, faceR: 365 },
+  bulu:   { w: 540, h: 720, headTop: 29, chin: 248, head: 220, feet: 685, bboxTop: 29, contentL: 146, contentR: 393, faceL: 180, faceR: 350 },
   hate:   { w: 540, h: 720, headTop: 86, chin: 294, head: 209, feet: 700, bboxTop: 4, contentL: 109, contentR: 430, faceL: 219, faceR: 393 },
-  spirit: { w: 540, h: 720, headTop: 82, chin: 293, head: 212, feet: 700, bboxTop: 4, contentL: 117, contentR: 422, faceL: 208, faceR: 362 },
+  spirit: { w: 540, h: 800, headTop: 132, chin: 320.5, head: 188.5, feet: 765, bboxTop: 7, contentL: 133, contentR: 406, faceL: 205, faceR: 334 },
   mascot: { w: 248, h: 441, headTop: 106, chin: 210, head: 105, feet: 429, bboxTop: 12, contentL: 12, contentR: 236, faceL: 36, faceR: 212 }
 };
 
@@ -126,10 +126,15 @@ export function applyCastMetrics(fig, id, src, roleMul) {
   fig.style.setProperty("--scale", scale + "px");
 }
 
+// Version only cast10 art; unchanged characters keep their existing URLs.
+function castAsset(id, src) {
+  return id === "spirit" || id === "jiejie" ? `${src}?v=cast10` : src;
+}
+
 export function avatarSrc(id, expr = "happy") {
   const n = normId(id);
-  if (expr && expr !== "happy") return `assets/chars/avatars/${n}-${expr}.png`;
-  return `assets/chars/avatars/${n}.png`;
+  if (expr && expr !== "happy") return castAsset(n, `assets/chars/avatars/${n}-${expr}.png`);
+  return castAsset(n, `assets/chars/avatars/${n}.png`);
 }
 
 export function portraitSrc(id, expr = "happy", talking = false) {
@@ -143,9 +148,9 @@ export function portraitSrc(id, expr = "happy", talking = false) {
     return MASCOT_FULL[expr] || MASCOT_FULL.default;
   }
   if (expr) {
-    return `assets/chars/expr/${n}-${expr}${open}.png`;
+    return castAsset(n, `assets/chars/expr/${n}-${expr}${open}.png`);
   }
-  return FULL[n] || FULL.mascot;
+  return castAsset(n, FULL[n] || FULL.mascot);
 }
 
 export function bindImgFallback(img, id, expr, kind = "avatar") {
@@ -153,12 +158,12 @@ export function bindImgFallback(img, id, expr, kind = "avatar") {
     img.removeEventListener("error", onErr);
     const n = normId(id);
     if (kind === "avatar") {
-      if (img.src && !img.src.endsWith(`${n}.png`)) img.src = `assets/chars/avatars/${n}.png`;
+      if (img.src && !img.src.split("?")[0].endsWith(`${n}.png`)) img.src = castAsset(n, `assets/chars/avatars/${n}.png`);
     } else {
       const baseExpr = `assets/chars/expr/${n}-${expr || "happy"}.png`;
-      if (img.src.includes("-open")) img.src = baseExpr;
+      if (img.src.includes("-open")) img.src = castAsset(n, baseExpr);
       else if (n === "mascot") img.src = MASCOT_FULL[expr] || MASCOT_FULL.default;
-      else img.src = FULL[n] || FULL.mascot;
+      else img.src = castAsset(n, FULL[n] || FULL.mascot);
       const fig = img.parentElement;
       if (fig && fig.classList.contains("story-actor")) applyCastMetrics(fig, n, img.getAttribute("src") || img.src);
     }

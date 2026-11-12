@@ -26,7 +26,7 @@
       "headTop": 30,
       "chin": 262,
       "head": 233,
-      "feet": 686
+      "feet": 684
     },
     "apiao": {
       "w": 540,
@@ -34,7 +34,7 @@
       "headTop": 29,
       "chin": 248,
       "head": 220,
-      "feet": 687
+      "feet": 684
     },
     "sika": {
       "w": 540,
@@ -42,7 +42,7 @@
       "headTop": 29,
       "chin": 252,
       "head": 224,
-      "feet": 687
+      "feet": 685
     },
     "bulu": {
       "w": 540,
@@ -50,7 +50,7 @@
       "headTop": 29,
       "chin": 248,
       "head": 220,
-      "feet": 687
+      "feet": 685
     },
     "hate": {
       "w": 540,
@@ -62,11 +62,16 @@
     },
     "spirit": {
       "w": 540,
-      "h": 720,
-      "headTop": 82,
-      "chin": 293,
-      "head": 212,
-      "feet": 700
+      "h": 800,
+      "headTop": 132,
+      "chin": 320.5,
+      "head": 188.5,
+      "feet": 765,
+      "bboxTop": 7,
+      "contentL": 133,
+      "contentR": 406,
+      "faceL": 205,
+      "faceR": 334
     },
     "mascot": {
       "w": 248,

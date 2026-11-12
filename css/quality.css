@@ -3177,3 +3177,9 @@ body.is-dragging .piece.origin-ghost{ opacity: .32; filter: grayscale(.1); }
 #story #portraits.has-left.has-right .story-actor.speak.enter{
   transform: none !important;
 }
+
+/* cast10: the full-width portrait stage must not be clipped by the 640px
+   dialogue wrapper. The outer #story still clips at the viewport boundary. */
+#story .story-stage{
+  overflow: visible !important;
+}
