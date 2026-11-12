@@ -24,3 +24,5 @@ cast8：姐姐／氣球精靈已分開調整臉、頭髮與身體，精靈皇冠
 已實跑重建、檢查及來源比對：透明RGBA PNG540×720、腳底y685、PNG/WebP解碼一致；兩張新圖硬邊0、可見碎點0、alpha>0各1個連通塊。哈特既有39個硬邊依一像素不改要求保留。未改avatars/expr，未驗遊戲端完整顯示。
 
 只用Codex內建image_gen與免費本機工具；沒有即夢、付費API、AppleScript控制Chrome。只推xiaoxia/cast-redraw-v2，不merge、不推main、不碰PR #4或其他指定禁止範圍。
+
+最後圖面複查：小頌確認最新左臉髮叉及右髮接縫沒有看到實際殘影或斷線，沒有技術上的反對意見；未獨立跑像素量測。仍待決定的是姐姐含長髮+49.49%、全身重繪細節（含臉頰外側由原有頭髮變成透明縫）。完整補充：`review/cast8/xiaosong-final-clarification.md`。
