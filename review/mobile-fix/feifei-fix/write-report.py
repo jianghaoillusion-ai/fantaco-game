@@ -7,11 +7,14 @@ for i,r in enumerate(rows):
  p=r['path'];old=np.array(Image.open(io.BytesIO(subprocess.check_output(['git','show','33ada91:'+p]))).convert('RGBA'));new=np.array(Image.open(p).convert('RGBA'))
  m=(old[:,:,3]>=250)&(new[:,:,3]>=250);delta=np.abs(old[:,:,:3].astype(int)-new[:,:,:3].astype(int));assert delta[old[:,:,3]>0].max()==0
  checks.append({'path':p,'opaque_rgb_p99':float(np.percentile(delta[m].max(axis=1),99)),'opaque_rgb_max':int(delta[m].max()),'all_original_visible_rgb_max':int(delta[old[:,:,3]>0].max()),'size_unchanged':old.shape==new.shape})
+ prev=np.array(Image.open(io.BytesIO(subprocess.check_output(['git','show','4b227d8:'+p]))).convert('RGBA'))
+ assert np.array_equal(prev[:,:,:3],new[:,:,:3]);assert ((new[:,:,3]==prev[:,:,3])|(new[:,:,3]==0)).all()
+ checks[-1].update(round2_all_rgb_max=0,round2_alpha_only_cleared=True)
  x=(i%4)*400;y=(i//4)*440;d.text((x+3,y+5),p.replace('assets/chars/',''),fill='black')
  for j,ar in enumerate([old,new]):
   im=Image.fromarray(ar);im.thumbnail((195,400));overview.paste(im,(x+j*200,y+30),im)
 overview.save(out/'overview-before-after.png')
-(out/'validation.json').write_text(json.dumps({'baseline':'33ada9198ad30a6cf7271e8340d1276ad97f8e27','checks':checks,'modified_assets':16},ensure_ascii=False,indent=2)+'\n')
+(out/'validation.json').write_text(json.dumps({'baseline':'33ada9198ad30a6cf7271e8340d1276ad97f8e27','checks':checks,'modified_assets':16,'round2_baseline':'4b227d8'},ensure_ascii=False,indent=2)+'\n')
 text=(out/'README.md').read_text();start=text.index('| 圖檔');end=text.index('\n## 證據與驗證',start)
 table='| 圖檔（assets/chars/ 下） | 透明洞數/面積 前→後 | 缺損數/面積 前→後 | 碎片數 前→後 | 光暈像素 前→後 | 補色像素 | 補洞方法 |\n|---|---:|---:|---:|---:|---:|---|\n'
 for r in rows:

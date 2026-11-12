@@ -12,6 +12,10 @@ def comps(m):
  n,l,s,c=cv2.connectedComponentsWithStats(m.astype('uint8'),8);return n,l,s
 ref=original(Path('assets/chars/feifei.png'))
 sift=cv2.SIFT_create();k1,d1=sift.detectAndCompute(cv2.cvtColor(ref[:,:,:3],cv2.COLOR_RGB2GRAY),(ref[:,:,3]>240).astype('uint8')*255)
+def outer_ring(arr):
+ al=arr[:,:,3]
+ # Whole-image distance to opaque artwork; no hair-only restriction.
+ return (al>0)&(ndi.distance_transform_edt(al<250)>2)
 rows=[]
 files=sorted(list(Path('assets/chars/avatars').glob('feifei*.png'))+list(Path('assets/chars/expr').glob('feifei*.png')))
 for p in files:
@@ -60,6 +64,17 @@ for p in files:
  n,l,s=comps(new[:,:,3]>0);largest=1+np.argmax(s[1:,4])
  for i in range(1,n):
   if i!=largest:new[l==i,3]=0
+ # Round 2: remove distant outer matte and cyan/gray edge pixels outside
+ # the aligned approved silhouette. Do not touch bottle or interior artwork.
+ round1=new.copy()
+ c=new[:,:,:3].astype(float)
+ cool=(c[:,:,2]>c[:,:,0]*1.05)&(c[:,:,1]>c[:,:,0]*1.02)&(c[:,:,2]-c[:,:,0]>2)
+ needs_cool_cleanup="happy" not in p.stem and p.stem!="feifei"
+ ring=outer_ring(new)|(cool&~interior&needs_cool_cleanup)
+ new[ring,3]=0
+ n,l,s=comps(new[:,:,3]>0);largest=1+np.argmax(s[1:,4])
+ for i in range(1,n):
+  if i!=largest:new[l==i,3]=0
  def metrics(arr):
   al=arr[:,:,3];holes=(al<250)&interior&~cyan
   hn,hl,hs=comps(holes)
@@ -69,16 +84,25 @@ for p in files:
   en,el,es=comps(enclosed_zero)
   col=arr[:,:,:3].astype(float)
   full_blue=(col[:,:,2]>col[:,:,0]*1.05)&(col[:,:,1]>col[:,:,0]*1.02)&((col[:,:,2]-col[:,:,0])>2)&(al>0)
-  return dict(independent_enclosed_holes=en-1,independent_enclosed_area=int(enclosed_zero.sum()),full_image_blue_pixels=int(full_blue.sum()),all_detached_components=nn-2,transparent_holes=zn-1,transparent_hole_area=int(((al==0)&interior&~cyan).sum()),holes=hn-1,hole_area=int(holes.sum()),fragments=len(frags),fragment_area=int(sum(ss[i,4] for i in frags)),halo_pixels=int(blue(arr).sum()))
+  return dict(outer_ring_pixels=int(outer_ring(arr).sum()),independent_enclosed_holes=en-1,independent_enclosed_area=int(enclosed_zero.sum()),full_image_blue_pixels=int(full_blue.sum()),all_detached_components=nn-2,transparent_holes=zn-1,transparent_hole_area=int(((al==0)&interior&~cyan).sum()),holes=hn-1,hole_area=int(holes.sum()),fragments=len(frags),fragment_area=int(sum(ss[i,4] for i in frags)),halo_pixels=int(blue(arr).sum()))
  # RGB invariant stronger than requested p99 gate.
  assert np.array_equal(old[a>0,:3],new[a>0,:3])
  Image.fromarray(new).save(ROOT/p)
- row=dict(path=str(p),before=metrics(old),after=metrics(new),filled_pixels=int(((a==0)&(new[:,:,3]>0)).sum()),alpha_restored_pixels=int((new[:,:,3]>a).sum()),alpha_changed_pixels=int((a!=new[:,:,3]).sum()),rgb_visible_max=0,alignment=M.tolist(),alignment_inliers=int(inliers.sum()),method='SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑。')
+ row=dict(path=str(p),before=metrics(old),round1=metrics(round1),after=metrics(new),round2_removed_pixels=int(((round1[:,:,3]>0)&(new[:,:,3]==0)).sum()),filled_pixels=int(((a==0)&(new[:,:,3]>0)).sum()),alpha_restored_pixels=int((new[:,:,3]>a).sum()),alpha_changed_pixels=int((a!=new[:,:,3]).sum()),rgb_visible_max=0,alignment=M.tolist(),alignment_inliers=int(inliers.sum()),method='SIFT/RANSAC 對齊核准 feifei.png；僅 alpha=0 的洞取參考色，眼部洞用周圍原有深色取色，避免複製開心版高光；其餘只補 alpha。去除頭髮青藍漏色、外部碎屑與淡邊，外緣局部平滑；第2輪全身外圈細線與參考輪廓外藍灰細線只將 alpha 歸零。')
  rows.append(row)
  # Each sheet: head (eyes/hair) + lower hair/edge, checker/dark/light backgrounds.
  # Transform approved head rectangle into target coordinate, clip to canvas.
  pts=cv2.transform(np.float32([[[125,28],[425,280]]]),M)[0];x0,y0=np.maximum(0,np.floor(pts[0])).astype(int);x1,y1=np.minimum([w,h],np.ceil(pts[1])).astype(int)
  crops=[(x0,y0,x1,y1),(max(0,x1-int(100*M[0,0])),max(0,y1-int(60*M[1,1])),min(w,x1+5),min(h,y1+int(170*M[1,1])))]
+ # Additional full silhouette review at 2x on beige and green, R1 vs R2.
+ panel=Image.new('RGB',(w*4,h*4+52));d=ImageDraw.Draw(panel)
+ for k,bg in enumerate([(248,236,213),(130,170,110)]):
+  for j,ar in enumerate([round1,new]):
+   im=Image.fromarray(ar).resize((w*2,h*2),Image.Resampling.NEAREST)
+   tile=Image.new('RGB',im.size,bg);tile.paste(im,(0,0),im)
+   panel.paste(tile,(j*w*2,k*(h*2+26)+26))
+   d.text((j*w*2+5,k*(h*2+26)+5),'ROUND 1' if j==0 else 'ROUND 2',fill='white')
+ panel.save(OUT/('round2-edge-'+p.parent.name+'-'+p.stem+'.png'))
  panels=[]
  for box in crops:
   for bg in [(70,70,70),(248,236,213)]:

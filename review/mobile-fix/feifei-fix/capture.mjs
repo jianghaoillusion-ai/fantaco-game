@@ -19,17 +19,18 @@ try {
   for(const expr of ['determined','happy','sad','surprised','worried']) {
    await page.evaluate(expr=>__GAME.startStory([{speaker:'飛飛',portrait:'feifei',expr,text:'一起把星光帶回村莊吧。'}]),expr);
    await page.waitForFunction(()=>[...document.querySelectorAll('#portraits img')].every(i=>i.complete&&i.naturalWidth>0));
-   await page.waitForTimeout(250);
+   await page.evaluate(()=>document.fonts.ready);
+   await page.waitForTimeout(1000);
    const src=await page.locator('#portraits .speak img').getAttribute('src');assert.ok(src.includes(`feifei-${expr}.png`));
-   await page.screenshot({path:`${out}/${phase}-game-${expr}-390x844.png`});
+   await page.screenshot({animations:'disabled',path:`${out}/${phase}-game-${expr}-390x844.png`});
    // Freeze talking frame using the production source helper, leaving stage/UI untouched.
    await page.evaluate(async expr=>{const p=await import('/js/portraits.js?v=mobile3');document.querySelector('#portraits .speak img').src=p.portraitSrc('feifei',expr,true);},expr);
    await page.waitForFunction(()=>[...document.querySelectorAll('#portraits img')].every(i=>i.complete&&i.naturalWidth>0));
-   await page.screenshot({path:`${out}/${phase}-game-${expr}-open-390x844.png`});
+   await page.screenshot({animations:'disabled',path:`${out}/${phase}-game-${expr}-open-390x844.png`});
    results.push({phase,expr,src,open:'production portraitSrc, frozen talking frame',viewport:'390x844'});
   }
   await page.evaluate(()=>{const s=__GAME.save();s.orders=[{id:'review-feifei',npc:'feifei',need:{chain:'star',tier:1},reward:{coins:10,seeds:2}}];s.board[24]={kind:'item',chain:'star',tier:1,uid:'review-star'};__GAME.show('play');__GAME.refresh();});
-  await page.waitForTimeout(300);await page.screenshot({path:`${out}/${phase}-game-order-390x844.png`});
+  await page.waitForTimeout(300);await page.screenshot({animations:'disabled',path:`${out}/${phase}-game-order-390x844.png`});
   assert.deepEqual(errors,[]);await context.close();
  }
 }finally{await browser.close();}
