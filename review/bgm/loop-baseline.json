@@ -1,0 +1,116 @@
+{
+  "cute-a-glock-bubbles.mp3": {
+    "samples": 2304000,
+    "duration": 48.0,
+    "tail_100ms_dbfs": -25.18661117553711,
+    "seam_dip_db": 1.1498947143554688,
+    "inner_max_dip_db": 6.225194931030273,
+    "quiet_50ms_percent": 4.270833333333333,
+    "boundary_delta": 0.004319138824939728,
+    "seam_second_difference": 0.021555203944444656,
+    "inner_max_second_difference": 0.029770731925964355,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": true,
+      "no_boundary_hole": true,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  },
+  "cute-a-glock-bubbles.ogg": {
+    "samples": 2304000,
+    "duration": 48.0,
+    "tail_100ms_dbfs": -24.8414249420166,
+    "seam_dip_db": 1.4897441864013672,
+    "inner_max_dip_db": 6.289491653442383,
+    "quiet_50ms_percent": 4.270833333333333,
+    "boundary_delta": 0.003295768052339554,
+    "seam_second_difference": 0.007755625993013382,
+    "inner_max_second_difference": 0.03137849271297455,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": true,
+      "no_boundary_hole": true,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  },
+  "cute-b-uke-hop.mp3": {
+    "samples": 2468571,
+    "duration": 51.4285625,
+    "tail_100ms_dbfs": -20.714130401611328,
+    "seam_dip_db": 24.088613510131836,
+    "inner_max_dip_db": 7.938167572021484,
+    "quiet_50ms_percent": 6.420233463035019,
+    "boundary_delta": 0.0006846936303190887,
+    "seam_second_difference": 0.005755788646638393,
+    "inner_max_second_difference": 0.02124243974685669,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": true,
+      "no_boundary_hole": false,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  },
+  "cute-b-uke-hop.ogg": {
+    "samples": 2468571,
+    "duration": 51.4285625,
+    "tail_100ms_dbfs": -20.419099807739258,
+    "seam_dip_db": 22.99015235900879,
+    "inner_max_dip_db": 8.319883346557617,
+    "quiet_50ms_percent": 6.3229571984435795,
+    "boundary_delta": 0.003843613900244236,
+    "seam_second_difference": 0.0056142546236515045,
+    "inner_max_second_difference": 0.021133258938789368,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": true,
+      "no_boundary_hole": false,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  },
+  "cute-c-whistle-parade.mp3": {
+    "samples": 2160000,
+    "duration": 45.0,
+    "tail_100ms_dbfs": -43.47300720214844,
+    "seam_dip_db": 1.0020523071289062,
+    "inner_max_dip_db": 3.7517433166503906,
+    "quiet_50ms_percent": 11.88888888888889,
+    "boundary_delta": 0.0008510658517479897,
+    "seam_second_difference": 0.0032263267785310745,
+    "inner_max_second_difference": 0.0026621147990226746,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": false,
+      "no_boundary_hole": true,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  },
+  "cute-c-whistle-parade.ogg": {
+    "samples": 2160000,
+    "duration": 45.0,
+    "tail_100ms_dbfs": -43.16501235961914,
+    "seam_dip_db": 1.1111373901367188,
+    "inner_max_dip_db": 2.9237823486328125,
+    "quiet_50ms_percent": 11.555555555555555,
+    "boundary_delta": 0.0015072333626449108,
+    "seam_second_difference": 0.0009960769675672054,
+    "inner_max_second_difference": 0.0026153624057769775,
+    "checks": {
+      "exact_samples": true,
+      "tail_energy": false,
+      "no_boundary_hole": true,
+      "continuous_body": false,
+      "no_clipping": true,
+      "no_extra_seam_transient": true
+    }
+  }
+}

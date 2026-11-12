@@ -1,0 +1,13 @@
+{
+  "input": "/Volumes/外接資料碟/ai-lab/fantaco-bgm-cute/review/bgm/cute-a-glock-bubbles.mp3",
+  "model": "mlx-community/MOSS-Music-8B-Thinking-6bit",
+  "mood": "可愛童趣、輕快的無鼓音樂盒",
+  "prompt": "請仔細聆聽這段音樂，全部用繁體中文回答，分項條列：\n1. 曲風\n2. 情緒與氛圍\n3. 主要樂器與音色\n4. 速度（估計 BPM，快/中/慢）\n5. 調性（大調/小調、主音）\n6. 段落結構（附大約時間點，例如前奏、主歌、高潮、結尾）\n7. 混音觀察（人聲或講話是否被蓋住、低頻是否過重、有無突兀的聲音）\n8. 這段音樂適不適合「可愛童趣、輕快的無鼓音樂盒」這種調性的短影片？說明理由，並給出調整建議。\n",
+  "text": "",
+  "load_s": 15.7,
+  "infer_s": 83.9,
+  "total_s": 99.8,
+  "mlx_peak_gb": 8.95,
+  "rss_peak_gb": 2.55,
+  "generation_tokens": 3072
+}

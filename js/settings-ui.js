@@ -1,6 +1,6 @@
 /** Settings sheet: music / SFX toggles + volume sliders, persist immediately. */
 
-import { setAudioSettings, playMusic, stopMusic, getAudioSettings, sfx } from "./audio.js?v=25";
+import { setAudioSettings, sfx } from "./audio.js?v=bgm3r2";
 
 export const DEFAULT_SETTINGS = { music: true, sfx: true, haptics: true, musicVol: 0.72, sfxVol: 0.85 };
 
@@ -20,13 +20,6 @@ export function createSettingsUi(ctx) {
     save.settings = { ...DEFAULT_SETTINGS, ...(save.settings || {}), ...extra };
     setAudioSettings(save.settings);
     persist();
-    if (save.settings.music) {
-      const ch = save.chapter || "village";
-      const onPlay = $("#play")?.classList.contains("on");
-      const onTitle = $("#title")?.classList.contains("on");
-      if (onPlay) playMusic(ch);
-      else if (onTitle) playMusic("village");
-    } else stopMusic();
     sync();
   }
 

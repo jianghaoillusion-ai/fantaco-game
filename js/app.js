@@ -3,11 +3,11 @@ import { isCellOpen } from "./world.js?v=25";
 import { createHaptics } from "./haptics.js?v=mobile2";
 import { Auth } from "./auth.js?v=25";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=bgm3r2";
 import { mountMascot } from "./mascot.js?v=mobile3";
 import { mountHome } from "./home.js?v=25";
 import { bindStory, startStory } from "./story.js?v=mobile3";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=mobile2";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=r1112";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
 import { reserveItems } from "./merge.js?v=mobile3";
 import { avatarSrc } from "./portraits.js?v=mobile3";
@@ -16,7 +16,7 @@ import {
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js?v=mobile3";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=mobile3";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=r1112";
 import { regionById } from "./world.js?v=25";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
@@ -55,7 +55,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=mobile3");
+  const res = await fetch(url + "?v=r1112");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -120,7 +120,7 @@ function show(name) {
   if (name === "play") {
     unlockGenerators(); ensureOrders(); persist();
     applyChapterLook();
-    playMusic(SAVE.chapter);
+    playSceneMusic();
     mascot?.wake?.();
     requestAnimationFrame(() => {
       applyBoardLayout();
@@ -138,25 +138,32 @@ function show(name) {
   refreshHud();
 }
 
+function playSceneMusic() {
+  const region = regionById(MAP, SAVE.region);
+  playMusic(region?.chapter === SAVE.chapter ? region.id : SAVE.chapter);
+}
+
 function chapter() { return CHAPTERS.find((c) => c.id === SAVE.chapter) || CHAPTERS[0]; }
 
 function applyChapterLook() {
   const ch = chapter();
-  const region = regionById(MAP, SAVE.region) || null;
+  const candidate = regionById(MAP, SAVE.region);
+  const region = candidate?.chapter === SAVE.chapter ? candidate : null;
   const play = $("#play");
   const bgPath = region?.bg || ch.bg;
   const bg = new URL(bgPath, document.baseURI).href;
   play.style.backgroundImage = `url("${bg}")`;
   play.style.setProperty("--chapter-bg", `url("${bg}")`);
   play.dataset.chapterId = ch.id;
-  play.dataset.regionId = SAVE.region || ch.id;
+  play.dataset.regionId = region?.id || ch.id;
   const sceneBg = $(".scene-bg");
   if (sceneBg) sceneBg.style.backgroundImage = `url("${bg}")`;
   $$("[data-chapter]").forEach((el) => { el.textContent = region?.name || ch.title; });
 }
 
 function bind() {
-  document.addEventListener("pointerdown", () => unlockAudio(), { once: true });
+  ["pointerdown", "pointerup", "touchend", "click", "keydown"].forEach(event =>
+    document.addEventListener(event, () => unlockAudio()));
 
   $("#nick-form")?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -188,7 +195,7 @@ function bind() {
   $("#btn-result-ok")?.addEventListener("click", () => {
     $("#result").classList.remove("on");
     if (pendingAfterClear) { const fn = pendingAfterClear; pendingAfterClear = null; fn(); }
-    else { playMusic(SAVE.chapter); show("play"); }
+    else { playSceneMusic(); show("play"); }
   });
   systems?.bind();
   bindChromeTips();
@@ -907,7 +914,7 @@ function tryFulfill(loc, orderId) {
       renderBoard(); renderOrders(); refreshHud();
       if (o.outro) startStory(o.outro, () => {
         if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
-        else { playMusic(SAVE.chapter); applyChapterLook(); maybeStoryIntro(); }
+        else { playSceneMusic(); applyChapterLook(); maybeStoryIntro(); }
       });
       else if (chapterClear || leveled) showClear({ chapterClear, leveled, o });
       else maybeStoryIntro();
@@ -981,10 +988,10 @@ function showClear({ chapterClear, leveled, o }) {
   if (chapterClear) {
     lyricsBox.style.display = "";
     lyricsBox.innerHTML = (GAME.lyrics.endingLines || []).map((l) => `<p>${l}</p>`).join("");
-    pendingAfterClear = () => { playMusic(SAVE.chapter); applyChapterLook(); show("play"); maybeStoryIntro(); };
+    pendingAfterClear = () => { playSceneMusic(); applyChapterLook(); show("play"); maybeStoryIntro(); };
   } else {
     lyricsBox.style.display = "none";
-    pendingAfterClear = () => { playMusic(SAVE.chapter); show("play"); maybeStoryIntro(); };
+    pendingAfterClear = () => { playSceneMusic(); show("play"); maybeStoryIntro(); };
   }
 }
 
@@ -1085,7 +1092,7 @@ function systemCtx() {
     getSelected: () => selectedUid,
     setSelected: (u) => { selectedUid = u; },
     persist, toast, sfx, show, refresh, refreshHud, grantCoins, applyCoins,
-    startStory, applyChapterLook, playMusic, pauseMusic, resumeMusic,
+    startStory, applyChapterLook, playMusic, playSceneMusic, pauseMusic, resumeMusic,
     makePiece, infoName, infoImg, findCellByUid, removeFrom,
     canMerge: (a, b) => canMerge(a, b, CHAINS, GENS),
     moveOrMerge, onTap, moveToInventory,

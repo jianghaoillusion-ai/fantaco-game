@@ -1,0 +1,78 @@
+{
+  "method": "ffmpeg 2-pole highpass 400 Hz + ebur128; guard excluded; MP3",
+  "not_phone_hardware": true,
+  "reference_median_lufs": -16.8,
+  "rows": [
+    {
+      "id": "village",
+      "highpass_400_lufs": -16.6,
+      "difference_from_other_11_median_db": 0.2
+    },
+    {
+      "id": "journey",
+      "highpass_400_lufs": -18.0,
+      "difference_from_other_11_median_db": -1.2
+    },
+    {
+      "id": "candy",
+      "highpass_400_lufs": -16.6,
+      "difference_from_other_11_median_db": 0.2
+    },
+    {
+      "id": "bulu",
+      "highpass_400_lufs": -17.9,
+      "difference_from_other_11_median_db": -1.1
+    },
+    {
+      "id": "hate",
+      "highpass_400_lufs": -17.9,
+      "difference_from_other_11_median_db": -1.1
+    },
+    {
+      "id": "ending",
+      "highpass_400_lufs": -16.8,
+      "difference_from_other_11_median_db": 0.0
+    },
+    {
+      "id": "castle",
+      "highpass_400_lufs": -16.6,
+      "difference_from_other_11_median_db": 0.2
+    },
+    {
+      "id": "slope",
+      "highpass_400_lufs": -18.6,
+      "difference_from_other_11_median_db": -1.8
+    },
+    {
+      "id": "hill",
+      "highpass_400_lufs": -16.6,
+      "difference_from_other_11_median_db": 0.2
+    },
+    {
+      "id": "bagvalley",
+      "highpass_400_lufs": -18.2,
+      "difference_from_other_11_median_db": -1.4
+    },
+    {
+      "id": "candylane",
+      "highpass_400_lufs": -16.8,
+      "difference_from_other_11_median_db": 0.0
+    },
+    {
+      "id": "lamplight",
+      "highpass_400_lufs": -17.7,
+      "difference_from_other_11_median_db": -0.9
+    },
+    {
+      "id": "theater",
+      "highpass_400_lufs": -17.8,
+      "difference_from_other_11_median_db": -1.0
+    },
+    {
+      "id": "plaza",
+      "highpass_400_lufs": -17.2,
+      "difference_from_other_11_median_db": -0.4
+    }
+  ],
+  "pass": true
+}

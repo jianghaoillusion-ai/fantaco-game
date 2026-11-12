@@ -5,7 +5,7 @@ import {
 } from "./world.js?v=10";
 
 export function createMap(ctx) {
-  const { $, toast, sfx, persist, refresh, refreshHud, show, startStory, applyChapterLook, playMusic } = ctx;
+  const { $, toast, sfx, persist, refresh, refreshHud, show, startStory, applyChapterLook } = ctx;
 
   let pendingRegion = null;
 
@@ -164,7 +164,7 @@ export function createMap(ctx) {
     refreshHud();
     renderMap();
     ctx.fx?.celebrateRestore?.(b.name);
-    ctx.playMusic?.(region?.music || region?.chapter || ch);
+    ctx.playSceneMusic?.();
     ctx.mascot?.cheer?.();
   }
 
@@ -174,7 +174,7 @@ export function createMap(ctx) {
     if (region.chapter) save.chapter = region.chapter;
     persist();
     applyChapterLook();
-    playMusic(region.music || region.chapter || save.chapter);
+    // show("play") selects the region once, after save.region is updated.
     sfx.tap();
     show("play");
   }

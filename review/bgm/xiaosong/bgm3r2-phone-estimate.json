@@ -1,0 +1,105 @@
+{
+ "說明": "400 Hz 二階高通後的循環響度（LUFS），估手機小喇叭相對音量；below500/above1k 是 mp3 能量比例",
+ "tracks": {
+  "village": {
+   "mp3": -16.6,
+   "below500_pct": 3.5,
+   "above1k_pct": 31.1,
+   "ogg": -16.1
+  },
+  "journey": {
+   "mp3": -18.0,
+   "below500_pct": 47.8,
+   "above1k_pct": 12.6,
+   "ogg": -17.5
+  },
+  "candy": {
+   "mp3": -16.6,
+   "below500_pct": 5.7,
+   "above1k_pct": 73.6,
+   "ogg": -16.2
+  },
+  "bulu": {
+   "mp3": -17.9,
+   "below500_pct": 34.3,
+   "above1k_pct": 5.8,
+   "ogg": -17.4
+  },
+  "hate": {
+   "mp3": -17.9,
+   "below500_pct": 28.5,
+   "above1k_pct": 1.0,
+   "ogg": -17.3
+  },
+  "ending": {
+   "mp3": -16.8,
+   "below500_pct": 10.2,
+   "above1k_pct": 42.5,
+   "ogg": -16.4
+  },
+  "castle": {
+   "mp3": -16.6,
+   "below500_pct": 2.5,
+   "above1k_pct": 77.4,
+   "ogg": -16.1
+  },
+  "slope": {
+   "mp3": -18.6,
+   "below500_pct": 68.6,
+   "above1k_pct": 4.9,
+   "ogg": -18.1
+  },
+  "hill": {
+   "mp3": -16.6,
+   "below500_pct": 4.3,
+   "above1k_pct": 42.0,
+   "ogg": -16.1
+  },
+  "bagvalley": {
+   "mp3": -18.2,
+   "below500_pct": 41.0,
+   "above1k_pct": 10.2,
+   "ogg": -17.7
+  },
+  "candylane": {
+   "mp3": -16.8,
+   "below500_pct": 14.5,
+   "above1k_pct": 77.1,
+   "ogg": -16.4
+  },
+  "lamplight": {
+   "mp3": -17.7,
+   "below500_pct": 38.5,
+   "above1k_pct": 6.9,
+   "ogg": -17.2
+  },
+  "theater": {
+   "mp3": -17.8,
+   "below500_pct": 31.6,
+   "above1k_pct": 17.5,
+   "ogg": -17.3
+  },
+  "plaza": {
+   "mp3": -17.2,
+   "below500_pct": 12.5,
+   "above1k_pct": 25.2,
+   "ogg": -16.7
+  }
+ },
+ "四階高通_mp3": {
+  "village": -16.4,
+  "journey": -17.7,
+  "candy": -16.6,
+  "bulu": -17.8,
+  "hate": -17.5,
+  "ending": -16.7,
+  "castle": -16.5,
+  "slope": -18.3,
+  "hill": -16.5,
+  "bagvalley": -18.0,
+  "candylane": -16.9,
+  "lamplight": -17.2,
+  "theater": -17.7,
+  "plaza": -16.9
+ }
+}

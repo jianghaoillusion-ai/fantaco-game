@@ -1,0 +1,892 @@
+{
+ "browser": "148.0.7778.96",
+ "base": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/",
+ "tested_at": "2026-11-12T07:08:16.076Z",
+ "game": {
+  "before_gesture": {
+   "contexts": 0,
+   "live": 0,
+   "max": 0,
+   "starts": 0,
+   "decodes": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "title_before_gesture": {
+   "contexts": 0,
+   "live": 0,
+   "max": 0,
+   "starts": 0,
+   "decodes": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "after_first_gesture": {
+   "contexts": 1,
+   "live": 1,
+   "max": 1,
+   "starts": 1,
+   "decodes": 1,
+   "fetches": 1,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "first_track": "village",
+  "title_to_play_same_scene": {
+   "contexts": 1,
+   "live": 1,
+   "max": 1,
+   "starts": 1,
+   "decodes": 1,
+   "fetches": 1,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "enter": [
+   {
+    "id": "castle",
+    "region_on_screen": "castle",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 1360,
+    "started": [
+     {
+      "track": "castle",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 41.3793125,
+      "frames": 1986207,
+      "rate": 48000,
+      "rms": 0.09502480584057373
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 2,
+     "decoded": 0,
+     "megabytes": 32.73168182373047,
+     "everCreated": 4
+    }
+   },
+   {
+    "id": "slope",
+    "region_on_screen": "slope",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 505,
+    "started": [
+     {
+      "track": "slope",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 36.36364583333334,
+      "frames": 1745455,
+      "rate": 48000,
+      "rms": 0.1136115082134309
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.04844665527344,
+     "everCreated": 6
+    }
+   },
+   {
+    "id": "hill",
+    "region_on_screen": "hill",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 524,
+    "started": [
+     {
+      "track": "hill",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 36.610166666666665,
+      "frames": 1757288,
+      "rate": 48000,
+      "rms": 0.10282430098234405
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 41.87736511230469,
+     "everCreated": 8
+    }
+   },
+   {
+    "id": "bagvalley",
+    "region_on_screen": "bagvalley",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 501,
+    "started": [
+     {
+      "track": "bagvalley",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.63635416666666,
+      "frames": 2094545,
+      "rate": 48000,
+      "rms": 0.11499249809479196
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 42.70391845703125,
+     "everCreated": 10
+    }
+   },
+   {
+    "id": "candylane",
+    "region_on_screen": "candylane",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 507,
+    "started": [
+     {
+      "track": "candylane",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 35.82089583333333,
+      "frames": 1719403,
+      "rate": 48000,
+      "rms": 0.10913808944317677
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 42.505157470703125,
+     "everCreated": 12
+    }
+   },
+   {
+    "id": "lamplight",
+    "region_on_screen": "lamplight",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 541,
+    "started": [
+     {
+      "track": "lamplight",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.2,
+      "frames": 2073600,
+      "rate": 48000,
+      "rms": 0.10667440947539805
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 44.918426513671875,
+     "everCreated": 14
+    }
+   },
+   {
+    "id": "theater",
+    "region_on_screen": "theater",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 503,
+    "started": [
+     {
+      "track": "theater",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 46.15385416666667,
+      "frames": 2215385,
+      "rate": 48000,
+      "rms": 0.10959350019843198
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 45.840362548828125,
+     "everCreated": 16
+    }
+   },
+   {
+    "id": "plaza",
+    "region_on_screen": "plaza",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 1366,
+    "started": [
+     {
+      "track": "plaza",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 38.09522916666667,
+      "frames": 1828571,
+      "rate": 48000,
+      "rms": 0.10552684972707534
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "plaza",
+    "region_on_screen": "plaza",
+    "new_starts": 0,
+    "new_decodes": 0,
+    "new_fetches": 0,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": null,
+    "started": [],
+    "order": "",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "theater",
+    "region_on_screen": "theater",
+    "new_starts": 1,
+    "new_decodes": 0,
+    "new_fetches": 0,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 895,
+    "started": [
+     {
+      "track": "theater",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 46.15385416666667,
+      "frames": 2215385,
+      "rate": 48000,
+      "rms": 0.10959350019843198
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "village",
+    "region_on_screen": "village",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 984,
+    "started": [
+     {
+      "track": "village",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 48,
+      "frames": 2304000,
+      "rate": 48000,
+      "rms": 0.10702721129900103
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 48.431060791015625,
+     "everCreated": 20
+    }
+   },
+   {
+    "id": "lamplight",
+    "region_on_screen": "lamplight",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 966,
+    "started": [
+     {
+      "track": "lamplight",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.2,
+      "frames": 2073600,
+      "rate": 48000,
+      "rms": 0.10667440947539805
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 50.30048370361328,
+     "everCreated": 22
+    }
+   }
+  ],
+  "fetch_log": [
+   "assets/audio/bgm-village.mp3?v=bgm3",
+   "assets/audio/bgm-castle.mp3?v=bgm3",
+   "assets/audio/bgm-slope.mp3?v=bgm3",
+   "assets/audio/bgm-hill.mp3?v=bgm3",
+   "assets/audio/bgm-bagvalley.mp3?v=bgm3",
+   "assets/audio/bgm-candylane.mp3?v=bgm3",
+   "assets/audio/bgm-lamplight.mp3?v=bgm3",
+   "assets/audio/bgm-theater.mp3?v=bgm3",
+   "assets/audio/bgm-plaza.mp3?v=bgm3",
+   "assets/audio/bgm-village.mp3?v=bgm3",
+   "assets/audio/bgm-lamplight.mp3?v=bgm3"
+  ],
+  "same_scene": [
+   {
+    "name": "show(play) x3",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "圖鑑→回遊玩",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖→回遊玩（不進別區）",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "開設定",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "音量拉到 0",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0
+   },
+   {
+    "name": "音量拉到 100",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.5
+   },
+   {
+    "name": "音量拉回 72",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "關音樂",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0
+   },
+   {
+    "name": "開音樂",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "關設定",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖修「目前這區」的建築",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖修「別區」的建築",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "修完回遊玩",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "開關背包",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "故事對話→略過",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "拖曳合成",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "交訂單",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   }
+  ],
+  "region_after_restore": "lamplight",
+  "merge_happened": true,
+  "order_delivered": true,
+  "track_after_same_scene": "lamplight",
+  "pause_resume": {
+   "live_while_paused": 0,
+   "resume_offset": 11.535999999999998,
+   "expected_offset": 11.535999999999998,
+   "same_track": true,
+   "live_after": 1
+  },
+  "rapid_switch": {
+   "live": 1,
+   "max_live_ever": 1,
+   "final_track": "candy",
+   "alive": {
+    "gc": true,
+    "loop": 3,
+    "decoded": 0,
+    "megabytes": 43.74714660644531,
+    "everCreated": 36
+   }
+  },
+  "chapters": [
+   {
+    "chapter": "journey",
+    "track": "journey",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "candy",
+    "track": "candy",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "bulu",
+    "track": "bulu",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "hate",
+    "track": "hate",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "ending",
+    "track": "ending",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "village",
+    "track": "village",
+    "new_starts": 1,
+    "live": 1
+   }
+  ],
+  "alive_after_all": {
+   "gc": true,
+   "loop": 3,
+   "decoded": 0,
+   "megabytes": 47.26414489746094,
+   "everCreated": 46
+  },
+  "after_stop": {
+   "contexts": 1,
+   "live": 0,
+   "max": 1,
+   "starts": 20,
+   "decodes": 23,
+   "fetches": 23,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "overlap_violations": 0,
+  "total_events": 40,
+  "page_errors": [],
+  "console_errors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin"
+  ],
+  "failed_requests": [
+   "https://server.ethicalads.io/api/v1/decision/?publisher=githackcom&ad_types=image-v1&div_ids=githack-other-ad&callback=ad_1794467296952_776384&keywords=&campaign_types=paid%7Cpublisher-house%7Ccommunity%7Chouse&format=jsonp&client_version=2.5.0&placement_index=0&url=https%3A%2F%2Frawcdn.githack.com%2Fjianghaoillusion-ai%2Ffantaco-game%2F201cf99303815a749eb68bb1648e4419e1588cb7%2Findex.html",
+   "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/assets/chars/expr/mascot-happy-open.png",
+   "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/assets/chars/expr/jiejie-happy.png?v=cast10r2"
+  ]
+ },
+ "fallback": {
+  "title": [
+   {
+    "src": "bgm-village.mp3?v=bgm3",
+    "paused": false,
+    "t": 3.734929,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "play_same": [
+   {
+    "src": "bgm-village.mp3?v=bgm3",
+    "paused": false,
+    "t": 4.239262,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "castle": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 3.792851,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "music_off": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 4.038572,
+    "volume": 0,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "music_on": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 4.611055,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "after_wrap": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 0.863315,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "page_errors": []
+ },
+ "loop_test": {
+  "before_click": {
+   "contexts": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "plays": [
+   {
+    "ext": "ogg",
+    "i": 0,
+    "status": "微笑村 · 鐵琴泡泡音樂盒 · OGG · 48.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 1,
+    "status": "神祕魔法袋 · 烏克麗麗搖擺跳跳 · OGG · 51.428562 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 2,
+    "status": "第一願：西卡 · 口哨氣球小遊行 · OGG · 45.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 3,
+    "status": "第二願：布魯 · 木琴躲貓貓：三連小跳與高低應答 · OGG · 44.444437 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 4,
+    "status": "最後一願：哈特 · 短風琴魔術步：切分和弦與空拍問答 · OGG · 38.709688 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 5,
+    "status": "漫天氣球 · 氣球圓舞：三拍柔鐘與長音雲朵 · OGG · 42.352938 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 6,
+    "status": "微笑城堡 · 小鐘鐘塔：雙聲部卡農與整拍撥弦 · OGG · 41.379312 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 7,
+    "status": "飛飛的出發坡 · 彈跳起跑：附點上行與雙拍踏步 · OGG · 36.363646 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 8,
+    "status": "阿飄的探險丘 · 丘陵迴旋：三拍木管與交錯琶音 · OGG · 36.610167 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 9,
+    "status": "魔法袋谷 · 魔法口袋：五音短句與搖擺分解和弦 · OGG · 43.636354 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 10,
+    "status": "西卡的糖果巷 · 糖果踢踏：短木琴與反拍鈴答句 · OGG · 35.820896 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 11,
+    "status": "布魯的夜燈林 · 夜燈搖籃：輕風琴長句與稀疏星光 · OGG · 43.200000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 12,
+    "status": "哈特的魔術劇場 · 玩偶小劇場：撥弦停頓與低音回答 · OGG · 46.153854 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 13,
+    "status": "漫天氣球廣場 · 廣場跳格子：短笛呼喊與拉丁式木塊 · OGG · 38.095229 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 0,
+    "status": "微笑村 · 鐵琴泡泡音樂盒 · MP3 · 48.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 1,
+    "status": "神祕魔法袋 · 烏克麗麗搖擺跳跳 · MP3 · 51.428562 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 2,
+    "status": "第一願：西卡 · 口哨氣球小遊行 · MP3 · 45.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 3,
+    "status": "第二願：布魯 · 木琴躲貓貓：三連小跳與高低應答 · MP3 · 44.444437 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 4,
+    "status": "最後一願：哈特 · 短風琴魔術步：切分和弦與空拍問答 · MP3 · 38.709688 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 5,
+    "status": "漫天氣球 · 氣球圓舞：三拍柔鐘與長音雲朵 · MP3 · 42.352938 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 6,
+    "status": "微笑城堡 · 小鐘鐘塔：雙聲部卡農與整拍撥弦 · MP3 · 41.379312 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 7,
+    "status": "飛飛的出發坡 · 彈跳起跑：附點上行與雙拍踏步 · MP3 · 36.363646 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 8,
+    "status": "阿飄的探險丘 · 丘陵迴旋：三拍木管與交錯琶音 · MP3 · 36.610167 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 9,
+    "status": "魔法袋谷 · 魔法口袋：五音短句與搖擺分解和弦 · MP3 · 43.636354 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 10,
+    "status": "西卡的糖果巷 · 糖果踢踏：短木琴與反拍鈴答句 · MP3 · 35.820896 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 11,
+    "status": "布魯的夜燈林 · 夜燈搖籃：輕風琴長句與稀疏星光 · MP3 · 43.200000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 12,
+    "status": "哈特的魔術劇場 · 玩偶小劇場：撥弦停頓與低音回答 · MP3 · 46.153854 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 13,
+    "status": "漫天氣球廣場 · 廣場跳格子：短笛呼喊與拉丁式木塊 · MP3 · 38.095229 秒，循環播放中",
+    "live": 1
+   }
+  ],
+  "alive": {
+   "gc": true,
+   "loop": 3,
+   "decoded": 0,
+   "megabytes": 46.673248291015625,
+   "everCreated": 58
+  },
+  "after_stop": {
+   "live": 0,
+   "max": 2,
+   "contexts": 1,
+   "starts": 28
+  },
+  "page_errors": [],
+  "console_errors": [
+   "Failed to load resource: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin"
+  ]
+ },
+ "server_requests": 0,
+ "interstitial": [
+  {
+   "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/index.html",
+   "title": "External Content Notice | rawgit.hack"
+  },
+  {
+   "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/index.html",
+   "title": "External Content Notice | rawgit.hack"
+  },
+  {
+   "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/201cf99303815a749eb68bb1648e4419e1588cb7/review/bgm/loop-test.html",
+   "title": "External Content Notice | rawgit.hack"
+  }
+ ]
+}

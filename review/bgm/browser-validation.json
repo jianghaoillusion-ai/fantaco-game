@@ -1,0 +1,228 @@
+{
+  "browser": "148.0.7778.96",
+  "files": [
+    {
+      "name": "cute-a-glock-bubbles.mp3",
+      "rate": 48000,
+      "pcm_sha256": [],
+      "seam_dip_db": 1.2537718936935143,
+      "inner_max_dip_db": 10.561456601862623,
+      "tail_100ms_dbfs": -18.826230727311586,
+      "samples": 2304000,
+      "expected": 2304000,
+      "loop_frames": 2304000,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.009979253634810448
+    },
+    {
+      "name": "cute-a-glock-bubbles.ogg",
+      "rate": 48000,
+      "pcm_sha256": [
+        "642c1214268ae7466b78d6aefd3e6eeacf94e22d07ea858b8512ff672278fac2",
+        "aba40bee509f4c7b1d9010d872b0ac8d6be725afa0c292d235aa9bf15fff01f0"
+      ],
+      "seam_dip_db": 1.2954340755489184,
+      "inner_max_dip_db": 10.765384944170997,
+      "tail_100ms_dbfs": -18.777839339556092,
+      "samples": 2304320,
+      "expected": 2304000,
+      "loop_frames": 2304000,
+      "trimmed_tail": 320,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.017292557284235954
+    },
+    {
+      "name": "cute-b-uke-hop.mp3",
+      "rate": 48000,
+      "pcm_sha256": [],
+      "seam_dip_db": 4.4696106254100805,
+      "inner_max_dip_db": 8.793828457537646,
+      "tail_100ms_dbfs": -18.252787659533,
+      "samples": 2468571,
+      "expected": 2468571,
+      "loop_frames": 2468571,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.0006714072078466415
+    },
+    {
+      "name": "cute-b-uke-hop.ogg",
+      "rate": 48000,
+      "pcm_sha256": [
+        "9f47d5dde00df1c4ed1b7b92dcf150b4dc128dfdd99a22069255a29fbaf1602c",
+        "ef62189557fe4bad9bff68e5bd358a427442abccb775c254b4c2184391b30caf"
+      ],
+      "seam_dip_db": 4.5461971204220255,
+      "inner_max_dip_db": 8.629620096827963,
+      "tail_100ms_dbfs": -18.21971151335049,
+      "samples": 2469568,
+      "expected": 2468571,
+      "loop_frames": 2468571,
+      "trimmed_tail": 997,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.00974294263869524
+    },
+    {
+      "name": "cute-c-whistle-parade.mp3",
+      "rate": 48000,
+      "pcm_sha256": [],
+      "seam_dip_db": 0.22741636409533328,
+      "inner_max_dip_db": 4.735980665060481,
+      "tail_100ms_dbfs": -18.15252255930494,
+      "samples": 2160000,
+      "expected": 2160000,
+      "loop_frames": 2160000,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.018615893088281155
+    },
+    {
+      "name": "cute-c-whistle-parade.ogg",
+      "rate": 48000,
+      "pcm_sha256": [
+        "ebdff7de727d6f06cb86ed793e0ab5ead3f147ba06c09b5cac1f0e3b628ca981",
+        "cbfb63a0dcfec27d2114cb1a0d7ebe0e150a88bdb9e676f97d197f7f07395da7"
+      ],
+      "seam_dip_db": 0.5820984884867144,
+      "inner_max_dip_db": 4.49673636143897,
+      "tail_100ms_dbfs": -18.106415459375267,
+      "samples": 2160960,
+      "expected": 2160000,
+      "loop_frames": 2160000,
+      "trimmed_tail": 960,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.023803863674402237
+    },
+    {
+      "name": "cute-a-glock-bubbles.mp3",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 1.2675162355826082,
+      "inner_max_dip_db": 10.580392036000855,
+      "tail_100ms_dbfs": -18.82612558006745,
+      "samples": 2116800,
+      "expected": 2116800,
+      "loop_frames": 2116800,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.010960020794300362
+    },
+    {
+      "name": "cute-a-glock-bubbles.ogg",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 1.3090611164409331,
+      "inner_max_dip_db": 10.78318919606852,
+      "tail_100ms_dbfs": -18.777733548712465,
+      "samples": 2117094,
+      "expected": 2116800,
+      "loop_frames": 2116800,
+      "trimmed_tail": 294,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.017798571847379208
+    },
+    {
+      "name": "cute-b-uke-hop.mp3",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 4.399972578035673,
+      "inner_max_dip_db": 8.810136962238154,
+      "tail_100ms_dbfs": -18.252509196739698,
+      "samples": 2267999,
+      "expected": 2268000,
+      "loop_frames": 2267999,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.0023366196546703577
+    },
+    {
+      "name": "cute-b-uke-hop.ogg",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 4.645003342055745,
+      "inner_max_dip_db": 8.65129131781202,
+      "tail_100ms_dbfs": -18.219880197057744,
+      "samples": 2268915,
+      "expected": 2268000,
+      "loop_frames": 2268000,
+      "trimmed_tail": 915,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.009064641315490007
+    },
+    {
+      "name": "cute-c-whistle-parade.mp3",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 0.1964374942299436,
+      "inner_max_dip_db": 4.609119244538945,
+      "tail_100ms_dbfs": -18.152411295081993,
+      "samples": 1984499,
+      "expected": 1984500,
+      "loop_frames": 1984499,
+      "trimmed_tail": 0,
+      "two_cycles_max_error": 2.9103830456733704e-11,
+      "seam_jump": 0.04018043912947178
+    },
+    {
+      "name": "cute-c-whistle-parade.ogg",
+      "rate": 44100,
+      "pcm_sha256": [],
+      "seam_dip_db": 0.5550488374206779,
+      "inner_max_dip_db": 4.402846220196139,
+      "tail_100ms_dbfs": -18.106345019371663,
+      "samples": 1985381,
+      "expected": 1984500,
+      "loop_frames": 1984500,
+      "trimmed_tail": 881,
+      "two_cycles_max_error": 0,
+      "seam_jump": 0.024975068867206573
+    }
+  ],
+  "ui": {
+    "no_autoplay": true,
+    "six_choices": true,
+    "same_song_no_restart": true,
+    "stop_during_fetch": true,
+    "fetch_error_visible": true,
+    "return_to_active_during_fetch": true,
+    "format_after_error": true,
+    "rebuild_after_pagehide": true,
+    "page_errors": []
+  },
+  "ogg_full_alignment": [
+    {
+      "name": "cute-a-glock-bubbles.ogg",
+      "channels": 2,
+      "compared_samples_per_channel": 2304000,
+      "exact_match": true,
+      "final_granule": 2304000,
+      "sha256": [
+        "642c1214268ae7466b78d6aefd3e6eeacf94e22d07ea858b8512ff672278fac2",
+        "aba40bee509f4c7b1d9010d872b0ac8d6be725afa0c292d235aa9bf15fff01f0"
+      ]
+    },
+    {
+      "name": "cute-b-uke-hop.ogg",
+      "channels": 2,
+      "compared_samples_per_channel": 2468571,
+      "exact_match": true,
+      "final_granule": 2468571,
+      "sha256": [
+        "9f47d5dde00df1c4ed1b7b92dcf150b4dc128dfdd99a22069255a29fbaf1602c",
+        "ef62189557fe4bad9bff68e5bd358a427442abccb775c254b4c2184391b30caf"
+      ]
+    },
+    {
+      "name": "cute-c-whistle-parade.ogg",
+      "channels": 2,
+      "compared_samples_per_channel": 2160000,
+      "exact_match": true,
+      "final_granule": 2160000,
+      "sha256": [
+        "ebdff7de727d6f06cb86ed793e0ab5ead3f147ba06c09b5cac1f0e3b628ca981",
+        "cbfb63a0dcfec27d2114cb1a0d7ebe0e150a88bdb9e676f97d197f7f07395da7"
+      ]
+    }
+  ]
+}

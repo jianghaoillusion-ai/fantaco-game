@@ -1,122 +1,194 @@
-/* Chapter BGM is original procedural synth. Level/chapter clear plays the official 〈飛向藍藍天〉 chorus clip (assets/audio/feixiang-sting.*). */
-
+/* Original scene music; official clear sting files remain unchanged. */
 let ctx, unlocked = false;
-const musicEl = { el: null, id: null };
-let lastMusicId = "village";
-
-const MUSIC_FILES = {
-  village: "bgm-village", journey: "bgm-journey", candy: "bgm-candy",
-  bulu: "bgm-bulu", hate: "bgm-hate", ending: "bgm-ending",
-  castle: "bgm-village", slope: "bgm-journey", hill: "bgm-journey",
-  bagvalley: "bgm-journey", candylane: "bgm-candy", lamplight: "bgm-bulu",
-  theater: "bgm-hate", plaza: "bgm-ending"
-};
-
-export function unlockAudio() {
-  try {
-    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === "suspended") ctx.resume();
-    unlocked = true;
-  } catch {}
-}
-
-function ac() {
-  if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-  return ctx;
-}
-
 let settings = { music: true, sfx: true, musicVol: 0.72, sfxVol: 0.85 };
-
-function musicGain() {
-  if (!settings.music) return 0;
-  const v = settings.musicVol;
-  return (v == null ? 0.72 : v);
+const MUSIC_FILES = Object.fromEntries('village journey candy bulu hate ending castle slope hill bagvalley candylane lamplight theater plaza'.split(' ').map(id => [id, `bgm-${id}`]));
+// Exact scored loop lengths; codec tail blocks are excluded after decoding.
+const MUSIC_SECONDS = {village:48, journey:2468571/48000, candy:45,
+ bulu:80*60/108, hate:80*60/124, ending:72*60/102, castle:80*60/116,
+ slope:80*60/132, hill:72*60/118, bagvalley:80*60/110,
+ candylane:80*60/134, lamplight:43.2, theater:80*60/104, plaza:80*60/126};
+const LOOP_GUARD = 9216 / 48000; // Circular codec context, not silence.
+const cache = new Map();
+const decodeUnavailable = new Set();
+let active = null, wanted = null, generation = 0, paused = false, clearVoice = null;
+function ac() {
+ if (!ctx || ctx.state === "closed") ctx = new (window.AudioContext || window.webkitAudioContext)();
+ return ctx;
 }
-function sfxGain() {
-  if (!settings.sfx) return 0;
-  const v = settings.sfxVol;
-  return (v == null ? 0.85 : v);
+export function unlockAudio() {
+ unlocked = true;
+ const retry=()=>{if(wanted && !paused){if(active?.el)active.el.play().catch(()=>{});else if(!active)playMusic(wanted)}};
+ if(window.AudioContext || window.webkitAudioContext) {
+  try {const c=ac();if(c.state!=='running'){c.resume().then(retry).catch(()=>{});return;}}catch{}
+ }
+ retry();
 }
-
+function musicGain() { return settings.music ? (settings.musicVol ?? .72) : 0; }
+function sfxGain() { return settings.sfx ? (settings.sfxVol ?? .85) : 0; }
 function applyMusicVolume() {
-  if (musicEl.el) musicEl.el.volume = 0.5 * musicGain();
-  document.querySelectorAll("audio[data-role='feixiang-clear']").forEach((el) => {
-    el.volume = 0.88 * musicGain();
-    if (!settings.music || musicGain() === 0) el.pause();
-  });
+ const value=.5*musicGain();
+ if(active?.gain) { const p=active.gain.gain; p.cancelScheduledValues(ctx.currentTime);p.setValueAtTime(p.value,ctx.currentTime);p.linearRampToValueAtTime(value,ctx.currentTime+.025); }
+ if(active?.el) { active.el.volume=value;active.el.muted=value===0; }
+ if(clearVoice) { clearVoice.el.volume=.88*musicGain();if(!musicGain()) clearVoice.finish(); }
 }
-
 export function setAudioSettings(s) {
-  settings = { ...settings, ...s };
-  if (!settings.music || musicGain() === 0) stopMusic();
-  else {
-    applyMusicVolume();
-    if (!musicEl.el && lastMusicId) playMusic(lastMusicId);
-    else applyMusicVolume();
-  }
-  applyMusicVolume();
+ const wasAudible=musicGain()>0;
+ settings={...settings,...s};
+ if(!musicGain())generation++; // Invalidate a load that began before muting.
+ if(!wasAudible && musicGain() && wanted && active?.id!==wanted) {
+  dispose(active);active=null; // Never unmute the previous region while loading.
+  if(!paused)playMusic(wanted);
+ }
+ applyMusicVolume();
 }
 export function getAudioSettings() { return settings; }
-
-export function playMusic(chapterId) {
-  const file = MUSIC_FILES[chapterId] || "bgm-village";
-  lastMusicId = chapterId || "village";
-  if (!settings.music || musicGain() === 0) { stopMusic(); return; }
-  if (musicEl.id === file && musicEl.el && !musicEl.el.paused) {
-    applyMusicVolume();
-    return;
-  }
-  stopMusic();
-  const el = new Audio();
-  const ogg = `assets/audio/${file}.ogg`;
-  const mp3 = `assets/audio/${file}.mp3`;
-  if (el.canPlayType("audio/ogg")) el.src = ogg; else el.src = mp3;
-  el.loop = true;
-  el.volume = 0.5 * musicGain();
-  el.play().catch(() => {});
-  musicEl.el = el; musicEl.id = file;
+function dispose(v) {
+ if(!v)return;
+ if(v.source) { try{v.source.stop()}catch{} v.source.disconnect();v.gain.disconnect();v.source=null; }
+ if(v.el) { v.el.onloadedmetadata=null;v.el.ontimeupdate=null;v.el.onended=null;v.el.pause();v.el.removeAttribute('src');v.el.load(); }
 }
-
-export function stopMusic() {
-  if (musicEl.el) {
-    musicEl.el.pause();
-    musicEl.el.src = "";
-    musicEl.el = null;
-    musicEl.id = null;
+// Keep one complete scored cycle. Codec context allows a tiny circular origin
+// adjustment after resampling, avoiding an unmatched fractional sample at 44.1k.
+export function prepareLoopBuffer(buffer, frames, guard, context) {
+ const channels=Array.from({length:buffer.numberOfChannels},(_,c)=>buffer.getChannelData(c));
+ const radius=Math.round(buffer.sampleRate*.01),width=Math.round(buffer.sampleRate*.002);
+ const sample=(x,q,k)=>x[q+((k%frames)+frames)%frames];
+ const dip=q=>{
+  const values=[];
+  for(let ms=-6;ms<=6;ms+=.5){
+   const at=Math.round(ms*buffer.sampleRate/1000)-Math.floor(width/2);let sum=0;
+   for(const x of channels)for(let k=0;k<width;k++)sum+=sample(x,q,at+k)**2;
+   values.push(10*Math.log10(Math.max(1e-24,sum/(width*channels.length))));
   }
+  return Math.max(0,Math.min(values[0],values.at(-1))-Math.min(...values));
+ };
+ const nominalDip=dip(guard);
+ let origin=guard,best=Infinity;
+ for(let d=-radius;d<=radius;d++) {
+  const q=guard+d;if(q<2 || q+frames+2>buffer.length)continue;
+  let score=0;
+  for(const x of channels)for(let k=-width;k<width-2;k++)score=Math.max(score,
+   Math.abs(sample(x,q,k+2)-2*sample(x,q,k+1)+sample(x,q,k)));
+  score+=Math.abs(d)*1e-12;
+  if(score<best && dip(q)<=nominalDip+.01){best=score;origin=q;}
+ }
+ const loop=context.createBuffer(buffer.numberOfChannels,frames,buffer.sampleRate);
+ channels.forEach((x,c)=>loop.copyToChannel(x.subarray(origin,origin+frames),c));
+ return {buffer:loop,loopStart:0,duration:frames/buffer.sampleRate,codecOrigin:origin};
 }
-
+export function prepareDecodedLoop(buffer,seconds,ext,context) {
+   const frames=Math.round(Math.round(seconds*48000)/48000*buffer.sampleRate);
+   const loopStart=Math.round(LOOP_GUARD*buffer.sampleRate)/buffer.sampleRate;
+   const expected=Math.round((Math.round(seconds*48000)+18432)/48000*buffer.sampleRate);
+   const excess=buffer.length-expected;
+   if(excess < -2 || excess > Math.ceil((ext==='ogg'?2048:4096)/48000*buffer.sampleRate))throw new Error('BGM decoded length mismatch');
+   const prepared=prepareLoopBuffer(buffer,frames,Math.round(loopStart*buffer.sampleRate),context);
+   // Extra leading codec delay is accepted only with measured periodic agreement.
+   if(excess>2 && ext==='mp3') {
+    let error=0,power=0,count=0;const q=prepared.codecOrigin,w=Math.round(buffer.sampleRate*.002);
+    for(let c=0;c<buffer.numberOfChannels;c++){const x=buffer.getChannelData(c);for(let k=0;k<w;k++){error+=(x[q+k]-x[q+frames+k])**2;power+=x[q+k]**2;count++;}}
+    if(Math.sqrt(error/Math.max(power,1e-12))>.25 || Math.sqrt(error/count)>.025)throw new Error('BGM codec alignment mismatch');
+   }
+   return prepared;
+}
+async function load(id) {
+ if(cache.has(id)){const hit=cache.get(id);cache.delete(id);cache.set(id,hit);return hit;}
+ const promise=(async()=>{
+  let error,codecFailures=0;
+  // Prefer MP3 (small, gapless metadata); try Vorbis if decoding fails.
+  for(const ext of ['mp3','ogg'])try {
+   const response=await fetch(`assets/audio/${MUSIC_FILES[id]}.${ext}?v=bgm3r2`);
+   if(!response.ok)throw new Error(`BGM HTTP ${response.status}`);
+   const bytes=await response.arrayBuffer();
+   let buffer;try{buffer=await ac().decodeAudioData(bytes);}catch(e){codecFailures++;throw e;}
+   return prepareDecodedLoop(buffer,MUSIC_SECONDS[id],ext,ac());
+  }catch(e){error=e}
+  if(codecFailures===2)decodeUnavailable.add(id);
+  throw error;
+ })();
+ cache.set(id,promise);
+ // Bound decoded PCM memory on phones; active source retains its own buffer.
+ while(cache.size>3)cache.delete(cache.keys().next().value);
+ try{return await promise}catch(e){cache.delete(id);throw e}
+}
+function start(v) {
+ const source=ac().createBufferSource(),gain=ctx.createGain();
+ source.buffer=v.buffer;source.loop=true;source.loopStart=v.loopStart;source.loopEnd=v.loopStart+v.duration;
+ source.connect(gain);gain.connect(ctx.destination);
+ gain.gain.setValueAtTime(0,ctx.currentTime);gain.gain.linearRampToValueAtTime(.5*musicGain(),ctx.currentTime+.025);
+ v.source=source;v.gain=gain;v.started=ctx.currentTime;
+ source.start(0,v.loopStart+(v.offset || 0));
+}
+// A short fade-out followed by a new source: no simultaneous BGM sources.
+async function retire(v) {
+ if(!v)return;
+ if(v.source) {
+  const p=v.gain.gain,t=ctx.currentTime;p.cancelScheduledValues(t);p.setValueAtTime(p.value,t);p.linearRampToValueAtTime(0,t+.025);
+  await new Promise(resolve=>setTimeout(resolve,35));
+ }
+ dispose(v);
+}
+let switching=Promise.resolve();
+export async function playMusic(sceneId) {
+ const id=MUSIC_FILES[sceneId]?sceneId:'village';wanted=id;
+ const token=++generation;
+ if(clearVoice)clearVoice.finish(false);
+ if(!unlocked || paused || !musicGain())return;
+ if(active?.id===id) {applyMusicVolume();return;}
+ let data;
+ let web=!!(window.AudioContext || window.webkitAudioContext) && !decodeUnavailable.has(id);
+ try { if(web)data=await load(id); } catch(error) {console.warn('BGM Web Audio unavailable; using HTML audio',id,error);web=false;}
+ if(token!==generation || paused)return;
+ switching=switching.then(async()=>{
+  if(token!==generation || paused)return;
+  if(active?.id===id)return;
+  const old=active;active=null;await retire(old);
+  if(token!==generation || paused)return;
+  if(web) {active={id,...data,offset:0};start(active);}
+  else {
+   const el=new Audio();el.src=`assets/audio/${MUSIC_FILES[id]}.mp3?v=bgm3r2`;el.volume=.5*musicGain();el.muted=!musicGain();
+   active={id,el};
+   el.onloadedmetadata=()=>{if(active?.el===el)el.currentTime=LOOP_GUARD;};
+   const wrap=()=>{if(active?.el!==el || paused)return;if(el.ended || el.currentTime>=LOOP_GUARD+MUSIC_SECONDS[id]){el.currentTime=el.ended?LOOP_GUARD:el.currentTime-MUSIC_SECONDS[id];el.play().catch(()=>{});}};
+   el.ontimeupdate=wrap;el.onended=wrap;el.play().catch(()=>{});
+  }
+ }).catch(error=>{dispose(active);active=null;console.warn("BGM transition failed",error);});
+ await switching;
+}
+export function stopMusic() { generation++;wanted=null;if(clearVoice)clearVoice.finish(false);paused=false;dispose(active);active=null; }
 export function pauseMusic() {
-  try { musicEl.el?.pause(); } catch {}
+ generation++;paused=true;
+ if(active?.source) {
+  active.offset=((active.offset||0)+ctx.currentTime-active.started)%active.duration;
+  dispose(active);
+ } else active?.el?.pause();
 }
-
 export function resumeMusic() {
-  if (!settings.music || musicGain() === 0) return;
-  if (musicEl.el) { musicEl.el.play().catch(() => {}); return; }
-  if (lastMusicId) playMusic(lastMusicId);
+ paused=false;
+ if(active?.id===wanted) {if(active.el)active.el.play().catch(()=>{});else if(!active.source)start(active);}
+ else if(wanted)playMusic(wanted);
 }
-
 export function playClearTheme() {
-  /* Official 〈飛向藍藍天〉 chorus clip (from 飛向藍藍天_MMM v1.wav, ~28s). */
-  stopMusic();
-  if (!settings.music || musicGain() === 0) return Promise.resolve();
-  const el = new Audio();
-  const m4a = "assets/audio/feixiang-sting.m4a";
-  const ogg = "assets/audio/feixiang-sting.ogg";
-  if (el.canPlayType("audio/mp4") || el.canPlayType("audio/aac")) el.src = m4a;
-  else el.src = ogg;
-  el.volume = 0.88 * musicGain();
-  el.setAttribute("data-role", "feixiang-clear");
-  document.querySelectorAll("audio[data-role='feixiang-clear']").forEach((n) => n.remove());
-  document.body.appendChild(el);
-  const played = el.play().catch(() => {
-    el.src = el.src.endsWith(".m4a") ? ogg : m4a;
-    return el.play().catch(() => {});
-  });
-  return played.then(() => new Promise((res) => {
-    el.onended = res;
-    setTimeout(res, 30000);
-  }));
+ if(clearVoice)clearVoice.finish(false);
+ if(!musicGain())return Promise.resolve();
+ const wasPaused=paused;pauseMusic();
+ return new Promise(resolve=>{
+  const el=new Audio();let timer,alternative=false;
+  const finish=(restore=true)=>{
+   if(clearVoice?.el!==el)return;
+   clearVoice=null;clearTimeout(timer);el.onended=null;el.onerror=null;
+   el.pause();el.removeAttribute('src');el.load();paused=wasPaused;resolve();
+   if(restore && !wasPaused)resumeMusic();
+  };
+  const failed=()=>{
+   if(clearVoice?.el!==el)return;
+   if(alternative || el.src.endsWith('.ogg')){finish();return;}
+   alternative=true;el.src='assets/audio/feixiang-sting.ogg';el.play().catch(()=>finish());
+  };
+  clearVoice={el,finish};el.volume=.88*musicGain();
+  el.src=el.canPlayType('audio/mp4')?'assets/audio/feixiang-sting.m4a':'assets/audio/feixiang-sting.ogg';
+  el.onended=()=>finish();el.onerror=failed;timer=setTimeout(()=>finish(),30000);el.play().catch(failed);
+ });
 }
 
 function beep(freq, dur, type, gain, at) {

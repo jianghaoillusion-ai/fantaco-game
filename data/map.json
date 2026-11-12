@@ -81,7 +81,7 @@
       "subtitle": "大賽獎盃住的地方",
       "source": "new",
       "chapter": "village",
-      "music": "village",
+      "music": "castle",
       "bg": "assets/bg/village.webp",
       "npc": "jiejie",
       "unlock": {
@@ -141,7 +141,7 @@
       "subtitle": "離開村子的第一道坡",
       "source": "new",
       "chapter": "journey",
-      "music": "journey",
+      "music": "slope",
       "bg": "assets/bg/journey.webp",
       "npc": "feifei",
       "unlock": {
@@ -191,7 +191,7 @@
       "subtitle": "愛探險的人會來這裡",
       "source": "new",
       "chapter": "journey",
-      "music": "journey",
+      "music": "hill",
       "bg": "assets/bg/journey.webp",
       "npc": "apiao",
       "unlock": {
@@ -240,7 +240,7 @@
       "subtitle": "氣球精靈出現的地方",
       "source": "new",
       "chapter": "journey",
-      "music": "journey",
+      "music": "bagvalley",
       "bg": "assets/bg/journey.webp",
       "npc": "spirit",
       "unlock": {
@@ -289,7 +289,7 @@
       "subtitle": "香甜的小巷",
       "source": "new",
       "chapter": "candy",
-      "music": "candy",
+      "music": "candylane",
       "bg": "assets/bg/candy.webp",
       "npc": "sika",
       "unlock": {
@@ -338,7 +338,7 @@
       "subtitle": "把小路點亮",
       "source": "new",
       "chapter": "bulu",
-      "music": "journey",
+      "music": "lamplight",
       "bg": "assets/bg/bulu.webp",
       "npc": "bulu",
       "unlock": {
@@ -387,7 +387,7 @@
       "subtitle": "找回自信的小舞台",
       "source": "new",
       "chapter": "hate",
-      "music": "candy",
+      "music": "theater",
       "bg": "assets/bg/hate.webp",
       "npc": "hate",
       "unlock": {
@@ -436,7 +436,7 @@
       "subtitle": "充滿歡笑的終章",
       "source": "new",
       "chapter": "ending",
-      "music": "village",
+      "music": "plaza",
       "bg": "assets/bg/ending.webp",
       "npc": "feifei",
       "unlock": {
