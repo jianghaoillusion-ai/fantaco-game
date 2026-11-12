@@ -7,7 +7,7 @@ R=Path(__file__).resolve().parents[2];O=R/'review/cast8';p=O/'build_cast8.py'
 tree=ast.parse(p.read_text());nodes=[n for n in tree.body if isinstance(n,(ast.Import,ast.ImportFrom,ast.FunctionDef))];ns={'__file__':str(p)};exec(compile(ast.Module(body=nodes,type_ignores=[]),str(p),'exec'),ns);ns['R']=R
 polys={'jiejie':[(228,127),(242,121),(256,118),(269,117),(282,112),(298,117),(308,132),(309,155),(302,170),(285,183),(266,188),(248,183),(235,172),(229,154)],'spirit':[(228,215),(238,208),(251,207),(263,205),(276,204),(290,207),(303,212),(313,230),(309,254),(298,270),(284,281),(266,284),(250,280),(237,270),(230,254)]}
 out={}
-for k,s,anchor,target,blur,dy in [('jiejie',1.85,(267,187),(267,247),.7,1),('spirit',1.60,(270,282),(270,313),.45,0)]:
+for k,s,anchor,target,blur,dy in [('jiejie',1.885,(267,187),(267,249),.7,1),('spirit',1.65,(270,282),(270,313),.45,0)]:
  im=ns['trans'](ns['layer'](ns['source'](k),ns['poly'](polys[k]).filter(ImageFilter.GaussianBlur(blur))),s,anchor,target)
  if dy:
   z=Image.new('RGBA',(540,720));z.alpha_composite(im,(0,dy));im=z

@@ -8,10 +8,10 @@
     "sole": 685,
     "webp_equal": true,
     "hard_edge_pixels": 0,
-    "edge_mid_alpha_percent": 99.96475149806133,
+    "edge_mid_alpha_percent": 99.92840095465394,
     "small_components_under8": 0,
     "alpha_positive_components": 1,
-    "sha256": "66723c1c89309e6360c32094d8e786fe13ea0f78e5ae3ec54ea9acbc0665e095"
+    "sha256": "13a92cd0b83809612b1e0fc6afe0a97933b7213f6b6e8e1bcda4aa1465442dbb"
   },
   "hate": {
     "size": [
@@ -36,10 +36,10 @@
     "sole": 685,
     "webp_equal": true,
     "hard_edge_pixels": 0,
-    "edge_mid_alpha_percent": 99.31708465795361,
+    "edge_mid_alpha_percent": 99.51284861770796,
     "small_components_under8": 0,
     "alpha_positive_components": 1,
-    "sha256": "7e6a19a38cd131723c206415e0ad437758e4e3b7fc4d54ddcece155c8d085f9b"
+    "sha256": "dc07031350628b3a02b3cad067f9a141340caaa6525d30b30a9fc2a5a4378bfb"
   },
   "hate_pixels_changed_vs_5b125dc": 0,
   "unchanged_files": {

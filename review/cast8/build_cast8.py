@@ -44,8 +44,8 @@ out=Image.new('RGBA',(540,720))
 put(out,body,.925,(270,685),(270,685));put(out,hand,.925,(270,685),(270,685))
 # original crown, never scaled
 hatmask=rect((0,0,539,176));hm=np.array(hatmask);hm[145:177][blue[145:177]]=0
-put(out,head,1.585,(270,282),(270,313))
-put(out,layer(im,facemask.filter(ImageFilter.GaussianBlur(.45))),1.60,(270,282),(270,313))
+put(out,head,1.565,(270,282),(270,313))
+put(out,layer(im,facemask.filter(ImageFilter.GaussianBlur(.45))),1.65,(270,282),(270,313))
 # Restore the original front-facing crown/base layer after the enlarged hair.
 hat=trans(layer(im,Image.fromarray(hm)),1,(270,161),(270,126))
 out.alpha_composite(hat)
@@ -55,7 +55,7 @@ spirit=out
 
 jiejie=Image.open(R/'review/cast8/source/jiejie-seam-repair.png').convert('RGBA')
 # Hair/head layer is uniformly reduced 15%, anchored at the hair top; face stays independent.
-small=trans(jiejie,.85,(270,40),(270,40))
+small=trans(jiejie,.84,(270,40),(270,40))
 a=np.array(jiejie).astype(float);b=np.array(small).astype(float)
 y=np.indices(a.shape[:2])[0];w=np.clip((260-y)/70,0,1)[:,:,None]
 head_zone=poly([(190,0),(420,0),(420,260),(196,260),(196,170),(190,120)])
@@ -79,7 +79,22 @@ c[:,:,:3]=np.divide(c[:,:,:3]*255,c[:,:,3:4],out=np.zeros_like(c[:,:,:3]),where=
 jiejie=Image.fromarray(np.clip(c,0,255).astype('uint8'))
 original=source('jiejie')
 fm=poly([(228,127),(242,121),(256,118),(269,117),(282,112),(298,117),(308,132),(309,155),(302,170),(285,183),(266,188),(248,183),(235,172),(229,154)])
-put(jiejie,layer(original,fm.filter(ImageFilter.GaussianBlur(.7))),1.85,(267,187),(267,247))
+put(jiejie,layer(original,fm.filter(ImageFilter.GaussianBlur(.7))),1.885,(267,187),(267,249))
+# Restore the source right ear independently of hair; do not count a shrunken ear as hair.
+ear_mask=poly([(313,127),(320,123),(327,125),(331,131),(330,140),(325,149),(315,154),(312,145)])
+# Remove the old, small ear's exposed upper rim before laying back the source ear.
+aa=np.array(jiejie);hh=cv2.cvtColor(aa[:,:,:3],cv2.COLOR_RGB2HSV)
+old_ear=np.zeros((720,540),np.uint8)
+old_ear[113:131,326:345]=((hh[113:131,326:345,0]<25)&(hh[113:131,326:345,2]>150))*255
+old_ear=cv2.dilate(old_ear,np.ones((3,3),np.uint8))
+aa[:,:,:3]=cv2.inpaint(aa[:,:,:3],old_ear,3,cv2.INPAINT_TELEA);jiejie=Image.fromarray(aa)
+ear=trans(layer(original,ear_mask.filter(ImageFilter.GaussianBlur(.5))),1.6,(320,138),(344,137))
+face=trans(layer(original,fm.filter(ImageFilter.GaussianBlur(.7))),1.885,(267,187),(267,249))
+ea=np.array(ear)
+protected=(np.array(face)[:,:,3]>200).astype('float32')
+protected=cv2.GaussianBlur(protected,(5,5),.7)
+ea[:,:,3]=(ea[:,:,3]*(1-protected)).astype('uint8')
+jiejie.alpha_composite(Image.fromarray(ea))
 # The face cutout carries a few brown hair pixels at its perimeter. Restore the intact
 # hair texture only outside the cheek, after compositing the face, to avoid a rectangular seam.
 join=Image.new('L',(540,720));jd=ImageDraw.Draw(join);jd.ellipse((334,218,371,259),fill=255)
@@ -125,6 +140,29 @@ d.line([(x*4,y*4) for x,y in pts],fill=(29,49,60,245),width=7,joint='curve')
 spirit.alpha_composite(line.resize((540,720),Image.Resampling.LANCZOS))
 # Remove any detached sub-128-alpha islands left by supersampled line drawing.
 a=np.array(spirit);n,l,ss,_=cv2.connectedComponentsWithStats((a[:,:,3]>0).astype('uint8'),8);a[l!=1+np.argmax(ss[1:,4])]=0;spirit=Image.fromarray(a)
-for key,im in [('jiejie',finish(jiejie)),('spirit',spirit)]:
+def repair_internal(im, boxes):
+ a=np.array(im)
+ for x0,y0,x1,y1 in boxes:
+  # Flood from outside: preserve true background and exterior antialiasing.
+  low=(a[:,:,3]<128).astype('uint8'); flood=np.pad(low,1,constant_values=1)
+  cv2.floodFill(flood,None,(0,0),2)
+  exterior=flood[1:-1,1:-1]==2
+  near=cv2.dilate(exterior.astype('uint8'),np.ones((3,3),np.uint8))>0
+  roi=a[y0:y1,x0:x1]; missing=(roi[:,:,3]<250)&~near[y0:y1,x0:x1]
+  if not missing.any():continue
+  # Inpaint RGB from opaque neighbours, then restore opaque interior only.
+  mask=np.zeros(a.shape[:2],np.uint8);mask[y0:y1,x0:x1]=missing*255
+  rgb=cv2.inpaint(a[:,:,:3],mask,3,cv2.INPAINT_TELEA)
+  a[:,:,:3][mask>0]=rgb[mask>0];a[:,:,3][mask>0]=255
+ return Image.fromarray(a)
+jiejie=repair_internal(finish(jiejie),[(198,124,204,135),(200,119,204,124),(202,107,205,110),(199,115,202,119),(350,150,363,184)])
+spirit=repair_internal(spirit,[(254,125,264,136),(273,125,280,137),(293,125,302,137),(279,126,286,131),(249,129,253,134),(241,130,246,134),(163,354,169,391),(180,348,197,375)])
+# Smooth only the exterior transition after the internal fills.
+spirit=finish(spirit)
+# Reconnect the wrist/cuff inner ink contour after filling the transparent slit.
+ink=Image.new('RGBA',(2160,2880));di=ImageDraw.Draw(ink)
+di.line([(x*4,y*4) for x,y in [(194,349),(193,353),(191,358),(188,363),(186,368),(184,373)]],fill=(46,55,58,255),width=6,joint='curve')
+spirit.alpha_composite(ink.resize((540,720),Image.Resampling.LANCZOS))
+for key,im in [('jiejie',jiejie),('spirit',spirit)]:
  im.save(R/f'assets/chars/{key}.png')
  im.save(R/f'assets/chars/{key}.webp',lossless=True,exact=True,method=6)

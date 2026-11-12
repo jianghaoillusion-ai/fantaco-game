@@ -55,9 +55,33 @@ for k,s in spec.items():
 old=json.loads((R/'review/cast7/measurements.json').read_text())['rows']
 for k in IDS[:3]:
  a=old[k];rows[k]={**a,'total_height':a['body_height']-1,'with_hat':int(np.where(np.array(imgs[k])[:,:,3]>=128)[0].max()-np.where(np.array(imgs[k])[:,:,3]>=128)[0].min()),'shoulder_width':a['visible_shoulder_span'],'hair_all':None,'legacy':True}
+# Round 2 uses the reviewer's unchanged segmentation and current landmarks.
+import sys
+sys.path.insert(0,str(O/'xiaosong/final-scripts'))
+sys.argv=['meas.py',os.environ['TMPDIR'],'42','249','127','314','15','2']
+import meas
+mm={
+'bulu':meas.measure('bulu',str(R/'assets/chars/bulu.png'),30,246.5,394,(268,150),'bulu'),
+'jiejie':meas.measure('jiejie',str(R/'assets/chars/jiejie.png'),42,249,391.5,(265,150),'jiejie'),
+'spirit':meas.measure('spirit',str(R/'assets/chars/spirit.png'),127,314,421.5,(268,240),'spirit',open_k=3)}
+mapkeys=dict(head_height='headH',ratio='ratio',face_width='faceW',head_width='headW',head_area='headArea',face_area='faceArea',hair_area='hair',hair_all='hairLong',shoulder_width='shFull',shoulder_right='shRight',torso_length='body',leg_length='leg',total_height='total',with_hat='total_hat',waist_to_sole='waist2foot',top='top',chin='chin',waist='waist')
+for k,m in mm.items():
+ for dst,srcname in mapkeys.items():
+  if srcname in m:rows[k][dst]=m[srcname]
+ rows[k]['face_width_row']=m['faceW_y']
+ if k!='bulu':
+  masks=np.load(Path(os.environ['TMPDIR'])/('mask-'+k+'.npz'))
+  fx=np.where(masks['face'][m['faceW_y']])[0];rows[k]['face_width_x']=[int(fx.min()),int(fx.max())]
+  col=np.array(imgs[k]);col[masks['hair'],:3]=[0,190,210];col[masks['face'],:3]=[30,210,60];col[masks['ears'],:3]=[230,130,20]
+  Image.fromarray(col).save(O/f'mask-{k}.png')
+  for name in ['head','face','hair','ears']:Image.fromarray((masks[name]*255).astype('uint8')).save(O/f'mask-{k}-{name}.png')
+ if k!='bulu': rows[k]['head_width_no_ears']=m['headW_noear']
+rows['jiejie']['leg_length']=None
+reference=rows['bulu'];reference['with_hat']=655
+(O/'reviewer-measurements-r2.json').write_text(json.dumps(mm,ensure_ascii=False,indent=2))
 fields=[('ratio','頭身比'),('face_width','臉寬'),('head_width','含髮頭寬'),('head_area','頭部面積'),('hair_area','髮量：下巴以上'),('hair_all','髮量：含長髮'),('shoulder_width','肩全寬含袖'),('shoulder_right','右肩單邊'),('torso_length','身長'),('leg_length','腿長'),('total_height','總高不含配件'),('with_hat','總高含配件'),('head_height','頭高'),('waist_to_sole','腰到腳底')]
 def fmt(v):return '無法量測' if v is None else f'{v:.4f}' if isinstance(v,float) and v<1 else f'{v:g}'
-lines=['# cast8 暫測數字（尚未驗收）','','布魯、哈特使用小頌 cast7 第2次審查值（哈特逐像素未變）。新圖遵守髮頂／下巴／腰線定義，以像素遮罩暫測；臉髮色彩分割仍有誤差，不能宣稱 ±5% 全過。遮罩一併交付。飛飛、阿飄、西卡沿用 cast7 標記，未重新獨立驗收。','','|項目|布魯基準|姐姐暫測（差距）|哈特定稿（差距）|精靈暫測（差距）|','|---|---:|---:|---:|---:|']
+lines=['# cast8 暫測數字（尚未驗收）','','第2輪：布魯、姐姐、精靈使用小頌 final-scripts/meas.py（CLOSE=15、EARD=2）；哈特數值沿用cast7，但差距統一按本輪布魯重算。飛飛、阿飄、西卡沿用cast7未重驗。頭部髮量與全部長髮分開列。','','|項目|布魯基準|姐姐暫測（差距）|哈特定稿（差距）|精靈暫測（差距）|','|---|---:|---:|---:|---:|']
 for f,label in fields:
  cells=[]
  for k in ['jiejie','hate','spirit']:
@@ -134,7 +158,7 @@ for name,box in [('jiejie-right-fringe-4x',(350,175,405,240)),('jiejie-left-chee
  for j,color in enumerate(['white','#302d38']):c.paste(bg(z,color).resize((z.width*4,z.height*4),Image.Resampling.NEAREST),(j*z.width*4,0))
  c.save(O/(name+'.png'))
 # Original cheek at the same isotropic face scale versus final cheek.
-original=src('jiejie','f346cdf');scale=1.85;dx=267-scale*267;dy=248-scale*187
+original=src('jiejie','f346cdf');scale=1.885;dx=267-scale*267;dy=250-scale*187
 original=original.convert('RGBa').transform((540,720),Image.Transform.AFFINE,(1/scale,0,-dx/scale,0,1/scale,-dy/scale),Image.Resampling.BICUBIC).convert('RGBA')
 box=(195,178,225,225);c=Image.new('RGB',(240,218),'white')
 for i,(im,title) in enumerate([(original,'original'),(imgs['jiejie'],'cast8')]):
