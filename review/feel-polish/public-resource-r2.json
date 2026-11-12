@@ -1,7 +1,21 @@
 {
   "blinkStatus": 200,
-  "brokenImages": [
+  "brokenImages": [],
+  "initialBrokenCandidates": [
     "",
     ""
-  ]
+  ],
+  "emptySourceElementsLocal": [
+    {
+      "id": "info-thumb",
+      "class": "info-thumb",
+      "visible": false
+    },
+    {
+      "id": "discover-img",
+      "class": "",
+      "visible": false
+    }
+  ],
+  "note": "Initial candidates were empty src placeholders, not failed network images; blink direct HTTP 200. Local structure cross-check recorded."
 }
