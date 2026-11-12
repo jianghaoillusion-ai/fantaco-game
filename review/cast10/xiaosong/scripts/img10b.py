@@ -35,17 +35,17 @@ for r in rowsT:
     for t in r: o.paste(t,(x,y)); x+=t.width+12
     y+=Hc+110
 spread=[max(r['gotFoot'] for r in v)-min(r['gotFoot'] for r in v) for v in N.values()]
-d.text((8,y),f'總共跑了 7 種畫面大小 × 6 組角色＝42 個場景（上面挑 10 個）：腳底最大差 0 px 的有 {sum(s==0 for s in spread)} 個、1 px 的 {sum(s==1 for s in spread)} 個、2 px 的 {sum(s==2 for s in spread)} 個（阿飄，390×844）。精靈在 42 個場景都沒有被裁切，頁面錯誤 0 個。',fill=(0,0,0),font=F(14))
+d.text((8,y),f'總共跑了 7 種畫面大小 × 6 組角色＝42 個場景（上面挑 10 個）：腳底最大差 0 px 的有 {sum(s==0 for s in spread)} 個、1 px 的 {sum(s==1 for s in spread)} 個、2 px 的 {sum(s>=2 for s in spread)} 個。精靈在 42 個場景都沒有被裁切，頁面錯誤 0 個。',fill=(0,0,0),font=F(14))
 d.text((8,y+24),'手機窄畫面時，站旁邊的角色（哈特、眠花糖、飛飛、姐姐）外側會被畫面邊緣切掉十幾 px，這是遊戲原本的排法（基準 39b59fe 也一樣），不是這一輪造成的。',fill=(90,90,90),font=F(13))
 o.save(f'{OUT}/alignment-check.png')
 # ---- append seam zoom to edges-sister
 e=Image.open(f'{OUT}/edges-sister.png'); k=14; pans=[]
-for box in [(203,354,231,384),(298,354,326,384)]:
+for box in [(196,356,226,392),(298,356,328,392)]:
     for p in [T+'/jiejie-c9.png','assets/chars/jiejie.png']:
         pans.append(comp(p,(255,255,255)).crop(box).resize(((box[2]-box[0])*k,(box[3]-box[1])*k),Image.NEAREST))
 w=sum(p.width+16 for p in pans)+20; o=Image.new('RGB',(max(e.width,w),e.height+pans[0].height+110),'white'); o.paste(e,(0,0)); d=ImageDraw.Draw(o)
-y=e.height+10; d.text((8,y),'腰身接縫放大 14 倍（每格＝原圖 1 個像素）　問題：改後兩側都多出 2～3 px 的直角階梯，不是順的弧線',fill=(200,0,0),font=F(16,True)); x=8
+y=e.height+10; d.text((8,y),'腰身接縫放大 14 倍（每格＝原圖 1 個像素）　第 2 輪：兩側是順的斜線，描邊連續，沒有直角階梯',fill=(0,120,0),font=F(16,True)); x=8
 for p,t in zip(pans,['左側　改前 39b59fe','左側　改後 cast10','右側　改前 39b59fe','右側　改後 cast10']):
     d.text((x,y+30),t,fill=(0,0,0),font=F(14,True)); o.paste(p,(x,y+54)); x+=p.width+16
-d.text((8,y+60+pans[0].height),'左側：y365→y366 邊緣一口氣往外跳 3 px（218→215）。右側：y362→y363 往外跳 2 px（312→314），(313,364) 那一格不透明直接貼全透明。描邊沒有斷，但外形是方塊補丁。',fill=(0,0,0),font=F(13))
+d.text((8,y+60+pans[0].height),'左側：腰從頭髮下緣順順往外斜到腰帶（每列最多移 1 px），腰帶和裙腰一起往外 6 px。右側：最多往外 3 px，在手的上方收回原位。不透明直接貼全透明的像素 0 個。',fill=(0,0,0),font=F(13))
 o.save(f'{OUT}/edges-sister.png'); print('ok',o.size)
