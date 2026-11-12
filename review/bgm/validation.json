@@ -1,39 +1,40 @@
 [
   {
     "stem": "cute-a-glock-bubbles",
-    "style": "鐵琴泡泡",
-    "instrument": "鐵琴主旋律、柔木琴和弦、圓潤撥弦低音、沙鈴",
+    "style": "鐵琴泡泡音樂盒",
+    "instrument": "合成鐵琴、柔木琴琶音；無鼓、無沙鈴、無獨立低音",
     "key": "C 大調",
     "bpm": 120,
     "samples": 2304000,
     "duration_seconds": 48.0,
     "bars": 24,
     "master": {
-      "lufs": -16.0,
-      "true_peak_dbtp": -5.52
+      "lufs": -15.99,
+      "true_peak_dbtp": -4.87
     },
     "master_seam": {
-      "boundary_delta": 0.003925160572109818,
-      "derivative_p99": 0.03121889788502102,
-      "pre_100ms_rms": 0.054022698630392225,
-      "post_100ms_rms": 0.17824550055342048,
-      "energy_change_db": 10.368846015894214,
-      "joined_200ms_peak": 0.5035688327633235,
-      "sample_peak": 0.5297381656972215,
+      "boundary_delta": 0.0028128339507619837,
+      "derivative_p99": 0.05078046761376336,
+      "pre_100ms_rms": 0.056757210860332474,
+      "post_100ms_rms": 0.18294715184838317,
+      "energy_change_db": 10.166092146377716,
+      "joined_200ms_peak": 0.4911680708338427,
+      "sample_peak": 0.5709016042542888,
       "clipped_samples": 0
     },
     "files": {
       "cute-a-glock-bubbles.mp3": {
         "lufs": -16.26,
-        "true_peak_dbtp": -5.78,
-        "boundary_delta": 0.004078440368175507,
-        "derivative_p99": 0.030278410762548447,
-        "pre_100ms_rms": 0.05238419398665428,
-        "post_100ms_rms": 0.1728941798210144,
-        "energy_change_db": 10.371602155306709,
-        "joined_200ms_peak": 0.4889812469482422,
-        "sample_peak": 0.5138975977897644,
+        "true_peak_dbtp": -5.13,
+        "boundary_delta": 0.004319138824939728,
+        "derivative_p99": 0.049252819269895554,
+        "pre_100ms_rms": 0.05503886193037033,
+        "post_100ms_rms": 0.1774391382932663,
+        "energy_change_db": 10.167599491114629,
+        "joined_200ms_peak": 0.4763522446155548,
+        "sample_peak": 0.5538199543952942,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.3 LUFS\n\n  Loudness range:\n    LRA:         2.5 LU\n    Threshold: -36.2 LUFS\n    LRA low:   -17.6 LUFS\n    LRA high:  -15.2 LUFS\n\n  True peak:\n    Peak:       -5.1 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -49,20 +50,20 @@
           }
         },
         "decoded_samples": 2304000,
-        "decoded_duration_seconds": 48.0,
-        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.2 LUFS\n\n  Loudness range:\n    LRA:         0.9 LU\n    Threshold: -36.3 LUFS\n    LRA low:   -16.9 LUFS\n    LRA high:  -15.9 LUFS\n\n  True peak:\n    Peak:       -5.8 dBFS"
+        "decoded_duration_seconds": 48.0
       },
       "cute-a-glock-bubbles.ogg": {
         "lufs": -15.94,
-        "true_peak_dbtp": -5.43,
-        "boundary_delta": 0.0004899869672954082,
-        "derivative_p99": 0.031373217701911926,
-        "pre_100ms_rms": 0.05450674891471863,
-        "post_100ms_rms": 0.1790907233953476,
-        "energy_change_db": 10.332456232551092,
-        "joined_200ms_peak": 0.509709894657135,
-        "sample_peak": 0.5350412726402283,
+        "true_peak_dbtp": -4.95,
+        "boundary_delta": 0.003295768052339554,
+        "derivative_p99": 0.05098038539290428,
+        "pre_100ms_rms": 0.05727021023631096,
+        "post_100ms_rms": 0.1841018795967102,
+        "energy_change_db": 10.142588901700629,
+        "joined_200ms_peak": 0.49433115124702454,
+        "sample_peak": 0.5658121705055237,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -15.8 LUFS\n    Threshold: -26.0 LUFS\n\n  Loudness range:\n    LRA:         2.5 LU\n    Threshold: -35.9 LUFS\n    LRA low:   -17.3 LUFS\n    LRA high:  -14.8 LUFS\n\n  True peak:\n    Peak:       -4.9 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -78,46 +79,46 @@
           }
         },
         "decoded_samples": 2304000,
-        "decoded_duration_seconds": 48.0,
-        "ebur128_summary": "Integrated loudness:\n    I:         -15.9 LUFS\n    Threshold: -25.9 LUFS\n\n  Loudness range:\n    LRA:         0.9 LU\n    Threshold: -35.9 LUFS\n    LRA low:   -16.5 LUFS\n    LRA high:  -15.6 LUFS\n\n  True peak:\n    Peak:       -5.4 dBFS"
+        "decoded_duration_seconds": 48.0
       }
     }
   },
   {
     "stem": "cute-b-uke-hop",
-    "style": "烏克麗麗跳跳",
-    "instrument": "合成烏克麗麗分解與刷弦、木琴短句、輕木塊、撥弦低音",
+    "style": "烏克麗麗搖擺跳跳",
+    "instrument": "合成撥弦主奏、反拍刷弦、分解和弦撥弦低音、輕沙鈴；無木塊與鼓",
     "key": "F 大調",
     "bpm": 112,
     "samples": 2468571,
     "duration_seconds": 51.4285625,
     "bars": 24,
     "master": {
-      "lufs": -16.0,
-      "true_peak_dbtp": -5.77
+      "lufs": -15.99,
+      "true_peak_dbtp": -4.43
     },
     "master_seam": {
-      "boundary_delta": 0.008205843888318798,
-      "derivative_p99": 0.06932135654373782,
-      "pre_100ms_rms": 0.08337896104952947,
-      "post_100ms_rms": 0.20064341296970623,
-      "energy_change_db": 7.627368547114463,
-      "joined_200ms_peak": 0.4946231492019287,
-      "sample_peak": 0.5135246123183501,
+      "boundary_delta": 0.0,
+      "derivative_p99": 0.044805826594852556,
+      "pre_100ms_rms": 0.09497640811675967,
+      "post_100ms_rms": 0.2271236390963383,
+      "energy_change_db": 7.57293193926467,
+      "joined_200ms_peak": 0.473808880442597,
+      "sample_peak": 0.6005667213800256,
       "clipped_samples": 0
     },
     "files": {
       "cute-b-uke-hop.mp3": {
-        "lufs": -16.26,
-        "true_peak_dbtp": -6.01,
-        "boundary_delta": 0.011683017015457153,
-        "derivative_p99": 0.06723368167877197,
-        "pre_100ms_rms": 0.08086549490690231,
-        "post_100ms_rms": 0.19466428458690643,
-        "energy_change_db": 7.630460583906701,
-        "joined_200ms_peak": 0.479824036359787,
-        "sample_peak": 0.4995172321796417,
+        "lufs": -16.27,
+        "true_peak_dbtp": -4.67,
+        "boundary_delta": 0.0006846936303190887,
+        "derivative_p99": 0.04344944283366203,
+        "pre_100ms_rms": 0.09210716933012009,
+        "post_100ms_rms": 0.22024065256118774,
+        "energy_change_db": 7.5720809911973985,
+        "joined_200ms_peak": 0.46010035276412964,
+        "sample_peak": 0.5842216610908508,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.2 LUFS\n\n  Loudness range:\n    LRA:         2.3 LU\n    Threshold: -36.2 LUFS\n    LRA low:   -17.4 LUFS\n    LRA high:  -15.1 LUFS\n\n  True peak:\n    Peak:       -4.7 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -133,20 +134,20 @@
           }
         },
         "decoded_samples": 2468571,
-        "decoded_duration_seconds": 51.4285625,
-        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.2 LUFS\n\n  Loudness range:\n    LRA:         1.1 LU\n    Threshold: -36.2 LUFS\n    LRA low:   -16.8 LUFS\n    LRA high:  -15.7 LUFS\n\n  True peak:\n    Peak:       -6.0 dBFS"
+        "decoded_duration_seconds": 51.4285625
       },
       "cute-b-uke-hop.ogg": {
-        "lufs": -15.96,
-        "true_peak_dbtp": -5.67,
-        "boundary_delta": 0.012597933411598206,
-        "derivative_p99": 0.06950534880161285,
-        "pre_100ms_rms": 0.08359647542238235,
-        "post_100ms_rms": 0.2015061378479004,
-        "energy_change_db": 7.642006240732401,
-        "joined_200ms_peak": 0.5001266002655029,
-        "sample_peak": 0.5190776586532593,
+        "lufs": -15.95,
+        "true_peak_dbtp": -4.49,
+        "boundary_delta": 0.003843613900244236,
+        "derivative_p99": 0.04488890990614891,
+        "pre_100ms_rms": 0.09528949111700058,
+        "post_100ms_rms": 0.22823059558868408,
+        "energy_change_db": 7.586577118766923,
+        "joined_200ms_peak": 0.47120147943496704,
+        "sample_peak": 0.595954418182373,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -15.9 LUFS\n    Threshold: -25.9 LUFS\n\n  Loudness range:\n    LRA:         2.2 LU\n    Threshold: -35.9 LUFS\n    LRA low:   -17.1 LUFS\n    LRA high:  -14.8 LUFS\n\n  True peak:\n    Peak:       -4.5 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -162,15 +163,14 @@
           }
         },
         "decoded_samples": 2468571,
-        "decoded_duration_seconds": 51.4285625,
-        "ebur128_summary": "Integrated loudness:\n    I:         -15.9 LUFS\n    Threshold: -25.9 LUFS\n\n  Loudness range:\n    LRA:         1.1 LU\n    Threshold: -35.9 LUFS\n    LRA low:   -16.5 LUFS\n    LRA high:  -15.4 LUFS\n\n  True peak:\n    Peak:       -5.7 dBFS"
+        "decoded_duration_seconds": 51.4285625
       }
     }
   },
   {
     "stem": "cute-c-whistle-parade",
-    "style": "口哨氣球遊行",
-    "instrument": "合成口哨主旋律、木琴應答、短風琴和弦、輕鼓與沙鈴",
+    "style": "口哨氣球小遊行",
+    "instrument": "帶氣聲滑音的合成口哨、短風琴、木琴應答、輕小鼓與木質短低音；無沙鈴",
     "key": "G 大調",
     "bpm": 128,
     "samples": 2160000,
@@ -178,30 +178,31 @@
     "bars": 24,
     "master": {
       "lufs": -16.0,
-      "true_peak_dbtp": -3.73
+      "true_peak_dbtp": -8.79
     },
     "master_seam": {
-      "boundary_delta": 0.009766990052449492,
-      "derivative_p99": 0.04470760235788451,
-      "pre_100ms_rms": 0.047001417473242005,
-      "post_100ms_rms": 0.22180894953071995,
-      "energy_change_db": 13.477362188396771,
-      "joined_200ms_peak": 0.5970920970072412,
-      "sample_peak": 0.6502214068186625,
+      "boundary_delta": 0.0006006307644025165,
+      "derivative_p99": 0.05686300155411655,
+      "pre_100ms_rms": 0.006926108569160101,
+      "post_100ms_rms": 0.12527575700840562,
+      "energy_change_db": 25.147554815316106,
+      "joined_200ms_peak": 0.2670712951880978,
+      "sample_peak": 0.3635475844682747,
       "clipped_samples": 0
     },
     "files": {
       "cute-c-whistle-parade.mp3": {
         "lufs": -16.26,
-        "true_peak_dbtp": -3.99,
-        "boundary_delta": 0.011181287467479706,
-        "derivative_p99": 0.04336685687303543,
-        "pre_100ms_rms": 0.045576371252536774,
-        "post_100ms_rms": 0.2151656448841095,
-        "energy_change_db": 13.480663707922105,
-        "joined_200ms_peak": 0.5794699192047119,
-        "sample_peak": 0.6307181119918823,
+        "true_peak_dbtp": -9.06,
+        "boundary_delta": 0.0008510658517479897,
+        "derivative_p99": 0.05515825003385544,
+        "pre_100ms_rms": 0.006704242434352636,
+        "post_100ms_rms": 0.12149497866630554,
+        "energy_change_db": 25.164172370646973,
+        "joined_200ms_peak": 0.25893646478652954,
+        "sample_peak": 0.3522994816303253,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.2 LUFS\n\n  Loudness range:\n    LRA:         3.1 LU\n    Threshold: -36.2 LUFS\n    LRA low:   -17.4 LUFS\n    LRA high:  -14.3 LUFS\n\n  True peak:\n    Peak:       -9.1 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -217,20 +218,20 @@
           }
         },
         "decoded_samples": 2160000,
-        "decoded_duration_seconds": 45.0,
-        "ebur128_summary": "Integrated loudness:\n    I:         -16.2 LUFS\n    Threshold: -26.2 LUFS\n\n  Loudness range:\n    LRA:         0.9 LU\n    Threshold: -36.2 LUFS\n    LRA low:   -16.7 LUFS\n    LRA high:  -15.7 LUFS\n\n  True peak:\n    Peak:       -4.0 dBFS"
+        "decoded_duration_seconds": 45.0
       },
       "cute-c-whistle-parade.ogg": {
-        "lufs": -15.95,
-        "true_peak_dbtp": -3.68,
-        "boundary_delta": 0.014161123894155025,
-        "derivative_p99": 0.044962916523218155,
-        "pre_100ms_rms": 0.047568514943122864,
-        "post_100ms_rms": 0.2231183499097824,
-        "energy_change_db": 13.424313923153413,
-        "joined_200ms_peak": 0.6054458022117615,
-        "sample_peak": 0.6541008353233337,
+        "lufs": -15.94,
+        "true_peak_dbtp": -8.68,
+        "boundary_delta": 0.0015072333626449108,
+        "derivative_p99": 0.0571514330804348,
+        "pre_100ms_rms": 0.006946232635527849,
+        "post_100ms_rms": 0.12625494599342346,
+        "energy_change_db": 25.189981526613643,
+        "joined_200ms_peak": 0.2680855989456177,
+        "sample_peak": 0.36759692430496216,
         "clipped_samples": 0,
+        "ebur128_summary": "Integrated loudness:\n    I:         -15.9 LUFS\n    Threshold: -25.9 LUFS\n\n  Loudness range:\n    LRA:         3.1 LU\n    Threshold: -35.8 LUFS\n    LRA low:   -17.1 LUFS\n    LRA high:  -14.0 LUFS\n\n  True peak:\n    Peak:       -8.7 dBFS",
         "ffprobe": {
           "programs": [],
           "stream_groups": [],
@@ -246,8 +247,7 @@
           }
         },
         "decoded_samples": 2160000,
-        "decoded_duration_seconds": 45.0,
-        "ebur128_summary": "Integrated loudness:\n    I:         -15.9 LUFS\n    Threshold: -25.9 LUFS\n\n  Loudness range:\n    LRA:         0.9 LU\n    Threshold: -35.9 LUFS\n    LRA low:   -16.4 LUFS\n    LRA high:  -15.4 LUFS\n\n  True peak:\n    Peak:       -3.7 dBFS"
+        "decoded_duration_seconds": 45.0
       }
     }
   }
