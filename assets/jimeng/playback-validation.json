@@ -1,0 +1,21 @@
+{
+  "browser": "Local Google Chrome headless",
+  "results": {
+    "mp4": {
+      "readyState": 4,
+      "duration": 5,
+      "width": 720,
+      "height": 720,
+      "seek": 2.5007,
+      "cornerAlpha": 255
+    },
+    "webm": {
+      "readyState": 4,
+      "duration": 5,
+      "width": 720,
+      "height": 720,
+      "seek": 2.5013,
+      "cornerAlpha": 0
+    }
+  }
+}
