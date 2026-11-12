@@ -16,14 +16,14 @@
       {
         "id": "bulu",
         "bottomPixelY": 688,
-        "topPixelY": 322,
-        "componentPixels": 25537
+        "topPixelY": 272,
+        "componentPixels": 31422
       },
       {
         "id": "jiejie",
         "bottomPixelY": 688,
         "topPixelY": 313,
-        "componentPixels": 40523
+        "componentPixels": 40609
       }
     ]
   },
@@ -73,7 +73,7 @@
         "id": "jiejie",
         "bottomPixelY": 269,
         "topPixelY": 92,
-        "componentPixels": 9289
+        "componentPixels": 9308
       }
     ]
   }

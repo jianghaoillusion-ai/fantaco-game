@@ -20,8 +20,8 @@
     "webpPixelDiff": 0,
     "headIncludingHairDiff": 0,
     "legsFeetDiff": 0,
-    "beltAndBelowDiff": 0,
-    "changedPixels": 261,
+    "beltAndBelowDiff": 1167,
+    "changedPixels": 1558,
     "happy": {
       "headDiff": 0,
       "legsDiff": 0

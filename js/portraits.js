@@ -128,7 +128,7 @@ export function applyCastMetrics(fig, id, src, roleMul) {
 
 // Version only cast10 art; unchanged characters keep their existing URLs.
 function castAsset(id, src) {
-  return id === "spirit" || id === "jiejie" ? `${src}?v=cast10` : src;
+  return id === "spirit" || id === "jiejie" ? `${src}?v=cast10r2` : src;
 }
 
 export function avatarSrc(id, expr = "happy") {

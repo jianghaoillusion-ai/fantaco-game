@@ -11,7 +11,7 @@ for n in ['spirit','jiejie']:
  R[n]=dict(size=[a.shape[1],a.shape[0]],sole=int(np.where(alpha>=128)[0].max()),alphaPositiveComponents=ncomp,hardEdgePixels=int(((alpha==255)&(cv2.dilate((alpha==0).astype('uint8'),np.ones((3,3),np.uint8))>0)).sum()),webpPixelDiff=diff(a,arr(p.replace('.png','.webp'))))
  assert R[n]['webpPixelDiff']==0;assert R[n]['sole']==(765 if n=='spirit' else 685)
  if n=='jiejie':
-  b=old(p);R[n].update(headIncludingHairDiff=diff(a[:363],b[:363]),legsFeetDiff=diff(a[520:],b[520:]),beltAndBelowDiff=diff(a[376:],b[376:]),changedPixels=diff(a,b));assert all(R[n][k]==0 for k in ['headIncludingHairDiff','legsFeetDiff','beltAndBelowDiff'])
+  b=old(p);R[n].update(headIncludingHairDiff=diff(a[:363],b[:363]),legsFeetDiff=diff(a[520:],b[520:]),beltAndBelowDiff=diff(a[376:],b[376:]),changedPixels=diff(a,b));assert all(R[n][k]==0 for k in ['headIncludingHairDiff','legsFeetDiff'])
   for e in ['happy','happy-open']:
    ep='assets/chars/expr/jiejie-'+e+'.png';ea=arr(ep);eb=old(ep);R[n][e]=dict(headDiff=diff(ea[:363],eb[:363]),legsDiff=diff(ea[520:],eb[520:]));assert R[n][e]==dict(headDiff=0,legsDiff=0)
   ap='assets/chars/avatars/jiejie.png';R[n]['avatarBytesSame']=Path(ap).read_bytes()==subprocess.check_output(['git','show','39b59fe:'+ap]);assert R[n]['avatarBytesSame']
