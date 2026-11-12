@@ -16,11 +16,11 @@
 三音效長度 .30/.18/.42 秒，預設播放gain .136；原始RMS約−27dBFS，播放約−44.4dBFS。village BGM原始平均−19.4dBFS，預設gain .36後約−28.3dBFS，音效平均低約16dB。不同BGM／音量滑桿與瞬間音樂空隙會改變差距；可愛程度與聽感需本人驗收。對照影片沒有音軌，屬預期，音效請在遊戲測。
 
 ## 公開測試網址
-程式測試版本：`42e7fc837f5a398bf18c6c93feb9846fcf5bcbea`。後續commit僅補驗證結果與文件。
+第2輪測試頁與證據版本：`9a88eb7b3b0ae5e84059e6f75ed281ae3ec7ac20`。後續commit僅補驗證結果與文件。
 
-[遊戲測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/index.html) · [觸覺測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/review/feel-polish/haptic-test.html) · [Draft PR #9](https://github.com/jianghaoillusion-ai/fantaco-game/pull/9)
+[遊戲測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/9a88eb7b3b0ae5e84059e6f75ed281ae3ec7ac20/index.html) · [觸覺測試](https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/9a88eb7b3b0ae5e84059e6f75ed281ae3ec7ac20/review/feel-polish/haptic-test.html) · [Draft PR #9](https://github.com/jianghaoillusion-ai/fantaco-game/pull/9)
 
-curl兩頁均HTTP200；headless點過githack的「Open the page」通知後，觸覺頁與遊戲正常，棋盤63格、遊戲資源及JavaScript錯誤均0。見public-check.json。通知頁自身廣告遭瀏覽器阻擋，與遊戲資源無關。
+curl兩頁均HTTP200；headless點過githack的「Open the page」通知後，觸覺頁與遊戲正常，棋盤63格、遊戲資源及JavaScript錯誤均0。見第一輪 public-check.json；第2輪 public-check-r2.json（blink圖片有一次載入取消，另查 public-resource-r2.json）。通知頁自身廣告遭瀏覽器阻擋，與遊戲資源無關。
 
 ## iPhone 測試（五步）
 1. 用Safari開觸覺測試頁，若先出現外部內容通知，點「Open the page」；記下iOS版本，逐一試直接switch、label和各按鈕；滑動touchmove那格，記錄哪個真的震。
