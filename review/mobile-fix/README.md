@@ -5,9 +5,9 @@ iPhone 多半仍不會震；所有裝置震動均「未在實機測試」。本�
 ## 回應小頌第 1 輪的六個問題
 
 1. 眼睛亮點：已從 22a7d6d 重算清理，兩張 sad 表情的白色亮點恢復。`alpha-eye-restored-feifei-sad.png`、`alpha-eye-restored-feifei-sad-open.png` 是原版／第1輪／第2輪五倍對照。
-2. 無差別刪小塊：改成先以原始外輪廓填滿建立保護區，角色輪廓包住的小島（含眼睛、嘴巴）不刪。保留原圖所有 RGB。新增 `check-alpha.py`，先在第1輪圖重現失敗，再驗證修正後通過。仍會刪輪廓外、面積小於100的殘點；外部實心像素刪除量逐張公開，沒有宣稱全圖實心 alpha 不變。保留的小島不能一概當成髒點。
+2. 無差別刪小塊：改成先以原始外輪廓填滿建立保護區，角色輪廓包住的小島（含眼睛、嘴巴）不刪。保留原圖所有 RGB。新增 `check-alpha.py`，先在第1輪圖重現失敗，再驗證修正後通過。仍會刪輪廓外、面積小於100的殘點；外部實心像素刪除量逐張公開，沒有宣稱全圖實心 alpha 不變。保留的小島不能一概當成髒點。保護區由原始 alpha>0 計算，會把外圍薄霧範圍也圈入，該範圍內部分斷開殘點仍保留，所以不能宣稱外圍碎點全清。
 3. 淡色方塊：仍未找到來源。檢查了交貨頭像與道具引用、CSS，交貨頭像底色是圓形淡黃，備齊道具的圓角綠底有遊戲含義；沒有證據可把它們當成使用者回報的藍紫粉白方塊而刪掉。保留待釐清，需當時 iPhone 截圖與網址，未部署也未實機驗收。
-4. 原有透明眼珠／頭髮：製作12張 `alpha-hole-proposal-*` 對照，右格僅把封閉透明洞的 alpha 補回，RGB 不變，沒有套用到遊戲。補眼珠看得到原本棕色，但髮絲與衣服仍有複雜鏤空；不把自動補洞當作已核准角色修復。提案圖不是成品。
+4. 原有透明眼珠／頭髮：製作12張 `alpha-hole-proposal-*` 對照，右格僅把封閉透明洞的 alpha 補回，RGB 不變，沒有套用到遊戲。提案的部分眼珠近黑、頭髮冒出黑色色塊，洞裡顏色不能直接套用；髮絲與衣服仍有複雜鏤空；不把自動補洞當作已核准角色修復。提案圖不是成品。
 5. 貼紙 WebP：盤點補齊14張，4張有清理的 PNG/WebP alpha 完全一致。WebP 各自保留原始 RGB，無損重存，不重新壓有損。角色與模組快取升為 mobile2。
 6. 盤點數字：分列小連通區、極淡像素、alpha 變更量及刪除實心像素。小區塊不全是殘片，包含白色亮點，不能追求全部歸零。
 
@@ -36,9 +36,9 @@ iPhone 多半仍不會震；所有裝置震動均「未在實機測試」。本�
 
 ## 本輪驗證
 
-`node --test tests/*.test.mjs`：5個檔案全過。headless Chromium 390×844 真實CDP觸控：浮圖底緣429.2、手指y461.5，留32.3px；合成tier2、目標高亮、滑鼠位置、無效落點、取消不改棋盤、文字與進度條分離、震動開關重載保存，無頁面錯誤。`check-alpha.py`：49張角色圖的輪廓內實心 alpha 保留、RGB p99≤8。57張有改素材與基準所有 RGB 最大差為0，尺寸不變，14組貼紙 PNG/WebP alpha 一致。全部只使用免費本機工具，沒用即夢、付費API或 AppleScript。
+`node --test tests/*.test.mjs`：5個檔案全過。headless Chromium 390×844 真實CDP觸控：浮圖底緣429.2、手指y461.5，留32.3px；合成tier2、目標高亮、滑鼠位置、無效落點、取消不改棋盤、文字與進度條分離、震動開關重載保存，無頁面錯誤。`check-alpha.py`：49張角色圖的輪廓內實心 alpha 保留、RGB p99≤8（此腳本不含貼紙；貼紙由清理腳本的RGB驗證與另行PNG/WebP alpha逐像素檢查涵蓋）。57張有改素材與基準所有 RGB 最大差為0，尺寸不變，14組貼紙 PNG/WebP alpha 一致。全部只使用免費本機工具，沒用即夢、付費API或 AppleScript。
 
-本輪57張素材的 alpha 共變更170,288像素，極淡像素147,022→0。77張角色／貼紙原始小區塊1002→840，這不是「剩840個髒點」：保留的角色內部小島包含眼睛亮點；也不能因此宣稱所有髮絲都乾淨。41張道具保留原有光效。
+本輪57張素材的 alpha 共變更170,288像素，極淡像素147,022→0。77張角色／貼紙原始小區塊1002→840，這不是「剩840個髒點」：保留的角色內部小島包含眼睛亮點；其中也有被原始薄霧保護圈涵蓋的外圍殘渣；不能宣稱所有髮絲或碎點都乾淨。41張道具保留原有光效。
 
 before截圖維持22a7d6d，after已以第2輪重截；測試存檔非私人存檔。第1輪小頌截圖仍保留於 xiaosong/，僅屬歷史證據；其餘 alpha-cleanup / alpha-mask 已重新產生。去背補洞提案僅供審閱，未寫回素材。
 
@@ -48,61 +48,61 @@ before截圖維持22a7d6d，after已以第2輪重截；測試存檔非私人存�
 
 |路徑|使用位置|問題／處理|小區塊前→後|極淡前→後|alpha變更像素|刪除實心像素|RGB p99|
 |---|---|---|---|---|---|---|---|
-|`assets/chars/apiao.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
-|`assets/chars/apiao.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
-|`assets/chars/avatars/apiao.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|10→0|2528→0|2528|0|0.0|
-|`assets/chars/avatars/bulu.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|11→0|2483→0|2483|0|0.0|
-|`assets/chars/avatars/feifei-determined.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|27→36|9176→0|10509|0|0.0|
-|`assets/chars/avatars/feifei-happy.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|12→6|2009→0|3091|0|0.0|
-|`assets/chars/avatars/feifei-sad.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|24→32|8152→0|9317|0|0.0|
-|`assets/chars/avatars/feifei-surprised.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|24→47|8141→0|9399|0|0.0|
-|`assets/chars/avatars/feifei-worried.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|21→46|8591→0|9944|0|0.0|
-|`assets/chars/avatars/feifei.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|4→8|2165→0|3458|0|0.0|
-|`assets/chars/avatars/hate.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|3→0|3713→0|3713|0|0.0|
-|`assets/chars/avatars/jiejie.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|0→0|1142→0|1142|0|0.0|
-|`assets/chars/avatars/mascot.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|10→0|2042→0|2042|0|0.0|
-|`assets/chars/avatars/sika.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|4→0|2496→0|2496|0|0.0|
-|`assets/chars/avatars/spirit.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|5→0|9430→0|9430|0|0.0|
-|`assets/chars/bulu.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
-|`assets/chars/bulu.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
-|`assets/chars/expr/apiao-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
-|`assets/chars/expr/apiao-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
-|`assets/chars/expr/bulu-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
-|`assets/chars/expr/bulu-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
-|`assets/chars/expr/feifei-determined-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|35→37|0→0|577|0|0.0|
-|`assets/chars/expr/feifei-determined.png`|故事表情|只清外部殘點與淡霧，保護內部小島|35→37|0→0|577|0|0.0|
-|`assets/chars/expr/feifei-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
-|`assets/chars/expr/feifei-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
-|`assets/chars/expr/feifei-sad-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|50→102|0→0|1072|6|0.0|
-|`assets/chars/expr/feifei-sad.png`|故事表情|只清外部殘點與淡霧，保護內部小島|27→21|0→0|710|0|0.0|
-|`assets/chars/expr/feifei-surprised-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|28→34|0→0|920|194|0.0|
-|`assets/chars/expr/feifei-surprised.png`|故事表情|只清外部殘點與淡霧，保護內部小島|28→34|0→0|920|194|0.0|
-|`assets/chars/expr/feifei-worried-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|24→15|0→0|640|0|0.0|
-|`assets/chars/expr/feifei-worried.png`|故事表情|只清外部殘點與淡霧，保護內部小島|24→15|0→0|640|0|0.0|
-|`assets/chars/expr/hate-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|14→0|2901→0|2901|0|0.0|
-|`assets/chars/expr/hate-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|14→0|2901→0|2901|0|0.0|
-|`assets/chars/expr/jiejie-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
-|`assets/chars/expr/jiejie-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
-|`assets/chars/expr/sika-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
-|`assets/chars/expr/sika-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
-|`assets/chars/expr/spirit-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
-|`assets/chars/expr/spirit-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
-|`assets/chars/feifei.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
-|`assets/chars/feifei.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3826|0|0.0|
-|`assets/chars/hate.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|3→0|2912→0|2912|0|0.0|
-|`assets/chars/hate.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|3→0|2912→0|2912|0|0.0|
-|`assets/chars/jiejie.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
-|`assets/chars/jiejie.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
-|`assets/chars/sika.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
-|`assets/chars/sika.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
-|`assets/chars/spirit.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
-|`assets/chars/spirit.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
+|`assets/chars/apiao.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1452→0|1452|0|0.0|
+|`assets/chars/apiao.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1452→0|1452|0|0.0|
+|`assets/chars/avatars/apiao.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|10→0|2528→0|2528|0|0.0|
+|`assets/chars/avatars/bulu.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|11→0|2483→0|2483|0|0.0|
+|`assets/chars/avatars/feifei-determined.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|27→36|9176→0|10509|0|0.0|
+|`assets/chars/avatars/feifei-happy.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|12→6|2009→0|3091|0|0.0|
+|`assets/chars/avatars/feifei-sad.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|24→32|8152→0|9317|0|0.0|
+|`assets/chars/avatars/feifei-surprised.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|24→47|8141→0|9399|0|0.0|
+|`assets/chars/avatars/feifei-worried.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|21→46|8591→0|9944|0|0.0|
+|`assets/chars/avatars/feifei.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|4→8|2165→0|3458|0|0.0|
+|`assets/chars/avatars/hate.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|3→0|3713→0|3713|0|0.0|
+|`assets/chars/avatars/jiejie.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1142→0|1142|0|0.0|
+|`assets/chars/avatars/mascot.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|10→0|2042→0|2042|0|0.0|
+|`assets/chars/avatars/sika.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|4→0|2496→0|2496|0|0.0|
+|`assets/chars/avatars/spirit.png`|交貨框／頭像|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|5→0|9430→0|9430|0|0.0|
+|`assets/chars/bulu.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1398→0|1398|0|0.0|
+|`assets/chars/bulu.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/apiao-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1452→0|1452|0|0.0|
+|`assets/chars/expr/apiao-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1452→0|1452|0|0.0|
+|`assets/chars/expr/bulu-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/bulu-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/feifei-determined-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|35→37|0→0|577|0|0.0|
+|`assets/chars/expr/feifei-determined.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|35→37|0→0|577|0|0.0|
+|`assets/chars/expr/feifei-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1445→0|3798|0|0.0|
+|`assets/chars/expr/feifei-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1445→0|3798|0|0.0|
+|`assets/chars/expr/feifei-sad-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|50→102|0→0|1072|6|0.0|
+|`assets/chars/expr/feifei-sad.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|27→21|0→0|710|0|0.0|
+|`assets/chars/expr/feifei-surprised-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|28→34|0→0|920|194|0.0|
+|`assets/chars/expr/feifei-surprised.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|28→34|0→0|920|194|0.0|
+|`assets/chars/expr/feifei-worried-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|24→15|0→0|640|0|0.0|
+|`assets/chars/expr/feifei-worried.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|24→15|0→0|640|0|0.0|
+|`assets/chars/expr/hate-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|14→0|2901→0|2901|0|0.0|
+|`assets/chars/expr/hate-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|14→0|2901→0|2901|0|0.0|
+|`assets/chars/expr/jiejie-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|4605→0|4605|0|0.0|
+|`assets/chars/expr/jiejie-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|4605→0|4605|0|0.0|
+|`assets/chars/expr/sika-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1302→0|1302|0|0.0|
+|`assets/chars/expr/sika-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1302→0|1302|0|0.0|
+|`assets/chars/expr/spirit-happy-open.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|8130→0|8130|0|0.0|
+|`assets/chars/expr/spirit-happy.png`|故事表情|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|8130→0|8130|0|0.0|
+|`assets/chars/feifei.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1445→0|3798|0|0.0|
+|`assets/chars/feifei.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1445→0|3826|0|0.0|
+|`assets/chars/hate.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|3→0|2912→0|2912|0|0.0|
+|`assets/chars/hate.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|3→0|2912→0|2912|0|0.0|
+|`assets/chars/jiejie.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|4605→0|4605|0|0.0|
+|`assets/chars/jiejie.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|4605→0|4605|0|0.0|
+|`assets/chars/sika.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1302→0|1302|0|0.0|
+|`assets/chars/sika.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|1302→0|1302|0|0.0|
+|`assets/chars/spirit.png`|故事備援立繪|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|8130→0|8130|0|0.0|
+|`assets/chars/spirit.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|0→0|8130→0|8130|0|0.0|
 |`assets/mascot/sticker/back.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/back.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/blink.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/blink.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
-|`assets/mascot/sticker/face.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|102→69|0→0|40|40|0.0|
-|`assets/mascot/sticker/face.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|102→69|0→0|40|40|0.0|
+|`assets/mascot/sticker/face.png`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|102→69|0→0|40|40|0.0|
+|`assets/mascot/sticker/face.webp`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|102→69|0→0|40|40|0.0|
 |`assets/mascot/sticker/front.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/front.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/hold-carrot.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
@@ -111,20 +111,20 @@ before截圖維持22a7d6d，after已以第2輪重截；測試存檔非私人存�
 |`assets/mascot/sticker/hold-star.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/jump.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/jump.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
-|`assets/mascot/sticker/keychain-jump.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|17→0|0→0|18|18|0.0|
-|`assets/mascot/sticker/keychain-jump.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|17→0|0→0|18|18|0.0|
+|`assets/mascot/sticker/keychain-jump.png`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|17→0|0→0|18|18|0.0|
+|`assets/mascot/sticker/keychain-jump.webp`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|17→0|0→0|18|18|0.0|
 |`assets/mascot/sticker/peek.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/peek.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/side.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/side.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/sit-closed.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/sit-closed.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
-|`assets/mascot/sticker/sleep.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|1→0|0→0|25|16|0.0|
-|`assets/mascot/sticker/sleep.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|1→0|0→0|25|16|0.0|
+|`assets/mascot/sticker/sleep.png`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|1→0|0→0|25|16|0.0|
+|`assets/mascot/sticker/sleep.webp`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|1→0|0→0|25|16|0.0|
 |`assets/mascot/sticker/surprise.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
 |`assets/mascot/sticker/surprise.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
-|`assets/mascot/sticker/wave.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|161→116|0→0|60|60|0.0|
-|`assets/mascot/sticker/wave.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|161→116|0→0|60|60|0.0|
+|`assets/mascot/sticker/wave.png`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|161→116|0→0|60|60|0.0|
+|`assets/mascot/sticker/wave.webp`|眠花糖故事／主畫面|清淡霧與未受保護殘點；薄霧圈內殘點仍可能保留|161→116|0→0|60|60|0.0|
 |`assets/tiles/candy-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
 |`assets/tiles/candy-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
 |`assets/tiles/candy-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
