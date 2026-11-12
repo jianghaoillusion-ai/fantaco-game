@@ -1,0 +1,2183 @@
+{
+ "browser": "148.0.7778.96",
+ "base": "local read-only server",
+ "tested_at": "2026-11-12T07:07:11.770Z",
+ "decode": [
+  {
+   "id": "village",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2322432,
+   "expected": 2322432,
+   "excess": 0,
+   "origin": 8892,
+   "guard": 9216,
+   "frames": 2304000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0077517032623291016,
+   "seam_d2": 0.0038453340530395508,
+   "inner_d2_max": 0.02645953744649887,
+   "seam_d2_percentile": 39.266666666666666,
+   "seam_dip": 0.30380519522161364,
+   "inner_dip_max": 10.56506767017802,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "village",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2322432,
+   "expected": 2322432,
+   "excess": 0,
+   "origin": 8907,
+   "guard": 9216,
+   "frames": 2304000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.02019127458333969,
+   "seam_d2": 0.004000991582870483,
+   "inner_d2_max": 0.02648712694644928,
+   "seam_d2_percentile": 38.2,
+   "seam_dip": 0.7506381756429512,
+   "inner_dip_max": 10.835329381437269,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "journey",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2487003,
+   "expected": 2487003,
+   "excess": 0,
+   "origin": 8802,
+   "guard": 9216,
+   "frames": 2468571,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0079345703125,
+   "seam_d2": 0.005584895610809326,
+   "inner_d2_max": 0.020904541015625,
+   "seam_d2_percentile": 62,
+   "seam_dip": 1.8670117460025892,
+   "inner_dip_max": 8.565718171986155,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "journey",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2487104,
+   "expected": 2487003,
+   "excess": 101,
+   "origin": 8850,
+   "guard": 9216,
+   "frames": 2468571,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.010437570977956057,
+   "seam_d2": 0.00481598824262619,
+   "inner_d2_max": 0.022303789854049683,
+   "seam_d2_percentile": 54.733333333333334,
+   "seam_dip": 0,
+   "inner_dip_max": 8.663886684289825,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.14876505732536316
+  },
+  {
+   "id": "candy",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2178432,
+   "expected": 2178432,
+   "excess": 0,
+   "origin": 8913,
+   "guard": 9216,
+   "frames": 2160000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.014556884765625,
+   "seam_d2": 0.0047914087772369385,
+   "inner_d2_max": 0.00714111328125,
+   "seam_d2_percentile": 33.266666666666666,
+   "seam_dip": 0,
+   "inner_dip_max": 4.639751621742747,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "candy",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2179392,
+   "expected": 2178432,
+   "excess": 960,
+   "origin": 8893,
+   "guard": 9216,
+   "frames": 2160000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.018213987350463867,
+   "seam_d2": 0.005487996153533459,
+   "inner_d2_max": 0.007508993148803711,
+   "seam_d2_percentile": 36.46666666666666,
+   "seam_dip": 0.2451663774445585,
+   "inner_dip_max": 4.339804990282147,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.199815034866333
+  },
+  {
+   "id": "bulu",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2151765,
+   "expected": 2151765,
+   "excess": 0,
+   "origin": 9262,
+   "guard": 9216,
+   "frames": 2133333,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.011841177940368652,
+   "seam_d2": 0.002838134765625,
+   "inner_d2_max": 0.0072021484375,
+   "seam_d2_percentile": 75.26666666666667,
+   "seam_dip": 1.498622518333633,
+   "inner_dip_max": 6.504577203270124,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "bulu",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2152512,
+   "expected": 2151765,
+   "excess": 747,
+   "origin": 9220,
+   "guard": 9216,
+   "frames": 2133333,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0064271315932273865,
+   "seam_d2": 0.0030789226293563843,
+   "inner_d2_max": 0.0076508671045303345,
+   "seam_d2_percentile": 76.33333333333333,
+   "seam_dip": 1.7731803912519126,
+   "inner_dip_max": 6.988333674192681,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.10270955413579941
+  },
+  {
+   "id": "hate",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 1876497,
+   "expected": 1876497,
+   "excess": 0,
+   "origin": 9197,
+   "guard": 9216,
+   "frames": 1858065,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.002349853515625,
+   "seam_d2": 0.00015259534120559692,
+   "inner_d2_max": 0.0005188137292861938,
+   "seam_d2_percentile": 4.266666666666667,
+   "seam_dip": 4.630124524901191,
+   "inner_dip_max": 10.637482508662906,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "hate",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 1876544,
+   "expected": 1876497,
+   "excess": 47,
+   "origin": 9180,
+   "guard": 9216,
+   "frames": 1858065,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0008255690336227417,
+   "seam_d2": 0.00019158422946929932,
+   "inner_d2_max": 0.000506475567817688,
+   "seam_d2_percentile": 14.333333333333334,
+   "seam_dip": 3.798104323147733,
+   "inner_dip_max": 11.744983230400972,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.21853536367416382
+  },
+  {
+   "id": "ending",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2051373,
+   "expected": 2051373,
+   "excess": 0,
+   "origin": 9216,
+   "guard": 9216,
+   "frames": 2032941,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0076294876635074615,
+   "seam_d2": 0.003662109375,
+   "inner_d2_max": 0.022095412015914917,
+   "seam_d2_percentile": 36.666666666666664,
+   "seam_dip": 2.6690176891174247,
+   "inner_dip_max": 4.348258705976534,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "ending",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2052288,
+   "expected": 2051373,
+   "excess": 915,
+   "origin": 9139,
+   "guard": 9216,
+   "frames": 2032941,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.010617494583129883,
+   "seam_d2": 0.0038129761815071106,
+   "inner_d2_max": 0.023151129484176636,
+   "seam_d2_percentile": 35.733333333333334,
+   "seam_dip": 1.8106198295837679,
+   "inner_dip_max": 4.320406823025234,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.13129304349422455
+  },
+  {
+   "id": "castle",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2004639,
+   "expected": 2004639,
+   "excess": 0,
+   "origin": 8959,
+   "guard": 9216,
+   "frames": 1986207,
+   "loop_vs_concat_max_error": 5.820766091346741e-11,
+   "jump": 0.0010376274585723877,
+   "seam_d2": 0.0052491724491119385,
+   "inner_d2_max": 0.02047792822122574,
+   "seam_d2_percentile": 21.933333333333334,
+   "seam_dip": 1.030090217053715,
+   "inner_dip_max": 4.331632765346999,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "castle",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2005312,
+   "expected": 2004639,
+   "excess": 673,
+   "origin": 8952,
+   "guard": 9216,
+   "frames": 1986207,
+   "loop_vs_concat_max_error": 5.820766091346741e-11,
+   "jump": 0.01703525334596634,
+   "seam_d2": 0.005548015236854553,
+   "inner_d2_max": 0.01956634223461151,
+   "seam_d2_percentile": 21.866666666666667,
+   "seam_dip": 1.5033243759520047,
+   "inner_dip_max": 4.051826311709849,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.056636061519384384
+  },
+  {
+   "id": "slope",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 1763887,
+   "expected": 1763887,
+   "excess": 0,
+   "origin": 9216,
+   "guard": 9216,
+   "frames": 1745455,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0032958984375,
+   "seam_d2": 0.001220703125,
+   "inner_d2_max": 0.005828857421875,
+   "seam_d2_percentile": 9.933333333333334,
+   "seam_dip": 0,
+   "inner_dip_max": 7.610254872740601,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "slope",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 1764160,
+   "expected": 1763887,
+   "excess": 273,
+   "origin": 9225,
+   "guard": 9216,
+   "frames": 1745455,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.003983438014984131,
+   "seam_d2": 0.0013205595314502716,
+   "inner_d2_max": 0.00609394907951355,
+   "seam_d2_percentile": 11.266666666666666,
+   "seam_dip": 0,
+   "inner_dip_max": 7.689676839655078,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.08786047250032425
+  },
+  {
+   "id": "hill",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 1775720,
+   "expected": 1775720,
+   "excess": 0,
+   "origin": 9143,
+   "guard": 9216,
+   "frames": 1757288,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.00030517578125,
+   "seam_d2": 0.004730358719825745,
+   "inner_d2_max": 0.011505126953125,
+   "seam_d2_percentile": 37.8,
+   "seam_dip": 0,
+   "inner_dip_max": 2.6920024384753525,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "hill",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 1776192,
+   "expected": 1775720,
+   "excess": 472,
+   "origin": 9135,
+   "guard": 9216,
+   "frames": 1757288,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.02733255922794342,
+   "seam_d2": 0.004876419901847839,
+   "inner_d2_max": 0.011737331748008728,
+   "seam_d2_percentile": 37.266666666666666,
+   "seam_dip": 0.2349464921718436,
+   "inner_dip_max": 2.8176776374152546,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.04041770100593567
+  },
+  {
+   "id": "bagvalley",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2112977,
+   "expected": 2112977,
+   "excess": 0,
+   "origin": 9121,
+   "guard": 9216,
+   "frames": 2094545,
+   "loop_vs_concat_max_error": 2.9103830456733704e-11,
+   "jump": 0.005828857421875,
+   "seam_d2": 0.00128173828125,
+   "inner_d2_max": 0.004364013671875,
+   "seam_d2_percentile": 44.06666666666666,
+   "seam_dip": 1.6567058942346975,
+   "inner_dip_max": 5.7905156458129525,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "bagvalley",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2113600,
+   "expected": 2112977,
+   "excess": 623,
+   "origin": 9237,
+   "guard": 9216,
+   "frames": 2094545,
+   "loop_vs_concat_max_error": 5.820766091346741e-11,
+   "jump": 0.005553144961595535,
+   "seam_d2": 0.001523822546005249,
+   "inner_d2_max": 0.004123035818338394,
+   "seam_d2_percentile": 50.93333333333333,
+   "seam_dip": 1.772950565647477,
+   "inner_dip_max": 5.966539864042819,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.07463482022285461
+  },
+  {
+   "id": "candylane",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 1737835,
+   "expected": 1737835,
+   "excess": 0,
+   "origin": 9224,
+   "guard": 9216,
+   "frames": 1719403,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.002197265625,
+   "seam_d2": 0.0015564486384391785,
+   "inner_d2_max": 0.00900295376777649,
+   "seam_d2_percentile": 0.7333333333333333,
+   "seam_dip": 0,
+   "inner_dip_max": 4.347889579872895,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "candylane",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 1738176,
+   "expected": 1737835,
+   "excess": 341,
+   "origin": 9227,
+   "guard": 9216,
+   "frames": 1719403,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.005427548661828041,
+   "seam_d2": 0.0015564002096652985,
+   "inner_d2_max": 0.009471535682678223,
+   "seam_d2_percentile": 0.5333333333333333,
+   "seam_dip": 0,
+   "inner_dip_max": 4.436959516767342,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.060428813099861145
+  },
+  {
+   "id": "lamplight",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2092032,
+   "expected": 2092032,
+   "excess": 0,
+   "origin": 9214,
+   "guard": 9216,
+   "frames": 2073600,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.004699850454926491,
+   "seam_d2": 0.0010681478306651115,
+   "inner_d2_max": 0.00543212890625,
+   "seam_d2_percentile": 16.066666666666666,
+   "seam_dip": 0.8885755450313795,
+   "inner_dip_max": 5.227188606365093,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "lamplight",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2092352,
+   "expected": 2092032,
+   "excess": 320,
+   "origin": 9550,
+   "guard": 9216,
+   "frames": 2073600,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.006176019087433815,
+   "seam_d2": 0.001160256564617157,
+   "inner_d2_max": 0.0054209232330322266,
+   "seam_d2_percentile": 18,
+   "seam_dip": 0.039192317626003614,
+   "inner_dip_max": 5.185394266230205,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.08588116616010666
+  },
+  {
+   "id": "theater",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 2233817,
+   "expected": 2233817,
+   "excess": 0,
+   "origin": 9211,
+   "guard": 9216,
+   "frames": 2215385,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.004119873046875,
+   "seam_d2": 0.000762939453125,
+   "inner_d2_max": 0.004913330078125,
+   "seam_d2_percentile": 28.066666666666666,
+   "seam_dip": 10.430124150488044,
+   "inner_dip_max": 10.276781312824522,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "theater",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 2234560,
+   "expected": 2233817,
+   "excess": 743,
+   "origin": 8861,
+   "guard": 9216,
+   "frames": 2215385,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.006134755909442902,
+   "seam_d2": 0.0008452087640762329,
+   "inner_d2_max": 0.005047835409641266,
+   "seam_d2_percentile": 31.6,
+   "seam_dip": 2.3180494097943587,
+   "inner_dip_max": 10.812171921997908,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.05366595461964607
+  },
+  {
+   "id": "plaza",
+   "ext": "mp3",
+   "rate": 48000,
+   "decoded": 1847003,
+   "expected": 1847003,
+   "excess": 0,
+   "origin": 9450,
+   "guard": 9216,
+   "frames": 1828571,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.00955229252576828,
+   "seam_d2": 0.003509521484375,
+   "inner_d2_max": 0.010040283203125,
+   "seam_d2_percentile": 30.266666666666666,
+   "seam_dip": 0.002317893431023066,
+   "inner_dip_max": 3.0971295302137065,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "plaza",
+   "ext": "ogg",
+   "rate": 48000,
+   "decoded": 1847744,
+   "expected": 1847003,
+   "excess": 741,
+   "origin": 9094,
+   "guard": 9216,
+   "frames": 1828571,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.015109121799468994,
+   "seam_d2": 0.0036117583513259888,
+   "inner_d2_max": 0.0098610520362854,
+   "seam_d2_percentile": 29.06666666666667,
+   "seam_dip": 1.1823454127543158,
+   "inner_dip_max": 3.1820405314507703,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.04651639610528946
+  },
+  {
+   "id": "village",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 2133734,
+   "expected": 2133734,
+   "excess": 0,
+   "origin": 8170,
+   "guard": 8467,
+   "frames": 2116800,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.008792117238044739,
+   "seam_d2": 0.004466257989406586,
+   "inner_d2_max": 0.028240634128451347,
+   "seam_d2_percentile": 38.4,
+   "seam_dip": 0.37081299217887675,
+   "inner_dip_max": 10.580108944000724,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "village",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 2133734,
+   "expected": 2133734,
+   "excess": 0,
+   "origin": 8184,
+   "guard": 8467,
+   "frames": 2116800,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.020899184048175812,
+   "seam_d2": 0.004670754075050354,
+   "inner_d2_max": 0.028413883410394192,
+   "seam_d2_percentile": 37.86666666666667,
+   "seam_dip": 0.7485155148420084,
+   "inner_dip_max": 10.852288845762107,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "journey",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 2284934,
+   "expected": 2284934,
+   "excess": 0,
+   "origin": 8087,
+   "guard": 8467,
+   "frames": 2268000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.005430066958069801,
+   "seam_d2": 0.006173662841320038,
+   "inner_d2_max": 0.02293151617050171,
+   "seam_d2_percentile": 60.199999999999996,
+   "seam_dip": 1.8714147547899707,
+   "inner_dip_max": 8.570067565026925,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "journey",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 2285026,
+   "expected": 2284934,
+   "excess": 92,
+   "origin": 8132,
+   "guard": 8467,
+   "frames": 2268000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.008887283504009247,
+   "seam_d2": 0.005684010684490204,
+   "inner_d2_max": 0.02576567232608795,
+   "seam_d2_percentile": 55.53333333333333,
+   "seam_dip": 0,
+   "inner_dip_max": 8.658013739617868,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.14879250526428223
+  },
+  {
+   "id": "candy",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 2001434,
+   "expected": 2001434,
+   "excess": 0,
+   "origin": 8189,
+   "guard": 8467,
+   "frames": 1984500,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.01588885486125946,
+   "seam_d2": 0.005887970328330994,
+   "inner_d2_max": 0.008342090994119644,
+   "seam_d2_percentile": 35.266666666666666,
+   "seam_dip": 0,
+   "inner_dip_max": 4.572849476394616,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "candy",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 2002316,
+   "expected": 2001434,
+   "excess": 882,
+   "origin": 8192,
+   "guard": 8467,
+   "frames": 1984500,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.020406090654432774,
+   "seam_d2": 0.0064351558685302734,
+   "inner_d2_max": 0.008854031562805176,
+   "seam_d2_percentile": 36.8,
+   "seam_dip": 0,
+   "inner_dip_max": 4.277589166376579,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.2097768485546112
+  },
+  {
+   "id": "bulu",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1976934,
+   "expected": 1976934,
+   "excess": 0,
+   "origin": 8514,
+   "guard": 8467,
+   "frames": 1960000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0021836310625076294,
+   "seam_d2": 0.003372304141521454,
+   "inner_d2_max": 0.00852249190211296,
+   "seam_d2_percentile": 75.46666666666667,
+   "seam_dip": 0.7267203426336906,
+   "inner_dip_max": 6.472608985006765,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "bulu",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1977620,
+   "expected": 1976934,
+   "excess": 686,
+   "origin": 8406,
+   "guard": 8467,
+   "frames": 1960000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.020983155816793442,
+   "seam_d2": 0.0036499276757240295,
+   "inner_d2_max": 0.009036436676979065,
+   "seam_d2_percentile": 76.13333333333333,
+   "seam_dip": 1.2775235212647829,
+   "inner_dip_max": 6.984179586106912,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.10325220972299576
+  },
+  {
+   "id": "hate",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1724031,
+   "expected": 1724032,
+   "excess": -1,
+   "origin": 8565,
+   "guard": 8467,
+   "frames": 1707097,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0007456024177372456,
+   "seam_d2": 0.00020723044872283936,
+   "inner_d2_max": 0.0005865544080734253,
+   "seam_d2_percentile": 9.2,
+   "seam_dip": 7.004373142527065,
+   "inner_dip_max": 10.736397705757621,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "hate",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1724074,
+   "expected": 1724032,
+   "excess": 42,
+   "origin": 8881,
+   "guard": 8467,
+   "frames": 1707097,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0009287260472774506,
+   "seam_d2": 0.0003208331763744354,
+   "inner_d2_max": 0.0005999505519866943,
+   "seam_d2_percentile": 28.933333333333334,
+   "seam_dip": 1.2273278212777612,
+   "inner_dip_max": 11.864391770936997,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.2185697853565216
+  },
+  {
+   "id": "ending",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1884698,
+   "expected": 1884699,
+   "excess": -1,
+   "origin": 8477,
+   "guard": 8467,
+   "frames": 1867765,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0004999376833438873,
+   "seam_d2": 0.004281483590602875,
+   "inner_d2_max": 0.025926709175109863,
+   "seam_d2_percentile": 36.53333333333333,
+   "seam_dip": 2.2177405992190344,
+   "inner_dip_max": 4.378490055525088,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "ending",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1885539,
+   "expected": 1884699,
+   "excess": 840,
+   "origin": 8487,
+   "guard": 8467,
+   "frames": 1867765,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.005621844902634621,
+   "seam_d2": 0.004519596695899963,
+   "inner_d2_max": 0.026678606867790222,
+   "seam_d2_percentile": 36.4,
+   "seam_dip": 1.4522762826380244,
+   "inner_dip_max": 4.312803224191779,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.13123072683811188
+  },
+  {
+   "id": "castle",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1841762,
+   "expected": 1841762,
+   "excess": 0,
+   "origin": 8430,
+   "guard": 8467,
+   "frames": 1824828,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.003384105861186981,
+   "seam_d2": 0.005618393421173096,
+   "inner_d2_max": 0.02368607372045517,
+   "seam_d2_percentile": 17.599999999999998,
+   "seam_dip": 1.9811306284316075,
+   "inner_dip_max": 4.38907709278951,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "castle",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1842380,
+   "expected": 1841762,
+   "excess": 618,
+   "origin": 8218,
+   "guard": 8467,
+   "frames": 1824828,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.010265138000249863,
+   "seam_d2": 0.0065523236989974976,
+   "inner_d2_max": 0.022592484951019287,
+   "seam_d2_percentile": 21.53333333333333,
+   "seam_dip": 2.554310483533019,
+   "inner_dip_max": 4.104810947585726,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.056556060910224915
+  },
+  {
+   "id": "slope",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1620571,
+   "expected": 1620571,
+   "excess": 0,
+   "origin": 8467,
+   "guard": 8467,
+   "frames": 1603637,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.002779403825115878,
+   "seam_d2": 0.001447182148694992,
+   "inner_d2_max": 0.006885997951030731,
+   "seam_d2_percentile": 10.266666666666667,
+   "seam_dip": 0,
+   "inner_dip_max": 7.600250096490438,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "slope",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1620821,
+   "expected": 1620571,
+   "excess": 250,
+   "origin": 8459,
+   "guard": 8467,
+   "frames": 1603637,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.004262024536728859,
+   "seam_d2": 0.0015501640737056732,
+   "inner_d2_max": 0.00722271203994751,
+   "seam_d2_percentile": 11.066666666666666,
+   "seam_dip": 0,
+   "inner_dip_max": 7.678503377012735,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.08782985806465149
+  },
+  {
+   "id": "hill",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1631442,
+   "expected": 1631443,
+   "excess": -1,
+   "origin": 8289,
+   "guard": 8467,
+   "frames": 1614508,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.015257522463798523,
+   "seam_d2": 0.005124345421791077,
+   "inner_d2_max": 0.01304076611995697,
+   "seam_d2_percentile": 34.66666666666667,
+   "seam_dip": 0.4619807543573735,
+   "inner_dip_max": 2.6586345290478626,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "hill",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1631876,
+   "expected": 1631443,
+   "excess": 433,
+   "origin": 8404,
+   "guard": 8467,
+   "frames": 1614508,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.01459529995918274,
+   "seam_d2": 0.00589047372341156,
+   "inner_d2_max": 0.012999683618545532,
+   "seam_d2_percentile": 40.46666666666667,
+   "seam_dip": 0,
+   "inner_dip_max": 2.91031765188637,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.040318313986063004
+  },
+  {
+   "id": "bagvalley",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1941297,
+   "expected": 1941298,
+   "excess": -1,
+   "origin": 8349,
+   "guard": 8467,
+   "frames": 1924363,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0016916096210479736,
+   "seam_d2": 0.0015036910772323608,
+   "inner_d2_max": 0.00519118458032608,
+   "seam_d2_percentile": 44.46666666666667,
+   "seam_dip": 1.5203442709499697,
+   "inner_dip_max": 5.86722618059099,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "bagvalley",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1941869,
+   "expected": 1941298,
+   "excess": 571,
+   "origin": 8271,
+   "guard": 8467,
+   "frames": 1924363,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.010514691472053528,
+   "seam_d2": 0.0016885101795196533,
+   "inner_d2_max": 0.004868898540735245,
+   "seam_d2_percentile": 47.06666666666667,
+   "seam_dip": 0,
+   "inner_dip_max": 6.0788490969775495,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.07432539016008377
+  },
+  {
+   "id": "candylane",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1596635,
+   "expected": 1596636,
+   "excess": -1,
+   "origin": 8473,
+   "guard": 8467,
+   "frames": 1579702,
+   "loop_vs_concat_max_error": 5.820766091346741e-11,
+   "jump": 0.00018860772252082825,
+   "seam_d2": 0.001868952065706253,
+   "inner_d2_max": 0.010693132877349854,
+   "seam_d2_percentile": 0.8,
+   "seam_dip": 0,
+   "inner_dip_max": 4.246255750442387,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "candylane",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1596949,
+   "expected": 1596636,
+   "excess": 313,
+   "origin": 8503,
+   "guard": 8467,
+   "frames": 1579702,
+   "loop_vs_concat_max_error": 1.1641532182693481e-10,
+   "jump": 0.005236034281551838,
+   "seam_d2": 0.002151094377040863,
+   "inner_d2_max": 0.011383026838302612,
+   "seam_d2_percentile": 1.4666666666666666,
+   "seam_dip": 0.12216973569482548,
+   "inner_dip_max": 4.482093097279016,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.05992279201745987
+  },
+  {
+   "id": "lamplight",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1922054,
+   "expected": 1922054,
+   "excess": 0,
+   "origin": 8467,
+   "guard": 8467,
+   "frames": 1905120,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.004428145126439631,
+   "seam_d2": 0.001178434118628502,
+   "inner_d2_max": 0.006417214870452881,
+   "seam_d2_percentile": 14.333333333333334,
+   "seam_dip": 0.9438709911108987,
+   "inner_dip_max": 5.156427248567674,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "lamplight",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1922348,
+   "expected": 1922054,
+   "excess": 294,
+   "origin": 8774,
+   "guard": 8467,
+   "frames": 1905120,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.006714627146720886,
+   "seam_d2": 0.0013627372682094574,
+   "inner_d2_max": 0.006435826420783997,
+   "seam_d2_percentile": 17.933333333333334,
+   "seam_dip": 0.04652318160101743,
+   "inner_dip_max": 5.1008194700165745,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.08588932454586029
+  },
+  {
+   "id": "theater",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 2052319,
+   "expected": 2052319,
+   "excess": 0,
+   "origin": 8463,
+   "guard": 8467,
+   "frames": 2035385,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.004136794246733189,
+   "seam_d2": 0.0008912011981010437,
+   "inner_d2_max": 0.005830995738506317,
+   "seam_d2_percentile": 29.333333333333332,
+   "seam_dip": 10.442191018782545,
+   "inner_dip_max": 10.39182145801761,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "theater",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 2053001,
+   "expected": 2052319,
+   "excess": 682,
+   "origin": 8142,
+   "guard": 8467,
+   "frames": 2035385,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0067010968923568726,
+   "seam_d2": 0.0010017752647399902,
+   "inner_d2_max": 0.00597737729549408,
+   "seam_d2_percentile": 31.8,
+   "seam_dip": 2.356384321927571,
+   "inner_dip_max": 10.91947902960148,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.05470117926597595
+  },
+  {
+   "id": "plaza",
+   "ext": "mp3",
+   "rate": 44100,
+   "decoded": 1696934,
+   "expected": 1696934,
+   "excess": 0,
+   "origin": 8499,
+   "guard": 8467,
+   "frames": 1680000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.008788246661424637,
+   "seam_d2": 0.0038550347089767456,
+   "inner_d2_max": 0.011399030685424805,
+   "seam_d2_percentile": 28.599999999999998,
+   "seam_dip": 0,
+   "inner_dip_max": 3.0423912201652783,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0
+  },
+  {
+   "id": "plaza",
+   "ext": "ogg",
+   "rate": 44100,
+   "decoded": 1697614,
+   "expected": 1696934,
+   "excess": 680,
+   "origin": 8664,
+   "guard": 8467,
+   "frames": 1680000,
+   "loop_vs_concat_max_error": 0,
+   "jump": 0.0019851326942443848,
+   "seam_d2": 0.004084035754203796,
+   "inner_d2_max": 0.01192869246006012,
+   "seam_d2_percentile": 29.4,
+   "seam_dip": 0.8898056821721205,
+   "inner_dip_max": 3.1828833523492825,
+   "tail_quiet_ms": 0,
+   "extra_tail_peak": 0.04653916135430336
+  }
+ ],
+ "decode_page_errors": [],
+ "game": {
+  "before_gesture": {
+   "contexts": 0,
+   "live": 0,
+   "max": 0,
+   "starts": 0,
+   "decodes": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "title_before_gesture": {
+   "contexts": 0,
+   "live": 0,
+   "max": 0,
+   "starts": 0,
+   "decodes": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "after_first_gesture": {
+   "contexts": 1,
+   "live": 1,
+   "max": 1,
+   "starts": 1,
+   "decodes": 1,
+   "fetches": 1,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "first_track": "village",
+  "title_to_play_same_scene": {
+   "contexts": 1,
+   "live": 1,
+   "max": 1,
+   "starts": 1,
+   "decodes": 1,
+   "fetches": 1,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "enter": [
+   {
+    "id": "castle",
+    "region_on_screen": "castle",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 119,
+    "started": [
+     {
+      "track": "castle",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 41.3793125,
+      "frames": 1986207,
+      "rate": 48000,
+      "rms": 0.09502480584057373
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 2,
+     "decoded": 0,
+     "megabytes": 32.73168182373047,
+     "everCreated": 4
+    }
+   },
+   {
+    "id": "slope",
+    "region_on_screen": "slope",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 139,
+    "started": [
+     {
+      "track": "slope",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 36.36364583333334,
+      "frames": 1745455,
+      "rate": 48000,
+      "rms": 0.1136115082134309
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.04844665527344,
+     "everCreated": 6
+    }
+   },
+   {
+    "id": "hill",
+    "region_on_screen": "hill",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 960,
+    "started": [
+     {
+      "track": "hill",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 36.610166666666665,
+      "frames": 1757288,
+      "rate": 48000,
+      "rms": 0.10282430098234405
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 41.87736511230469,
+     "everCreated": 8
+    }
+   },
+   {
+    "id": "bagvalley",
+    "region_on_screen": "bagvalley",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 963,
+    "started": [
+     {
+      "track": "bagvalley",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.63635416666666,
+      "frames": 2094545,
+      "rate": 48000,
+      "rms": 0.11499249809479196
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 42.70391845703125,
+     "everCreated": 10
+    }
+   },
+   {
+    "id": "candylane",
+    "region_on_screen": "candylane",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 980,
+    "started": [
+     {
+      "track": "candylane",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 35.82089583333333,
+      "frames": 1719403,
+      "rate": 48000,
+      "rms": 0.10913808944317677
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 42.505157470703125,
+     "everCreated": 12
+    }
+   },
+   {
+    "id": "lamplight",
+    "region_on_screen": "lamplight",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 946,
+    "started": [
+     {
+      "track": "lamplight",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.2,
+      "frames": 2073600,
+      "rate": 48000,
+      "rms": 0.10667440947539805
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 44.918426513671875,
+     "everCreated": 14
+    }
+   },
+   {
+    "id": "theater",
+    "region_on_screen": "theater",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 976,
+    "started": [
+     {
+      "track": "theater",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 46.15385416666667,
+      "frames": 2215385,
+      "rate": 48000,
+      "rms": 0.10959350019843198
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 45.840362548828125,
+     "everCreated": 16
+    }
+   },
+   {
+    "id": "plaza",
+    "region_on_screen": "plaza",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 928,
+    "started": [
+     {
+      "track": "plaza",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 38.09522916666667,
+      "frames": 1828571,
+      "rate": 48000,
+      "rms": 0.10552684972707534
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "plaza",
+    "region_on_screen": "plaza",
+    "new_starts": 0,
+    "new_decodes": 0,
+    "new_fetches": 0,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": null,
+    "started": [],
+    "order": "",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "theater",
+    "region_on_screen": "theater",
+    "new_starts": 1,
+    "new_decodes": 0,
+    "new_fetches": 0,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 905,
+    "started": [
+     {
+      "track": "theater",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 46.15385416666667,
+      "frames": 2215385,
+      "rate": 48000,
+      "rms": 0.10959350019843198
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 46.673248291015625,
+     "everCreated": 18
+    }
+   },
+   {
+    "id": "village",
+    "region_on_screen": "village",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 965,
+    "started": [
+     {
+      "track": "village",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 48,
+      "frames": 2304000,
+      "rate": 48000,
+      "rms": 0.10702721129900103
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 48.431060791015625,
+     "everCreated": 20
+    }
+   },
+   {
+    "id": "lamplight",
+    "region_on_screen": "lamplight",
+    "new_starts": 1,
+    "new_decodes": 1,
+    "new_fetches": 1,
+    "live": 1,
+    "max_live": 1,
+    "ms_from_click_to_new_track": 981,
+    "started": [
+     {
+      "track": "lamplight",
+      "offset": 0,
+      "liveBefore": 0,
+      "loopStart": 0,
+      "loopEnd": 43.2,
+      "frames": 2073600,
+      "rate": 48000,
+      "rms": 0.10667440947539805
+     }
+    ],
+    "order": "stop>start",
+    "alive": {
+     "gc": true,
+     "loop": 3,
+     "decoded": 0,
+     "megabytes": 50.30048370361328,
+     "everCreated": 22
+    }
+   }
+  ],
+  "fetch_log": [
+   "assets/audio/bgm-village.mp3?v=bgm3",
+   "assets/audio/bgm-castle.mp3?v=bgm3",
+   "assets/audio/bgm-slope.mp3?v=bgm3",
+   "assets/audio/bgm-hill.mp3?v=bgm3",
+   "assets/audio/bgm-bagvalley.mp3?v=bgm3",
+   "assets/audio/bgm-candylane.mp3?v=bgm3",
+   "assets/audio/bgm-lamplight.mp3?v=bgm3",
+   "assets/audio/bgm-theater.mp3?v=bgm3",
+   "assets/audio/bgm-plaza.mp3?v=bgm3",
+   "assets/audio/bgm-village.mp3?v=bgm3",
+   "assets/audio/bgm-lamplight.mp3?v=bgm3"
+  ],
+  "same_scene": [
+   {
+    "name": "show(play) x3",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "圖鑑→回遊玩",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖→回遊玩（不進別區）",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "開設定",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "音量拉到 0",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0
+   },
+   {
+    "name": "音量拉到 100",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.5
+   },
+   {
+    "name": "音量拉回 72",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "關音樂",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0
+   },
+   {
+    "name": "開音樂",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "關設定",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖修「目前這區」的建築",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "地圖修「別區」的建築",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "修完回遊玩",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "開關背包",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "故事對話→略過",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "拖曳合成",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   },
+   {
+    "name": "交訂單",
+    "new_starts": 0,
+    "new_stops": 0,
+    "live": 1,
+    "gain": 0.36000001430511475
+   }
+  ],
+  "region_after_restore": "lamplight",
+  "merge_happened": true,
+  "order_delivered": true,
+  "track_after_same_scene": "lamplight",
+  "pause_resume": {
+   "live_while_paused": 0,
+   "resume_offset": 10.67733333333333,
+   "expected_offset": 10.67733333333333,
+   "same_track": true,
+   "live_after": 1
+  },
+  "rapid_switch": {
+   "live": 1,
+   "max_live_ever": 1,
+   "final_track": "candy",
+   "alive": {
+    "gc": true,
+    "loop": 3,
+    "decoded": 0,
+    "megabytes": 43.74714660644531,
+    "everCreated": 36
+   }
+  },
+  "chapters": [
+   {
+    "chapter": "journey",
+    "track": "journey",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "candy",
+    "track": "candy",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "bulu",
+    "track": "bulu",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "hate",
+    "track": "hate",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "ending",
+    "track": "ending",
+    "new_starts": 1,
+    "live": 1
+   },
+   {
+    "chapter": "village",
+    "track": "village",
+    "new_starts": 1,
+    "live": 1
+   }
+  ],
+  "alive_after_all": {
+   "gc": true,
+   "loop": 3,
+   "decoded": 0,
+   "megabytes": 47.26414489746094,
+   "everCreated": 46
+  },
+  "after_stop": {
+   "contexts": 1,
+   "live": 0,
+   "max": 1,
+   "starts": 20,
+   "decodes": 23,
+   "fetches": 23,
+   "audios": 0,
+   "ctxState": "running"
+  },
+  "overlap_violations": 0,
+  "total_events": 40,
+  "page_errors": [],
+  "console_errors": [
+   "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ],
+  "failed_requests": [
+   "404 http://127.0.0.1:54328/assets/chars/expr/mascot-happy-open.png",
+   "http://127.0.0.1:54328/assets/chars/expr/mascot-happy.png"
+  ]
+ },
+ "mp3_padding_simulation": [
+  {
+   "lead_zero_samples": 0,
+   "results": [
+    {
+     "id": "village",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3"
+     ],
+     "loopSeconds": 48,
+     "seam_d2": 0.0036622285842895508,
+     "exact_zero_samples_in_loop": 351
+    },
+    {
+     "id": "journey",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3",
+      "assets/audio/bgm-journey.mp3?v=bgm3"
+     ],
+     "loopSeconds": 51.4285625,
+     "seam_d2": 0.005188144743442535,
+     "exact_zero_samples_in_loop": 290
+    },
+    {
+     "id": "hate",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-journey.mp3?v=bgm3",
+      "assets/audio/bgm-hate.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.7096875,
+     "seam_d2": 0.00015259254723787308,
+     "exact_zero_samples_in_loop": 289
+    },
+    {
+     "id": "plaza",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-hate.mp3?v=bgm3",
+      "assets/audio/bgm-plaza.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.09522916666667,
+     "seam_d2": 0.003387562930583954,
+     "exact_zero_samples_in_loop": 222
+    }
+   ],
+   "warnings": [],
+   "page_errors": []
+  },
+  {
+   "lead_zero_samples": 1105,
+   "results": [
+    {
+     "id": "village",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3"
+     ],
+     "loopSeconds": 48,
+     "seam_d2": 0.003967396914958954,
+     "exact_zero_samples_in_loop": 351,
+     "padded": {
+      "lead": 1105,
+      "pad": 47
+     }
+    },
+    {
+     "id": "journey",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3",
+      "assets/audio/bgm-journey.mp3?v=bgm3"
+     ],
+     "loopSeconds": 51.4285625,
+     "seam_d2": 0.00631733238697052,
+     "exact_zero_samples_in_loop": 289,
+     "padded": {
+      "lead": 1105,
+      "pad": 212
+     }
+    },
+    {
+     "id": "hate",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-journey.mp3?v=bgm3",
+      "assets/audio/bgm-hate.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.7096875,
+     "seam_d2": 0.000244140625,
+     "exact_zero_samples_in_loop": 289,
+     "padded": {
+      "lead": 1105,
+      "pad": 158
+     }
+    },
+    {
+     "id": "plaza",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-hate.mp3?v=bgm3",
+      "assets/audio/bgm-plaza.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.09522916666667,
+     "seam_d2": 0.003570668399333954,
+     "exact_zero_samples_in_loop": 222,
+     "padded": {
+      "lead": 1105,
+      "pad": 852
+     }
+    }
+   ],
+   "warnings": [],
+   "page_errors": []
+  },
+  {
+   "lead_zero_samples": 2257,
+   "results": [
+    {
+     "id": "village",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3"
+     ],
+     "loopSeconds": 48,
+     "seam_d2": 0.0052490234375,
+     "exact_zero_samples_in_loop": 351,
+     "padded": {
+      "lead": 2257,
+      "pad": 47
+     }
+    },
+    {
+     "id": "journey",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-village.mp3?v=bgm3",
+      "assets/audio/bgm-journey.mp3?v=bgm3"
+     ],
+     "loopSeconds": 51.4285625,
+     "seam_d2": 0.005889892578125,
+     "exact_zero_samples_in_loop": 289,
+     "padded": {
+      "lead": 2257,
+      "pad": 212
+     }
+    },
+    {
+     "id": "hate",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-journey.mp3?v=bgm3",
+      "assets/audio/bgm-hate.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.7096875,
+     "seam_d2": 0.00030517578125,
+     "exact_zero_samples_in_loop": 289,
+     "padded": {
+      "lead": 2257,
+      "pad": 158
+     }
+    },
+    {
+     "id": "plaza",
+     "used": "web-audio",
+     "fetched": [
+      "assets/audio/bgm-hate.mp3?v=bgm3",
+      "assets/audio/bgm-plaza.mp3?v=bgm3"
+     ],
+     "loopSeconds": 38.09522916666667,
+     "seam_d2": 0.003631591796875,
+     "exact_zero_samples_in_loop": 222,
+     "padded": {
+      "lead": 2257,
+      "pad": 852
+     }
+    }
+   ],
+   "warnings": [],
+   "page_errors": []
+  }
+ ],
+ "fallback": {
+  "title": [
+   {
+    "src": "bgm-village.mp3?v=bgm3",
+    "paused": false,
+    "t": 1.155963,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "play_same": [
+   {
+    "src": "bgm-village.mp3?v=bgm3",
+    "paused": false,
+    "t": 1.660993,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "castle": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 1.173653,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "music_off": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 1.436588,
+    "volume": 0,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "music_on": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 1.887468,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "after_wrap": [
+   {
+    "src": "bgm-castle.mp3?v=bgm3",
+    "paused": false,
+    "t": 0.856616,
+    "volume": 0.36,
+    "loop": false,
+    "ready": 4
+   }
+  ],
+  "page_errors": []
+ },
+ "loop_test": {
+  "before_click": {
+   "contexts": 0,
+   "fetches": 0,
+   "audios": 0
+  },
+  "plays": [
+   {
+    "ext": "ogg",
+    "i": 0,
+    "status": "微笑村 · 鐵琴泡泡音樂盒 · OGG · 48.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 1,
+    "status": "神祕魔法袋 · 烏克麗麗搖擺跳跳 · OGG · 51.428562 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 2,
+    "status": "第一願：西卡 · 口哨氣球小遊行 · OGG · 45.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 3,
+    "status": "第二願：布魯 · 木琴躲貓貓：三連小跳與高低應答 · OGG · 44.444437 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 4,
+    "status": "最後一願：哈特 · 短風琴魔術步：切分和弦與空拍問答 · OGG · 38.709688 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 5,
+    "status": "漫天氣球 · 氣球圓舞：三拍柔鐘與長音雲朵 · OGG · 42.352938 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 6,
+    "status": "微笑城堡 · 小鐘鐘塔：雙聲部卡農與整拍撥弦 · OGG · 41.379312 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 7,
+    "status": "飛飛的出發坡 · 彈跳起跑：附點上行與雙拍踏步 · OGG · 36.363646 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 8,
+    "status": "阿飄的探險丘 · 丘陵迴旋：三拍木管與交錯琶音 · OGG · 36.610167 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 9,
+    "status": "魔法袋谷 · 魔法口袋：五音短句與搖擺分解和弦 · OGG · 43.636354 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 10,
+    "status": "西卡的糖果巷 · 糖果踢踏：短木琴與反拍鈴答句 · OGG · 35.820896 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 11,
+    "status": "布魯的夜燈林 · 夜燈搖籃：輕風琴長句與稀疏星光 · OGG · 43.200000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 12,
+    "status": "哈特的魔術劇場 · 玩偶小劇場：撥弦停頓與低音回答 · OGG · 46.153854 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "ogg",
+    "i": 13,
+    "status": "漫天氣球廣場 · 廣場跳格子：短笛呼喊與拉丁式木塊 · OGG · 38.095229 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 0,
+    "status": "微笑村 · 鐵琴泡泡音樂盒 · MP3 · 48.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 1,
+    "status": "神祕魔法袋 · 烏克麗麗搖擺跳跳 · MP3 · 51.428562 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 2,
+    "status": "第一願：西卡 · 口哨氣球小遊行 · MP3 · 45.000000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 3,
+    "status": "第二願：布魯 · 木琴躲貓貓：三連小跳與高低應答 · MP3 · 44.444437 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 4,
+    "status": "最後一願：哈特 · 短風琴魔術步：切分和弦與空拍問答 · MP3 · 38.709688 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 5,
+    "status": "漫天氣球 · 氣球圓舞：三拍柔鐘與長音雲朵 · MP3 · 42.352938 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 6,
+    "status": "微笑城堡 · 小鐘鐘塔：雙聲部卡農與整拍撥弦 · MP3 · 41.379312 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 7,
+    "status": "飛飛的出發坡 · 彈跳起跑：附點上行與雙拍踏步 · MP3 · 36.363646 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 8,
+    "status": "阿飄的探險丘 · 丘陵迴旋：三拍木管與交錯琶音 · MP3 · 36.610167 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 9,
+    "status": "魔法袋谷 · 魔法口袋：五音短句與搖擺分解和弦 · MP3 · 43.636354 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 10,
+    "status": "西卡的糖果巷 · 糖果踢踏：短木琴與反拍鈴答句 · MP3 · 35.820896 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 11,
+    "status": "布魯的夜燈林 · 夜燈搖籃：輕風琴長句與稀疏星光 · MP3 · 43.200000 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 12,
+    "status": "哈特的魔術劇場 · 玩偶小劇場：撥弦停頓與低音回答 · MP3 · 46.153854 秒，循環播放中",
+    "live": 1
+   },
+   {
+    "ext": "mp3",
+    "i": 13,
+    "status": "漫天氣球廣場 · 廣場跳格子：短笛呼喊與拉丁式木塊 · MP3 · 38.095229 秒，循環播放中",
+    "live": 1
+   }
+  ],
+  "alive": {
+   "gc": true,
+   "loop": 3,
+   "decoded": 0,
+   "megabytes": 46.673248291015625,
+   "everCreated": 58
+  },
+  "after_stop": {
+   "live": 0,
+   "max": 2,
+   "contexts": 1,
+   "starts": 28
+  },
+  "page_errors": [],
+  "console_errors": []
+ },
+ "server_requests": 337,
+ "interstitial": []
+}
