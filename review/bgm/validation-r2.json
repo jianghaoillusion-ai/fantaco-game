@@ -10,6 +10,7 @@
     "fallback_zero_volume_muted": true,
     "fallback_unmuted": true,
     "default_mp3": true,
+    "rapid_audition_no_overlap": true,
     "release_gestures": true
   },
   "pass": true

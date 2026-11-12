@@ -34,8 +34,10 @@ const format = document.querySelector('#format');
 const buttons = [...document.querySelectorAll('[data-song]')];
 const cache = new Map();
 let context, active, wanted = null, generation = 0;
-async function retire(voice) {
-  if (!voice) return;
+let retiring = Promise.resolve();
+function retire(voice) {
+  if (!voice) return retiring;
+  retiring = retiring.then(async () => {
   const now = context.currentTime;
   voice.gain.gain.cancelScheduledValues(now);
   voice.gain.gain.setValueAtTime(voice.gain.gain.value, now);
@@ -43,6 +45,8 @@ async function retire(voice) {
   await new Promise(resolve => setTimeout(resolve, 35));
   voice.source.stop();
   voice.source.onended = () => { voice.source.disconnect(); voice.gain.disconnect(); };
+  });
+  return retiring;
 }
 async function play(index) {
   const token = ++generation;

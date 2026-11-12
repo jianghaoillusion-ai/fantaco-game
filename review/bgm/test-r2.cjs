@@ -31,8 +31,14 @@ const server=http.createServer((req,res)=>{const file=path.join(root,decodeURI(r
   await fallback.evaluate(()=>a.setAudioSettings({musicVol:.72}));
   results.checks.fallback_unmuted=await fallback.evaluate(()=>voices.find(e=>e.src)?.muted===false);
   await fallback.close();
-  const audition=await browser.newPage();await audition.goto(base+'review/bgm/loop-test.html');
-  results.checks.default_mp3=await audition.inputValue('#format')==='mp3';await audition.close();
+  const audition=await browser.newPage();
+  await audition.addInitScript(()=>{window.live=0;window.max=0;const mk=AudioContext.prototype.createBufferSource;AudioContext.prototype.createBufferSource=function(){const s=mk.call(this),start=s.start.bind(s),stop=s.stop.bind(s);let on=false;s.start=(...a)=>{if(s.loop){on=true;live++;max=Math.max(max,live)}return start(...a)};s.stop=(...a)=>{if(on){on=false;live--}return stop(...a)};return s}});
+  await audition.goto(base+'review/bgm/loop-test.html');
+  results.checks.default_mp3=await audition.inputValue('#format')==='mp3';
+  for(let i=0;i<3;i++){await audition.click(`[data-song="${i}"]`);await audition.waitForFunction(i=>document.querySelector(`[data-song="${i}"]`).getAttribute('aria-pressed')==='true',i)}
+  await audition.evaluate(async()=>{document.querySelector('[data-song="0"]').click();await new Promise(r=>setTimeout(r,10));document.querySelector('[data-song="1"]').click()});
+  await audition.waitForTimeout(200);results.checks.rapid_audition_no_overlap=await audition.evaluate(()=>max===1&&live===1);
+  await audition.close();
   const app=fs.readFileSync(root+'/js/app.js','utf8');
   results.checks.release_gestures=['pointerup','touchend','click'].every(e=>app.includes('"'+e+'"'));
   results.pass=Object.values(results.checks).every(Boolean);
