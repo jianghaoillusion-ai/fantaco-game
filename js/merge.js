@@ -49,44 +49,10 @@ export function starterBoard(cols, rows) {
   };
   const item = (chain, tier) => ({ kind: "item", chain, tier, uid: makeUid() });
   const gen = (id, tier) => ({ kind: "gen", gen: id, tier, uid: makeUid() });
-  // Interior 5x7 is open. Fill ~65% with varied village + later-chain items so the board reads full.
-  // Two identical stars sit side-by-side for a first merge.
+  // New saves only: one producer and the pair used by the first story order.
   put(4, 3, gen("star", 1));
-  put(3, 3, gen("garden", 1));
   put(4, 2, item("star", 1));
   put(5, 2, item("star", 1));
-  put(2, 3, item("star", 2));
-  put(4, 4, item("star", 3));
-  put(6, 4, item("star", 7)); // 微笑氣球
-  put(5, 1, item("star", 4));
-  put(1, 3, item("star", 5));
-  put(1, 2, item("garden", 1));
-  put(3, 1, item("garden", 2));
-  put(5, 3, item("garden", 3));
-  put(2, 5, item("garden", 4));
-  put(7, 2, item("garden", 5));
-  put(1, 1, item("garden", 6));
-  put(4, 1, item("garden", 8));
-  put(1, 4, item("tea", 1));
-  put(6, 1, item("tea", 2));
-  put(3, 5, item("candy", 1));
-  put(5, 5, item("candy", 2));
-  put(6, 3, item("candy", 3));
-  put(3, 2, item("candy", 4));
-  put(2, 2, item("candy", 5));
-  put(4, 5, item("candy", 6));
-  put(2, 1, item("magic", 1));
-  put(7, 4, item("magic", 2));
-  put(1, 5, item("magic", 3));
-  put(2, 4, item("magic", 4));
-  put(7, 3, item("magic", 5));
-  put(7, 5, item("forest", 1));
-  put(6, 2, item("forest", 2));
-  put(6, 5, item("candy", 7));
-  put(7, 1, item("garden", 7));
-  put(3, 4, item("goods", 1));
-  put(5, 4, item("goods", 2));
-  // two interiors left open beside the generators so new drops still have a seat
   return b;
 }
 
@@ -160,7 +126,6 @@ export function refillProduceQueue(genCell, gens, n = 10) {
   const q = [];
   for (let i = 0; i < n; i++) {
     if (def.id === "garden" && genCell.tier >= 2 && Math.random() < 0.08) q.push({ chain: "tea", tier: 1 });
-    else if (def.id === "star" && Math.random() < 0.1) q.push({ chain: "goods", tier: 1 });
     else q.push({ chain: def.produces, tier: pickTable(t.table) });
   }
   genCell.queue = q;
@@ -170,6 +135,7 @@ export function produceFrom(genCell, gens) {
   const def = gens[genCell.gen];
   const t = genDef(gens, genCell.gen, genCell.tier);
   if (!def || !t) return null;
+  if (genCell.queue) genCell.queue = genCell.queue.filter(c => c.chain === def.produces || (def.id === "garden" && genCell.tier >= 2 && c.chain === "tea"));
   if (!genCell.queue || !genCell.queue.length) refillProduceQueue(genCell, gens);
   const next = genCell.queue.shift();
   return { kind: "item", chain: next.chain, tier: next.tier, uid: makeUid() };
@@ -280,6 +246,7 @@ function listProceduralCandidates(opts) {
   const { chains, chapter, discovered, npcsByChapter } = opts;
   const order = ["village", "journey", "candy", "bulu", "hate", "ending"];
   const unlocked = Object.keys(chains).filter((id) => {
+    if (opts.availableChains) return opts.availableChains.includes(id);
     const ch = chains[id].chapter;
     const okChapter = order.indexOf(ch) <= order.indexOf(chapter || "village");
     if (!okChapter) return false;
@@ -319,9 +286,9 @@ function difficultyOf(c, opts) {
 }
 
 export function fillOrderSlots(save, slots, opts) {
-  save.orders = (save.orders || []).filter((o) => o && o.need);
+  save.orders = (save.orders || []).filter((o) => o && o.need && (!opts.availableChains || opts.availableChains.includes(o.need.chain)));
   const story = typeof opts.nextStory === "function" ? opts.nextStory() : opts.nextStory;
-  if (story && !save.orders.some((o) => o.id === story.id)) {
+  if (story && (!opts.availableChains || opts.availableChains.includes(story.need.chain)) && !save.orders.some((o) => o.id === story.id)) {
     save.orders.unshift({ ...story });
   }
   const needKey = (o) => `${o.need.chain}:${o.need.tier}`;

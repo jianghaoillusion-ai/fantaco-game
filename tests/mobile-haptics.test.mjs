@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import { createHaptics } from '../js/haptics.js';
+let enabled=true;const pulses=[];
+const h=createHaptics(()=>enabled,{vibrate:n=>pulses.push(n)},null);
+h.pickup();h.merge();assert.deepEqual(pulses,[8,24]);
+enabled=false;h.pickup();h.merge();assert.equal(pulses.length,2);
+let clicks=0;
+const input={setAttribute(){},style:{}};const label={appendChild(){},click(){clicks++},setAttribute(){},style:{}};
+const doc={createElement:t=>t==='input'?input:label,body:{appendChild(){}}};
+enabled=true;const ios=createHaptics(()=>enabled,{},doc);ios.pickup();ios.merge();assert.equal(clicks,2);enabled=false;ios.merge();assert.equal(clicks,2);
+console.log('haptics: Android durations, iOS label activation, disabled gate passed');

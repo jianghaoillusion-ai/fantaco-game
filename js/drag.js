@@ -24,9 +24,10 @@ export function createBoardDrag(ctx) {
   function placeFloat() {
     raf = 0;
     if (!drag?.float) return;
-    const x = drag.x, y = drag.y;
+    hoverAt(drag.x, drag.y);
+    const x = drag.x, y = drag.y - (drag.touch ? Math.max(56, drag.fh * 1.25) : 0);
     const w = drag.fw, h = drag.fh;
-    drag.float.style.transform = `translate3d(${x - w / 2}px, ${y - h / 2}px, 0) scale(1.1)`;
+    drag.float.style.transform = `translate3d(${x - w / 2}px, ${y - h / 2}px, 0) scale(${drag.touch ? 1.2 : 1.1})`;
   }
 
   function queuePlace() {
@@ -55,6 +56,11 @@ export function createBoardDrag(ctx) {
     document.body.classList.add("is-dragging");
     hideTip();
     ctx.sfx?.pickup?.();
+    if (drag.touch) ctx.haptics?.pickup();
+    document.querySelectorAll("#board .cell:not(.locked)").forEach((cell) => {
+      const dest = ctx.getSave().board[ctx.getCols() * +cell.dataset.r + +cell.dataset.c];
+      if (dest && dest.uid !== drag.loc.item.uid && ctx.canMerge?.(drag.loc.item, dest)) cell.classList.add("merge-target");
+    });
     try { piece.setPointerCapture?.(drag.pointerId); } catch {}
     placeFloat();
   }
@@ -76,7 +82,7 @@ export function createBoardDrag(ctx) {
     el.classList.add(ok ? "merge-hot" : "merge-bad");
   }
 
-  function dropOk(el, item) {
+  function dropOk(el, item, loc = drag?.loc) {
     if (el.classList.contains("order")) {
       const od = (ctx.getSave().orders || []).find((o) => o.id === el.dataset.id);
       return !!(od && item.kind === "item" && item.chain === od.need.chain && item.tier === od.need.tier
@@ -89,13 +95,13 @@ export function createBoardDrag(ctx) {
     const dest = ctx.getSave().board[ctx.getCols() * r + c];
     if (!dest) return true;
     if (ctx.canMerge?.(item, dest)) return true;
-    if (drag.loc.where === "board") return true; // swap
+    if (loc?.where === "board") return true; // swap
     return false;
   }
 
-  function springBack(then) {
-    const fl = drag.float;
-    const origin = drag.originRect;
+  function springBack(d, then) {
+    const fl = d.float;
+    const origin = d.originRect;
     if (!fl || !origin) { then?.(); return; }
     const x = origin.left;
     const y = origin.top;
@@ -113,8 +119,13 @@ export function createBoardDrag(ctx) {
     if (raf) { cancelAnimationFrame(raf); raf = 0; }
     document.body.classList.remove("is-dragging");
     clearHot();
+    document.querySelectorAll(".merge-target").forEach(el => el.classList.remove("merge-target"));
     d.piece.classList.remove("origin-ghost");
     const fl = d.float;
+    if (e.type === "pointercancel") {
+      if (fl) fl.classList.remove("on", "spring");
+      return;
+    }
     if (!d.moved) {
       if (fl) fl.classList.remove("on");
       ctx.onTap?.(d.loc);
@@ -123,14 +134,14 @@ export function createBoardDrag(ctx) {
     const x = e.clientX, y = e.clientY;
     if (fl) fl.style.pointerEvents = "none";
     const el = document.elementFromPoint(x, y)?.closest?.(".cell, .order, .inv-cell");
-    const valid = el && dropOk(el, d.loc.item);
+    const valid = el && dropOk(el, d.loc.item, d.loc);
     const settle = (fn) => {
       if (fl) fl.classList.remove("on", "spring");
       fn?.();
     };
     if (!el || !valid) {
       ctx.sfx?.invalid?.();
-      springBack(() => settle());
+      springBack(d, () => settle());
       return;
     }
     if (el.classList.contains("order")) {
@@ -142,10 +153,11 @@ export function createBoardDrag(ctx) {
       return;
     }
     const r = +el.dataset.r, c = +el.dataset.c;
-    settle(() => ctx.moveOrMerge?.(d.loc, r, c));
+    settle(() => ctx.moveOrMerge?.(d.loc, r, c, d.touch));
   }
 
   function onDown(e) {
+    if (drag) return;
     if (e.button != null && e.button !== 0) return;
     const locked = e.target.closest(".cell.locked");
     if (locked && !e.target.closest(".piece")) { ctx.fog?.onLockedTap?.(locked); return; }
@@ -154,8 +166,9 @@ export function createBoardDrag(ctx) {
     const loc = ctx.findCellByUid?.(piece.dataset.uid);
     if (!loc) return;
     if (e.cancelable) e.preventDefault();
+    try { piece.setPointerCapture?.(e.pointerId); } catch {}
     drag = {
-      loc, piece,
+      loc, piece, touch: e.pointerType === "touch",
       start: { x: e.clientX, y: e.clientY, t: Date.now() },
       originRect: piece.getBoundingClientRect(),
       moved: false, float: null, pointerId: e.pointerId,
@@ -176,7 +189,7 @@ export function createBoardDrag(ctx) {
     }
     if (drag.moved) {
       queuePlace();
-      hoverAt(e.clientX, e.clientY);
+
     }
   }
 
@@ -191,6 +204,7 @@ export function createBoardDrag(ctx) {
     if (!play || play._dragBound) return;
     play._dragBound = true;
     play.addEventListener("pointerdown", onDown, { passive: false });
+    play.addEventListener("touchmove", e => { if (drag && e.cancelable) e.preventDefault(); }, { passive: false });
     window.addEventListener("pointermove", onMove, { passive: false });
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);

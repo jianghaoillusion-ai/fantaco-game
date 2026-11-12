@@ -1,0 +1,50 @@
+[
+  {
+    "path": "assets/chars/avatars/feifei-determined.png",
+    "proposal_pixels": 5023
+  },
+  {
+    "path": "assets/chars/avatars/feifei-sad.png",
+    "proposal_pixels": 4401
+  },
+  {
+    "path": "assets/chars/avatars/feifei-surprised.png",
+    "proposal_pixels": 3113
+  },
+  {
+    "path": "assets/chars/avatars/feifei-worried.png",
+    "proposal_pixels": 7535
+  },
+  {
+    "path": "assets/chars/expr/feifei-determined-open.png",
+    "proposal_pixels": 1925
+  },
+  {
+    "path": "assets/chars/expr/feifei-determined.png",
+    "proposal_pixels": 1925
+  },
+  {
+    "path": "assets/chars/expr/feifei-sad-open.png",
+    "proposal_pixels": 2132
+  },
+  {
+    "path": "assets/chars/expr/feifei-sad.png",
+    "proposal_pixels": 1661
+  },
+  {
+    "path": "assets/chars/expr/feifei-surprised-open.png",
+    "proposal_pixels": 1797
+  },
+  {
+    "path": "assets/chars/expr/feifei-surprised.png",
+    "proposal_pixels": 1797
+  },
+  {
+    "path": "assets/chars/expr/feifei-worried-open.png",
+    "proposal_pixels": 1651
+  },
+  {
+    "path": "assets/chars/expr/feifei-worried.png",
+    "proposal_pixels": 1651
+  }
+]
