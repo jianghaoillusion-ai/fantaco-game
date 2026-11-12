@@ -142,3 +142,7 @@ for i,(im,title) in enumerate([(original,'original'),(imgs['jiejie'],'cast8')]):
 c.save(O/'jiejie-cheek-source-4x.png')
 # Cheek endpoints at the widest face row, separate from the pointed ears.
 z=Image.open(O/'landmarks-spirit.png').crop((185,212,365,255));z.resize((720,172),Image.Resampling.NEAREST).save(O/'spirit-face-width-4x.png')
+# These are two backgrounds of the same current image, not before/after panels.
+for name in ['jiejie-right-fringe-4x','jiejie-left-cheek-4x','jiejie-right-neck-4x']:
+ z=Image.open(O/(name+'.png'));c=Image.new('RGB',(z.width,z.height+34),'#f3f0ea');c.paste(z,(0,34));d=ImageDraw.Draw(c)
+ d.text((5,5),'新版／白底',font=font(17),fill='#222');d.text((z.width//2+5,5),'新版／深底',font=font(17),fill='#222');c.save(O/(name+'.png'))

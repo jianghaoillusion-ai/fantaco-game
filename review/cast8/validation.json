@@ -8,10 +8,10 @@
     "sole": 685,
     "webp_equal": true,
     "hard_edge_pixels": 0,
-    "edge_mid_alpha_percent": 99.96475563909775,
+    "edge_mid_alpha_percent": 99.96475149806133,
     "small_components_under8": 0,
     "alpha_positive_components": 1,
-    "sha256": "4220683a7d34691b10099d3b07af662ae33521b34c3c9a9553d397db667d0d9e"
+    "sha256": "66723c1c89309e6360c32094d8e786fe13ea0f78e5ae3ec54ea9acbc0665e095"
   },
   "hate": {
     "size": [

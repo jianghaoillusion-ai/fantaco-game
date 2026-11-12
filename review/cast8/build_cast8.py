@@ -90,6 +90,14 @@ brown=(a[:,:,0]>a[:,:,2]*1.2)&(a[:,:,1]>a[:,:,2])&(a[:,:,1]<125)&(b[:,:,1]<125)
 jm[~brown]=0
 jiejie=Image.composite(body_source,jiejie,Image.fromarray(jm))
 a=np.array(jiejie);a[233:237,346:350,:3]=np.array(body_source)[233:237,346:350,:3];jiejie=Image.fromarray(a)
+# Preserve the original split hair strand beside the enlarged left cheek; remove only
+# the pale blend residue, outside the opaque face core.
+left_join=Image.new('L',(540,720));ImageDraw.Draw(left_join).ellipse((195,211,213,233),fill=255)
+lm=np.array(left_join.filter(ImageFilter.GaussianBlur(1)))
+a=np.array(jiejie);b=np.array(body_source)
+keep=(b[:,:,3]>128)&(b[:,:,1]<130)&(b[:,:,0]>b[:,:,2]*1.2)&(a[:,:,0]<235)
+lm[~keep]=0
+jiejie=Image.composite(body_source,jiejie,Image.fromarray(lm))
 def finish(im):
  a=np.array(im);solid=(a[:,:,3]>=128).astype('uint8')
  band=cv2.dilate(solid,np.ones((3,3),np.uint8))!=cv2.erode(solid,np.ones((3,3),np.uint8))
