@@ -18,15 +18,15 @@
   <link rel="stylesheet" href="css/story.css?v=25">
   <link rel="stylesheet" href="css/bag.css?v=25">
   <link rel="stylesheet" href="css/orders.css?v=25">
-  <link rel="stylesheet" href="css/settings.css?v=25">
-  <link rel="stylesheet" href="css/quality.css?v=cast10r2">
+  <link rel="stylesheet" href="css/settings.css?v=mobile1">
+  <link rel="stylesheet" href="css/quality.css?v=mobile1">
 </head>
 <body>
   <div id="app">
 
     <section id="profile" class="screen">
       <div class="modal" style="margin:auto">
-        <img src="assets/mascot/sticker/front.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/sticker/front.png?v=mobile1" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <h2>先取一個暱稱</h2>
         <p>給自己或小朋友一個冒險的名字。<br>進度會記在這台裝置上。</p>
         <form id="nick-form">
@@ -44,7 +44,7 @@
       </button>
       <img class="logo" src="assets/ui/logo.png" alt="FANTACO 魔幻藝術節">
       <h1>眠花糖的異想世界</h1>
-      <img class="hero" src="assets/mascot/sticker/jump.png" alt="眠花糖跳起來，尾巴有一顆黃星星">
+      <img class="hero" src="assets/mascot/sticker/jump.png?v=mobile1" alt="眠花糖跳起來，尾巴有一顆黃星星">
       <div class="actions">
         <button class="btn wide" id="btn-play">開始冒險</button>
         <div class="home-dock" role="navigation" aria-label="主畫面">
@@ -216,7 +216,7 @@
         <span></span>
       </div>
       <div class="modal" style="margin:24px auto;text-align:center">
-        <img src="assets/mascot/sticker/hold-star.png" alt="眠花糖" width="140" style="margin:0 auto 8px">
+        <img src="assets/mascot/sticker/hold-star.png?v=mobile1" alt="眠花糖" width="140" style="margin:0 auto 8px">
         <p id="daily-status">今天的禮物在這裡。</p>
         <p class="notice">連續來領，能量和星星種子會多一點點。</p>
         <button class="btn wide" id="btn-claim-daily" type="button">領取今日禮物</button>
@@ -232,7 +232,7 @@
           <h4>解鎖</h4>
           <div id="result-rewards" class="result-rewards"></div>
         </div>
-        <img class="result-hero" src="assets/mascot/sticker/hold-star.png" alt="眠花糖">
+        <img class="result-hero" src="assets/mascot/sticker/hold-star.png?v=mobile1" alt="眠花糖">
         <div id="result-lyrics" class="lyrics result-lyrics"></div>
         <button class="btn green wide" id="btn-result-ok" type="button">領取</button>
       </div>
@@ -321,6 +321,7 @@
           <input id="vol-sfx" type="range" min="0" max="100" value="85" aria-label="音效音量">
         </div>
         <button class="btn ghost" id="btn-howto" type="button">怎麼玩</button>
+        <div class="set-row haptics-row" title="震動"><svg aria-hidden="true" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="8" y="3" width="8" height="18" rx="2"/><path d="M4 7 2 10l2 3-2 3 2 2M20 7l2 3-2 3 2 3-2 2"/></svg><label class="tog"><input id="tog-haptics" type="checkbox" aria-label="震動" title="震動 開／關" checked></label></div>
         <button class="btn wide" id="btn-settings-close" type="button">完成</button>
       </div>
     </div>
@@ -378,6 +379,6 @@
     }
   }
   </script>
-  <script type="module" src="js/app.js?v=cast10r2"></script>
+  <script type="module" src="js/app.js?v=mobile1"></script>
 </body>
 </html>

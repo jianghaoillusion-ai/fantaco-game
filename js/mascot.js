@@ -5,22 +5,22 @@
  * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
-  idle: "assets/mascot/sticker/front.png",
-  idle2: "assets/mascot/sticker/front.png",
-  cheer: "assets/mascot/sticker/jump.png",
-  jump: "assets/mascot/sticker/jump.png",
-  happy: "assets/mascot/sticker/front.png",
-  wish: "assets/mascot/sticker/hold-star.png",
-  hero: "assets/mascot/sticker/hold-star.png",
-  think: "assets/mascot/sticker/sit-closed.png",
-  sit: "assets/mascot/sticker/sit-closed.png",
-  sleep: "assets/mascot/sticker/sleep.png",
-  sad: "assets/mascot/sticker/sleep.png",
-  side: "assets/mascot/sticker/side.png",
-  run: "assets/mascot/sticker/side.png",
-  back: "assets/mascot/sticker/back.png",
-  face: "assets/mascot/sticker/face.png",
-  front: "assets/mascot/sticker/front.png"
+  idle: "assets/mascot/sticker/front.png?v=mobile1",
+  idle2: "assets/mascot/sticker/front.png?v=mobile1",
+  cheer: "assets/mascot/sticker/jump.png?v=mobile1",
+  jump: "assets/mascot/sticker/jump.png?v=mobile1",
+  happy: "assets/mascot/sticker/front.png?v=mobile1",
+  wish: "assets/mascot/sticker/hold-star.png?v=mobile1",
+  hero: "assets/mascot/sticker/hold-star.png?v=mobile1",
+  think: "assets/mascot/sticker/sit-closed.png?v=mobile1",
+  sit: "assets/mascot/sticker/sit-closed.png?v=mobile1",
+  sleep: "assets/mascot/sticker/sleep.png?v=mobile1",
+  sad: "assets/mascot/sticker/sleep.png?v=mobile1",
+  side: "assets/mascot/sticker/side.png?v=mobile1",
+  run: "assets/mascot/sticker/side.png?v=mobile1",
+  back: "assets/mascot/sticker/back.png?v=mobile1",
+  face: "assets/mascot/sticker/face.png?v=mobile1",
+  front: "assets/mascot/sticker/front.png?v=mobile1"
 };
 
 /** Load data/mascot-poses.json so later official sticker frames can drop in without a code change. */
@@ -28,7 +28,7 @@ fetch("data/mascot-poses.json?v=25").then((r) => r.json()).then((man) => {
   const setName = man.defaultSet || "sticker";
   const set = (man.sets && man.sets[setName]) || {};
   for (const [k, v] of Object.entries(set)) {
-    if (typeof v === "string" && v && !v.startsWith("_")) POSES[k] = v;
+    if (typeof v === "string" && v && !v.startsWith("_")) POSES[k] = v.startsWith("assets/mascot/sticker/") ? `${v}?v=mobile1` : v;
   }
 }).catch(() => {});
 

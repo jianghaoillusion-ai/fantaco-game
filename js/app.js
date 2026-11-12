@@ -1,19 +1,20 @@
+import { createHaptics } from "./haptics.js?v=mobile1";
 import { Auth } from "./auth.js?v=25";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
 import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
-import { mountMascot } from "./mascot.js?v=25";
+import { mountMascot } from "./mascot.js?v=mobile1";
 import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=cast10r2";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=25";
+import { bindStory, startStory } from "./story.js?v=mobile1";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=mobile1";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
 import { reserveItems } from "./merge.js?v=25";
-import { avatarSrc } from "./portraits.js?v=cast10r2";
+import { avatarSrc } from "./portraits.js?v=mobile1";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js?v=25";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=25";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=mobile1";
 import { regionById } from "./world.js?v=25";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
@@ -23,6 +24,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 let GAME, CHAINS, GENS, CHAPTERS, STORY, MAP;
 let SAVE = loadSave();
+const haptics = createHaptics(() => SAVE.settings?.haptics !== false);
 let mascot;
 let dragging = null;
 let combo = { n: 0, at: 0 };
@@ -672,7 +674,7 @@ function tapGenerator(loc) {
   else systems?.fx.popAt(made.uid);
 }
 
-function moveOrMerge(loc, r, c) {
+function moveOrMerge(loc, r, c, touch = false) {
   if (systems && !systems.fog.canDropAt(r, c)) {
     sfx.invalid();
     toast("這一格還沒揭開");
@@ -698,6 +700,7 @@ function moveOrMerge(loc, r, c) {
     removeFrom(loc);
     SAVE.board[destI] = merged;
     onMerged(merged);
+    if (touch) haptics.merge();
     persist(); renderBoard();
     return;
   }
@@ -728,7 +731,6 @@ function onMerged(merged) {
     const cols = COLS;
     systems?.fog.revealAdjacent?.(Math.floor(at.i / cols), at.i % cols);
   }
-  try { navigator.vibrate?.(12); } catch {}
   systems?.events?.noteMerge?.(merged);
   systems?.orders?.bumpTask?.("merges");
   discover(merged);
@@ -1062,6 +1064,7 @@ function renderLyrics() {
 
 function systemCtx() {
   return {
+    haptics,
     $, $$,
     getSave: () => SAVE,
     getGame: () => GAME,

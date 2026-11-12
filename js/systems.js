@@ -9,7 +9,7 @@ import { createAds } from "./ads.js?v=25";
 import { nearbyEmpty } from "./merge.js?v=25";
 import { createEvents } from "./events.js";
 import { createEventsUi } from "./events-ui.js?v=25";
-import { createBoardDrag } from "./drag.js?v=25";
+import { createBoardDrag } from "./drag.js?v=mobile1";
 
 export { GEN_POPS, GEN_COOL_MS };
 

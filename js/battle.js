@@ -16,17 +16,17 @@ function loadImg(src) {
 }
 
 const IM = {
-  jump: loadImg("assets/mascot/sticker/jump.png"),
-  run: loadImg("assets/mascot/sticker/side.png"),
-  front: loadImg("assets/mascot/sticker/front.png"),
-  side: loadImg("assets/mascot/sticker/side.png"),
-  wish: loadImg("assets/mascot/sticker/hold-star.png"),
+  jump: loadImg("assets/mascot/sticker/jump.png?v=mobile1"),
+  run: loadImg("assets/mascot/sticker/side.png?v=mobile1"),
+  front: loadImg("assets/mascot/sticker/front.png?v=mobile1"),
+  side: loadImg("assets/mascot/sticker/side.png?v=mobile1"),
+  wish: loadImg("assets/mascot/sticker/hold-star.png?v=mobile1"),
   seed: loadImg("assets/items/star-seed.png"),
   smile: loadImg("assets/fx/smile.png"),
   bag: loadImg("assets/fx/bag.png"),
   happy: loadImg("assets/fx/balloon-happy.png"),
-  feifei: loadImg("assets/chars/feifei.png"),
-  sika: loadImg("assets/chars/sika.png"),
+  feifei: loadImg("assets/chars/feifei.png?v=mobile1"),
+  sika: loadImg("assets/chars/sika.png?v=mobile1"),
   fog: loadImg("assets/fx/fog.png"),
   deflate: loadImg("assets/fx/deflate.png"),
   shadow: loadImg("assets/fx/shadow.png")

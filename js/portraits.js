@@ -126,9 +126,9 @@ export function applyCastMetrics(fig, id, src, roleMul) {
   fig.style.setProperty("--scale", scale + "px");
 }
 
-// Version only cast10 art; unchanged characters keep their existing URLs.
+// Invalidate cached matte/specks across all cleaned character portraits.
 function castAsset(id, src) {
-  return id === "spirit" || id === "jiejie" ? `${src}?v=cast10r2` : src;
+  return `${src}?v=mobile1`;
 }
 
 export function avatarSrc(id, expr = "happy") {
@@ -143,9 +143,9 @@ export function portraitSrc(id, expr = "happy", talking = false) {
   if (n === "mascot") {
     if (talking) {
       const t = `assets/chars/expr/mascot-${expr || "happy"}-open.png`;
-      return t;
+      return castAsset(n, t);
     }
-    return MASCOT_FULL[expr] || MASCOT_FULL.default;
+    return castAsset(n, MASCOT_FULL[expr] || MASCOT_FULL.default);
   }
   if (expr) {
     return castAsset(n, `assets/chars/expr/${n}-${expr}${open}.png`);
@@ -162,7 +162,7 @@ export function bindImgFallback(img, id, expr, kind = "avatar") {
     } else {
       const baseExpr = `assets/chars/expr/${n}-${expr || "happy"}.png`;
       if (img.src.includes("-open")) img.src = castAsset(n, baseExpr);
-      else if (n === "mascot") img.src = MASCOT_FULL[expr] || MASCOT_FULL.default;
+      else if (n === "mascot") img.src = castAsset(n, MASCOT_FULL[expr] || MASCOT_FULL.default);
       else img.src = castAsset(n, FULL[n] || FULL.mascot);
       const fig = img.parentElement;
       if (fig && fig.classList.contains("story-actor")) applyCastMetrics(fig, n, img.getAttribute("src") || img.src);

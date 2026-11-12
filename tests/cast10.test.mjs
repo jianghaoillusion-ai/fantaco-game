@@ -14,10 +14,10 @@ for(const id of ['spirit','bulu','jiejie'])for(const vh of [390,820,844]){
  assert.equal(Number(vars['--img-h']),m.h);assert.equal(Number(vars['--feet']),m.feet);
 }
 for(const id of ['spirit','jiejie']){
- for(const talking of [false,true])assert.ok(portraitSrc(id,'happy',talking).endsWith('?v=cast10r2'));
- assert.ok(portraitSrc(id,'',false).endsWith('?v=cast10r2'));assert.ok(avatarSrc(id).endsWith('?v=cast10r2'));
+ for(const talking of [false,true])assert.ok(portraitSrc(id,'happy',talking).endsWith('?v=mobile1'));
+ assert.ok(portraitSrc(id,'',false).endsWith('?v=mobile1'));assert.ok(avatarSrc(id).endsWith('?v=mobile1'));
  let fail;const img={src:portraitSrc(id,'happy',true),parentElement:null,addEventListener(_,f){fail=f},removeEventListener(){}};
  bindImgFallback(img,id,'happy','full');fail();assert.equal(img.src,portraitSrc(id,'happy',false));
 }
-assert.equal(portraitSrc('bulu','happy',true),'assets/chars/expr/bulu-happy-open.png');
+assert.equal(portraitSrc('bulu','happy',true),'assets/chars/expr/bulu-happy-open.png?v=mobile1');
 console.log('cast10: mixed canvases, ground anchors, versioned assets and fallback passed');
