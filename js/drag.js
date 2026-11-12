@@ -24,6 +24,7 @@ export function createBoardDrag(ctx) {
   function placeFloat() {
     raf = 0;
     if (!drag?.float) return;
+    hoverAt(drag.x, drag.y);
     const x = drag.x, y = drag.y - (drag.touch ? Math.max(56, drag.fh * 1.25) : 0);
     const w = drag.fw, h = drag.fh;
     drag.float.style.transform = `translate3d(${x - w / 2}px, ${y - h / 2}px, 0) scale(${drag.touch ? 1.2 : 1.1})`;
@@ -156,6 +157,7 @@ export function createBoardDrag(ctx) {
   }
 
   function onDown(e) {
+    if (drag) return;
     if (e.button != null && e.button !== 0) return;
     const locked = e.target.closest(".cell.locked");
     if (locked && !e.target.closest(".piece")) { ctx.fog?.onLockedTap?.(locked); return; }
@@ -164,6 +166,7 @@ export function createBoardDrag(ctx) {
     const loc = ctx.findCellByUid?.(piece.dataset.uid);
     if (!loc) return;
     if (e.cancelable) e.preventDefault();
+    try { piece.setPointerCapture?.(e.pointerId); } catch {}
     drag = {
       loc, piece, touch: e.pointerType === "touch",
       start: { x: e.clientX, y: e.clientY, t: Date.now() },
@@ -186,7 +189,7 @@ export function createBoardDrag(ctx) {
     }
     if (drag.moved) {
       queuePlace();
-      hoverAt(e.clientX, e.clientY);
+
     }
   }
 
@@ -201,6 +204,7 @@ export function createBoardDrag(ctx) {
     if (!play || play._dragBound) return;
     play._dragBound = true;
     play.addEventListener("pointerdown", onDown, { passive: false });
+    play.addEventListener("touchmove", e => { if (drag && e.cancelable) e.preventDefault(); }, { passive: false });
     window.addEventListener("pointermove", onMove, { passive: false });
     window.addEventListener("pointerup", onUp);
     window.addEventListener("pointercancel", onUp);

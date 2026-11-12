@@ -1,6 +1,6 @@
 /** Irregular island unlock: crates/fog with coin badges, opening in clumps. */
 import { clumpOf, isCellOpen, clumpCells, lockedClumpIds, CLUMP_COSTS, isAllOpen, isContour, unlockOneCell } from "./world.js?v=25";
-import { nearbyEmpty, produceFrom } from "./merge.js?v=25";
+import { nearbyEmpty, produceFrom } from "./merge.js?v=mobile3";
 
 export const GEN_POPS = 18;
 export const GEN_COOL_MS = 6_000;
@@ -189,6 +189,8 @@ export function createFog(ctx) {
   }
 
   function tickCool() {
+    // Auto-production would replace the captured piece DOM mid-drag. Defer until release.
+    if (ctx.drag?.isDragging()) return;
     document.querySelectorAll(".piece.gen").forEach((el) => {
       const loc = ctx.findCellByUid?.(el.dataset.uid);
       if (loc?.item?.kind === "gen") decorateGen(el, loc.item);

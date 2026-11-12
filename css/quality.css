@@ -3193,3 +3193,9 @@ body.is-dragging .piece.origin-ghost{ opacity: .32; filter: grayscale(.1); }
 .daily-card{position:relative;}
 #play #board .cell.merge-target{box-shadow:inset 0 0 0 2px #7ad14a !important;background-color:#e6f8cf !important;}
 #play #board .cell.merge-target.merge-hot{box-shadow:inset 0 0 0 3px #55ae2f,0 0 0 4px #7ad14a66 !important;}
+
+/* Mobile gestures belong to the game. */
+body { -webkit-user-select:none; user-select:none; -webkit-touch-callout:none; touch-action:manipulation; }
+input, textarea { -webkit-user-select:text; user-select:text; }
+#btn-claim-generators { border:0; border-radius:12px; background:#fff3c8; color:#47536f; padding:6px 12px; font:inherit; font-size:12px; }
+#btn-claim-generators[hidden] { display:none; }

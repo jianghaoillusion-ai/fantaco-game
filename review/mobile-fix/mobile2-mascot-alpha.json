@@ -1,0 +1,16 @@
+[
+  {
+    "name": "face",
+    "alpha_changed": 15500,
+    "small_before": 69,
+    "small_after": 0,
+    "rgb_max_difference": 0
+  },
+  {
+    "name": "wave",
+    "alpha_changed": 30029,
+    "small_before": 116,
+    "small_after": 0,
+    "rgb_max_difference": 0
+  }
+]

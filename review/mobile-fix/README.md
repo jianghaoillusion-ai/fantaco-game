@@ -1,3 +1,5 @@
+> mobile2 補充輪請先看 [mobile2-notes.md](mobile2-notes.md)、[unlock-flow.md](unlock-flow.md)。以下 mobile1 數字與去背提案是歷史紀錄，face／wave 最新修復見 mobile2-mascot-alpha.json。
+
 # 第 2 輪手機修正（最後一輪）
 
 iPhone 多半仍不會震；所有裝置震動均「未在實機測試」。本輪不是全部驗收通過：原始淡藍／紫／粉白方塊仍未重現，不能宣稱已解決。

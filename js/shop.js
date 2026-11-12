@@ -1,3 +1,4 @@
+import { saleValue } from "./progression.js?v=mobile3";
 /** In-game shop and magic-bag popup. Coins and 星星種子 only — no IAP, ads, or premium currency. */
 import { shopItemAvailable, canAfford, payCost, formatCost, formatCostHtml } from "./world.js?v=25";
 import { bagCap } from "./bag.js?v=25";
@@ -22,9 +23,14 @@ export function createShop(ctx) {
     if (!uid) return;
     const loc = ctx.findCellByUid(uid);
     if (!loc || loc.item.kind !== "item") { toast("這個不能賣"); return; }
-    if ((loc.item.tier || 1) <= 1) { sfx.invalid(); toast("第 1 階不能賣，合高一點再賣吧"); return; }
-    const coins = loc.item.tier * 2;
-    ctx.removeFrom(loc);
+    let coins = saleValue(loc.item);
+    if (ctx.isRetired?.(loc.item)) {
+      const save = ctx.getSave();
+      const offer = ctx.recycleOffer(loc.item);
+      coins = offer.coins;
+      for (const target of offer.targets) (target.where === "board" ? save.board : save.inventory)[target.i] = null;
+      save.inventory = save.inventory.filter(Boolean);
+    } else ctx.removeFrom(loc);
     ctx.setSelected?.(null);
     toast(`賣掉了，得到 ${coins} 金幣`);
     persist();
