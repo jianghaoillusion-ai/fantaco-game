@@ -1,18 +1,43 @@
-拖曳：只有 touch 上移至少 56px、放大到 1.2；滑鼠保持原位置與 1.1。可合成格顯示綠底綠框，手指所在合成格加粗；落點仍是手指位置。修正無效落點／交換時讀取已清空拖曳狀態，pointercancel 不落下。
+# 第 2 輪手機修正（最後一輪）
 
-震動：設定新增手機圖示與開關，沒有可見文字，用 title／aria-label 說明，存入遊戲 localStorage，舊存檔預設開。Android Chrome 有震動硬體且系統允許時，拿起 8ms／合成 24ms。桌機、iOS 18以前、不支援振動API或switch觸覺的瀏覽器不會／不保證震動。系統關閉觸覺、低電量模式等可能不震，這些情境未實測。
+iPhone 多半仍不會震；所有裝置震動均「未在實機測試」。本輪不是全部驗收通過：原始淡藍／紫／粉白方塊仍未重現，不能宣稱已解決。
 
-新版 iOS：包含 WebKit fc1ef83 修補的 Safari 會拒絕程式 label click，不會因本次隱藏 switch 方法震動。舊版也只是 best-effort，pointermove 拿起時可能沒有使用者啟用，合成放開時才有機會。iOS 不能控制強弱。所有震動均「未在實機測試」，不可把 headless 或單元測試當作實際震動成功。
-依據：[WebKit Safari 18](https://webkit.org/blog/15865/webkit-features-in-safari-18-0/)、[WebKit 原始修補](https://github.com/WebKit/WebKit/commit/fc1ef83eae10068fe468587d959e868041ddfe03)、[MDN vibrate](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vibrate)。
+## 回應小頌第 1 輪的六個問題
 
-圖片：盤點104張，其中角色／眠花糖63張，交貨道具41張。角色53張有改，只改 alpha，存檔後重讀與22a7d6d比較，所有像素RGB最大差異=0，不透明RGB p99=0。角色小殘片721→0；道具188個小區塊包含原有光效，未改，不能說全104張殘片為0。清理規則為 alpha<16、小於100像素的八連通區；飛飛偏青藍半透明像素僅在與外界透明背景相鄰的外輪廓2px內清理，不清內部挑染或水瓶。已撤掉「整塊最高alpha<128就刪」規則。cast10、眠花糖官方色均未重畫或改RGB。7張WebP按各自原始RGB做同樣alpha清理後存無損，部分約增為4～5倍；目前程式未引用這些角色WebP，不增加主畫面下載量。
+1. 眼睛亮點：已從 22a7d6d 重算清理，兩張 sad 表情的白色亮點恢復。`alpha-eye-restored-feifei-sad.png`、`alpha-eye-restored-feifei-sad-open.png` 是原版／第1輪／第2輪五倍對照。
+2. 無差別刪小塊：改成先以原始外輪廓填滿建立保護區，角色輪廓包住的小島（含眼睛、嘴巴）不刪。保留原圖所有 RGB。新增 `check-alpha.py`，先在第1輪圖重現失敗，再驗證修正後通過。仍會刪輪廓外、面積小於100的殘點；外部實心像素刪除量逐張公開，沒有宣稱全圖實心 alpha 不變。保留的小島不能一概當成髒點。
+3. 淡色方塊：仍未找到來源。檢查了交貨頭像與道具引用、CSS，交貨頭像底色是圓形淡黃，備齊道具的圓角綠底有遊戲含義；沒有證據可把它們當成使用者回報的藍紫粉白方塊而刪掉。保留待釐清，需當時 iPhone 截圖與網址，未部署也未實機驗收。
+4. 原有透明眼珠／頭髮：製作12張 `alpha-hole-proposal-*` 對照，右格僅把封閉透明洞的 alpha 補回，RGB 不變，沒有套用到遊戲。補眼珠看得到原本棕色，但髮絲與衣服仍有複雜鏤空；不把自動補洞當作已核准角色修復。提案圖不是成品。
+5. 貼紙 WebP：盤點補齊14張，4張有清理的 PNG/WebP alpha 完全一致。WebP 各自保留原始 RGB，無損重存，不重新壓有損。角色與模組快取升為 mobile2。
+6. 盤點數字：分列小連通區、極淡像素、alpha 變更量及刪除實心像素。小區塊不全是殘片，包含白色亮點，不能追求全部歸零。
 
-原始問題限制：22a7d6d 的交貨頭像是飛飛／氣球精靈／微笑姐姐等，沒有名為花仙子的角色。本地尚未重現描述的大塊藍紫粉白方塊，不能宣稱這項已實機修好；可能涉及不同素材或快取，原因未確認。飛飛舊表情眼睛／頭髮已有透明缺洞，本次不補畫、不改設計。保留大面積獨立配件，不能宣稱所有藝術細節都已人工逐像素驗收。
+拖曳落點仍是手指所在格，依原規格未改落點；實際手感待使用者測試。震動拿起仍在跨過拖曳門檻時觸發，避免一碰就震；此事件不能提供可靠的 iOS 啟用，沒有宣稱已繞過限制。
 
-狀態列：倒數與黃色進度條分上下兩列。390×844 測得兩者不相交、文字不截斷。
+## 四項修改
 
-驗證：node --test tests/*.test.mjs 共5個測試檔通過。headless Chromium＋CDP真實touch事件驗證浮起、可見高亮（實際computedStyle）、成功合成、滑鼠中心不變、無效落點、取消拖曳、倒數／進度條分離、關閉震動保存且重載保留，沒有頁面執行錯誤。
+|項目|檔案與內容|
+|---|---|
+|拖曳|`js/drag.js`、`js/app.js`、`css/quality.css`：touch 上移至少56px、1.2倍，可合成格高亮；滑鼠保持1.1倍與原位置；本輪保留第1輪行為|
+|震動|`js/haptics.js`、`js/settings-ui.js`、`js/systems.js`、`js/app.js`、`index.html`、`css/settings.css`：8ms拿起、24ms合成，圖示開關、預設開並存 localStorage；本輪未改觸發行為|
+|去背|`assets/chars/`、`assets/chars/avatars/`、`assets/chars/expr/`、`assets/mascot/sticker/`；清理腳本 `review/mobile-fix/cleanup-alpha.py`；`js/portraits.js`、`js/mascot.js`、相關模組與 `index.html` 快取 mobile2|
+|狀態列|`css/quality.css` 倒數文字與進度條上下排；本輪保留第1輪修正|
 
-證據：before以git show 22a7d6d取得頁面與素材，沒有切換或修改其他worktree。兩組均390×844測試存檔，statusbar為局部裁切；alpha-cleanup為原尺寸對照，alpha-detail為4倍局部，alpha-mask紅色為被改透明度的像素。截圖非私人遊戲存檔。重跑需要既有Playwright、外接碟瀏覽器，先啟動本機8893 HTTP服務，再執行 capture.mjs before／after。
+## 震動支援（未在實機測試）
 
-免費工具：Pillow／numpy／OpenCV、既有Playwright與Node。未用即夢、生圖、付費API或AppleScript。小頌僅唯讀交叉檢查。
+|裝置／瀏覽器|可期待的結果|
+|---|---|
+|Android Chrome，有馬達且系統允許|API 支援，拿起8ms、合成24ms；不是硬體實測保證|
+|iPhone Safari，含 WebKit fc1ef83 修補|程式 label.click 會被擋，這個方法不會震；未確認各 iOS 正式版的收錄版本|
+|iOS 18 之後、尚未包含修補的 Safari|只能 best-effort；拿起 pointermove 沒有可靠使用者啟用；放開合成可能有效，不能調強弱|
+|iOS 18以前、桌機、無支援硬體／API|本功能無可靠震動|
+|系統停用觸覺、低電量、靜音／勿擾等|可能無震動，依系統與裝置而異；沒有逐機驗證|
+
+依據：[WebKit 修補](https://github.com/WebKit/WebKit/commit/fc1ef83eae10068fe468587d959e868041ddfe03)、[MDN vibrate](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vibrate)。
+
+## 本輪驗證
+
+`node --test tests/*.test.mjs`：5個檔案全過。headless Chromium 390×844 真實CDP觸控：浮圖底緣429.2、手指y461.5，留32.3px；合成tier2、目標高亮、滑鼠位置、無效落點、取消不改棋盤、文字與進度條分離、震動開關重載保存，無頁面錯誤。`check-alpha.py`：49張角色圖的輪廓內實心 alpha 保留、RGB p99≤8。57張有改素材與基準所有 RGB 最大差為0，尺寸不變，14組貼紙 PNG/WebP alpha 一致。全部只使用免費本機工具，沒用即夢、付費API或 AppleScript。
+
+本輪57張素材的 alpha 共變更170,288像素，極淡像素147,022→0。77張角色／貼紙原始小區塊1002→840，這不是「剩840個髒點」：保留的角色內部小島包含眼睛亮點；也不能因此宣稱所有髮絲都乾淨。41張道具保留原有光效。
+
+before截圖維持22a7d6d，after已以第2輪重截；測試存檔非私人存檔。第1輪小頌截圖仍保留於 xiaosong/，僅屬歷史證據；其餘 alpha-cleanup / alpha-mask 已重新產生。去背補洞提案僅供審閱，未寫回素材。

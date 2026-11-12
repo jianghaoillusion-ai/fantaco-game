@@ -20,7 +20,9 @@ await page.evaluate(()=>{
  document.querySelector('.daily-timer').textContent='19小時 6分';
 });
 await page.waitForTimeout(700);
+await page.locator('.daily-timer').evaluate(el=>el.textContent='19小時 6分');
 await page.screenshot({path:`review/mobile-fix/${phase}-delivery.png`});
+await page.locator('.daily-timer').evaluate(el=>el.textContent='19小時 6分');
 await page.locator('.orders-head').screenshot({path:`review/mobile-fix/${phase}-statusbar.png`});
 const a=await page.locator('[data-uid="test-a"]').boundingBox();const b=await page.locator('[data-uid="test-b"]').boundingBox();
 const cdp=await page.context().newCDPSession(page);

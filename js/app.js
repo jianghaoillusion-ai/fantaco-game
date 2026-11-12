@@ -1,20 +1,20 @@
-import { createHaptics } from "./haptics.js?v=mobile1";
+import { createHaptics } from "./haptics.js?v=mobile2";
 import { Auth } from "./auth.js?v=25";
 import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
 import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=25";
-import { mountMascot } from "./mascot.js?v=mobile1";
+import { mountMascot } from "./mascot.js?v=mobile2";
 import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=mobile1";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=mobile1";
+import { bindStory, startStory } from "./story.js?v=mobile2";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=mobile2";
 import { bagCap, migrateBagSlots } from "./bag.js?v=25";
 import { reserveItems } from "./merge.js?v=25";
-import { avatarSrc } from "./portraits.js?v=mobile1";
+import { avatarSrc } from "./portraits.js?v=mobile2";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, firstEmpty, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
 } from "./merge.js?v=25";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=mobile1";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=mobile2";
 import { regionById } from "./world.js?v=25";
 import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
 import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";

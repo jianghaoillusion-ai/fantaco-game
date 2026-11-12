@@ -7,7 +7,7 @@ import cv2
 from PIL import Image,ImageDraw
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'review/mobile-fix'
-files=sorted(list((ROOT/'assets/chars').rglob('*.png'))+list((ROOT/'assets/chars').rglob('*.webp'))+list((ROOT/'assets/mascot/sticker').glob('*.png')))
+files=sorted(list((ROOT/'assets/chars').rglob('*.png'))+list((ROOT/'assets/chars').rglob('*.webp'))+list((ROOT/'assets/mascot/sticker').glob('*.png'))+list((ROOT/'assets/mascot/sticker').glob('*.webp')))
 def parts(alpha):
  n,l,s,_=cv2.connectedComponentsWithStats((alpha>0).astype('uint8'),8)
  return n,l,s
@@ -18,7 +18,11 @@ for path in files:
  original=Image.open(BytesIO(raw)); original_mode=original.mode
  old=np.array(original.convert('RGBA'));new=old.copy();a=new[:,:,3]
  n,l,st=parts(a);before=sum(st[1:,4]<100)
- # Remove extremely faint matte and detached specks; retain genuine detached art.
+ # Filled original silhouettes protect eye highlights and other enclosed islands.
+ contours,_=cv2.findContours((old[:,:,3]>0).astype('uint8'),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+ protected=np.zeros(a.shape,dtype='uint8')
+ cv2.drawContours(protected,[c for c in contours if cv2.contourArea(c)>=100],-1,1,cv2.FILLED)
+ # Remove extremely faint matte and detached specks; retain enclosed artwork.
  a[a<16]=0
  if 'feifei' in rel:
   rgb=old[:,:,:3].astype(float)
@@ -31,10 +35,13 @@ for path in files:
   a[spill]=0
  nn,ll,ss=parts(a)
  for i in range(1,nn):
-  if ss[i,4]<100:a[ll==i]=0
+  if ss[i,4]<100 and not np.any(protected[ll==i]):a[ll==i]=0
+ # Keep PNG/WebP alpha identical without changing the WebP's original RGB.
+ if '/sticker/' in rel and path.suffix=='.webp':
+  a[:]=np.array(Image.open(path.with_suffix('.png')).convert('RGBA'))[:,:,3]
  n2,l2,st2=parts(a);after=sum(st2[1:,4]<100)
  changed=bool(np.any(old!=new));rgbdiff=int(np.max(np.abs(old[:,:,:3].astype(int)-new[:,:,:3].astype(int))))
- if changed:
+ if changed or not np.array_equal(np.array(Image.open(path).convert("RGBA")),new):
   im=Image.fromarray(new)
   if path.suffix=='.webp':im.save(path,lossless=True,exact=True)
   else:im.save(path)
@@ -52,7 +59,7 @@ for path in files:
  rgb_max=int(np.abs(old[:,:,:3].astype(int)-actual[:,:,:3].astype(int)).max())
  opaque=old[:,:,3]==255
  p99=float(np.percentile(np.abs(old[:,:,:3][opaque].astype(int)-actual[:,:,:3][opaque].astype(int)),99)) if opaque.any() else 0
- rows.append(dict(path=rel,use='交貨框／頭像' if '/avatars/' in rel else '故事表情' if '/expr/' in rel else '眠花糖故事／主畫面' if '/sticker/' in rel else '故事備援立繪'+('（WebP 備援；目前角色程式未引用）' if path.suffix=='.webp' else ''),before=int(before),after=int(after),changed=changed,alpha_pixels=int(np.count_nonzero(old[:,:,3]!=a)),opaque_rgb_p99=p99,rgb_max=rgb_max,original_mode=original_mode,saved_mode=Image.open(path).mode))
+ rows.append(dict(path=rel,use='交貨框／頭像' if '/avatars/' in rel else '故事表情' if '/expr/' in rel else '眠花糖故事／主畫面' if '/sticker/' in rel else '故事備援立繪'+('（WebP 備援；目前角色程式未引用）' if path.suffix=='.webp' else ''),before=int(before),after=int(after),changed=changed,alpha_pixels=int(np.count_nonzero(old[:,:,3]!=a)),faint_before=int(np.count_nonzero((old[:,:,3]>0)&(old[:,:,3]<16))),faint_after=int(np.count_nonzero((a>0)&(a<16))),opaque_removed=int(np.count_nonzero((old[:,:,3]==255)&(a==0))),protected_components=int(sum(ss[i,4]<100 and np.any(protected[ll==i]) for i in range(1,nn))),opaque_rgb_p99=p99,rgb_max=rgb_max,original_mode=original_mode,saved_mode=Image.open(path).mode))
  assert rgbdiff==0
  if changed:
   actual=np.array(Image.open(path).convert('RGBA'));mask=old[:,:,3]==255

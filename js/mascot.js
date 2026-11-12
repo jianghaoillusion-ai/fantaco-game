@@ -5,22 +5,22 @@
  * Official 3D remains an optional fallback (window.__MASCOT_3D = true).
  */
 const POSES = {
-  idle: "assets/mascot/sticker/front.png?v=mobile1",
-  idle2: "assets/mascot/sticker/front.png?v=mobile1",
-  cheer: "assets/mascot/sticker/jump.png?v=mobile1",
-  jump: "assets/mascot/sticker/jump.png?v=mobile1",
-  happy: "assets/mascot/sticker/front.png?v=mobile1",
-  wish: "assets/mascot/sticker/hold-star.png?v=mobile1",
-  hero: "assets/mascot/sticker/hold-star.png?v=mobile1",
-  think: "assets/mascot/sticker/sit-closed.png?v=mobile1",
-  sit: "assets/mascot/sticker/sit-closed.png?v=mobile1",
-  sleep: "assets/mascot/sticker/sleep.png?v=mobile1",
-  sad: "assets/mascot/sticker/sleep.png?v=mobile1",
-  side: "assets/mascot/sticker/side.png?v=mobile1",
-  run: "assets/mascot/sticker/side.png?v=mobile1",
-  back: "assets/mascot/sticker/back.png?v=mobile1",
-  face: "assets/mascot/sticker/face.png?v=mobile1",
-  front: "assets/mascot/sticker/front.png?v=mobile1"
+  idle: "assets/mascot/sticker/front.png?v=mobile2",
+  idle2: "assets/mascot/sticker/front.png?v=mobile2",
+  cheer: "assets/mascot/sticker/jump.png?v=mobile2",
+  jump: "assets/mascot/sticker/jump.png?v=mobile2",
+  happy: "assets/mascot/sticker/front.png?v=mobile2",
+  wish: "assets/mascot/sticker/hold-star.png?v=mobile2",
+  hero: "assets/mascot/sticker/hold-star.png?v=mobile2",
+  think: "assets/mascot/sticker/sit-closed.png?v=mobile2",
+  sit: "assets/mascot/sticker/sit-closed.png?v=mobile2",
+  sleep: "assets/mascot/sticker/sleep.png?v=mobile2",
+  sad: "assets/mascot/sticker/sleep.png?v=mobile2",
+  side: "assets/mascot/sticker/side.png?v=mobile2",
+  run: "assets/mascot/sticker/side.png?v=mobile2",
+  back: "assets/mascot/sticker/back.png?v=mobile2",
+  face: "assets/mascot/sticker/face.png?v=mobile2",
+  front: "assets/mascot/sticker/front.png?v=mobile2"
 };
 
 /** Load data/mascot-poses.json so later official sticker frames can drop in without a code change. */
@@ -28,7 +28,7 @@ fetch("data/mascot-poses.json?v=25").then((r) => r.json()).then((man) => {
   const setName = man.defaultSet || "sticker";
   const set = (man.sets && man.sets[setName]) || {};
   for (const [k, v] of Object.entries(set)) {
-    if (typeof v === "string" && v && !v.startsWith("_")) POSES[k] = v.startsWith("assets/mascot/sticker/") ? `${v}?v=mobile1` : v;
+    if (typeof v === "string" && v && !v.startsWith("_")) POSES[k] = v.startsWith("assets/mascot/sticker/") ? `${v}?v=mobile2` : v;
   }
 }).catch(() => {});
 

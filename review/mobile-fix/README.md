@@ -1,134 +1,173 @@
-# 手機修正驗收
+# 第 2 輪手機修正（最後一輪）
 
-拖曳：只有 touch 上移至少 56px、放大到 1.2；滑鼠保持原位置與 1.1。可合成格顯示綠底綠框，手指所在合成格加粗；落點仍是手指位置。修正無效落點／交換時讀取已清空拖曳狀態，pointercancel 不落下。
+iPhone 多半仍不會震；所有裝置震動均「未在實機測試」。本輪不是全部驗收通過：原始淡藍／紫／粉白方塊仍未重現，不能宣稱已解決。
 
-震動：設定新增手機圖示與開關，沒有可見文字，用 title／aria-label 說明，存入遊戲 localStorage，舊存檔預設開。Android Chrome 有震動硬體且系統允許時，拿起 8ms／合成 24ms。桌機、iOS 18以前、不支援振動API或switch觸覺的瀏覽器不會／不保證震動。系統關閉觸覺、低電量模式等可能不震，這些情境未實測。
+## 回應小頌第 1 輪的六個問題
 
-新版 iOS：包含 WebKit fc1ef83 修補的 Safari 會拒絕程式 label click，不會因本次隱藏 switch 方法震動。舊版也只是 best-effort，pointermove 拿起時可能沒有使用者啟用，合成放開時才有機會。iOS 不能控制強弱。所有震動均「未在實機測試」，不可把 headless 或單元測試當作實際震動成功。
-依據：[WebKit Safari 18](https://webkit.org/blog/15865/webkit-features-in-safari-18-0/)、[WebKit 原始修補](https://github.com/WebKit/WebKit/commit/fc1ef83eae10068fe468587d959e868041ddfe03)、[MDN vibrate](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vibrate)。
+1. 眼睛亮點：已從 22a7d6d 重算清理，兩張 sad 表情的白色亮點恢復。`alpha-eye-restored-feifei-sad.png`、`alpha-eye-restored-feifei-sad-open.png` 是原版／第1輪／第2輪五倍對照。
+2. 無差別刪小塊：改成先以原始外輪廓填滿建立保護區，角色輪廓包住的小島（含眼睛、嘴巴）不刪。保留原圖所有 RGB。新增 `check-alpha.py`，先在第1輪圖重現失敗，再驗證修正後通過。仍會刪輪廓外、面積小於100的殘點；外部實心像素刪除量逐張公開，沒有宣稱全圖實心 alpha 不變。保留的小島不能一概當成髒點。
+3. 淡色方塊：仍未找到來源。檢查了交貨頭像與道具引用、CSS，交貨頭像底色是圓形淡黃，備齊道具的圓角綠底有遊戲含義；沒有證據可把它們當成使用者回報的藍紫粉白方塊而刪掉。保留待釐清，需當時 iPhone 截圖與網址，未部署也未實機驗收。
+4. 原有透明眼珠／頭髮：製作12張 `alpha-hole-proposal-*` 對照，右格僅把封閉透明洞的 alpha 補回，RGB 不變，沒有套用到遊戲。補眼珠看得到原本棕色，但髮絲與衣服仍有複雜鏤空；不把自動補洞當作已核准角色修復。提案圖不是成品。
+5. 貼紙 WebP：盤點補齊14張，4張有清理的 PNG/WebP alpha 完全一致。WebP 各自保留原始 RGB，無損重存，不重新壓有損。角色與模組快取升為 mobile2。
+6. 盤點數字：分列小連通區、極淡像素、alpha 變更量及刪除實心像素。小區塊不全是殘片，包含白色亮點，不能追求全部歸零。
 
-圖片：盤點104張，其中角色／眠花糖63張，交貨道具41張。角色53張有改，只改 alpha，存檔後重讀與22a7d6d比較，所有像素RGB最大差異=0，不透明RGB p99=0。角色小殘片721→0；道具188個小區塊包含原有光效，未改，不能說全104張殘片為0。清理規則為 alpha<16、小於100像素的八連通區；飛飛偏青藍半透明像素僅在與外界透明背景相鄰的外輪廓2px內清理，不清內部挑染或水瓶。已撤掉「整塊最高alpha<128就刪」規則。cast10、眠花糖官方色均未重畫或改RGB。7張WebP按各自原始RGB做同樣alpha清理後存無損，部分約增為4～5倍；目前程式未引用這些角色WebP，不增加主畫面下載量。
+拖曳落點仍是手指所在格，依原規格未改落點；實際手感待使用者測試。震動拿起仍在跨過拖曳門檻時觸發，避免一碰就震；此事件不能提供可靠的 iOS 啟用，沒有宣稱已繞過限制。
 
-原始問題限制：22a7d6d 的交貨頭像是飛飛／氣球精靈／微笑姐姐等，沒有名為花仙子的角色。本地尚未重現描述的大塊藍紫粉白方塊，不能宣稱這項已實機修好；可能涉及不同素材或快取，原因未確認。飛飛舊表情眼睛／頭髮已有透明缺洞，本次不補畫、不改設計。保留大面積獨立配件，不能宣稱所有藝術細節都已人工逐像素驗收。
+## 四項修改
 
-狀態列：倒數與黃色進度條分上下兩列。390×844 測得兩者不相交、文字不截斷。
+|項目|檔案與內容|
+|---|---|
+|拖曳|`js/drag.js`、`js/app.js`、`css/quality.css`：touch 上移至少56px、1.2倍，可合成格高亮；滑鼠保持1.1倍與原位置；本輪保留第1輪行為|
+|震動|`js/haptics.js`、`js/settings-ui.js`、`js/systems.js`、`js/app.js`、`index.html`、`css/settings.css`：8ms拿起、24ms合成，圖示開關、預設開並存 localStorage；本輪未改觸發行為|
+|去背|`assets/chars/`、`assets/chars/avatars/`、`assets/chars/expr/`、`assets/mascot/sticker/`；清理腳本 `review/mobile-fix/cleanup-alpha.py`；`js/portraits.js`、`js/mascot.js`、相關模組與 `index.html` 快取 mobile2|
+|狀態列|`css/quality.css` 倒數文字與進度條上下排；本輪保留第1輪修正|
 
-驗證：node --test tests/*.test.mjs 共5個測試檔通過。headless Chromium＋CDP真實touch事件驗證浮起、可見高亮（實際computedStyle）、成功合成、滑鼠中心不變、無效落點、取消拖曳、倒數／進度條分離、關閉震動保存且重載保留，沒有頁面執行錯誤。
+## 震動支援（未在實機測試）
 
-證據：before以git show 22a7d6d取得頁面與素材，沒有切換或修改其他worktree。兩組均390×844測試存檔，statusbar為局部裁切；alpha-cleanup為原尺寸對照，alpha-detail為4倍局部，alpha-mask紅色為被改透明度的像素。截圖非私人遊戲存檔。重跑需要既有Playwright、外接碟瀏覽器，先啟動本機8893 HTTP服務，再執行 capture.mjs before／after。
+|裝置／瀏覽器|可期待的結果|
+|---|---|
+|Android Chrome，有馬達且系統允許|API 支援，拿起8ms、合成24ms；不是硬體實測保證|
+|iPhone Safari，含 WebKit fc1ef83 修補|程式 label.click 會被擋，這個方法不會震；未確認各 iOS 正式版的收錄版本|
+|iOS 18 之後、尚未包含修補的 Safari|只能 best-effort；拿起 pointermove 沒有可靠使用者啟用；放開合成可能有效，不能調強弱|
+|iOS 18以前、桌機、無支援硬體／API|本功能無可靠震動|
+|系統停用觸覺、低電量、靜音／勿擾等|可能無震動，依系統與裝置而異；沒有逐機驗證|
 
-免費工具：Pillow／numpy／OpenCV、既有Playwright與Node。未用即夢、生圖、付費API或AppleScript。小頌僅唯讀交叉檢查。
+依據：[WebKit 修補](https://github.com/WebKit/WebKit/commit/fc1ef83eae10068fe468587d959e868041ddfe03)、[MDN vibrate](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/vibrate)。
 
-## 圖片盤點
+## 本輪驗證
 
-|路徑|使用位置|問題／處理|殘片前→後|不透明RGB p99|
-|---|---|---|---|---|
-|`assets/chars/apiao.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/apiao.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/avatars/apiao.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|10→0|0|
-|`assets/chars/avatars/bulu.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|11→0|0|
-|`assets/chars/avatars/feifei-determined.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|27→0|0|
-|`assets/chars/avatars/feifei-happy.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|12→0|0|
-|`assets/chars/avatars/feifei-sad.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|24→0|0|
-|`assets/chars/avatars/feifei-surprised.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|24→0|0|
-|`assets/chars/avatars/feifei-worried.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|21→0|0|
-|`assets/chars/avatars/feifei.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|4→0|0|
-|`assets/chars/avatars/hate.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|3→0|0|
-|`assets/chars/avatars/jiejie.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/avatars/mascot.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|10→0|0|
-|`assets/chars/avatars/sika.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|4→0|0|
-|`assets/chars/avatars/spirit.png`|交貨框／頭像|低透明殘邊／殘點；只清 alpha|5→0|0|
-|`assets/chars/bulu.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/bulu.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/apiao-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/apiao-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/bulu-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/bulu-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/feifei-determined-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|35→0|0|
-|`assets/chars/expr/feifei-determined.png`|故事表情|低透明殘邊／殘點；只清 alpha|35→0|0|
-|`assets/chars/expr/feifei-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/feifei-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/feifei-sad-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|50→0|0|
-|`assets/chars/expr/feifei-sad.png`|故事表情|低透明殘邊／殘點；只清 alpha|27→0|0|
-|`assets/chars/expr/feifei-surprised-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|28→0|0|
-|`assets/chars/expr/feifei-surprised.png`|故事表情|低透明殘邊／殘點；只清 alpha|28→0|0|
-|`assets/chars/expr/feifei-worried-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|24→0|0|
-|`assets/chars/expr/feifei-worried.png`|故事表情|低透明殘邊／殘點；只清 alpha|24→0|0|
-|`assets/chars/expr/hate-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|14→0|0|
-|`assets/chars/expr/hate-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|14→0|0|
-|`assets/chars/expr/jiejie-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/jiejie-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/sika-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/sika-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/spirit-happy-open.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/expr/spirit-happy.png`|故事表情|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/feifei.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/feifei.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/hate.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|3→0|0|
-|`assets/chars/hate.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|3→0|0|
-|`assets/chars/jiejie.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/jiejie.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/sika.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/sika.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/spirit.png`|故事備援立繪|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/chars/spirit.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|低透明殘邊／殘點；只清 alpha|0→0|0|
-|`assets/mascot/sticker/back.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/blink.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/face.png`|眠花糖故事／主畫面|低透明殘邊／殘點；只清 alpha|102→0|0|
-|`assets/mascot/sticker/front.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/hold-carrot.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/hold-star.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/jump.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/keychain-jump.png`|眠花糖故事／主畫面|低透明殘邊／殘點；只清 alpha|17→0|0|
-|`assets/mascot/sticker/peek.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/side.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/sit-closed.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/sleep.png`|眠花糖故事／主畫面|低透明殘邊／殘點；只清 alpha|1→0|0|
-|`assets/mascot/sticker/surprise.png`|眠花糖故事／主畫面|保留，未重繪|0→0|0|
-|`assets/mascot/sticker/wave.png`|眠花糖故事／主畫面|低透明殘邊／殘點；只清 alpha|161→0|0|
-|`assets/tiles/candy-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/candy-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/forest-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/forest-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/forest-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/forest-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/forest-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/garden-8.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/goods-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|1→1|0|
-|`assets/tiles/goods-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|106→106|0|
-|`assets/tiles/goods-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|19→19|0|
-|`assets/tiles/goods-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|62→62|0|
-|`assets/tiles/magic-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/magic-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/star-8.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/tea-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
-|`assets/tiles/tea-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|保留，未重繪|0→0|0|
+`node --test tests/*.test.mjs`：5個檔案全過。headless Chromium 390×844 真實CDP觸控：浮圖底緣429.2、手指y461.5，留32.3px；合成tier2、目標高亮、滑鼠位置、無效落點、取消不改棋盤、文字與進度條分離、震動開關重載保存，無頁面錯誤。`check-alpha.py`：49張角色圖的輪廓內實心 alpha 保留、RGB p99≤8。57張有改素材與基準所有 RGB 最大差為0，尺寸不變，14組貼紙 PNG/WebP alpha 一致。全部只使用免費本機工具，沒用即夢、付費API或 AppleScript。
 
-## 截圖與放大對照
+本輪57張素材的 alpha 共變更170,288像素，極淡像素147,022→0。77張角色／貼紙原始小區塊1002→840，這不是「剩840個髒點」：保留的角色內部小島包含眼睛亮點；也不能因此宣稱所有髮絲都乾淨。41張道具保留原有光效。
+
+before截圖維持22a7d6d，after已以第2輪重截；測試存檔非私人存檔。第1輪小頌截圖仍保留於 xiaosong/，僅屬歷史證據；其餘 alpha-cleanup / alpha-mask 已重新產生。去背補洞提案僅供審閱，未寫回素材。
+
+## 圖片盤點（118張）
+
+小區塊＝alpha>0、8連通、面積<100；包含角色設計細節，不等同全是殘片。極淡＝alpha 1～15。表中RGB p99均是存檔後重新解碼與22a7d6d比較。
+
+|路徑|使用位置|問題／處理|小區塊前→後|極淡前→後|alpha變更像素|刪除實心像素|RGB p99|
+|---|---|---|---|---|---|---|---|
+|`assets/chars/apiao.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
+|`assets/chars/apiao.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
+|`assets/chars/avatars/apiao.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|10→0|2528→0|2528|0|0.0|
+|`assets/chars/avatars/bulu.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|11→0|2483→0|2483|0|0.0|
+|`assets/chars/avatars/feifei-determined.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|27→36|9176→0|10509|0|0.0|
+|`assets/chars/avatars/feifei-happy.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|12→6|2009→0|3091|0|0.0|
+|`assets/chars/avatars/feifei-sad.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|24→32|8152→0|9317|0|0.0|
+|`assets/chars/avatars/feifei-surprised.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|24→47|8141→0|9399|0|0.0|
+|`assets/chars/avatars/feifei-worried.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|21→46|8591→0|9944|0|0.0|
+|`assets/chars/avatars/feifei.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|4→8|2165→0|3458|0|0.0|
+|`assets/chars/avatars/hate.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|3→0|3713→0|3713|0|0.0|
+|`assets/chars/avatars/jiejie.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|0→0|1142→0|1142|0|0.0|
+|`assets/chars/avatars/mascot.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|10→0|2042→0|2042|0|0.0|
+|`assets/chars/avatars/sika.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|4→0|2496→0|2496|0|0.0|
+|`assets/chars/avatars/spirit.png`|交貨框／頭像|只清外部殘點與淡霧，保護內部小島|5→0|9430→0|9430|0|0.0|
+|`assets/chars/bulu.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
+|`assets/chars/bulu.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/apiao-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
+|`assets/chars/expr/apiao-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1452→0|1452|0|0.0|
+|`assets/chars/expr/bulu-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/bulu-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1398→0|1398|0|0.0|
+|`assets/chars/expr/feifei-determined-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|35→37|0→0|577|0|0.0|
+|`assets/chars/expr/feifei-determined.png`|故事表情|只清外部殘點與淡霧，保護內部小島|35→37|0→0|577|0|0.0|
+|`assets/chars/expr/feifei-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
+|`assets/chars/expr/feifei-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
+|`assets/chars/expr/feifei-sad-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|50→102|0→0|1072|6|0.0|
+|`assets/chars/expr/feifei-sad.png`|故事表情|只清外部殘點與淡霧，保護內部小島|27→21|0→0|710|0|0.0|
+|`assets/chars/expr/feifei-surprised-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|28→34|0→0|920|194|0.0|
+|`assets/chars/expr/feifei-surprised.png`|故事表情|只清外部殘點與淡霧，保護內部小島|28→34|0→0|920|194|0.0|
+|`assets/chars/expr/feifei-worried-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|24→15|0→0|640|0|0.0|
+|`assets/chars/expr/feifei-worried.png`|故事表情|只清外部殘點與淡霧，保護內部小島|24→15|0→0|640|0|0.0|
+|`assets/chars/expr/hate-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|14→0|2901→0|2901|0|0.0|
+|`assets/chars/expr/hate-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|14→0|2901→0|2901|0|0.0|
+|`assets/chars/expr/jiejie-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
+|`assets/chars/expr/jiejie-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
+|`assets/chars/expr/sika-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
+|`assets/chars/expr/sika-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
+|`assets/chars/expr/spirit-happy-open.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
+|`assets/chars/expr/spirit-happy.png`|故事表情|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
+|`assets/chars/feifei.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3798|0|0.0|
+|`assets/chars/feifei.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1445→0|3826|0|0.0|
+|`assets/chars/hate.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|3→0|2912→0|2912|0|0.0|
+|`assets/chars/hate.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|3→0|2912→0|2912|0|0.0|
+|`assets/chars/jiejie.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
+|`assets/chars/jiejie.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|4605→0|4605|0|0.0|
+|`assets/chars/sika.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
+|`assets/chars/sika.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|1302→0|1302|0|0.0|
+|`assets/chars/spirit.png`|故事備援立繪|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
+|`assets/chars/spirit.webp`|故事備援立繪（WebP 備援；目前角色程式未引用）|只清外部殘點與淡霧，保護內部小島|0→0|8130→0|8130|0|0.0|
+|`assets/mascot/sticker/back.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/back.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/blink.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/blink.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/face.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|102→69|0→0|40|40|0.0|
+|`assets/mascot/sticker/face.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|102→69|0→0|40|40|0.0|
+|`assets/mascot/sticker/front.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/front.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/hold-carrot.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/hold-carrot.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/hold-star.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/hold-star.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/jump.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/jump.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/keychain-jump.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|17→0|0→0|18|18|0.0|
+|`assets/mascot/sticker/keychain-jump.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|17→0|0→0|18|18|0.0|
+|`assets/mascot/sticker/peek.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/peek.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/side.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/side.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/sit-closed.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/sit-closed.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/sleep.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|1→0|0→0|25|16|0.0|
+|`assets/mascot/sticker/sleep.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|1→0|0→0|25|16|0.0|
+|`assets/mascot/sticker/surprise.png`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/surprise.webp`|眠花糖故事／主畫面|未改；保留原圖|0→0|0→0|0|0|0.0|
+|`assets/mascot/sticker/wave.png`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|161→116|0→0|60|60|0.0|
+|`assets/mascot/sticker/wave.webp`|眠花糖故事／主畫面|只清外部殘點與淡霧，保護內部小島|161→116|0→0|60|60|0.0|
+|`assets/tiles/candy-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/candy-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/forest-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/forest-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/forest-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/forest-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/forest-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/garden-8.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/goods-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|1→1|0→0|0|0|0|
+|`assets/tiles/goods-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|106→106|0→0|0|0|0|
+|`assets/tiles/goods-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|19→19|0→0|0|0|0|
+|`assets/tiles/goods-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|62→62|0→0|0|0|0|
+|`assets/tiles/magic-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/magic-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-3.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-4.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-5.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-6.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-7.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/star-8.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/tea-1.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+|`assets/tiles/tea-2.webp`|交貨需求道具／棋盤（原圖已透明，保留原有光效）|未改；保留原圖|0→0|0→0|0|0|0|
+
+## review 圖片檔名
 
 - `review/mobile-fix/after-delivery.png`
 - `review/mobile-fix/after-drag.png`
@@ -183,13 +222,31 @@
 - `review/mobile-fix/alpha-cleanup-chars-spirit-png.png`
 - `review/mobile-fix/alpha-cleanup-chars-spirit-webp.png`
 - `review/mobile-fix/alpha-cleanup-mascot-sticker-face-png.png`
+- `review/mobile-fix/alpha-cleanup-mascot-sticker-face-webp.png`
 - `review/mobile-fix/alpha-cleanup-mascot-sticker-keychain-jump-png.png`
+- `review/mobile-fix/alpha-cleanup-mascot-sticker-keychain-jump-webp.png`
 - `review/mobile-fix/alpha-cleanup-mascot-sticker-sleep-png.png`
+- `review/mobile-fix/alpha-cleanup-mascot-sticker-sleep-webp.png`
 - `review/mobile-fix/alpha-cleanup-mascot-sticker-wave-png.png`
+- `review/mobile-fix/alpha-cleanup-mascot-sticker-wave-webp.png`
 - `review/mobile-fix/alpha-detail-avatars-feifei-sad.png`
 - `review/mobile-fix/alpha-detail-avatars-feifei-worried.png`
 - `review/mobile-fix/alpha-detail-expr-feifei-sad-open.png`
 - `review/mobile-fix/alpha-detail-expr-feifei-sad.png`
+- `review/mobile-fix/alpha-eye-restored-feifei-sad-open.png`
+- `review/mobile-fix/alpha-eye-restored-feifei-sad.png`
+- `review/mobile-fix/alpha-hole-proposal-avatars-feifei-determined.png`
+- `review/mobile-fix/alpha-hole-proposal-avatars-feifei-sad.png`
+- `review/mobile-fix/alpha-hole-proposal-avatars-feifei-surprised.png`
+- `review/mobile-fix/alpha-hole-proposal-avatars-feifei-worried.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-determined-open.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-determined.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-sad-open.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-sad.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-surprised-open.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-surprised.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-worried-open.png`
+- `review/mobile-fix/alpha-hole-proposal-expr-feifei-worried.png`
 - `review/mobile-fix/alpha-mask-chars-avatars-feifei-determined-png.png`
 - `review/mobile-fix/alpha-mask-chars-avatars-feifei-happy-png.png`
 - `review/mobile-fix/alpha-mask-chars-avatars-feifei-sad-png.png`
@@ -198,3 +255,28 @@
 - `review/mobile-fix/before-delivery.png`
 - `review/mobile-fix/before-drag.png`
 - `review/mobile-fix/before-statusbar.png`
+- `review/mobile-fix/xiaosong/after-mouse-drag.png`
+- `review/mobile-fix/xiaosong/after-orders-390.png`
+- `review/mobile-fix/xiaosong/after-play-390.png`
+- `review/mobile-fix/xiaosong/after-settings-390.png`
+- `review/mobile-fix/xiaosong/after-statusbar-320.png`
+- `review/mobile-fix/xiaosong/after-statusbar-390.png`
+- `review/mobile-fix/xiaosong/after-touch-drag-toprow.png`
+- `review/mobile-fix/xiaosong/after-touch-drag.png`
+- `review/mobile-fix/xiaosong/avatars-before-after-magenta.png`
+- `review/mobile-fix/xiaosong/before-mouse-drag.png`
+- `review/mobile-fix/xiaosong/before-orders-390.png`
+- `review/mobile-fix/xiaosong/before-play-390.png`
+- `review/mobile-fix/xiaosong/before-statusbar-320.png`
+- `review/mobile-fix/xiaosong/before-statusbar-390.png`
+- `review/mobile-fix/xiaosong/before-touch-drag-toprow.png`
+- `review/mobile-fix/xiaosong/before-touch-drag.png`
+- `review/mobile-fix/xiaosong/tiles-on-magenta-normal-and-alpha-x6.png`
+- `review/mobile-fix/xiaosong/zoom-avatar-feifei-worried.png`
+- `review/mobile-fix/xiaosong/zoom-avatar-feifei.png`
+- `review/mobile-fix/xiaosong/zoom-avatar-spirit.png`
+- `review/mobile-fix/xiaosong/zoom-expr-feifei-sad-open.png`
+- `review/mobile-fix/xiaosong/zoom-expr-feifei-surprised-open.png`
+- `review/mobile-fix/xiaosong/zoom-feifei-sad-left-eye-highlight.png`
+- `review/mobile-fix/xiaosong/zoom-mascot-face.png`
+- `review/mobile-fix/xiaosong/zoom-mascot-wave.png`
