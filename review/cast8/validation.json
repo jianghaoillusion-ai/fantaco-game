@@ -1,0 +1,57 @@
+{
+  "jiejie": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole": 685,
+    "webp_equal": true,
+    "hard_edge_pixels": 0,
+    "edge_mid_alpha_percent": 99.92840095465394,
+    "small_components_under8": 0,
+    "alpha_positive_components": 1,
+    "sha256": "13a92cd0b83809612b1e0fc6afe0a97933b7213f6b6e8e1bcda4aa1465442dbb"
+  },
+  "hate": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole": 685,
+    "webp_equal": true,
+    "hard_edge_pixels": 39,
+    "edge_mid_alpha_percent": 66.97590902289392,
+    "small_components_under8": 0,
+    "alpha_positive_components": 4,
+    "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d"
+  },
+  "spirit": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole": 685,
+    "webp_equal": true,
+    "hard_edge_pixels": 0,
+    "edge_mid_alpha_percent": 99.51284861770796,
+    "small_components_under8": 0,
+    "alpha_positive_components": 1,
+    "sha256": "dc07031350628b3a02b3cad067f9a141340caaa6525d30b30a9fc2a5a4378bfb"
+  },
+  "hate_pixels_changed_vs_5b125dc": 0,
+  "unchanged_files": {
+    "assets/chars/feifei.png": true,
+    "assets/chars/feifei.webp": true,
+    "assets/chars/apiao.png": true,
+    "assets/chars/apiao.webp": true,
+    "assets/chars/sika.png": true,
+    "assets/chars/sika.webp": true,
+    "assets/chars/bulu.png": true,
+    "assets/chars/bulu.webp": true,
+    "assets/chars/hate.png": true,
+    "assets/chars/hate.webp": true
+  }
+}

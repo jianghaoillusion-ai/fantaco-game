@@ -1,0 +1,58 @@
+{
+  "bulu": {
+    "top": 30,
+    "chin": 246.5,
+    "waist": 394,
+    "feet": 685,
+    "hatTop": 30,
+    "headH": 216.5,
+    "ratio": 0.33053435114503815,
+    "faceW": 134,
+    "faceL": 199,
+    "faceR": 332,
+    "headArea": 32965,
+    "hair": 14946,
+    "shoulder": 161,
+    "body": 147.5,
+    "split": 471,
+    "leg": 214,
+    "total": 655,
+    "totalHat": 655,
+    "contentL": 147,
+    "contentR": 391
+  },
+  "spirit": {
+    "top": 132,
+    "chin": 320.5,
+    "waist": 469,
+    "feet": 765,
+    "hatTop": 7,
+    "headH": 188.5,
+    "ratio": 0.29778830963665087,
+    "faceW": 130,
+    "faceL": 205,
+    "faceR": 334,
+    "headArea": 31283,
+    "hair": 15561,
+    "shoulder": 228,
+    "body": 148.5,
+    "split": 542,
+    "leg": 223,
+    "total": 633,
+    "totalHat": 758,
+    "contentL": 133,
+    "contentR": 406
+  },
+  "sisterWidths": {
+    "visibleChest": {
+      "y": 349,
+      "before": 93,
+      "after": 93
+    },
+    "waist": {
+      "y": 369,
+      "before": 93,
+      "after": 96
+    }
+  }
+}

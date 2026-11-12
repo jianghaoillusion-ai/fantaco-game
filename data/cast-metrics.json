@@ -4,17 +4,21 @@
     "refId": "jiejie",
     "speakerBodyVh": 0.5,
     "partnerMul": 0.88,
-    "jiejieHead": 186,
-    "jiejieBody": 659
+    "jiejieBody": 639
   },
   "chars": {
     "jiejie": {
       "w": 540,
       "h": 720,
-      "headTop": 29,
-      "chin": 214,
-      "head": 186,
-      "feet": 687
+      "headTop": 46,
+      "chin": 236.5,
+      "head": 190.5,
+      "feet": 685,
+      "bboxTop": 22,
+      "contentL": 112,
+      "contentR": 427,
+      "faceL": 210,
+      "faceR": 334
     },
     "feifei": {
       "w": 540,
@@ -22,7 +26,7 @@
       "headTop": 30,
       "chin": 262,
       "head": 233,
-      "feet": 686
+      "feet": 684
     },
     "apiao": {
       "w": 540,
@@ -30,7 +34,7 @@
       "headTop": 29,
       "chin": 248,
       "head": 220,
-      "feet": 687
+      "feet": 684
     },
     "sika": {
       "w": 540,
@@ -38,7 +42,7 @@
       "headTop": 29,
       "chin": 252,
       "head": 224,
-      "feet": 687
+      "feet": 685
     },
     "bulu": {
       "w": 540,
@@ -46,23 +50,28 @@
       "headTop": 29,
       "chin": 248,
       "head": 220,
-      "feet": 687
+      "feet": 685
     },
     "hate": {
       "w": 540,
       "h": 720,
-      "headTop": 114,
-      "chin": 262,
-      "head": 149,
-      "feet": 686
+      "headTop": 86,
+      "chin": 294,
+      "head": 209,
+      "feet": 700
     },
     "spirit": {
       "w": 540,
-      "h": 720,
-      "headTop": 114,
-      "chin": 268,
-      "head": 155,
-      "feet": 686
+      "h": 800,
+      "headTop": 132,
+      "chin": 320.5,
+      "head": 188.5,
+      "feet": 765,
+      "bboxTop": 7,
+      "contentL": 133,
+      "contentR": 406,
+      "faceL": 205,
+      "faceR": 334
     },
     "mascot": {
       "w": 248,

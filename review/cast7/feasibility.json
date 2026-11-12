@@ -1,0 +1,50 @@
+{
+  "jiejie": {
+    "head_scale_range": [
+      1.4725,
+      1.7988157894736843
+    ],
+    "area_scale_range": [
+      1.434247016178057,
+      1.5078453531573988
+    ],
+    "overlap": true,
+    "face_scale_range": [
+      1.805,
+      1.995
+    ],
+    "head_width_scale_range": [
+      1.3273972602739725,
+      1.467123287671233
+    ],
+    "hair_area_scale_range": [
+      1.0267005348377343,
+      1.079385637952829
+    ],
+    "required_ranges_intersect": false
+  },
+  "spirit": {
+    "head_scale_range": [
+      1.5922154471544716,
+      1.945060975609756
+    ],
+    "area_scale_range": [
+      1.5585767531633101,
+      1.6385550663782502
+    ],
+    "overlap": true,
+    "face_scale_range": [
+      1.5598765432098765,
+      1.724074074074074
+    ],
+    "head_width_scale_range": [
+      1.2666666666666666,
+      1.4000000000000001
+    ],
+    "hair_area_scale_range": [
+      1.4709415911534585,
+      1.546422909002825
+    ],
+    "required_ranges_intersect": false
+  }
+}

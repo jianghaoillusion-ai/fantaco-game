@@ -1,0 +1,80 @@
+{
+  "bulu": {
+    "top": 30,
+    "chin": 246.5,
+    "waist": 394,
+    "total": 655,
+    "headH": 216.5,
+    "ratio": 0.33053435114503815,
+    "faceW": 134,
+    "faceW_y": 165,
+    "headW": 204,
+    "headW_y": 115,
+    "headW_noear": 204,
+    "headArea": 32965,
+    "faceArea": 16159,
+    "earArea": 1718,
+    "hair": 15088,
+    "hairLong": 15088,
+    "shFull": 161,
+    "shRight": 83,
+    "sh_y": 280,
+    "cx": 266,
+    "body": 147.5,
+    "waist2foot": 291,
+    "split": 471,
+    "leg": 214
+  },
+  "jiejie": {
+    "top": 44,
+    "chin": 249.5,
+    "waist": 368,
+    "total": 641,
+    "total_hat": 665,
+    "headH": 205.5,
+    "ratio": 0.3205928237129485,
+    "faceW": 136,
+    "faceW_y": 181,
+    "headW": 218,
+    "headArea": 39393,
+    "faceArea": 12074,
+    "earArea": 1641,
+    "hair": 25678,
+    "hairLong": 35291,
+    "shFull": 249,
+    "shRight": 112,
+    "sh_y": 284,
+    "body": 118.5,
+    "waist2foot": 317,
+    "leg": null
+  },
+  "legs": {
+    "jiejie": [
+      {
+        "x0": 201,
+        "x1": 250,
+        "width": 50
+      },
+      {
+        "x0": 286,
+        "x1": 336,
+        "width": 51
+      }
+    ],
+    "feifei": [
+      {
+        "x0": 180,
+        "x1": 233,
+        "width": 54
+      },
+      {
+        "x0": 260,
+        "x1": 316,
+        "width": 57
+      }
+    ],
+    "y": 595,
+    "ratio_left": 0.9259259259259259,
+    "ratio_right": 0.8947368421052632
+  }
+}

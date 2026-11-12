@@ -1,0 +1,97 @@
+{
+  "spirit": {
+    "size": [
+      540,
+      800
+    ],
+    "sole": 765,
+    "alphaPositiveComponents": 1,
+    "hardEdgePixels": 0,
+    "webpPixelDiff": 0
+  },
+  "jiejie": {
+    "size": [
+      540,
+      720
+    ],
+    "sole": 685,
+    "alphaPositiveComponents": 1,
+    "hardEdgePixels": 0,
+    "webpPixelDiff": 0,
+    "headIncludingHairDiff": 0,
+    "legsFeetDiff": 0,
+    "beltAndBelowDiff": 1167,
+    "changedPixels": 1558,
+    "happy": {
+      "headDiff": 0,
+      "legsDiff": 0
+    },
+    "happy-open": {
+      "headDiff": 0,
+      "legsDiff": 0
+    },
+    "avatarBytesSame": true
+  },
+  "hate": {
+    "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d",
+    "39b59fe": {
+      "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d",
+      "byteIdentical": true
+    },
+    "5b125dc": {
+      "sha256": "99e828263d17ba27db7db67ef0e55c207e00a71eb59016ae731b905a3e2c1b0d",
+      "byteIdentical": true
+    }
+  },
+  "otherArtChanges": [
+    "assets/chars/avatars/spirit.png",
+    "assets/chars/expr/jiejie-happy-open.png",
+    "assets/chars/expr/jiejie-happy.png",
+    "assets/chars/expr/spirit-happy-open.png",
+    "assets/chars/expr/spirit-happy.png",
+    "assets/chars/jiejie.png",
+    "assets/chars/jiejie.webp",
+    "assets/chars/spirit.png",
+    "assets/chars/spirit.webp"
+  ],
+  "game": [
+    {
+      "viewport": [
+        1100,
+        820
+      ],
+      "actualSoleDelta": 0.005815972222080745,
+      "visible": [
+        "spirit",
+        "bulu",
+        "jiejie"
+      ],
+      "errors": []
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "actualSoleDelta": 0.003135850694548026,
+      "visible": [
+        "spirit",
+        "bulu"
+      ],
+      "errors": []
+    },
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "actualSoleDelta": 0.010243055555520186,
+      "visible": [
+        "spirit",
+        "bulu",
+        "jiejie"
+      ],
+      "errors": []
+    }
+  ]
+}

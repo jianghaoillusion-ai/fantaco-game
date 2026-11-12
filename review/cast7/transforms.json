@@ -1,0 +1,33 @@
+{
+  "status": "第2輪：只清背景、重新對齊腳底；比例限制待使用者決定，未完成",
+  "jiejie": {
+    "commit": "525ab99f5d635f75cf3553877422fa018a81d35f",
+    "path": "assets/chars/jiejie.png",
+    "scale": 1,
+    "translate": [
+      0,
+      2
+    ],
+    "edit": "清除青色背景與碎點；分區縮放未執行"
+  },
+  "spirit": {
+    "commit": "525ab99f5d635f75cf3553877422fa018a81d35f",
+    "path": "assets/chars/spirit.png",
+    "scale": 1,
+    "translate": [
+      0,
+      5
+    ],
+    "edit": "清除青色背景與碎點；分區縮放未執行"
+  },
+  "hate": {
+    "commit": "78bb5adcc143f7f433c46d1992067bb01f3a6a34",
+    "path": "assets/chars/hate.png",
+    "scale": 1,
+    "translate": [
+      0,
+      0
+    ],
+    "edit": "右側髮緣 alpha 反鋸齒，見 hate-diff.json"
+  }
+}

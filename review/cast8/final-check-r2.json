@@ -1,0 +1,30 @@
+{
+  "old_ear_exposed_roi": [
+    327,
+    118,
+    334,
+    126
+  ],
+  "skin_pixels": 0,
+  "spirit_holes_128": [
+    [
+      145,
+      326,
+      385,
+      14,
+      17,
+      0
+    ]
+  ],
+  "spirit_holes_200": [
+    [
+      173,
+      326,
+      384,
+      15,
+      18,
+      0
+    ]
+  ],
+  "spirit_alpha_positive_components": 1
+}

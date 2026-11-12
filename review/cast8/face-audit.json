@@ -1,0 +1,18 @@
+{
+  "jiejie": {
+    "original": "f346cdf:assets/chars/jiejie.png",
+    "scale": 1.885,
+    "core_pixels": 13071,
+    "changed_rgb_pixels": 0,
+    "max_rgb_error": 0,
+    "note": "覆回區往內縮2px；外圈髮緣接合修補不屬於五官保真保證。"
+  },
+  "spirit": {
+    "original": "f346cdf:assets/chars/spirit.png",
+    "scale": 1.65,
+    "core_pixels": 11774,
+    "changed_rgb_pixels": 0,
+    "max_rgb_error": 0,
+    "note": "覆回區往內縮2px；外圈髮緣接合修補不屬於五官保真保證。"
+  }
+}

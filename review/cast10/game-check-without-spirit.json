@@ -1,0 +1,159 @@
+[
+  {
+    "viewport": [
+      1100,
+      820
+    ],
+    "errors": [],
+    "rows": [
+      {
+        "id": "bulu",
+        "visible": true,
+        "display": "flex",
+        "opacity": "1",
+        "imgOpacity": "1",
+        "clip": "visible",
+        "rect": [
+          379,
+          252.75,
+          343.109375,
+          457.484375
+        ],
+        "ancestors": [
+          {
+            "id": "",
+            "class": "story-actor speak",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              379,
+              252.75,
+              343.109375,
+              435.25
+            ]
+          },
+          {
+            "id": "portraits",
+            "class": "portraits has-left",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              0,
+              0,
+              1100,
+              820
+            ]
+          },
+          {
+            "id": "",
+            "class": "story-stage",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              230,
+              0,
+              640,
+              820
+            ]
+          },
+          {
+            "id": "story",
+            "class": "screen on",
+            "overflow": "hidden",
+            "opacity": "1",
+            "rect": [
+              0,
+              0,
+              1100,
+              820
+            ]
+          }
+        ],
+        "src": "/assets/chars/expr/bulu-happy.png",
+        "natural": [
+          540,
+          720
+        ],
+        "scale": 0.6353949652777777,
+        "foot": 687.9955512152777,
+        "top": 271.17645399305553,
+        "left": 471.76766493055555,
+        "right": 628.7102213541666
+      },
+      {
+        "id": "jiejie",
+        "visible": true,
+        "display": "flex",
+        "opacity": "1",
+        "imgOpacity": "1",
+        "clip": "visible",
+        "rect": [
+          -57,
+          301.21875,
+          304.890625,
+          406.53125
+        ],
+        "ancestors": [
+          {
+            "id": "",
+            "class": "story-actor dim",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              -57,
+              301.21875,
+              304.890625,
+              386.78125
+            ]
+          },
+          {
+            "id": "portraits",
+            "class": "portraits has-left",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              0,
+              0,
+              1100,
+              820
+            ]
+          },
+          {
+            "id": "",
+            "class": "story-stage",
+            "overflow": "visible",
+            "opacity": "1",
+            "rect": [
+              230,
+              0,
+              640,
+              820
+            ]
+          },
+          {
+            "id": "story",
+            "class": "screen on",
+            "overflow": "hidden",
+            "opacity": "1",
+            "rect": [
+              0,
+              0,
+              1100,
+              820
+            ]
+          }
+        ],
+        "src": "/assets/chars/expr/jiejie-happy.png?v=cast10r2",
+        "natural": [
+          540,
+          720
+        ],
+        "scale": 0.5646267361111111,
+        "foot": 687.9880642361111,
+        "top": 313.64053819444445,
+        "left": 6.238194444444446,
+        "right": 184.09561631944445
+      }
+    ]
+  }
+]

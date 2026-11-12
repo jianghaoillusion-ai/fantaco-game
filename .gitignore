@@ -1,12 +1,17 @@
 .DS_Store
 assets/_raw/
 assets/audio/tmp/
+
+# Local credentials and data must not enter branch backups.
 .env
 .env.*
 .dev.vars
 *.db
 *.pem
 *.key
+auth.json
+credentials*.json
+token*.json
 **/token.json
 **/tokens.json
 __pycache__/

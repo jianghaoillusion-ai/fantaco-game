@@ -1,0 +1,999 @@
+{
+  "calibration": {
+    "chin": "outline_end",
+    "hh_off": 1,
+    "k_face": 0,
+    "k_ear": 3
+  },
+  "calibration_top10": [
+    {
+      "chin": "outline_end",
+      "hh_off": 0,
+      "k_face": 0,
+      "k_ear": 3,
+      "score": 0.00403,
+      "head_height": 217.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15477,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_end",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 3,
+      "score": 0.00403,
+      "head_height": 218.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15477,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_end",
+      "hh_off": 0,
+      "k_face": 0,
+      "k_ear": 4,
+      "score": 0.01088,
+      "head_height": 217.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15357,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_end",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 4,
+      "score": 0.01088,
+      "head_height": 218.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15357,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_mid",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 3,
+      "score": 0.01103,
+      "head_height": 217.5,
+      "face_width": 133,
+      "jaw_width": 115,
+      "head_area": 32965,
+      "hair_total_est": 15435,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_mid",
+      "hh_off": 0,
+      "k_face": 0,
+      "k_ear": 3,
+      "score": 0.01563,
+      "head_height": 216.5,
+      "face_width": 133,
+      "jaw_width": 115,
+      "head_area": 32965,
+      "hair_total_est": 15435,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_mid",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 4,
+      "score": 0.01879,
+      "head_height": 217.5,
+      "face_width": 133,
+      "jaw_width": 115,
+      "head_area": 32965,
+      "hair_total_est": 15315,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_end",
+      "hh_off": 0,
+      "k_face": 0,
+      "k_ear": 2,
+      "score": 0.01896,
+      "head_height": 217.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15708,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_end",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 2,
+      "score": 0.01896,
+      "head_height": 218.0,
+      "face_width": 133,
+      "jaw_width": 114,
+      "head_area": 33007,
+      "hair_total_est": 15708,
+      "head_width": 204
+    },
+    {
+      "chin": "outline_mid",
+      "hh_off": 1,
+      "k_face": 0,
+      "k_ear": 2,
+      "score": 0.02144,
+      "head_height": 217.5,
+      "face_width": 133,
+      "jaw_width": 115,
+      "head_area": 32965,
+      "hair_total_est": 15666,
+      "head_width": 204
+    }
+  ],
+  "sanity": {
+    "bulu": {
+      "size": [
+        540,
+        720
+      ],
+      "mode": "RGBA",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "semi_alpha_px": 6652,
+      "white_halo_px": 0
+    },
+    "jiejie": {
+      "size": [
+        540,
+        720
+      ],
+      "mode": "RGBA",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "semi_alpha_px": 97272,
+      "white_halo_px": 0
+    },
+    "hate": {
+      "size": [
+        540,
+        720
+      ],
+      "mode": "RGBA",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "semi_alpha_px": 105033,
+      "white_halo_px": 0
+    },
+    "spirit": {
+      "size": [
+        540,
+        720
+      ],
+      "mode": "RGBA",
+      "corner_alpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "semi_alpha_px": 105089,
+      "white_halo_px": 0
+    }
+  },
+  "sha1": {
+    "bulu": "d5f57f313aa6d202f0cc474aa6c84fa7bcd7adbf",
+    "jiejie": "83f58524bcbc1b0829d6d2b94f520a7ceba8175e",
+    "hate": "f9215df16e09c4be5238d40940ffccc0d33cf9e3",
+    "spirit": "51612a1403fd43d08021c4bd465299987cba02ac"
+  },
+  "rows": {
+    "bulu": {
+      "id": "bulu",
+      "cx": 266.0,
+      "chin": 247.0,
+      "chin_variants": {
+        "skin_end": 245.0,
+        "outline_mid": 246.5,
+        "outline_end": 247.0
+      },
+      "chin_row": 247,
+      "skin_rgb": [
+        255.0,
+        196.0,
+        140.0
+      ],
+      "hair_refs": [
+        [
+          18.0,
+          3.8,
+          4.3
+        ],
+        [
+          13.4,
+          2.7,
+          3.3
+        ]
+      ],
+      "ears": [
+        {
+          "method": "分開的膚色塊",
+          "area": 359
+        },
+        {
+          "method": "分開的膚色塊",
+          "area": 420
+        }
+      ],
+      "occluders": {},
+      "warnings": [],
+      "top": 30,
+      "top_est": 30,
+      "sole": 685,
+      "body_height": 656,
+      "body_height_est": 656,
+      "head_height": 218.0,
+      "head_height_est": 218.0,
+      "face_width": 133,
+      "jaw_row": 217,
+      "jaw_width": 114,
+      "head_width": 204,
+      "head_width_est": 204,
+      "head_width_no_ears": 204,
+      "head_area": 33007,
+      "head_area_est": 33007,
+      "face_area": 15701,
+      "ear_area": 1829,
+      "neck_area": 0,
+      "hand_area": 0,
+      "hair_head": 15477,
+      "hair_hidden": 0,
+      "long_hair": 0,
+      "long_hair_components": [],
+      "long_hair_filter": {},
+      "hair_total_vis": 15477,
+      "hair_total_est": 15477,
+      "hair_head_est": 15477,
+      "hair_total_est_circle": 15477,
+      "head_area_est_circle": 33007,
+      "hair_upper_bound": 15477,
+      "head_area_upper": 33007,
+      "head_width_upper": 204,
+      "hair_non_hairlike_px": 668,
+      "c34_y": 280,
+      "c34_left": 77,
+      "c34_right": 83,
+      "c34_total": 160,
+      "y280_y": 280,
+      "y280_left": 77,
+      "y280_right": 83,
+      "y280_total": 160,
+      "waist_top": 384,
+      "waist_bottom": 399,
+      "waist": 391.5,
+      "torso": 144.5,
+      "split": 471,
+      "split_from": 605,
+      "split_skirt": false,
+      "chin_to_split": 224.0,
+      "leg": 214,
+      "ratio_est": 0.3323170731707317
+    },
+    "jiejie": {
+      "id": "jiejie",
+      "cx": 269.5,
+      "chin": 248.0,
+      "chin_variants": {
+        "skin_end": 246.0,
+        "outline_mid": 247.5,
+        "outline_end": 248.0
+      },
+      "chin_row": 248,
+      "skin_rgb": [
+        251.0,
+        191.0,
+        147.0
+      ],
+      "hair_refs": [
+        [
+          28.6,
+          11.9,
+          16.2
+        ],
+        [
+          28.8,
+          12.5,
+          15.8
+        ]
+      ],
+      "ears": [
+        {
+          "method": "分開的膚色塊",
+          "area": 413
+        },
+        {
+          "method": "分開的膚色塊",
+          "area": 395
+        }
+      ],
+      "occluders": {
+        "蝴蝶結": {
+          "method": "quadratic",
+          "x0": 222,
+          "x1": 322,
+          "fit_cols": 50,
+          "coef": [
+            0.009103293831327262,
+            -4.908720071051311,
+            688.5494240132737
+          ],
+          "est_top": 27,
+          "circle_center": [
+            269.7,
+            119.7
+          ],
+          "circle_r": 85.2,
+          "circle_top": 35,
+          "excluded_px": 2501,
+          "hidden_px": 1434,
+          "hidden_circle_px": 977
+        }
+      },
+      "warnings": [
+        "頭部範圍內有手的膚色 1472 px，已挖掉（未補被手遮住的頭髮）",
+        "裙子蓋住胯下，腿分開點 y466 只是裙襬下緣，不可當比例依據"
+      ],
+      "top": 39,
+      "top_est": 27,
+      "sole": 685,
+      "body_height": 647,
+      "body_height_est": 659,
+      "head_height": 210.0,
+      "head_height_est": 222.0,
+      "face_width": 138,
+      "jaw_row": 218,
+      "jaw_width": 111,
+      "head_width": 200,
+      "head_width_est": 200,
+      "head_width_no_ears": 200,
+      "head_area": 30995,
+      "head_area_est": 32429,
+      "face_area": 17773,
+      "ear_area": 1603,
+      "neck_area": 0,
+      "hand_area": 1472,
+      "hair_head": 11619,
+      "hair_hidden": 1434,
+      "long_hair": 2454,
+      "long_hair_components": [
+        {
+          "area": 330,
+          "bbox": [
+            209,
+            249,
+            246,
+            260
+          ]
+        },
+        {
+          "area": 292,
+          "bbox": [
+            298,
+            249,
+            331,
+            260
+          ]
+        },
+        {
+          "area": 877,
+          "bbox": [
+            206,
+            317,
+            225,
+            380
+          ]
+        },
+        {
+          "area": 589,
+          "bbox": [
+            315,
+            319,
+            335,
+            356
+          ]
+        }
+      ],
+      "long_hair_filter": {
+        "cand_px": 2714,
+        "removed_in_zone_px": 333,
+        "thin_kept_outside_zone_px": 0,
+        "dark_thin_outside_zone_px": 293,
+        "outline_px": 366,
+        "in_arm_poly_px": 104,
+        "rows_260_317_px": 70
+      },
+      "hair_total_vis": 14073,
+      "hair_total_est": 15507,
+      "hair_head_est": 13053,
+      "hair_total_est_circle": 15050,
+      "head_area_est_circle": 31972,
+      "hair_upper_bound": 15507,
+      "head_area_upper": 32429,
+      "head_width_upper": 200,
+      "hair_non_hairlike_px": 895,
+      "c34_y": 281,
+      "c34_left": 81,
+      "c34_right": 83,
+      "c34_total": 164,
+      "y280_y": 280,
+      "y280_left": 80,
+      "y280_right": 82,
+      "y280_total": 162,
+      "waist_top": 388,
+      "waist_bottom": 400,
+      "waist": 394.0,
+      "torso": 146.0,
+      "split": 466,
+      "split_from": 605,
+      "split_skirt": true,
+      "chin_to_split": 218.0,
+      "leg": 219,
+      "ratio_est": 0.33687405159332323
+    },
+    "hate": {
+      "id": "hate",
+      "cx": 270.0,
+      "chin": 246.0,
+      "chin_variants": {
+        "skin_end": 244.0,
+        "outline_mid": 245.5,
+        "outline_end": 246.0
+      },
+      "chin_row": 246,
+      "skin_rgb": [
+        251.0,
+        191.0,
+        144.0
+      ],
+      "hair_refs": [
+        [
+          39.6,
+          24.7,
+          29.0
+        ],
+        [
+          20.8,
+          14.3,
+          19.3
+        ]
+      ],
+      "ears": [
+        {
+          "method": "分開的膚色塊",
+          "area": 645
+        },
+        {
+          "method": "分開的膚色塊",
+          "area": 504
+        }
+      ],
+      "occluders": {
+        "鏡射": {
+          "axis": 270.0,
+          "excluded_px": 8870,
+          "hidden_px": 2784,
+          "hidden_face_ear_px": 0,
+          "upper_px": 5619
+        }
+      },
+      "warnings": [],
+      "top": 28,
+      "top_est": 28,
+      "sole": 685,
+      "body_height": 658,
+      "body_height_est": 658,
+      "head_height": 219.0,
+      "head_height_est": 219.0,
+      "face_width": 137,
+      "jaw_row": 216,
+      "jaw_width": 115,
+      "head_width": 195,
+      "head_width_est": 195,
+      "head_width_no_ears": 195,
+      "head_area": 30263,
+      "head_area_est": 33047,
+      "face_area": 15401,
+      "ear_area": 1912,
+      "neck_area": 0,
+      "hand_area": 0,
+      "hair_head": 12950,
+      "hair_hidden": 2784,
+      "long_hair": 0,
+      "long_hair_components": [],
+      "long_hair_filter": {},
+      "hair_total_vis": 12950,
+      "hair_total_est": 15734,
+      "hair_head_est": 15734,
+      "hair_total_est_circle": 15734,
+      "head_area_est_circle": 33047,
+      "hair_upper_bound": 18569,
+      "head_area_upper": 35882,
+      "head_width_upper": 241,
+      "hair_non_hairlike_px": 28,
+      "c34_y": 279,
+      "c34_left": 135,
+      "c34_right": 83,
+      "c34_total": 218,
+      "y280_y": 280,
+      "y280_left": 134,
+      "y280_right": 83,
+      "y280_total": 217,
+      "waist_top": 387,
+      "waist_bottom": 400,
+      "waist": 393.5,
+      "torso": 147.5,
+      "split": 462,
+      "split_from": 605,
+      "split_skirt": false,
+      "chin_to_split": 216.0,
+      "leg": 223,
+      "ratio_est": 0.33282674772036475
+    },
+    "spirit": {
+      "id": "spirit",
+      "cx": 270.0,
+      "chin": 255.0,
+      "chin_variants": {
+        "skin_end": 253.0,
+        "outline_mid": 254.5,
+        "outline_end": 255.0
+      },
+      "chin_row": 255,
+      "skin_rgb": [
+        252.0,
+        191.0,
+        146.0
+      ],
+      "hair_refs": "blue: B>1.15R 且 B>1.03G",
+      "ears": [
+        {
+          "method": "分開的膚色塊",
+          "area": 670
+        },
+        {
+          "method": "分開的膚色塊",
+          "area": 670
+        }
+      ],
+      "occluders": {
+        "皇冠": {
+          "method": "quadratic",
+          "x0": 222,
+          "x1": 318,
+          "fit_cols": 50,
+          "coef": [
+            0.005664066727756838,
+            -3.055685881915298,
+            449.17419989983057
+          ],
+          "est_top": 38,
+          "circle_center": [
+            269.8,
+            143.7
+          ],
+          "circle_r": 105.2,
+          "circle_top": 39,
+          "excluded_px": 2083,
+          "hidden_px": 563,
+          "hidden_circle_px": 494
+        }
+      },
+      "warnings": [],
+      "top": 44,
+      "top_est": 38,
+      "sole": 685,
+      "body_height": 642,
+      "body_height_est": 648,
+      "head_height": 212.0,
+      "head_height_est": 218.0,
+      "face_width": 135,
+      "jaw_row": 225,
+      "jaw_width": 109,
+      "head_width": 208,
+      "head_width_est": 208,
+      "head_width_no_ears": 197,
+      "head_area": 33531,
+      "head_area_est": 34094,
+      "face_area": 15151,
+      "ear_area": 2731,
+      "neck_area": 0,
+      "hand_area": 0,
+      "hair_head": 15649,
+      "hair_hidden": 563,
+      "long_hair": 0,
+      "long_hair_components": [],
+      "long_hair_filter": {},
+      "hair_total_vis": 15649,
+      "hair_total_est": 16212,
+      "hair_head_est": 16212,
+      "hair_total_est_circle": 16143,
+      "head_area_est_circle": 34025,
+      "hair_upper_bound": 16212,
+      "head_area_upper": 34094,
+      "head_width_upper": 208,
+      "hair_non_hairlike_px": 409,
+      "c34_y": 288,
+      "c34_left": 82,
+      "c34_right": 79,
+      "c34_total": 161,
+      "y280_y": 280,
+      "y280_left": 79,
+      "y280_right": 77,
+      "y280_total": 156,
+      "waist_top": 383,
+      "waist_bottom": 404,
+      "waist": 393.5,
+      "torso": 138.5,
+      "split": 469,
+      "split_from": 605,
+      "split_skirt": false,
+      "chin_to_split": 214.0,
+      "leg": 216,
+      "ratio_est": 0.33641975308641975
+    }
+  },
+  "seam": {
+    "crop": [
+      130,
+      218,
+      410,
+      303
+    ],
+    "rows": [
+      {
+        "y": 233,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 234,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 235,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 236,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 237,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 238,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 239,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 240,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 241,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 242,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 243,
+        "alpha_edge_run": 1,
+        "color_step_run": 5
+      },
+      {
+        "y": 244,
+        "alpha_edge_run": 1,
+        "color_step_run": 4
+      },
+      {
+        "y": 245,
+        "alpha_edge_run": 1,
+        "color_step_run": 5
+      },
+      {
+        "y": 246,
+        "alpha_edge_run": 1,
+        "color_step_run": 18
+      },
+      {
+        "y": 247,
+        "alpha_edge_run": 1,
+        "color_step_run": 4
+      },
+      {
+        "y": 248,
+        "alpha_edge_run": 1,
+        "color_step_run": 10
+      },
+      {
+        "y": 249,
+        "alpha_edge_run": 1,
+        "color_step_run": 1
+      },
+      {
+        "y": 250,
+        "alpha_edge_run": 1,
+        "color_step_run": 1
+      },
+      {
+        "y": 251,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 252,
+        "alpha_edge_run": 1,
+        "color_step_run": 1
+      },
+      {
+        "y": 253,
+        "alpha_edge_run": 2,
+        "color_step_run": 1
+      },
+      {
+        "y": 254,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 255,
+        "alpha_edge_run": 1,
+        "color_step_run": 8
+      },
+      {
+        "y": 256,
+        "alpha_edge_run": 0,
+        "color_step_run": 5
+      },
+      {
+        "y": 257,
+        "alpha_edge_run": 1,
+        "color_step_run": 6
+      },
+      {
+        "y": 258,
+        "alpha_edge_run": 1,
+        "color_step_run": 5
+      },
+      {
+        "y": 259,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 260,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 261,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 262,
+        "alpha_edge_run": 1,
+        "color_step_run": 6
+      },
+      {
+        "y": 263,
+        "alpha_edge_run": 0,
+        "color_step_run": 13
+      },
+      {
+        "y": 264,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 265,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 266,
+        "alpha_edge_run": 0,
+        "color_step_run": 1
+      },
+      {
+        "y": 267,
+        "alpha_edge_run": 0,
+        "color_step_run": 1
+      },
+      {
+        "y": 268,
+        "alpha_edge_run": 0,
+        "color_step_run": 5
+      },
+      {
+        "y": 269,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 270,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 271,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 272,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 273,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 274,
+        "alpha_edge_run": 0,
+        "color_step_run": 1
+      },
+      {
+        "y": 275,
+        "alpha_edge_run": 0,
+        "color_step_run": 7
+      },
+      {
+        "y": 276,
+        "alpha_edge_run": 0,
+        "color_step_run": 7
+      },
+      {
+        "y": 277,
+        "alpha_edge_run": 0,
+        "color_step_run": 4
+      },
+      {
+        "y": 278,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 279,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 280,
+        "alpha_edge_run": 0,
+        "color_step_run": 7
+      },
+      {
+        "y": 281,
+        "alpha_edge_run": 0,
+        "color_step_run": 6
+      },
+      {
+        "y": 282,
+        "alpha_edge_run": 0,
+        "color_step_run": 7
+      },
+      {
+        "y": 283,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 284,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 285,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 286,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 287,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 288,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 289,
+        "alpha_edge_run": 0,
+        "color_step_run": 2
+      },
+      {
+        "y": 290,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 291,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 292,
+        "alpha_edge_run": 0,
+        "color_step_run": 9
+      },
+      {
+        "y": 293,
+        "alpha_edge_run": 0,
+        "color_step_run": 4
+      },
+      {
+        "y": 294,
+        "alpha_edge_run": 0,
+        "color_step_run": 3
+      },
+      {
+        "y": 295,
+        "alpha_edge_run": 1,
+        "color_step_run": 2
+      },
+      {
+        "y": 296,
+        "alpha_edge_run": 1,
+        "color_step_run": 3
+      },
+      {
+        "y": 297,
+        "alpha_edge_run": 0,
+        "color_step_run": 5
+      }
+    ],
+    "flagged": []
+  }
+}

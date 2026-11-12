@@ -1,0 +1,114 @@
+{
+  "feifei": {
+    "scale": 0.5999438205917129,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 30,
+      "chin": 262,
+      "head": 233,
+      "feet": 684,
+      "bboxTop": 30,
+      "contentL": 113,
+      "contentR": 426,
+      "faceL": 200,
+      "faceR": 350
+    }
+  },
+  "apiao": {
+    "scale": 0.6353950463539505,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 29,
+      "chin": 248,
+      "head": 220,
+      "feet": 684,
+      "bboxTop": 29,
+      "contentL": 128,
+      "contentR": 412,
+      "faceL": 185,
+      "faceR": 355
+    }
+  },
+  "sika": {
+    "scale": 0.624048706240487,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 29,
+      "chin": 252,
+      "head": 224,
+      "feet": 685,
+      "bboxTop": 29,
+      "contentL": 152,
+      "contentR": 388,
+      "faceL": 180,
+      "faceR": 365
+    }
+  },
+  "bulu": {
+    "scale": 0.6353950463539505,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 29,
+      "chin": 248,
+      "head": 220,
+      "feet": 685,
+      "bboxTop": 29,
+      "contentL": 146,
+      "contentR": 393,
+      "faceL": 180,
+      "faceR": 350
+    }
+  },
+  "jiejie": {
+    "scale": 0.6416275430359938,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 46,
+      "chin": 236.5,
+      "head": 190.5,
+      "feet": 685,
+      "bboxTop": 22,
+      "contentL": 112,
+      "contentR": 427,
+      "faceL": 210,
+      "faceR": 334
+    }
+  },
+  "hate": {
+    "scale": 0.6688368908988952,
+    "metrics": {
+      "w": 540,
+      "h": 720,
+      "headTop": 86,
+      "chin": 294,
+      "head": 209,
+      "feet": 700,
+      "bboxTop": 4,
+      "contentL": 109,
+      "contentR": 430,
+      "faceL": 219,
+      "faceR": 393
+    }
+  },
+  "spirit": {
+    "scale": 0.6477093206951027,
+    "metrics": {
+      "w": 540,
+      "h": 800,
+      "headTop": 132,
+      "chin": 320.5,
+      "head": 188.5,
+      "feet": 765,
+      "bboxTop": 7,
+      "contentL": 133,
+      "contentR": 406,
+      "faceL": 205,
+      "faceR": 334
+    }
+  }
+}

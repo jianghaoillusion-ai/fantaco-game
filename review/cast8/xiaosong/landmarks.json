@@ -1,0 +1,10 @@
+{
+  "_說明": "y 都是 540x720 原圖座標，腳底固定 685。bulu/hate/原設定 spirit、jiejie 取自小頌 cast7 第 2 次審查實測值。cast8 候選的 chin/waist/legsplit 是小頌 2026-11-12 用眼睛從縮圖估的，誤差約 ±8 px，第一次跑完請看 out/overlay-*.png 對準後改成實測值再重跑。hairtop 留 null 代表交給程式自動抓（只認頭髮顏色，帽子皇冠蝴蝶結不算）。",
+  "foot": 685,
+  "bulu":          {"hairtop": 30,   "chin": 246.5, "waist": 394, "legsplit": 471},
+  "hate":          {"hairtop": 28,   "chin": 245.5, "waist": 395, "legsplit": 462},
+  "spirit_orig":   {"hairtop": 161,  "chin": 282.5, "waist": 399, "legsplit": 534},
+  "jiejie_orig":   {"hairtop": 58,   "chin": 185.5, "waist": 302, "legsplit": null},
+  "spirit_new":    {"hairtop": null, "chin": 290,   "waist": 425, "legsplit": 560, "_todo": "chin/waist/legsplit 目測，待確認"},
+  "jiejie_new":    {"hairtop": null, "chin": 238,   "waist": 385, "legsplit": null, "_todo": "chin/waist 目測，待確認；腿被裙子蓋住"}
+}

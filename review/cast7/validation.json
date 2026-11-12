@@ -1,0 +1,91 @@
+{
+  "jiejie": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "hard_edge_pixels": 0,
+      "hard_edge_ratio_percent": 0.0,
+      "boundary_pixels": 8099,
+      "intermediate_alpha_pixels": 8098,
+      "intermediate_ratio_percent": 99.99,
+      "alpha_levels": 175,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 10764
+  },
+  "hate": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "hard_edge_pixels": 39,
+      "hard_edge_ratio_percent": 0.58,
+      "boundary_pixels": 6683,
+      "intermediate_alpha_pixels": 4476,
+      "intermediate_ratio_percent": 66.98,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 440,
+    "head_width_before": 197,
+    "head_width_after": 197,
+    "hair_edge_before": {
+      "hard_edge_pixels": 8,
+      "hard_edge_ratio_percent": 1.82,
+      "boundary_pixels": 440,
+      "intermediate_alpha_pixels": 218,
+      "intermediate_ratio_percent": 49.55,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "hair_edge_after": {
+      "hard_edge_pixels": 0,
+      "hard_edge_ratio_percent": 0.0,
+      "boundary_pixels": 437,
+      "intermediate_alpha_pixels": 437,
+      "intermediate_ratio_percent": 100.0,
+      "alpha_levels": 256,
+      "small_components_under_8px": 0
+    },
+    "outside_roi_changed": 0
+  },
+  "spirit": {
+    "size": [
+      540,
+      720
+    ],
+    "mode": "RGBA",
+    "sole_y": 685,
+    "edge": {
+      "hard_edge_pixels": 0,
+      "hard_edge_ratio_percent": 0.0,
+      "boundary_pixels": 8215,
+      "intermediate_alpha_pixels": 8194,
+      "intermediate_ratio_percent": 99.74,
+      "alpha_levels": 123,
+      "small_components_under_8px": 0
+    },
+    "webp_matches_png": true,
+    "source_aligned_changed_pixels": 12195,
+    "cropped_source_bottom_alpha_pixels": 0
+  },
+  "unchanged_from_r1": {
+    "feifei": true,
+    "apiao": true,
+    "sika": true,
+    "bulu": true,
+    "hate": true
+  },
+  "status": "第2輪：姐姐／精靈清理青色背景；比例仍未通過全部≤5%；哈特不變",
+  "alpha_definition": "alpha≥128 輪廓的3×3膨脹減侵蝕帶；其中 1..254 像素 / 全帶像素。非全圖半透明比例；比例非零不能證明無背景殘色或所有邊緣無鋸齒。",
+  "visual_caveat": "已清除外圈與指定封閉空隙青色背景；衣服與飾品原有青藍色保留。比例未通過，邊緣須配合放大圖審查。"
+}
