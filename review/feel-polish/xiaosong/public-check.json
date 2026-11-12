@@ -1,0 +1,36 @@
+[
+ {
+  "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/index.html",
+  "status": 200,
+  "notice": true,
+  "title": "眠花糖的異想世界",
+  "jsErrors": [],
+  "http4xx": [],
+  "cells": 63,
+  "pieces": 3,
+  "brokenImgs": []
+ },
+ {
+  "url": "https://rawcdn.githack.com/jianghaoillusion-ai/fantaco-game/42e7fc837f5a398bf18c6c93feb9846fcf5bcbea/review/feel-polish/haptic-test.html",
+  "status": 200,
+  "notice": true,
+  "title": "FANTACO 觸覺測試",
+  "jsErrors": [],
+  "http4xx": [],
+  "buttons": 9,
+  "switches": 3,
+  "smalls": [
+   "直接點 switch 本體：Safari 17.4 起有此控制項；系統設定與硬體允許時，最可能有原生觸覺。",
+   "真實點 label，保留瀏覽器預設動作；新版 WebKit 仍可傳遞 trusted 點擊。",
+   "舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。需實際手勢；不能由切換成功判定有震動。",
+   "舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。需實際手勢；不能由切換成功判定有震動。",
+   "舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。需實際手勢；不能由切換成功判定有震動。",
+   "舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。需實際手勢；不能由切換成功判定有震動。",
+   "舊引擎盡力嘗試；fc1ef83 修正後因非 trusted click 不震。請在此按住滑動；move 不是可靠的使用者啟用。",
+   "程式 click 非 trusted；不能當成可靠 iOS 觸覺方法。",
+   "只改值，沒有原生點擊，不預期震動。",
+   "iOS Safari 沒有此 API；Android 支援仍取決於硬體與設定。",
+   "離開同步手勢且非 trusted，不預期可靠觸覺。"
+  ]
+ }
+]
