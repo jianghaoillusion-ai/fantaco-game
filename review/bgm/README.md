@@ -1,127 +1,84 @@
-# 可愛風 BGM 第一階段補充輪（bgm2）
+# 14 場景專屬 BGM（bgm3）
 
-只改 `review/bgm/`；未接入遊戲，未修改 `js/audio.js`、`assets/`。PR #6 維持 draft。三首皆為免費 Python/numpy/ffmpeg 原創程序合成，無外部取樣、既有旋律、即夢、付費 API 或 AI 浮水印。沒有進行全球曲庫比對。
+A 鐵琴 → village，B 烏克麗麗 → journey，C 口哨 → candy。保留原樂譜、編曲與音色，再由同一程序重新編碼成手機檔；其餘 11 首另寫樂譜與各自伴奏。全部免費 Python/numpy/ffmpeg 程序合成，沒有外部取樣或套用既有旋律，沒有付費服務、即夢或浮水印；沒有進行全球曲庫比對。
 
-## 這次修正
+覆寫原本 6 組 bgm 同名檔，新增 8 組地區 bgm，共 14 首／28 檔。feixiang-sting、sting-clear 保持原始 bytes。MP3 128 kbps；OGG Vorbis quality 4（hate 為 quality 6，減少柔風琴邊界失真）。
 
-前輪最後一次小頌獨立審查為 **FAIL**，不是較早那份 PASS：B 的 3ms 首尾收放切斷殘響，C 的最後 122ms 近乎無聲。本輪移除首尾收放，鐵琴自然衰減至少 2.8 秒、撥弦至少 1.6 秒，增加 12 個循環殘響反射，三首各寫自己的最後一小節。全部音尾與殘響以取模／循環位移折回開頭，沒有淡出、空拍、插入零值或刪除音尾。
+## 場景與曲目
 
-為降低有損編碼接點的風險，整首立體聲循環共同移動檔案起點到第一拍前 0–10ms 內的低振幅處（取兩端、兩聲道振幅平方總和最小值），所有樣本完整保留，並非把接點壓成零。檔案起點相對原樂譜：A −342 樣本（−7.125ms）、B −445（−9.2708ms）、C −114（−2.375ms）。所以檔案 0 秒不強稱為第一拍起音；小節格線也跟著移動，整圈仍是完整 24 小節／96 拍。驗證曲內小節線已扣除此位移。尾段屬和弦自然回到主和弦，A 鐵琴尾音、B 最後弱拍撥弦與 C 延長口哨都跨過接點。
+| 場景 id | 顯示名稱 | 檔名（assets/audio/；均有 mp3、ogg） | 主樂器 | 調性 | BPM | 拍號／小節 | 循環秒 | 循環 LUFS mp3／ogg | 循環 dBTP mp3／ogg | KB mp3／ogg |
+|---|---|---|---|---|---:|---|---:|---:|---:|---:|
+| village | 微笑村 | bgm-village.mp3 / .ogg | 合成鐵琴、柔木琴琶音；無鼓、無沙鈴、無獨立低音 | C 大調 | 120 | 4/4／24 | 48.000000 | -16.48／-15.98 | -4.75／-4.35 | 775.0／399.4 |
+| journey | 神祕魔法袋 | bgm-journey.mp3 / .ogg | 合成撥弦主奏、反拍刷弦、分解和弦撥弦低音、輕沙鈴；無木塊與鼓 | F 大調 | 112 | 4/4／24 | 51.428562 | -16.45／-15.98 | -4.09／-3.63 | 829.9／667.9 |
+| candy | 第一願：西卡 | bgm-candy.mp3 / .ogg | 帶氣聲滑音的合成口哨、短風琴、木琴應答、輕小鼓與木質短低音；無沙鈴 | G 大調 | 128 | 4/4／24 | 45.000000 | -16.45／-15.97 | -8.17／-7.73 | 727.0／543.9 |
+| bulu | 第二願：布魯 | bgm-bulu.mp3 / .ogg | 木琴、木質低音、短撥弦 | D 大調 | 108 | 4/4／20 | 44.444437 | -16.44／-15.94 | -4.89／-4.42 | 718.1／330.3 |
+| hate | 最後一願：哈特 | bgm-hate.mp3 / .ogg | 短風琴、木質低音 | Bb 大調 | 124 | 4/4／20 | 38.709688 | -16.45／-15.94 | -6.88／-6.30 | 626.3／299.3 |
+| ending | 漫天氣球 | bgm-ending.mp3 / .ogg | 柔鐘、長風琴低音、撥弦 | Eb 大調 | 102 | 3/4／24 | 42.352938 | -16.44／-15.96 | -5.73／-5.17 | 684.7／367.1 |
+| castle | 微笑城堡 | bgm-castle.mp3 / .ogg | 雙聲部小鐘、整拍撥弦 | A 大調 | 116 | 4/4／20 | 41.379312 | -16.45／-15.97 | -7.32／-6.94 | 669.4／400.0 |
+| slope | 飛飛的出發坡 | bgm-slope.mp3 / .ogg | 附點撥弦、雙拍木琴低音 | E 大調 | 132 | 4/4／20 | 36.363646 | -16.44／-15.96 | -5.02／-4.60 | 589.1／296.2 |
+| hill | 阿飄的探險丘 | bgm-hill.mp3 / .ogg | 合成口哨、三拍木琴琶音 | F# 大調 | 118 | 3/4／24 | 36.610167 | -16.45／-15.95 | -7.61／-7.15 | 592.9／412.9 |
+| bagvalley | 魔法袋谷 | bgm-bagvalley.mp3 / .ogg | 撥弦旋律、搖擺低音、鈴答句 | B 大調 | 110 | 4/4／20 | 43.636354 | -16.45／-15.96 | -4.22／-3.86 | 705.5／328.0 |
+| candylane | 西卡的糖果巷 | bgm-candylane.mp3 / .ogg | 短木琴、反拍鈴、風琴低音 | Ab 大調 | 134 | 4/4／20 | 35.820896 | -16.45／-15.99 | -7.38／-6.53 | 580.3／310.8 |
+| lamplight | 布魯的夜燈林 | bgm-lamplight.mp3 / .ogg | 輕風琴、分解撥弦、稀疏鈴音 | F 大調 | 100 | 3/4／24 | 43.200000 | -16.45／-15.95 | -4.83／-4.34 | 698.2／356.3 |
+| theater | 哈特的魔術劇場 | bgm-theater.mp3 / .ogg | 撥弦、木琴和弦、低音答句 | Db 大調 | 104 | 4/4／20 | 46.153854 | -16.45／-15.96 | -5.52／-4.93 | 745.8／328.6 |
+| plaza | 漫天氣球廣場 | bgm-plaza.mp3 / .ogg | 短口哨、切分風琴、木塊 | C 大調 | 126 | 4/4／20 | 38.095229 | -16.45／-15.95 | -5.56／-5.03 | 616.7／421.9 |
 
-## 三首最終檔案
+## 每首風格與對應理由
 
-48 kHz、雙聲道、4/4、24 小節；MP3 提高為 320 kbps，OGG Vorbis quality 5。母帶固定增益約 −16 LUFS，沒有動態正規化造成每圈不同。
+- **village｜鐵琴泡泡音樂盒**：A 的小鐘與泡泡感適合微笑村；首頁沿用同首，首頁不是第 15 個場景。
+- **journey｜烏克麗麗搖擺跳跳**：B 的反拍烏克麗麗適合背著魔法袋出發。
+- **candy｜口哨氣球小遊行**：C 的口哨小遊行適合西卡活潑的糖果主線。
+- **bulu｜木琴躲貓貓：三連小跳與高低應答**：三連音高低應答，讓怕黑角色仍有俏皮陪伴。
+- **hate｜短風琴魔術步：切分和弦與空拍問答**：短風琴切分像變魔術的小停頓，避免黑暗或史詩感。
+- **ending｜氣球圓舞：三拍柔鐘與長音雲朵**：三拍柔鐘像氣球慢慢升起，速度仍有輕巧推進。
+- **castle｜小鐘鐘塔：雙聲部卡農與整拍撥弦**：雙聲部鐘聲對應鐘塔與城堡，和 A 的無鼓琶音旋律分開。
+- **slope｜彈跳起跑：附點上行與雙拍踏步**：上行附點與雙拍踏步，對應飛飛準備起跑。
+- **hill｜丘陵迴旋：三拍木管與交錯琶音**：三拍木管輪轉，呼應阿飄繞著小丘探險。
+- **bagvalley｜魔法口袋：五音短句與搖擺分解和弦**：五音短句、搖擺低音和單次鈴答句，像翻找魔法口袋。
+- **candylane｜糖果踢踏：短木琴與反拍鈴答句**：更快的反拍木琴踢踏，與主線 C 的口哨行進曲不同。
+- **lamplight｜夜燈搖籃：輕風琴長句與稀疏星光**：三拍稀疏星光、柔風琴長句，夜晚溫柔而不陰森。
+- **theater｜玩偶小劇場：撥弦停頓與低音回答**：撥弦留白與低音回答，像玩偶在舞台輪流探頭。
+- **plaza｜廣場跳格子：短笛呼喊與拉丁式木塊**：短口哨呼喊、切分風琴與木塊，像廣場跳格子；不同於 C 的四分音符遊行。
 
-| 樣本／檔名（各有 mp3、ogg） | 風格／調性 | BPM | 樣本數 | 長度秒 | MP3／OGG LUFS | MP3／OGG dBTP |
-|---|---|---:|---:|---:|---:|---:|
-| cute-a-glock-bubbles | 鐵琴泡泡音樂盒；C 大調 | 120 | 2304000 | 48.0000000 | -16.0／-15.95 | -4.31／-4.43 |
-| cute-b-uke-hop | 烏克麗麗搖擺跳跳；F 大調 | 112 | 2468571 | 51.4285625 | -16.0／-15.97 | -3.6／-3.65 |
-| cute-c-whistle-parade | 口哨氣球小遊行；G 大調 | 128 | 2160000 | 45.0000000 | -16.01／-15.96 | -7.76／-7.76 |
+## 循環做法
 
-A 為無鼓鐵琴＋柔木琴琶音；B 為反拍刷弦＋分解和弦低音＋輕沙鈴；C 為口哨＋短風琴＋木琴＋輕小鼓。仍保留各自 A／B／A 變奏，沒有改成三首同伴奏。B 的樣本數因 112 BPM 取最近整數，誤差 −0.4286 樣本（約 −8.93 微秒），不補靜音。
+所有音符與殘響都繞回同一圈，週期高通收斂低頻（原 A/B/C 100 Hz，新曲 110 Hz）。每首整圈 20 或 24 小節，BPM 100–134。取樣整數造成的小於 1 sample 誤差記錄在 scores-bgm3.json；沒有補零填拍。
 
-[鐵琴 MP3](cute-a-glock-bubbles.mp3)／[OGG](cute-a-glock-bubbles.ogg)；[烏克麗麗 MP3](cute-b-uke-hop.mp3)／[OGG](cute-b-uke-hop.ogg)；[口哨 MP3](cute-c-whistle-parade.mp3)／[OGG](cute-c-whistle-parade.ogg)。三首各自的 repo raw 路徑為 `review/bgm/<上表檔名>.mp3` 及 `.ogg`；固定 commit 的 GitHub raw URL 見本輪最終報告。中間 WAV 不保留，可由合成程式重建。
+**壓縮檔兩端各帶 9216 samples（48k 的 192 ms）循環音訊緩衝，不是靜音。** 編碼器在實際循環邊界前後都有上下文，減少原本 MP3／Vorbis 邊界瞬態；解碼後從 192ms 附近擷取表中長度的完整一圈，複製到獨立 AudioBuffer；source 的 loopStart=0、loopEnd=完整一圈長度。為處理 44.1k 重採樣的小數樣本，擷取起點可在 ±10ms 內在不加深接點能量凹洞的前提下，選兩聲道接點前後 2ms 二階差最小的位置，不改一圈樣本數、不混音、不補零。選到的實際 offset 全記錄在 validation-bgm3.json。檔案有效解碼總長比表中循環多 384ms；buffer source 每圈只播放擷取後的完整小節，不播放兩端保護區。這也排除 Chromium Vorbis 額外的尾區塊。直接用外部一般播放器循環整個檔案會包含緩衝，不能當成遊戲內試聽。
 
-## 循環接點數字
+循環檔起點是原樂譜前的循環位移，完整訊號不減少；每曲 origin_shift_samples 見樂譜 JSON。新曲編碼起點可往前移最多 350ms，所以入場可能先聽到上一小節尾端的弱起，不把檔案 0 秒說成強拍。不是逐圈淡出、接點交叉混音，也沒有切斷殘響。B 原本約 6ms 凹洞與 C 約 122ms 近靜音尾巴的修正沿用 bgm2，這輪對最終手機編碼重新量測。
 
-下表由最終檔重新解碼量得。末 100ms 必須高於 −35 dBFS；接點 ±6ms 中的 2ms 能量凹洞不應超過曲內小節線最大值（容許 1dB）；50ms 窗低於 −40dBFS 比例上限 0.5%；二階差分上限為曲內小節線最大值，不加容許倍數或額外餘量。這些是波形檢查，不冒稱已耳聽。
+## 播放器與場景
 
-| 檔案 | 尾100ms dBFS | 接點樣本差 | 接點凹洞／曲內最大 dB | 近無聲50ms窗 % | 接點二階差／曲內最大 |
-|---|---:|---:|---:|---:|---:|
-| cute-a-glock-bubbles.mp3 | -18.83 | 0.009980 | 1.25／10.56 | 0.104 | 0.00776／0.02790 |
-| cute-a-glock-bubbles.ogg | -18.78 | 0.017293 | 1.30／10.77 | 0.104 | 0.00905／0.02586 |
-| cute-b-uke-hop.mp3 | -18.25 | 0.000664 | 4.47／8.79 | 0.000 | 0.00835／0.02286 |
-| cute-b-uke-hop.ogg | -18.22 | 0.009743 | 4.55／8.63 | 0.000 | 0.01102／0.02222 |
-| cute-c-whistle-parade.mp3 | -18.15 | 0.018632 | 0.23／4.74 | 0.000 | 0.00700／0.00743 |
-| cute-c-whistle-parade.ogg | -18.11 | 0.023804 | 0.58／4.50 | 0.000 | 0.00617／0.00731 |
+js/audio.js 先 fetch、decodeAudioData，再 AudioBufferSourceNode loop=true；抽出有效範圍，三曲大小的 LRU 解碼快取限制手機記憶體。第一次手勢建立／resume AudioContext，之後手勢也可恢復 suspended/interrupted context。每個 source 只 start 一次；同曲請求只更新音量，不重播。
 
-六檔解碼長度都等於母帶，削波 0，true peak 均低於 −1 dBTP。以 10ms 窗、1ms 步進回查最後 400ms，六檔尾端連續低於 −40dBFS 皆為 0ms。A 仍有 0.104% 的安靜窗（約一窗 50ms），不在循環尾端；B/C 為 0%。新驗證先在舊檔重現失敗，再用新版通過；[舊檔基線](loop-baseline.json)、[新接點量測](loop-validation.json)、[響度與峰值](validation.json)。既有 `r2-*`、`r2-listening-*` 與 `xiaosong/` 是前輪證據，不適用本輪音檔，不要拿舊 PASS 或舊圖當本輪結論。
+換曲先載好新檔，再把舊曲淡出 25ms、停止／disconnect，才開新曲；設計上不交叉疊兩首。序號取消過時載入，序列化切換避免競態；失敗不會讓後續切歌鏈永久失效。音樂關閉或音量零只改 gain，保留時間；廣告暫停記錄 offset，恢復從原位置。sting 使用獨立單一播放器，結束／取消恢復 BGM，sting 音檔沒有改。原遊戲沒有呼叫 playClearTheme，本輪保留這個範圍，不額外接入結算。
 
-## 最終整合方案與獨立試聽
+app 的 playSceneMusic 統一選曲：region.chapter 與 SAVE.chapter 一致才用地區 id；章節已推進時用新章節 id，背景／名稱也使用相同判斷。地圖進入只由 show(play) 選一次；修建築依玩家所在場景、不依正在修的另一區選曲。設定 UI 不再另行重選曲。地圖／章節 music metadata 同步改成自己的 id。
 
-開 [loop-test.html](loop-test.html)，三首各一個按鈕，可選 MP3／OGG、停止。透過 HTTP 開啟（不能直接 file://）：在此 worktree 執行 `python3 -m http.server 8936 --bind 127.0.0.1 --directory review/bgm`，開 `http://127.0.0.1:8936/loop-test.html`。若埠被占用換一個；用完結束自己啟動的伺服器。
+Web Audio 不存在或兩格式解碼都失敗時退回 HTMLAudio，保留同曲與音量行為；**這條退路在 loadedmetadata 後定位、用 timeupdate／ended 跳過保護區，但事件排程不能保證 sample 精準循環，平順度仍不如 Web Audio**。MP3 若多出最多 4096 個 48k 等效樣本，還要以兩端 2ms 週期訊號的相對／絕對誤差確認，再採用完整圈；超量或不符合週期就退格式／播放器，不盲剪尾。這是程式與模擬驗證，不等於 Safari 已實測。
 
-最終遊戲方案：第一次使用者點擊時建立／resume AudioContext，fetch 完整曲目、decodeAudioData 並快取 AudioBuffer；用 **AudioBufferSourceNode.loop=true、loopStart=0、loopEnd=已核對的母帶長度**。每圈由音訊引擎循環，不靠 ended 事件或 JS 計時器重開、不用 `<audio loop>`。buffer source 只能 start 一次；暫停須記錄播放偏移，恢復新 source 從偏移接續；同曲不重啟。換曲先解碼好，再以 GainNode 短交叉淡化，循環內不淡入淡出。sting 應獨立管理且只有一支，播放時壓低／暫停 BGM，結束或取消皆恢復既有位置；設定靜音不丟播放進度。正式實作留到完整 6 首以上階段，並完成每關獨曲。
+模組與資料載入版本更新為 bgm3；音檔網址也帶 ?v=bgm3。本 repo 沒有 service worker。
 
-MP3 有編碼延遲及 frame 尾端補零，必須保留 Xing/LAME gapless 資訊並確認解碼器有處理；不能只看到檔案 duration 或副檔名就認定無縫。這批檔在 ffmpeg 與本機 Chromium 的 MP3 解碼長度正確。若其他瀏覽器多出前置延遲，單獨設 loopEnd 不會修正開頭；必須核對 offset 再設 loopStart/end，或改採核對過的 PCM WAV／OGG，不能盲目剪掉所有安靜音符。
+## 驗證與重跑
 
-OGG Vorbis 依 granule position 表示有效尾長，理論上可精準裁掉最後區塊多出的樣本；但本機 Chromium 148 的 decodeAudioData 實測仍多出尾塊：48kHz A/B/C 各 192／997／704 樣本。已比對三首有效全長、左右兩聲道，與 ffmpeg 的 PCM SHA-256 全部相同；最後 OGG 頁的 granule position 也分別等於母帶樣本數 2304000／2468571／2160000，確認有效訊號未前移或後移，多出的僅是解碼尾塊；因此本頁只用母帶樣本數換算 loopEnd 排除尾塊，不改檔也不破壞殘響。OGG 允許不超過 2048 個 48kHz 樣本的尾塊；MP3 只允許重採樣 ±2 樣本。超出就顯示錯誤，請改格式，不偷偷播放錯誤長度。此規則只針對這三檔，正式整合要逐曲驗證。
+- scores-bgm3.json：每曲完整 melody events、調性、節奏／拍號、樣本數、實際音檔 SHA-256、響度、峰值與接點量測。
+- validation-bgm3.json：最終 headless Chromium，14 首 × MP3/OGG × 48k/44.1k 的解碼與兩圈 AudioBufferSource 渲染；每組量尾音、能量凹洞與二階差分。48k OGG 的有效全長左右聲道另與 ffmpeg 逐樣本 SHA 對齊。
+- 音量門檻 −17 至 −15 LUFS、true peak ≤−1 dBTP、削波 0；尾 100ms >−35 dBFS，尾端連續近靜音 0ms；接點 2ms 凹洞不大於曲內小節線最大+1dB，接點二階差不大於曲內小節線最大。未為求通過放寬門檻。
+- padding-bgm3.json：14 首真實 MP3 在 48k／44.1k 加 529、1105、2257 個前置零樣本，84 組週期檢查全部通過；仍非 Safari 實測，可用 test-codec-padding.cjs 重跑。
+- 原創差異比較 91 組音高間距／節奏特徵；配器與和弦可直接查 compose_full.py，各自伴奏分支，不是同份伴奏換樂器。
+- 遊戲頁實際切換地區，測試合成、交單、背包、故事、設定、跨區修建築、暫停恢復、快速切換、載入中停止、sting 取消與 HTMLAudio 退路。只統計 looping BGM，不把短 SFX 當成重疊音樂。
 
-本機 Chromium 148：三首 × 兩格式 × 48k/44.1k 共 12 組，OfflineAudioContext 渲染兩圈，與指定範圍直接串接的最大誤差 ≤2.91e-11；沒有引擎新增的空白。44.1k MP3 B/C 少一樣本（重採樣），本頁以實際可用長度為準。另直接量測 44.1k 解碼訊號的接點凹洞與尾端能量（不是只拿 buffer 和自己比），六組全通過。前端已測六種選擇、無自動播放、同首重按不重啟、載入中按停止不晚到開播、404 顯示錯誤、載入中切回原曲恢復狀態、失敗後原曲能換格式、pagehide 關閉 context 後可點擊重建，無 pageerror。pagehide 測試是事件模擬，真實 bfcache／手機返回仍待驗。切換曲目／格式是使用者要求，從頭播放；新曲解碼好前舊曲繼續，約 25ms 淡化只用於手動換曲與停止，不是每圈接點處理。快速點選用序號取消過期結果。[瀏覽器測試數據](browser-validation.json)。尚未做 Safari/iPhone 實機及耳聽，不推論所有瀏覽器皆已驗收。
+先設定 TMPDIR 到外接碟，執行 `PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/bgm/compose_full.py`。程式先在 TMPDIR 渲染與量測，全部檢查通過後才替換正式音檔及樂譜 JSON；失敗不覆寫交付檔，並清除自己的 WAV 暫存。原 compose_cute.py 留作 A/B/C 來源。
 
-44.1kHz 解碼後接點（兩聲道能量，凹洞上限仍以該取樣率曲內小節線為準）：
+在 repo 根目錄執行 `python3 -m http.server 8938 --bind 127.0.0.1`，試聽頁是 `http://127.0.0.1:8938/review/bgm/loop-test.html`，14 首均可切 MP3/OGG。載入 `source /Volumes/外接資料碟/tools/skills/guizang-env.sh` 後，以既有 Playwright 的 NODE_PATH 執行 `node review/bgm/test-bgm3.cjs`；不需下載或安裝。接著跑 `PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/bgm/measure-playback.py` 量實際循環範圍（排除 guard）的響度與峰值，最後 `python review/bgm/write_report.py` 更新表格。單元測試 `node --test tests/*.test.mjs`。
 
-| 檔案 | 接點凹洞／曲內最大 dB | 尾100ms dBFS | 接點樣本差 |
-|---|---:|---:|---:|
-| cute-a-glock-bubbles.mp3 | 1.27／10.58 | -18.83 | 0.010960 |
-| cute-a-glock-bubbles.ogg | 1.31／10.78 | -18.78 | 0.017799 |
-| cute-b-uke-hop.mp3 | 4.40／8.81 | -18.25 | 0.002337 |
-| cute-b-uke-hop.ogg | 4.65／8.65 | -18.22 | 0.009065 |
-| cute-c-whistle-parade.mp3 | 0.20／4.61 | -18.15 | 0.040180 |
-| cute-c-whistle-parade.ogg | 0.56／4.40 | -18.11 | 0.024975 |
+## 交叉檢查
 
-參考：[Web Audio loop 規格](https://www.w3.org/TR/webaudio/#looping)、[Vorbis 封裝與 granule position](https://xiph.org/vorbis/doc/Vorbis_I_spec.html)。
+小頌只讀程式與小夏的證據後，同意作為 draft 交付；沒有獨立跑量測或耳聽。詳見 [xiaosong-review-bgm3.md](xiaosong-review-bgm3.md)。
 
-## 現有遊戲播放盤點（只讀，不修）
+## 還沒實測的部分
 
-以下依本 worktree 原始碼追查，並非遊戲實機重現。範圍為 `js/*.js` 與 `index.html`；無可用 codebase-memory MCP，改逐項搜尋所有呼叫再讀函式。
+Safari、iPhone、Android、來電／鎖屏／真正 bfcache 與手機靜音開關尚未實機驗收。suspend/resume 只有 Chromium 模擬。沒有實際耳聽，不保證「可愛程度／刺耳感／回音乾濕」符合每個人的感受。波形與數字不能替代我的王用耳朵確認。
 
-| 操作／位置（檔案、函式、行號） | 現象與影響 |
-|---|---|
-| `js/audio.js:61` playMusic，65–77 | 同檔且正在播直接返回；不同場景若共用檔不重開。不同檔或目前 paused 則先 stopMusic，再 new Audio、play；沒有預先解碼／交叉淡化，換曲可能有載入空檔且從頭播。BGM 只有一個引用，一般換曲不疊兩首。74 行 HTMLAudio loop 未保證本機及手機無縫，未做當前遊戲耳聽。 |
-| `js/audio.js:80` stopMusic | pause 後清 src、丟掉物件和 id，位置消失；之後一定從頭載入。沒有淡出可能硬切。 |
-| `js/audio.js:89` pauseMusic；93 resumeMusic；`js/ads.js:127` openAd／142；76 closeAd／80 | 看廣告會暫停、關閉通常從原位置 resume。若暫停期間有人呼叫 playMusic，即使同曲也因 paused 跳過保留判斷，從頭重建；若播放器被 settings 清掉，resumeMusic 用 lastMusicId 重開。此 worktree 找不到獨立的一般暫停按鈕呼叫。 |
-| `js/settings-ui.js:47` open、51 close；`js/audio.js:49` setAudioSettings | 只打開／關閉設定不影響播放。音量大於零時只改 volume；音樂關閉或音量到 0 會 stopMusic，重新開啟從頭。連 SFX 設定也經 apply→setAudioSettings；若 BGM 不存在但音樂開著，54 行會重開。 |
-| `js/settings-ui.js:18` apply／21、27–29 | 修改設定後額外按目前 play/title 選章節／village，可能覆蓋地區曲。音量到零再拉高也會重開，無原位置恢復。 |
-| `js/app.js:110` show／116、124；bind／169 | 回 title 改 village，離開其他曲會硬切並從頭載入；village 正在播則延續。show(play) 一律按 SAVE.chapter 播。book、map、daily、lyrics、howto 沒換曲分支，原曲繼續。 |
-| `js/map.js:171` enterRegion／177–179；`js/app.js:116` show | 先 region.music 再 show(play) 的 SAVE.chapter；lamplight、theater、plaza 等先選借用曲再被章節曲覆蓋，同一操作連切兩次，可能短暫空檔／重頭。 |
-| `js/map.js:136` restoreBuilding／167 | 修建築按 region.music 或 chapter 播，若不同檔立即切；回 play 又走章節。這也是場景有時配錯／共用曲的原因。 |
-| `js/story.js:47` startStory；488 nextStory／505；510 skipStory／516；`js/app.js:897、931` | 進故事只 show(story)，沒有停／降 BGM；音樂會延續。故事結束／跳過先 show(play) 再 done 回呼，可能先播目前章節再由回呼進別區。相同檔正在播時不重啟；不同章節會硬切。 |
-| `js/app.js:181` 領取結果事件／184；tryFulfill 856／897–899；showClear 935／973、976 | 結算後重呼 playMusic；同檔仍播時保留，章節變更就重新開始。結算音效 sfx.level 與 BGM 疊加是現有行為；此 worktree 的結果流程沒有呼叫 playClearTheme。 |
-| `js/audio.js:99` playClearTheme／101–119 | 函式先 stopMusic，再新建 sting Audio，沒有自動恢復 BGM。反覆呼叫只 remove 舊 DOM、沒有明確 pause／清 src；BGM 的 playMusic/stopMusic 也不管 sting，若未來接入可能疊播。播放失敗兩次會吞錯再等最多 30 秒；關音樂只 pause sting，不觸發 ended，Promise 可能等到 timeout。**目前全 js 與 HTML 無此函式的呼叫／匯入，不能把這個潛在風險說成已發生。** feixiang-sting／sting-clear 檔案未動。 |
-| `js/audio.js:15` unlockAudio／18；playMusic／76；`js/app.js:152` pointerdown | unlock 只 resume Web Audio context，不重試之前失敗的 HTMLAudio.play。play 的失敗被吞掉，所以初始自動播放被拒可能保持無聲，直到下一次 playMusic；不回報原因。js 範圍無 visibilitychange 音樂恢復處理，背景／鎖屏恢復要實機補驗。 |
-
-## 全部關卡／章節盤點
-
-盤點基準：origin/main `22a7d6d5c5b8c832add6daec2e09e6f54d321434`。讀取 js/audio.js、js/app.js、js/map.js、js/merge.js，以及它們的資料來源 data/chapters.json、data/map.json、data/stages/。本輪保留第一輪已交叉核對的盤點，並再次核對 MUSIC_FILES 與章節／地圖資料未變動。
-
-**數量定義：6 個主線章節、9 個地圖地區，village 重疊，合計 14 個不同場景 id；MUSIC_FILES 也有這 14 個 key。** repo 另外保留 3 個 stages 關卡定義（下表另列），目前 js 與 HTML 找不到載入 stages/index.json 或 import battle.js 的入口，因此不能把它們加成 17 個正在運行的關卡。玩家 Lv. 是經驗等級，沒有獨立場景與曲目，不當作另一批音樂關卡。
-
-主線呼叫 playMusic(SAVE.chapter)，直接由章節 id 對應 MUSIC_FILES。地圖 enterRegion 先設 save.chapter = region.chapter，再播 region.music，但隨後 show("play") 又在 js/app.js:116 播 SAVE.chapter，因此遊玩畫面最終以章節曲為準。restoreBuilding（js/map.js:167）則會在地圖修建築時播 region.music，直到下次切回遊玩或其他換曲操作。結算（js/app.js:184/899/973/976）與遊玩中設定開關（js/settings-ui.js:27）也走章節 id。data/chapters.json 中 bulu/hate/ending 的 music 分別是 journey/candy/village，但這些主線呼叫沒有讀該欄位。下表的實際曲目指進入遊玩後留下來的曲目；屬來源碼追查，非瀏覽器實測。
-
-| id | 顯示名稱 | 定義 | MUSIC_FILES[id] | 目前實際曲目／路徑 | 是否共用 |
-|---|---|---|---|---|---|
-| village | 微笑村 | 章節＋地圖 | bgm-village | bgm-village（主線／地圖） | 是；對照與 castle 同曲 |
-| journey | 神祕魔法袋 | 章節 | bgm-journey | bgm-journey（主線） | 是；對照與 slope、hill、bagvalley 同曲 |
-| candy | 第一願：西卡 | 章節 | bgm-candy | bgm-candy（主線） | 是；對照與 candylane 同曲 |
-| bulu | 第二願：布魯 | 章節 | bgm-bulu | bgm-bulu（主線） | 是；對照與 lamplight 同曲 |
-| hate | 最後一願：哈特 | 章節 | bgm-hate | bgm-hate（主線） | 是；對照與 theater 同曲 |
-| ending | 漫天氣球 | 章節 | bgm-ending | bgm-ending（主線） | 是；對照與 plaza 同曲 |
-| castle | 微笑城堡 | 地圖 | bgm-village | bgm-village（進入遊玩後） | 是；對照與 village 同曲 |
-| slope | 飛飛的出發坡 | 地圖 | bgm-journey | bgm-journey（進入遊玩後） | 是；對照與 journey、hill、bagvalley 同曲 |
-| hill | 阿飄的探險丘 | 地圖 | bgm-journey | bgm-journey（進入遊玩後） | 是；對照與 journey、slope、bagvalley 同曲 |
-| bagvalley | 魔法袋谷 | 地圖 | bgm-journey | bgm-journey（進入遊玩後） | 是；對照與 journey、slope、hill 同曲 |
-| candylane | 西卡的糖果巷 | 地圖 | bgm-candy | bgm-candy（進入遊玩後） | 是；對照與 candy 同曲 |
-| lamplight | 布魯的夜燈林 | 地圖 | bgm-bulu | bgm-bulu（進入遊玩後；地圖修建築時 bgm-journey） | 是；對照與 bulu 同曲；地圖修建築另借 journey |
-| theater | 哈特的魔術劇場 | 地圖 | bgm-hate | bgm-hate（進入遊玩後；地圖修建築時 bgm-candy） | 是；對照與 hate 同曲；地圖修建築另借 candy |
-| plaza | 漫天氣球廣場 | 地圖 | bgm-ending | bgm-ending（進入遊玩後；地圖修建築時 bgm-village） | 是；對照與 ending 同曲；地圖修建築另借 village |
-
-上述曲名皆指 `assets/audio/<曲名>.mp3/.ogg`。依 MUSIC_FILES 分組：village/castle；journey/slope/hill/bagvalley；candy/candylane；bulu/lamplight；hate/theater；ending/plaza。9 個地區進入遊玩後使用 6 首：bgm-village（village、castle）、bgm-journey（slope、hill、bagvalley）、bgm-candy（candylane）、bgm-bulu（lamplight）、bgm-hate（theater）、bgm-ending（plaza）。地圖修建築時 region.music 只對應 village／journey／candy 三首，和遊玩畫面的路由不同。
-
-| stages 定義 id | 顯示名稱 | theme | 目前曲目 | 是否共用 |
-|---|---|---|---|---|
-| 01-smile-contest | 微笑大賽（微笑村） | village | 無目前播放入口；若以 theme 對應則為 bgm-village | 定義無專屬音樂；不能認定目前在播放 |
-| 02-magic-bag | 神祕魔法袋（山洞小路） | journey | 無目前播放入口；若以 theme 對應則為 bgm-journey | 定義無專屬音樂；不能認定目前在播放 |
-| 03-sika | 第一願：西卡（糖果小路） | candy | 無目前播放入口；若以 theme 對應則為 bgm-candy | 定義無專屬音樂；不能認定目前在播放 |
-
-**下一階段需求：14 個現行場景 id 各自擁有獨一無二曲目，包含八個擴充地區；需讓 show("play")、結算、設定開關與地圖修建築統一依正確場景選曲，避免 region.music 被章節曲覆蓋；不能只改 MUSIC_FILES。** 三個保留 stage 若重新啟用，也需確認是否成為新的獨立配樂單位。這次依指示只做 A/B/C 三首樣本，沒有提前做全關卡配樂或變更播放邏輯。
-
-首頁標題畫面也固定播放 bgm-village（js/app.js:124、js/settings-ui.js:28），與微笑村共用；它不是第 15 關。第二階段需另決定首頁配樂。
-
-## 重跑驗證與未完成
-
-合成：`PYTHONDONTWRITEBYTECODE=1 ~/media-tools/venv/bin/python review/bgm/compose_cute.py`；驗證：同一個 Python 跑 `review/bgm/verify_loop.py`。TMPDIR 必須是外接碟已掛載的目錄，合成程式會檢查；中間 WAV 自動清理。瀏覽器測試先開上述本機 server，source `/Volumes/外接資料碟/tools/skills/guizang-env.sh`，設定 NODE_PATH 為既有 guizang skill 的 node_modules 後跑 `node review/bgm/test-loop-browser.cjs`，不安裝新套件。程式只合成或量測本資料夾音檔，不讀其他 worktree。
-
-最終版每一關都要自己的曲子；完整 6 首以上階段仍須依上表處理 14 個現行場景，不能六首共用就算完成。正式遊戲播放器、Safari/iPhone 實機與人工耳聽、全部關卡專屬作曲、本輪的全球曲庫查重皆未做。這輪只提交指定分支及 draft PR，不 merge、不推 main、不部署；不另建 repo/tag/Drive 備份。既有前輪文件保留作歷史，最終以本 README、loop-validation.json、browser-validation.json 與 bgm2 報告為準。
-
-音色提醒：本輪自然音尾與多個回音比前輪更明顯；可愛程度、回音是否偏濕、口哨是否刺耳，仍需我的王用耳朵決定。
+只提交 xiaoxia/bgm-cute 與 draft PR #6，不 merge、不推 main、不部署。前輪盤點與證據保留於 [README-bgm2.md](README-bgm2.md)，其歷史「未整合」敘述不適用本輪。

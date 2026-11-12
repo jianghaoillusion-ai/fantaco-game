@@ -1,0 +1,678 @@
+{
+  "synthetic_delay_on_real_mp3": true,
+  "not_safari_hardware": true,
+  "rows": [
+    {
+      "id": "village",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.00018280790127565456,
+      "absolute_rmse": 0.000019451261459753524,
+      "accepted": true
+    },
+    {
+      "id": "village",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.0006743383297583453,
+      "absolute_rmse": 0.00007670650202967046,
+      "accepted": true
+    },
+    {
+      "id": "village",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0006102698207544878,
+      "absolute_rmse": 0.00006774154422349723,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.022525105822843432,
+      "absolute_rmse": 0.001935288757975684,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.03127100695476216,
+      "absolute_rmse": 0.0025303867054370555,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.028215262867884786,
+      "absolute_rmse": 0.002946754486545346,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.009200113895063006,
+      "absolute_rmse": 0.0010943088077559318,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.008574120598246969,
+      "absolute_rmse": 0.0010852676310466125,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.008016357155579506,
+      "absolute_rmse": 0.0010344452817188927,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.007993321115811497,
+      "absolute_rmse": 0.0006210451087569948,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.003738427363013051,
+      "absolute_rmse": 0.00027570226328005565,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0020200101523318577,
+      "absolute_rmse": 0.00016833958694406018,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.0007831539760997458,
+      "absolute_rmse": 0.00003698606295380837,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.0009337231335894462,
+      "absolute_rmse": 0.00004108671791241622,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.000950623907189245,
+      "absolute_rmse": 0.0000814009143112914,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.008967757401317677,
+      "absolute_rmse": 0.000386571020981493,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.008303492436239764,
+      "absolute_rmse": 0.00037728615757443387,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.004218940576101073,
+      "absolute_rmse": 0.00027892077224436323,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.01008055822312699,
+      "absolute_rmse": 0.0006635344222615896,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.005974549482605944,
+      "absolute_rmse": 0.0003870273309633986,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.010028229170207794,
+      "absolute_rmse": 0.0006965887301797153,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.003373220158177244,
+      "absolute_rmse": 0.00021906438469429187,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.002850553631371617,
+      "absolute_rmse": 0.00023061606687516982,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0018022330047485818,
+      "absolute_rmse": 0.00014459333049799216,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.010605685592607194,
+      "absolute_rmse": 0.0014307518644132164,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.007225833005016981,
+      "absolute_rmse": 0.0009394788727530221,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.007612704986496648,
+      "absolute_rmse": 0.0009769740852437702,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.005163051203700545,
+      "absolute_rmse": 0.0003628889357079817,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.002886056457961692,
+      "absolute_rmse": 0.0002261961309849504,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0013409598435122855,
+      "absolute_rmse": 0.00011745347322017605,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.017579529437493274,
+      "absolute_rmse": 0.00046867257906992195,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.006205333571110301,
+      "absolute_rmse": 0.00019635107688884684,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.025638678619736285,
+      "absolute_rmse": 0.0005407660634536063,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.006324171407849257,
+      "absolute_rmse": 0.00017805757849098037,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.011820043826586689,
+      "absolute_rmse": 0.0003160625817062459,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.007202981910273439,
+      "absolute_rmse": 0.00027977055717695484,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.0023406096160000175,
+      "absolute_rmse": 0.00018852713203024009,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.001665410379638368,
+      "absolute_rmse": 0.00015530068363099744,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0011049457601072488,
+      "absolute_rmse": 0.000050990002745932535,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 48000,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.009874633237929432,
+      "absolute_rmse": 0.0009401829503927642,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 48000,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.012126978341036645,
+      "absolute_rmse": 0.0013683856900867232,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 48000,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.007021280193538698,
+      "absolute_rmse": 0.0008628188686069169,
+      "accepted": true
+    },
+    {
+      "id": "village",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.0002151749121490756,
+      "absolute_rmse": 0.000020011046176469328,
+      "accepted": true
+    },
+    {
+      "id": "village",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.0006808725792093467,
+      "absolute_rmse": 0.0000769650733524717,
+      "accepted": true
+    },
+    {
+      "id": "village",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.00018015438289787885,
+      "absolute_rmse": 0.000020778745855638305,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.05908097911657038,
+      "absolute_rmse": 0.005170024466565777,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.06551331250417372,
+      "absolute_rmse": 0.0046477719005294064,
+      "accepted": true
+    },
+    {
+      "id": "journey",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0896565817684625,
+      "absolute_rmse": 0.010623397399976017,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.009287328485129389,
+      "absolute_rmse": 0.0010976571229713906,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.008584618653095158,
+      "absolute_rmse": 0.001086305682203323,
+      "accepted": true
+    },
+    {
+      "id": "candy",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.009975924569715232,
+      "absolute_rmse": 0.0010999894450120845,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.045950457773433734,
+      "absolute_rmse": 0.0037245930915649618,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.04110133612632371,
+      "absolute_rmse": 0.0035221542354468105,
+      "accepted": true
+    },
+    {
+      "id": "bulu",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.03727081465545049,
+      "absolute_rmse": 0.003173221709635617,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.008521414184342178,
+      "absolute_rmse": 0.0005703287860492618,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.008897166985092122,
+      "absolute_rmse": 0.0005527493526780665,
+      "accepted": true
+    },
+    {
+      "id": "hate",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.009464464365104973,
+      "absolute_rmse": 0.0006421882023292629,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.07449447496488776,
+      "absolute_rmse": 0.003901787464289614,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.07131268472122487,
+      "absolute_rmse": 0.0037943620187581846,
+      "accepted": true
+    },
+    {
+      "id": "ending",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.07568899326192478,
+      "absolute_rmse": 0.005340589999179929,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.06603150741384689,
+      "absolute_rmse": 0.0045518656978764515,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.06603150741384689,
+      "absolute_rmse": 0.0045518656978764515,
+      "accepted": true
+    },
+    {
+      "id": "castle",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.06903074839780704,
+      "absolute_rmse": 0.0048016329563356705,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.019824501686197624,
+      "absolute_rmse": 0.0010552359155148656,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.020768761944282284,
+      "absolute_rmse": 0.0011135750017298562,
+      "accepted": true
+    },
+    {
+      "id": "slope",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.019296293702230592,
+      "absolute_rmse": 0.0011350733112514902,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.03615748913652586,
+      "absolute_rmse": 0.004932617772117949,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.03769114129243967,
+      "absolute_rmse": 0.004907718247786332,
+      "accepted": true
+    },
+    {
+      "id": "hill",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.03726639979458203,
+      "absolute_rmse": 0.005060564898098703,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.017054799867535657,
+      "absolute_rmse": 0.0011615650259915262,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.014233485131180421,
+      "absolute_rmse": 0.0011487904249472456,
+      "accepted": true
+    },
+    {
+      "id": "bagvalley",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.016172461066697685,
+      "absolute_rmse": 0.0013071266504704963,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.08821928297600891,
+      "absolute_rmse": 0.0023561022192627205,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.07079629334756744,
+      "absolute_rmse": 0.001826249393178551,
+      "accepted": true
+    },
+    {
+      "id": "candylane",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0648250425039243,
+      "absolute_rmse": 0.0013656279465187496,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.01576105911347224,
+      "absolute_rmse": 0.00045231604596297905,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.010854106987122523,
+      "absolute_rmse": 0.0003148532210262491,
+      "accepted": true
+    },
+    {
+      "id": "lamplight",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.00676145068530573,
+      "absolute_rmse": 0.000277064921549562,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.008049247568054073,
+      "absolute_rmse": 0.0005292556107315292,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.0018559170589829118,
+      "absolute_rmse": 0.00016229885371083576,
+      "accepted": true
+    },
+    {
+      "id": "theater",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.0017451346663823035,
+      "absolute_rmse": 0.00014391442384026828,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 44100,
+      "leading_zero_samples": 529,
+      "relative_rmse": 0.030905481640233507,
+      "absolute_rmse": 0.0035467427501368865,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 44100,
+      "leading_zero_samples": 1105,
+      "relative_rmse": 0.03750282523525464,
+      "absolute_rmse": 0.00422412114910279,
+      "accepted": true
+    },
+    {
+      "id": "plaza",
+      "rate": 44100,
+      "leading_zero_samples": 2257,
+      "relative_rmse": 0.03030748010323314,
+      "absolute_rmse": 0.0033311421873736197,
+      "accepted": true
+    }
+  ]
+}

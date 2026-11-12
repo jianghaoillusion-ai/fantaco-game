@@ -2,25 +2,33 @@
 <html lang="zh-Hant">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>三首 BGM 循環試聽</title>
+<title>14 首 BGM 循環試聽</title>
 <style>
 body{font:18px system-ui,sans-serif;background:#fff9ef;color:#493d4e;max-width:620px;margin:10vh auto;padding:24px}h1{font-size:28px}button,select{font:inherit;padding:14px 18px;border:1px solid #c9b9cf;border-radius:14px;background:white;color:inherit}button{cursor:pointer}button:focus-visible,select:focus-visible{outline:3px solid #9253a1;outline-offset:3px}.songs{display:grid;gap:14px;margin:24px 0}button[aria-pressed=true]{background:#e8d9ef}#status{line-height:1.7;min-height:3em}
 </style>
-<h1>三首 BGM 循環試聽</h1>
+<h1>14 首 BGM 循環試聽</h1>
 <label>格式 <select id="format"><option value="ogg">OGG</option><option value="mp3">MP3</option></select></label>
 <div class="songs">
-<button data-song="0" aria-pressed="false">A · 鐵琴泡泡</button>
-<button data-song="1" aria-pressed="false">B · 烏克麗麗跳跳</button>
-<button data-song="2" aria-pressed="false">C · 口哨氣球遊行</button>
+<button data-song="0" aria-pressed="false">微笑村 · 鐵琴泡泡音樂盒</button>
+<button data-song="1" aria-pressed="false">神祕魔法袋 · 烏克麗麗搖擺跳跳</button>
+<button data-song="2" aria-pressed="false">第一願：西卡 · 口哨氣球小遊行</button>
+<button data-song="3" aria-pressed="false">第二願：布魯 · 木琴躲貓貓：三連小跳與高低應答</button>
+<button data-song="4" aria-pressed="false">最後一願：哈特 · 短風琴魔術步：切分和弦與空拍問答</button>
+<button data-song="5" aria-pressed="false">漫天氣球 · 氣球圓舞：三拍柔鐘與長音雲朵</button>
+<button data-song="6" aria-pressed="false">微笑城堡 · 小鐘鐘塔：雙聲部卡農與整拍撥弦</button>
+<button data-song="7" aria-pressed="false">飛飛的出發坡 · 彈跳起跑：附點上行與雙拍踏步</button>
+<button data-song="8" aria-pressed="false">阿飄的探險丘 · 丘陵迴旋：三拍木管與交錯琶音</button>
+<button data-song="9" aria-pressed="false">魔法袋谷 · 魔法口袋：五音短句與搖擺分解和弦</button>
+<button data-song="10" aria-pressed="false">西卡的糖果巷 · 糖果踢踏：短木琴與反拍鈴答句</button>
+<button data-song="11" aria-pressed="false">布魯的夜燈林 · 夜燈搖籃：輕風琴長句與稀疏星光</button>
+<button data-song="12" aria-pressed="false">哈特的魔術劇場 · 玩偶小劇場：撥弦停頓與低音回答</button>
+<button data-song="13" aria-pressed="false">漫天氣球廣場 · 廣場跳格子：短笛呼喊與拉丁式木塊</button>
 </div>
 <button id="stop">停止</button>
 <p id="status" role="status">點一首開始，會持續循環。</p>
 <script type="module">
-const songs = [
-  {stem:'cute-a-glock-bubbles', samples:2304000},
-  {stem:'cute-b-uke-hop', samples:2468571},
-  {stem:'cute-c-whistle-parade', samples:2160000},
-];
+import {prepareLoopBuffer} from '../../js/audio.js?v=bgm3';
+const songs = [{"stem": "../../assets/audio/bgm-village", "samples": 2304000}, {"stem": "../../assets/audio/bgm-journey", "samples": 2468571}, {"stem": "../../assets/audio/bgm-candy", "samples": 2160000}, {"stem": "../../assets/audio/bgm-bulu", "samples": 2133333}, {"stem": "../../assets/audio/bgm-hate", "samples": 1858065}, {"stem": "../../assets/audio/bgm-ending", "samples": 2032941}, {"stem": "../../assets/audio/bgm-castle", "samples": 1986207}, {"stem": "../../assets/audio/bgm-slope", "samples": 1745455}, {"stem": "../../assets/audio/bgm-hill", "samples": 1757288}, {"stem": "../../assets/audio/bgm-bagvalley", "samples": 2094545}, {"stem": "../../assets/audio/bgm-candylane", "samples": 1719403}, {"stem": "../../assets/audio/bgm-lamplight", "samples": 2073600}, {"stem": "../../assets/audio/bgm-theater", "samples": 2215385}, {"stem": "../../assets/audio/bgm-plaza", "samples": 1828571}];
 const status = document.querySelector('#status');
 const format = document.querySelector('#format');
 const buttons = [...document.querySelectorAll('[data-song]')];
@@ -52,18 +60,21 @@ async function play(index) {
     }
     status.textContent = '載入中…';
     let buffer = cache.get(key);
+    if(buffer){cache.delete(key);cache.set(key,buffer);}
     if (!buffer) {
       const response = await fetch(key);
       if (!response.ok) throw new Error(`音檔讀取失敗（${response.status}）`);
       buffer = await context.decodeAudioData(await response.arrayBuffer());
-      const expected = Math.round(song.samples / 48000 * buffer.sampleRate);
+      const expected = Math.round((song.samples + 18432) / 48000 * buffer.sampleRate);
       // Chromium Vorbis may retain a final codec block; verified head alignment.
       const excess = buffer.length - expected;
       const allowance = ext === 'ogg' ? Math.ceil(2048 / 48000 * buffer.sampleRate) : 2;
       if (excess < -2 || excess > allowance) {
         throw new Error('解碼長度不符，可能有編碼補零；請換另一種格式');
       }
+      buffer = prepareLoopBuffer(buffer, Math.round(song.samples / 48000 * buffer.sampleRate), Math.round(9216 / 48000 * buffer.sampleRate), context).buffer;
       cache.set(key, buffer);
+      while(cache.size>3)cache.delete(cache.keys().next().value);
     }
     if (token !== generation) return;
     const source = context.createBufferSource();
@@ -72,15 +83,15 @@ async function play(index) {
     source.loop = true;
     source.loopStart = 0;
     const loopFrames = Math.min(buffer.length, Math.round(song.samples / 48000 * buffer.sampleRate));
-    source.loopEnd = loopFrames / buffer.sampleRate;
+    source.loopEnd = source.loopStart + loopFrames / buffer.sampleRate;
     source.connect(gain); gain.connect(context.destination);
     gain.gain.setValueAtTime(0, context.currentTime);
     gain.gain.linearRampToValueAtTime(.65, context.currentTime + .025);
-    source.start();
+    source.start(0, source.loopStart);
     retire(active);
     active = {source, gain, key, index};
     buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === index)));
-    status.textContent = active.message = `${buttons[index].textContent} · ${ext.toUpperCase()} · ${source.loopEnd.toFixed(6)} 秒，循環播放中`;
+    status.textContent = active.message = `${buttons[index].textContent} · ${ext.toUpperCase()} · ${(source.loopEnd-source.loopStart).toFixed(6)} 秒，循環播放中`;
   } catch (error) {
     if (token !== generation) return;
     wanted = active?.index ?? null;

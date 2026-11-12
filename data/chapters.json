@@ -53,7 +53,7 @@
       "title": "第二願：布魯",
       "subtitle": "怕黑的夜晚",
       "bg": "assets/bg/bulu.webp",
-      "music": "journey",
+      "music": "bulu",
       "unlock": "story:ch3-end",
       "generators": [
         "star",
@@ -70,7 +70,7 @@
       "title": "最後一願：哈特",
       "subtitle": "找回自信",
       "bg": "assets/bg/hate.webp",
-      "music": "candy",
+      "music": "hate",
       "unlock": "story:ch4-end",
       "generators": [
         "star",
@@ -87,7 +87,7 @@
       "title": "漫天氣球",
       "subtitle": "充滿歡笑",
       "bg": "assets/bg/ending.webp",
-      "music": "village",
+      "music": "ending",
       "unlock": "story:ch5-end",
       "generators": [
         "star",
