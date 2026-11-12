@@ -1,25 +1,25 @@
-import { availableChains, retiredChains, queueGenerator, claimGenerators, recycleOffer } from "./progression.js?v=mobile3";
-import { isCellOpen } from "./world.js?v=25";
-import { createHaptics } from "./haptics.js?v=mobile2";
-import { Auth } from "./auth.js?v=25";
-import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=25";
-import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=bgm3r2";
-import { mountMascot } from "./mascot.js?v=mobile3";
-import { mountHome } from "./home.js?v=25";
-import { bindStory, startStory } from "./story.js?v=mobile3";
-import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=r1112";
-import { bagCap, migrateBagSlots } from "./bag.js?v=25";
-import { reserveItems } from "./merge.js?v=mobile3";
-import { avatarSrc } from "./portraits.js?v=mobile3";
+import { availableChains, retiredChains, queueGenerator, claimGenerators, recycleOffer } from "./progression.js?v=20261112";
+import { isCellOpen } from "./world.js?v=20261112";
+import { createHaptics } from "./haptics.js?v=20261112";
+import { Auth } from "./auth.js?v=20261112";
+import { loadSave, writeSave, syncCloud, tickEnergy, nextEnergyIn, todayKey, ensureDaily, formatDailyResetLeft, ENERGY } from "./save.js?v=20261112";
+import { unlockAudio, playMusic, stopMusic, pauseMusic, resumeMusic, sfx, setAudioSettings, getAudioSettings } from "./audio.js?v=20261112";
+import { mountMascot } from "./mascot.js?v=20261112";
+import { mountHome } from "./home.js?v=20261112";
+import { bindStory, startStory } from "./story.js?v=20261112";
+import { createSettingsUi, migrateSettings } from "./settings-ui.js?v=20261112";
+import { bagCap, migrateBagSlots } from "./bag.js?v=20261112";
+import { reserveItems } from "./merge.js?v=20261112";
+import { avatarSrc } from "./portraits.js?v=20261112";
 import {
   starterBoard, canMerge, mergeCells, produceFrom, keyOf,
   itemDef, genDef, maxTier, chainPreview, makeProceduralOrder, NPCS_BY_CHAPTER, xpLevel, makeUid, idx,
   remapBoard, nearbyEmpty, fillOrderSlots
-} from "./merge.js?v=mobile3";
-import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=r1112";
-import { regionById } from "./world.js?v=25";
-import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=25";
-import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=25";
+} from "./merge.js?v=20261112";
+import { attachSystems, GEN_POPS, GEN_COOL_MS } from "./systems.js?v=20261112";
+import { regionById } from "./world.js?v=20261112";
+import { BOARD_COLS, BOARD_ROWS, fitBoardCell, migrateToFixedBoard } from "./board-layout.js?v=20261112";
+import { bindTip, bindChromeTips, hideTip } from "./tip.js?v=20261112";
 
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
@@ -55,7 +55,7 @@ const CHAPTER_NEXT = {
 };
 
 async function fetchJSON(url) {
-  const res = await fetch(url + "?v=r1112");
+  const res = await fetch(url + "?v=20261112");
   if (!res.ok) throw new Error("讀不到 " + url);
   return res.json();
 }
@@ -70,8 +70,8 @@ export async function boot() {
   ]);
   GENS = CHAINS.generators;
   CHAINS = CHAINS.chains;
-  for (const chain of Object.values(CHAINS)) for (const it of chain.items) it.img += "?v=mobile3";
-  for (const gen of Object.values(GENS)) for (const it of gen.tiers) it.img += "?v=mobile3";
+  for (const chain of Object.values(CHAINS)) for (const it of chain.items) it.img += "?v=20261112";
+  for (const gen of Object.values(GENS)) for (const it of gen.tiers) it.img += "?v=20261112";
   CHAPTERS = CHAPTERS.chapters;
   STORY = STORY.orders;
   tickEnergy(SAVE);

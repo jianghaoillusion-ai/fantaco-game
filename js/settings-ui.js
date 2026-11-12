@@ -1,6 +1,6 @@
 /** Settings sheet: music / SFX toggles + volume sliders, persist immediately. */
 
-import { setAudioSettings, sfx } from "./audio.js?v=bgm3r2";
+import { setAudioSettings, sfx } from "./audio.js?v=20261112";
 
 export const DEFAULT_SETTINGS = { music: true, sfx: true, haptics: true, musicVol: 0.72, sfxVol: 0.85 };
 
